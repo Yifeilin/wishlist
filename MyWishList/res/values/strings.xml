@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, MyWishList!</string>
+    <string name="app_name">MyWishList</string>
+    <string name="add">Add Wish Item</string>
+    <string name="del">Delete Wish Item</string>
+    <string name="chk">Check More Info</string>
+    <string name="cal">Cancel</string>
+</resources>
