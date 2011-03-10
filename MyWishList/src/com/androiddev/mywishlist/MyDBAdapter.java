@@ -20,7 +20,10 @@ public class MyDBAdapter {
 	public static final String KEY_ADDR = "address";
 	public static final String KEY_DATE = "date";
 	public static final String KEY_PIC =  "picture";
-	public static final int NAME_COLUMN = 1;
+	public static final int ITEM_COLUMN = 1;
+	public static final int ADDR_COLUMN = 2;
+	public static final int DATE_COLUMN = 3;
+	public static final int PIC_COLUMN = 4;
 	// TODO: Create public field for each column in your table.
 	// SQL Statement to create a new database.
 	private static final String DATABASE_CREATE = "create table "
