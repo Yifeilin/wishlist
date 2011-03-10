@@ -31,7 +31,7 @@ public class WishListItemAdapter extends ArrayAdapter<MyWishItem>{
 
 		MyWishItem item = getItem(position);
 		String itemName = item.getItemName();
-		Date createdDate = item.getCreated();
+		Date createdDate = item.getDate();
 		String shopAddr = item.getShopAddress();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String dateString = sdf.format(createdDate);
