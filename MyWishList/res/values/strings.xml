@@ -6,4 +6,9 @@
     <string name="del">Delete Wish Item</string>
     <string name="chk">Check More Info</string>
     <string name="cal">Cancel</string>
+    
+    <string name="menu_update">Refresh</string>
+	<string name="auto_update_prompt">Auto Update?</string>
+	<string name="update_freq_prompt">Update Frequency</string>
+	<string name="menu_preferences">Preferences</string>
 </resources>
