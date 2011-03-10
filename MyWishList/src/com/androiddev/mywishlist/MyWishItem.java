@@ -14,7 +14,7 @@ public class MyWishItem {
 		return itemName;
 	}
 
-	public Date getCreated() {
+	public Date getDate() {
 		return created;
 	}
 
