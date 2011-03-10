@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.androiddev.mywithlist.R;
-
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -26,6 +25,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.androiddev.mywithlist.R;
+
 public class MyWishList extends Activity {
     /** Called when the activity is first created. */
 	static final private int ADD_ITEM = Menu.FIRST;
@@ -38,8 +39,11 @@ public class MyWishList extends Activity {
 	private WishListItemAdapter aa;
 	private EditText myEditText;
 	
-	LocationManager mLocationManager;
-	Location mLocation;
+	private LocationManager mLocationManager;
+	private Location mLocation;
+	
+	private MyDBAdapter wishItemDBAdapter; 
+	private Cursor wishListCursor;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,11 @@ public class MyWishList extends Activity {
         myEditText = (EditText) findViewById(R.id.myEditText);
         
         wishItems = new ArrayList<MyWishItem>();
+        wishItemDBAdapter = new MyDBAdapter(this);
+        
+        wishItemDBAdapter.open();
+        populateWishList();
+        
         int resID = R.layout.wishlist_item;
         aa = new WishListItemAdapter(this, resID,wishItems);
         
@@ -92,7 +101,9 @@ public class MyWishList extends Activity {
 							MyWishItem newItem = new MyWishItem(myEditText
 									.getText().toString(), mSB.toString());
 
-							wishItems.add(0, newItem);
+							//wishItems.add(0, newItem);	
+							wishItemDBAdapter.insertWishItem(newItem);
+							updateArray();
 							aa.notifyDataSetChanged();
 							myEditText.setText("");
 							cancelAdd();
@@ -105,6 +116,9 @@ public class MyWishList extends Activity {
 			}
         });
         registerForContextMenu(myListView);
+        //restoreUIState();
+        
+        populateWishList();
     }
     
     @Override
@@ -192,7 +206,36 @@ public class MyWishList extends Activity {
 		myEditText.requestFocus();
 	}
 	private void removeItem(int _index) {
-		wishItems.remove(_index);
-		aa.notifyDataSetChanged();
+		wishItemDBAdapter.removeWishItem(wishItems.size()-_index);
+		updateArray();
+	}
+	
+	private void populateWishList()
+	{
+		wishListCursor = wishItemDBAdapter.getAllWishItemCursor();
+		startManagingCursor(wishListCursor);
+		
+		updateArray();
+	}
+	
+	private void updateArray(){
+		wishListCursor.requery();
+		
+		if (wishListCursor.moveToFirst())
+			do {
+			String item = wishListCursor.getString(MyDBAdapter.ITEM_COLUMN);
+			String date = wishListCursor.getString(MyDBAdapter.DATE_COLUMN);
+			String addr = wishListCursor.getString(MyDBAdapter.ADDR_COLUMN);
+			MyWishItem newItem = new MyWishItem(item, addr);
+			wishItems.add(0, newItem);
+			} while(wishListCursor.moveToNext());
+			aa.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		wishItemDBAdapter.close();
 	}
 }
