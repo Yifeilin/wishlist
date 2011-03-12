@@ -1,5 +1,8 @@
 package com.androiddev.mywishlist;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -64,13 +67,17 @@ public class MyDBAdapter {
 		
 		_newEntry.put(KEY_ITEM, _wishItem.getItemName());
 		_newEntry.put(KEY_ADDR, _wishItem.getShopAddress());
-		_newEntry.put(KEY_DATE, _wishItem.getDate().toString());
+		
+		Date createdDate = _wishItem.getDate();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		String dateString = sdf.format(createdDate);
+		_newEntry.put(KEY_DATE, dateString);
 		
 		return db.insert(DATABASE_TABLE, null, _newEntry);
 	}
 
 	public boolean removeWishItem(long _rowIndex) {
-		return db.delete(DATABASE_TABLE, KEY_ID + "=" + _rowIndex, null) > 0;
+		return db.delete(DATABASE_TABLE, KEY_ID + ">" + _rowIndex, null) > 0;
 	}
 
 	public Cursor getAllEntries() {

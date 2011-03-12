@@ -26,7 +26,7 @@ public class WishListItemAdapter extends ArrayAdapter<MyWishItem>{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
+
 		LinearLayout wishListView;
 
 		MyWishItem item = getItem(position);
@@ -35,7 +35,7 @@ public class WishListItemAdapter extends ArrayAdapter<MyWishItem>{
 		String shopAddr = item.getShopAddress();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String dateString = sdf.format(createdDate);
-		
+
 		if (convertView == null) {
 			wishListView = new LinearLayout(getContext());
 			String inflater = Context.LAYOUT_INFLATER_SERVICE;
@@ -45,12 +45,12 @@ public class WishListItemAdapter extends ArrayAdapter<MyWishItem>{
 		} else {
 			wishListView = (LinearLayout) convertView;
 		}
-		TextView dateView = (TextView) wishListView.findViewById(R.id.rowDate);
-		TextView taskView = (TextView) wishListView.findViewById(R.id.row);
+		TextView itemView = (TextView) wishListView.findViewById(R.id.item);
 		TextView addrView = (TextView) wishListView.findViewById(R.id.addr);
-		dateView.setText(dateString);
-		taskView.setText(itemName);
+		TextView dateView = (TextView) wishListView.findViewById(R.id.date);	
+		itemView.setText(itemName);
 		addrView.setText(shopAddr);
+		dateView.setText(dateString);
 		return wishListView;
 	}
 }
