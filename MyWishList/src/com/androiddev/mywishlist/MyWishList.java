@@ -1,9 +1,6 @@
 package com.androiddev.mywishlist;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -39,8 +37,6 @@ public class MyWishList extends Activity {
 	
 	private boolean addingNew = false; 
 	private ListView myListView;
-	private ArrayList<MyWishItem> wishItems;
-	private WishListItemAdapter listAdapter;
 	private EditText myEditText;
 	
 	private LocationManager mLocationManager;
@@ -57,24 +53,13 @@ public class MyWishList extends Activity {
         myListView = (ListView)findViewById(R.id.myWishListView);
         myEditText = (EditText) findViewById(R.id.myEditText);
         
-        //wishItems = new ArrayList<MyWishItem>();
         wishItemDBAdapter = new MyDBAdapter(this);
         
         wishItemDBAdapter.open();
-        //populateWishList();
         
-        int resID = R.layout.wishlist_item;
-        //listAdapter = new WishListItemAdapter(this, resID, wishItems);
-        wishListCursor = wishItemDBAdapter.getAllWishItemCursor();
-		
+    
+         
         
-        String[] from = new String[] {MyDBAdapter.KEY_ITEM, MyDBAdapter.KEY_ADDR, MyDBAdapter.KEY_DATE};
-        int[] to = new int[] {R.id.item, R.id.addr, R.id.date}; 
-        wishItemCursorAdapter = new WishItemCursorAdapter(this, resID, wishListCursor, from, to);
-        
-        //myListView.setAdapter(listAdapter);
-        
-        myListView.setAdapter(wishItemCursorAdapter);
         
         mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
@@ -83,9 +68,7 @@ public class MyWishList extends Activity {
 		String locationprovider =
 		mLocationManager.getBestProvider(criteria,true);
 		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
-		
-		
-		
+			
 		myEditText.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
@@ -103,19 +86,21 @@ public class MyWishList extends Activity {
 
 								for (int i = 0; i < currentAddr
 										.getMaxAddressLineIndex(); i++) {
-									addr.append(currentAddr.getAddressLine(i)).append("\n");
+									addr.append(currentAddr.getAddressLine(i));
+									if(i != currentAddr
+											.getMaxAddressLineIndex() - 1)
+										addr.append("\n");
 								}
 							}
-							
-							
+			
 							MyWishItem newItem = new MyWishItem(myEditText
 									.getText().toString(), addr.toString());
-	
+								
 							wishItemDBAdapter.insertWishItem(newItem);
-							//updateArray();
-							//wishListCursor.requery();
+							filldata();
+							// myListView.setAdapter(wishItemCursorAdapter);
 							wishItemCursorAdapter.notifyDataSetChanged();
-							//listAdapter.notifyDataSetChanged();
+							
 							myEditText.setText("");
 							cancelAdd();
 						} catch (IOException e) {
@@ -127,15 +112,13 @@ public class MyWishList extends Activity {
 			}
         });
         registerForContextMenu(myListView);
-        startManagingCursor(wishListCursor);	
-		//updateArray();
+       
+        filldata();
 		wishItemCursorAdapter.notifyDataSetChanged();
-        //populateWishList();
     }
     
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu);
 		MenuItem itemAdd = menu.add(0, ADD_ITEM, Menu.NONE, R.string.add);
 		MenuItem itemRem = menu.add(0, REM_ITEM, Menu.NONE, R.string.del);
@@ -152,14 +135,12 @@ public class MyWishList extends Activity {
     @Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.setHeaderTitle("Select To Do Item");
 		menu.add(0, REM_ITEM, Menu.NONE, R.string.del);
 	}
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		super.onPrepareOptionsMenu(menu);
 		int idx = myListView.getSelectedItemPosition();
 		String removeTitle = getString(addingNew ? R.string.cal : R.string.del);
@@ -171,7 +152,6 @@ public class MyWishList extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		super.onOptionsItemSelected(item);
 
 		int index = myListView.getSelectedItemPosition();
@@ -180,6 +160,7 @@ public class MyWishList extends Activity {
 			if (addingNew) {
 				cancelAdd();
 			} else {
+				//AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 				removeItem(index);
 			}
 			return true;
@@ -217,37 +198,28 @@ public class MyWishList extends Activity {
 		myEditText.requestFocus();
 	}
 	
-	private void removeItem(int _index) {
+	private void removeItem(long _index) {
+		
 		wishItemDBAdapter.removeWishItem(_index);
-		wishItemCursorAdapter.notifyDataSetChanged();
-		//updateArray();
+		filldata();
 	}
 	
-	private void populateWishList()
-	{
+	public void filldata(){
 		wishListCursor = wishItemDBAdapter.getAllWishItemCursor();
-		startManagingCursor(wishListCursor);	
-		//updateArray();
-		wishItemCursorAdapter.notifyDataSetChanged();
-	}
-	
-	private void updateArray() {
-		wishListCursor.requery();
-		wishItems.clear();
-		if (wishListCursor.moveToFirst())
-			do {
-				String item = wishListCursor.getString(MyDBAdapter.ITEM_COLUMN);
-				String date = wishListCursor.getString(MyDBAdapter.DATE_COLUMN);
-				String addr = wishListCursor.getString(MyDBAdapter.ADDR_COLUMN);
-				MyWishItem newItem = new MyWishItem(item, addr);
-				wishItems.add(0, newItem);
-			} while (wishListCursor.moveToNext());
-		listAdapter.notifyDataSetChanged();
+		startManagingCursor(wishListCursor);
+		
+		
+		int resID = R.layout.wishlist_item;
+	       
+	        
+	    String[] from = new String[] {MyDBAdapter.KEY_ITEM, MyDBAdapter.KEY_ADDR, MyDBAdapter.KEY_DATE};
+	    int[] to = new int[] {R.id.item, R.id.addr, R.id.date}; 
+		wishItemCursorAdapter = new WishItemCursorAdapter(this, resID, wishListCursor, from, to);
+		myListView.setAdapter(wishItemCursorAdapter);
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		wishItemDBAdapter.close();
 	}

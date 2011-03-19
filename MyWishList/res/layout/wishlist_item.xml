@@ -18,6 +18,12 @@
 		android:layout_height="fill_parent" android:padding="10dp"
 		android:scrollbars="vertical" android:fadingEdge="vertical"
 		android:textColor="@color/notepad_text"
-		android:layout_alignParentLeft="@+id/rowDate" />
+		android:layout_alignParentLeft="true" />
+	
+	<TextView android:id="@+id/ID" android:layout_width="wrap_content"
+		android:layout_height="fill_parent" android:padding="10dp"
+		android:scrollbars="vertical" android:fadingEdge="vertical"
+		android:textColor="@color/notepad_text"
+		android:layout_alignParentRight="@+id/item" />
 
 </RelativeLayout>

@@ -27,7 +27,6 @@ public class MyDBAdapter {
 	public static final int ADDR_COLUMN = 2;
 	public static final int DATE_COLUMN = 3;
 	public static final int PIC_COLUMN = 4;
-	// TODO: Create public field for each column in your table.
 	// SQL Statement to create a new database.
 	private static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
@@ -86,14 +85,12 @@ public class MyDBAdapter {
 	}
 
 	public MyWishItem getEntry(long _rowIndex) {
-		// TODO: Return a cursor to a row from the database and
 		// use the values to populate an instance of MyObject
 		return null;
 	}
 
 	public boolean updateEntry(long _rowIndex, MyWishItem _wishItem) {
-		// TODO: Create a new ContentValues based on the new object
-		// and use it to update a row in the database.
+		
 		ContentValues _newEntry = new ContentValues();
 		
 		_newEntry.put(KEY_ITEM, _wishItem.getItemName());
