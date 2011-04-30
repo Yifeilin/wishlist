@@ -31,7 +31,8 @@ public class ToDoList extends Activity {
 	//menu order number
 	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
-	static final private int CHK_TODO = Menu.FIRST+2;
+	static final private int CHECK_TODO = Menu.FIRST + 2;
+	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
@@ -153,11 +154,15 @@ public class ToDoList extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
+		
 		MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE, R.string.add_new);
-		MenuItem itemRem = menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
+		MenuItem itemRem = menu.add(0, REMOVE_TODO,  Menu.NONE, R.string.remove);
+		
+		itemAdd.setIcon(android.R.drawable.btn_plus);
+		itemRem.setIcon(android.R.drawable.btn_minus);
+		
 		itemAdd.setShortcut('0', 'a');
 		itemRem.setShortcut('1', 'r');
-		
 		return true;
 	}
 	@Override
@@ -166,6 +171,7 @@ public class ToDoList extends Activity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.setHeaderTitle("Selected To Do Item");
 		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
+		menu.add(0, DETAIL_TODO, Menu.NONE, R.string.detail);
 	}
 	
 	@Override

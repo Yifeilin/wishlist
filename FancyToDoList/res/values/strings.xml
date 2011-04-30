@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, ToDoList!</string>
-	<string name="app_name">f_todolist</string>
-	<string name="add_new">Add New Item</string>
-	<string name="remove">Remove Item</string>
+	<string name="app_name">FancyToDOList</string>
+	<string name="add_new">Add</string>
+	<string name="remove">Remove</string>
+	<string name="detail">Detail Information</string>
 	<string name="cancel">Cancel</string>
 </resources>
