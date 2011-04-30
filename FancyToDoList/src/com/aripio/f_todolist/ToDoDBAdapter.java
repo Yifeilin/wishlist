@@ -15,7 +15,7 @@ import android.util.Log;
 public class ToDoDBAdapter {
 	private static final String DATABASE_NAME = "todoList.db";
 	private static final String DATABASE_TABLE = "Items";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private SQLiteDatabase db;
 	private final Context context;
 	public static final String KEY_ID = "_id";
@@ -50,7 +50,7 @@ public class ToDoDBAdapter {
 		ContentValues newTaskValues = new ContentValues();
 		// Assign values for each row.
 		newTaskValues.put(KEY_TASK, _task.getTask());
-		newTaskValues.put(KEY_CREATION_DATE, _task.getCreated().getTime());
+		newTaskValues.put(KEY_CREATION_DATE, _task.getCreated());
 		newTaskValues.put(KEY_ADDRESS, _task.getAddr());
 		// Insert the row.
 		return db.insert(DATABASE_TABLE, null, newTaskValues);
@@ -92,9 +92,9 @@ public class ToDoDBAdapter {
 			throw new SQLException("No to do item found for row: " + _rowIndex);
 		}
 		String task = cursor.getString(TASK_COLUMN);
-		long created = cursor.getLong(CREATION_DATE_COLUMN);
+		String created = cursor.getString(CREATION_DATE_COLUMN);
 		String addr = cursor.getString(ADDR_COLUMN);
-		ToDoItem result = new ToDoItem(task, new Date(created), addr);
+		ToDoItem result = new ToDoItem(task, created, addr);
 		return result;
 	}
 
@@ -108,7 +108,7 @@ public class ToDoDBAdapter {
 		private static final String DATABASE_CREATE = "create table "
 				+ DATABASE_TABLE + " (" + KEY_ID
 				+ " integer primary key autoincrement, " + KEY_TASK
-				+ " text not null, " + KEY_CREATION_DATE + " long, " + KEY_ADDRESS + " text not null);";
+				+ " text not null, " + KEY_CREATION_DATE + " text not null, " + KEY_ADDRESS + " text not null);";
 
 		@Override
 		public void onCreate(SQLiteDatabase _db) {

@@ -6,13 +6,13 @@ import java.util.Date;
 public class ToDoItem {
 	String task;
 	String addr;
-	Date created;
+	String created;
 	
 	public String getTask(){
 		return task;
 	}
 	
-	public Date getCreated(){
+	public String getCreated(){
 		return created;
 	}
 	
@@ -21,15 +21,23 @@ public class ToDoItem {
 	}
 	
 	public ToDoItem(String _task){
-		this(_task, new Date(java.lang.System.currentTimeMillis()),null);
+		this(_task, null, null);
+		Date now = new Date(java.lang.System.currentTimeMillis());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		created = sdf.format(now);
+		
+		
 	}
 	
 	public ToDoItem(String _task, String _addr) {
-		this(_task, new Date(java.lang.System.currentTimeMillis()), _addr);
+		this(_task, null, _addr);
+		Date now = new Date(java.lang.System.currentTimeMillis());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		created = sdf.format(now);
 	}
 	
 	
-	public ToDoItem(String _task, Date _created, String _addr) {
+	public ToDoItem(String _task, String _created, String _addr) {
 		task = _task;
 		created = _created;
 		addr = _addr;

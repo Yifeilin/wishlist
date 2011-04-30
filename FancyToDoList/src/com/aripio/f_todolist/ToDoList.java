@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,9 +44,10 @@ public class ToDoList extends Activity {
 	private ListView myListView;
 	private ArrayList<ToDoItem> todoItems;
 	private EditText myEditText;
-	private ToDoItemAdapter aa;
+	//private ToDoItemAdapter aa;
 	private ToDoDBAdapter toDoDBAdapter;
 	private Cursor toDoListCursor;
+	private ToDoItemCursorAdapter todoItemCursor;
 
 	private LocationManager mLocationManager;
 	private Location mLocation;
@@ -61,8 +63,8 @@ public class ToDoList extends Activity {
 		todoItems = new ArrayList<ToDoItem>();
 
 		int resID = R.layout.todoitem_rel;
-		aa = new ToDoItemAdapter(this, resID, todoItems);
-		myListView.setAdapter(aa);
+		//aa = new ToDoItemAdapter(this, resID, todoItems);
+		//myListView.setAdapter(aa);
 
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
@@ -107,7 +109,8 @@ public class ToDoList extends Activity {
 									.getText().toString(), addr.toString());
 							toDoDBAdapter.insertTask(newItem);
 							updateArray();
-							aa.notifyDataSetChanged();
+							//aa.notifyDataSetChanged();
+							todoItemCursor.notifyDataSetChanged();
 							myEditText.setText("");
 							cancelAdd();
 						} catch (IOException e) {
@@ -137,19 +140,25 @@ public class ToDoList extends Activity {
 
 	private void updateArray() {
 		toDoListCursor.requery();
-		todoItems.clear();
-		if (toDoListCursor.moveToFirst())
-			do {
-				String task = toDoListCursor
-						.getString(ToDoDBAdapter.TASK_COLUMN);
-				long created = toDoListCursor
-						.getLong(ToDoDBAdapter.CREATION_DATE_COLUMN);
-				
-				String addr = toDoListCursor.getString(ToDoDBAdapter.ADDR_COLUMN);
-				ToDoItem newItem = new ToDoItem(task, new Date(created),addr);
-				todoItems.add(0, newItem);
-			} while (toDoListCursor.moveToNext());
-		aa.notifyDataSetChanged();
+		startManagingCursor(toDoListCursor);
+//		todoItems.clear();
+//		if (toDoListCursor.moveToFirst())
+//			do {
+//				String task = toDoListCursor
+//						.getString(ToDoDBAdapter.TASK_COLUMN);
+//				long created = toDoListCursor
+//						.getLong(ToDoDBAdapter.CREATION_DATE_COLUMN);
+//				
+//				String addr = toDoListCursor.getString(ToDoDBAdapter.ADDR_COLUMN);
+//				ToDoItem newItem = new ToDoItem(task, new Date(created),addr);
+//				todoItems.add(0, newItem);
+//			} while (toDoListCursor.moveToNext());
+		int resID = R.layout.todoitem_rel;
+		String[] from = new String[] {toDoDBAdapter.KEY_TASK, toDoDBAdapter.KEY_ADDRESS, toDoDBAdapter.KEY_CREATION_DATE};
+	    int[] to = new int[] {R.id.rowItem, R.id.rowAddr, R.id.rowDate}; 
+	    todoItemCursor = new ToDoItemCursorAdapter(this, resID, toDoListCursor, from, to);
+		//aa.notifyDataSetChanged();		
+		myListView.setAdapter(todoItemCursor);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -216,7 +225,7 @@ public class ToDoList extends Activity {
 		// Items are added to the listview in reverse order, so invert the index.
 		toDoDBAdapter.removeTask(todoItems.size()-index);
 		updateArray();
-		aa.notifyDataSetChanged();
+		//aa.notifyDataSetChanged();
 		
 	}
 	private void cancelAdd() {
