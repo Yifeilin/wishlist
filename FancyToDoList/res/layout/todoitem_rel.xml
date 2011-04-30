@@ -7,9 +7,14 @@
 		android:scrollbars="vertical" android:fadingEdge="vertical"
 		android:textColor="@color/notepad_text"
 		android:layout_alignParentRight="true" />
-	<TextView android:id="@+id/row" android:layout_width="fill_parent"
+	<TextView android:id="@+id/rowAddr" android:layout_width="wrap_content"
 		android:layout_height="fill_parent" android:padding="10dp"
 		android:scrollbars="vertical" android:fadingEdge="vertical"
 		android:textColor="@color/notepad_text"
-		android:layout_alignParentLeft="@+id/rowDate" />
+		android:layout_centerInParent="true" />
+	<TextView android:id="@+id/rowItem" android:layout_width="wrap_content"
+		android:layout_height="fill_parent" android:padding="10dp"
+		android:scrollbars="vertical" android:fadingEdge="vertical"
+		android:textColor="@color/notepad_text"
+		android:layout_alignParentLeft="true" />	
 </RelativeLayout>

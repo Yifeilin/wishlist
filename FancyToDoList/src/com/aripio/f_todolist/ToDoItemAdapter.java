@@ -27,6 +27,9 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem> {
 		ToDoItem item = getItem(position);
 		String taskString = item.getTask();
 		Date createdDate = item.getCreated();
+		String addrString = item.getAddr();
+		
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String dateString = sdf.format(createdDate);
 		if (convertView == null) {
@@ -39,9 +42,11 @@ public class ToDoItemAdapter extends ArrayAdapter<ToDoItem> {
 			todoView = (LinearLayout) convertView;
 		}
 		TextView dateView = (TextView) todoView.findViewById(R.id.rowDate);
-		TextView taskView = (TextView) todoView.findViewById(R.id.row);
+		TextView taskView = (TextView) todoView.findViewById(R.id.rowItem);
+		TextView addrView = (TextView) todoView.findViewById(R.id.rowAddr);
 		dateView.setText(dateString);
 		taskView.setText(taskString);
+		addrView.setText(addrString);
 		return todoView;
 	}
 

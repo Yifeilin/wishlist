@@ -1,11 +1,20 @@
 package com.aripio.f_todolist;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -19,54 +28,104 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class ToDoList extends Activity {
+	//menu order number
 	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
+	static final private int CHK_TODO = Menu.FIRST+2;
+	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
-	ToDoDBAdapter toDoDBAdapter;
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        myListView = (ListView) findViewById(R.id.myListView);
-        myEditText = (EditText)findViewById(R.id.myEditText);
-        
-        todoItems = new ArrayList<ToDoItem>();
-        
-        int resID = R.layout.todoitem_rel;
-        aa = new ToDoItemAdapter(this, resID, todoItems);
-        myListView.setAdapter(aa);
-        
-        
-        myEditText.setOnKeyListener(new OnKeyListener(){
-        	public boolean onKey(View v, int keyCode, KeyEvent event){
-        		if(event.getAction() == KeyEvent.ACTION_DOWN)
-        			if(keyCode == KeyEvent.KEYCODE_ENTER)
-        			{
-        				ToDoItem newItem = new ToDoItem(myEditText.getText().toString());
-        				toDoDBAdapter.insertTask(newItem);
-        				updateArray();
-        				//todoItems.add(0, newItem);
-        				//todoItems.add(0,myEditText.getText().toString());
-        				aa.notifyDataSetChanged();
-        				myEditText.setText("");
-        				cancelAdd();
-        				return true;
-        			}
-        	return false;
-        	}
-        });
-        registerForContextMenu(myListView);
-        restoreUIState();
-        
-        toDoDBAdapter = new ToDoDBAdapter(this);
-        // Open or create the database
-        toDoDBAdapter.open();
-        populateTodoList();
-    }
-    Cursor toDoListCursor;
+	
+	
+	private boolean addingNew = false;
+	private ListView myListView;
+	private ArrayList<ToDoItem> todoItems;
+	private EditText myEditText;
+	private ToDoItemAdapter aa;
+	private ToDoDBAdapter toDoDBAdapter;
+	private Cursor toDoListCursor;
+
+	private LocationManager mLocationManager;
+	private Location mLocation;
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		myListView = (ListView) findViewById(R.id.myListView);
+		myEditText = (EditText) findViewById(R.id.myEditText);
+
+		todoItems = new ArrayList<ToDoItem>();
+
+		int resID = R.layout.todoitem_rel;
+		aa = new ToDoItemAdapter(this, resID, todoItems);
+		myListView.setAdapter(aa);
+
+		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setPowerRequirement(Criteria.POWER_LOW);
+		//String locationprovider = mLocationManager.getBestProvider(criteria,
+				//true);
+		String locationprovider = LocationManager.GPS_PROVIDER;
+		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
+
+		myEditText.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+						try {
+							Geocoder mGC = new Geocoder(
+									getApplicationContext(), Locale.ENGLISH);
+							List<Address> addresses;
+							if(mLocation != null)
+							{
+								addresses = mGC.getFromLocation(
+										mLocation.getLatitude(), mLocation.getLongitude(), 1);
+							}
+							else
+								addresses = mGC.getFromLocation(
+										40.88301, -72.9795, 1);
+									
+							StringBuilder addr = new StringBuilder();
+							Address currentAddr = null;
+							if (addresses != null) {
+								currentAddr = addresses.get(0);
+
+								for (int i = 0; i < currentAddr
+										.getMaxAddressLineIndex(); i++) {
+									addr.append(currentAddr.getAddressLine(i));
+									if (i != currentAddr
+											.getMaxAddressLineIndex() - 1)
+										addr.append("\n");
+								}
+							}
+							ToDoItem newItem = new ToDoItem(myEditText
+									.getText().toString(), addr.toString());
+							toDoDBAdapter.insertTask(newItem);
+							updateArray();
+							aa.notifyDataSetChanged();
+							myEditText.setText("");
+							cancelAdd();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						return true;
+					}
+				return false;
+			}
+		});
+		registerForContextMenu(myListView);
+		restoreUIState();
+
+		toDoDBAdapter = new ToDoDBAdapter(this);
+		// Open or create the database
+		toDoDBAdapter.open();
+		populateTodoList();
+	}
+    
     private void populateTodoList() {
     // Get all the todo list items from the database.
     	toDoListCursor = toDoDBAdapter. getAllToDoItemsCursor();
@@ -74,18 +133,23 @@ public class ToDoList extends Activity {
     // Update the array.
     	updateArray();
     }
-    private void updateArray() {
-    	toDoListCursor.requery();
-    	todoItems.clear();
-    	if (toDoListCursor.moveToFirst())
-    	do {
-    	String task = toDoListCursor.getString(ToDoDBAdapter.TASK_COLUMN);
-    	long created = toDoListCursor.getLong(ToDoDBAdapter.CREATION_DATE_COLUMN);
-    	ToDoItem newItem = new ToDoItem(task, new Date(created));
-    	todoItems.add(0, newItem);
-    	} while(toDoListCursor.moveToNext());
-    	aa.notifyDataSetChanged();
-    }
+
+	private void updateArray() {
+		toDoListCursor.requery();
+		todoItems.clear();
+		if (toDoListCursor.moveToFirst())
+			do {
+				String task = toDoListCursor
+						.getString(ToDoDBAdapter.TASK_COLUMN);
+				long created = toDoListCursor
+						.getLong(ToDoDBAdapter.CREATION_DATE_COLUMN);
+				
+				String addr = toDoListCursor.getString(ToDoDBAdapter.ADDR_COLUMN);
+				ToDoItem newItem = new ToDoItem(task, new Date(created),addr);
+				todoItems.add(0, newItem);
+			} while (toDoListCursor.moveToNext());
+		aa.notifyDataSetChanged();
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -103,11 +167,7 @@ public class ToDoList extends Activity {
 		menu.setHeaderTitle("Selected To Do Item");
 		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
 	}
-	private boolean addingNew = false;
-	private ListView myListView;
-	private ArrayList<ToDoItem> todoItems;
-	private EditText myEditText;
-	private ToDoItemAdapter aa;
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);

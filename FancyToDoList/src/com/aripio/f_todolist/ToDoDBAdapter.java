@@ -14,15 +14,17 @@ import android.util.Log;
 
 public class ToDoDBAdapter {
 	private static final String DATABASE_NAME = "todoList.db";
-	private static final String DATABASE_TABLE = "todoItems";
-	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_TABLE = "Items";
+	private static final int DATABASE_VERSION = 2;
 	private SQLiteDatabase db;
 	private final Context context;
 	public static final String KEY_ID = "_id";
 	public static final String KEY_TASK = "task";
 	public static final String KEY_CREATION_DATE = "creation_date";
-	static final int TASK_COLUMN = 0;
-	static final int CREATION_DATE_COLUMN = 1;
+	public static final String KEY_ADDRESS = "address";
+	static final int TASK_COLUMN = 1;
+	static final int CREATION_DATE_COLUMN = 2;
+	static final int ADDR_COLUMN = 3;
 
 	public ToDoDBAdapter(Context _context) {
 		this.context = _context;
@@ -49,6 +51,7 @@ public class ToDoDBAdapter {
 		// Assign values for each row.
 		newTaskValues.put(KEY_TASK, _task.getTask());
 		newTaskValues.put(KEY_CREATION_DATE, _task.getCreated().getTime());
+		newTaskValues.put(KEY_ADDRESS, _task.getAddr());
 		// Insert the row.
 		return db.insert(DATABASE_TABLE, null, newTaskValues);
 	}
@@ -65,35 +68,35 @@ public class ToDoDBAdapter {
 		return db.update(DATABASE_TABLE, newValue, KEY_ID + "=" + _rowIndex,
 				null) > 0;
 	}
-	
+
 	public Cursor getAllToDoItemsCursor() {
-		return db.query(DATABASE_TABLE,
-		new String[] { KEY_ID, KEY_TASK, KEY_CREATION_DATE},
-		null, null, null, null, null);
-		}
-		public Cursor setCursorToToDoItem(long _rowIndex) throws SQLException {
-		Cursor result = db.query(true, DATABASE_TABLE,
-		new String[] {KEY_ID, KEY_TASK},
-		KEY_ID + "=" + _rowIndex, null, null, null,
-		null, null);
+		return db.query(DATABASE_TABLE, new String[] { KEY_ID, KEY_TASK,
+				KEY_CREATION_DATE, KEY_ADDRESS }, null, null, null, null, null);
+	}
+
+	public Cursor setCursorToToDoItem(long _rowIndex) throws SQLException {
+		Cursor result = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TASK }, KEY_ID + "=" + _rowIndex, null, null, null, null,
+				null);
 		if ((result.getCount() == 0) || !result.moveToFirst()) {
-		throw new SQLException("No to do items found for row: " + _rowIndex);
+			throw new SQLException("No to do items found for row: " + _rowIndex);
 		}
 		return result;
-		}
-		public ToDoItem getToDoItem(long _rowIndex) throws SQLException {
-		Cursor cursor = db.query(true, DATABASE_TABLE,
-		new String[] {KEY_ID, KEY_TASK},
-		KEY_ID + "=" + _rowIndex, null, null, null,
-		null, null);
+	}
+
+	public ToDoItem getToDoItem(long _rowIndex) throws SQLException {
+		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TASK }, KEY_ID + "=" + _rowIndex, null, null, null, null,
+				null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-		throw new SQLException("No to do item found for row: " + _rowIndex);
+			throw new SQLException("No to do item found for row: " + _rowIndex);
 		}
 		String task = cursor.getString(TASK_COLUMN);
 		long created = cursor.getLong(CREATION_DATE_COLUMN);
-		ToDoItem result = new ToDoItem(task, new Date(created));
+		String addr = cursor.getString(ADDR_COLUMN);
+		ToDoItem result = new ToDoItem(task, new Date(created), addr);
 		return result;
-		}
+	}
 
 	private static class toDoDBOpenHelper extends SQLiteOpenHelper {
 		public toDoDBOpenHelper(Context context, String name,
@@ -105,7 +108,7 @@ public class ToDoDBAdapter {
 		private static final String DATABASE_CREATE = "create table "
 				+ DATABASE_TABLE + " (" + KEY_ID
 				+ " integer primary key autoincrement, " + KEY_TASK
-				+ " text not null, " + KEY_CREATION_DATE + " long);";
+				+ " text not null, " + KEY_CREATION_DATE + " long, " + KEY_ADDRESS + " text not null);";
 
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
