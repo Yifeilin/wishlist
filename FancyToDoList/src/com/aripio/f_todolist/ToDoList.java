@@ -5,24 +5,32 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -30,8 +38,13 @@ public class ToDoList extends Activity {
 	//Assign a unique ID for each menu item
 	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
-	//static final private int CHECK_TODO = Menu.FIRST + 2;
+	static final private int HELP_TODO = Menu.FIRST + 2;
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
+	
+	static final private int DIALOG_MAIN = 0;
+	
+	private static int TAKE_PICTURE = 1;
+	private Uri outputFileUri;
 	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
@@ -55,6 +68,19 @@ public class ToDoList extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Welcome to the Fancy ToDo List!").setCancelable(false)
+	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	                dialog.cancel();
+	           }
+	       });
+		       
+		AlertDialog alert = builder.create();
+		alert.show();
+		
 		myListView = (ListView) findViewById(R.id.myListView);
 		myEditText = (EditText) findViewById(R.id.myEditText);
 
@@ -97,7 +123,6 @@ public class ToDoList extends Activity {
 							ToDoItem newItem = new ToDoItem(myEditText.getText().toString(), addr.toString());
 							toDoDBAdapter.insertTask(newItem);
 							updateListView();
-							//todoItemCursor.notifyDataSetChanged();
 							myEditText.setText("");
 							cancelAdd();
 						} catch (IOException e) {
@@ -107,6 +132,16 @@ public class ToDoList extends Activity {
 					}
 				return false;
 			}
+		});
+		
+		myListView.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+			}
+			
 		});
 		registerForContextMenu(myListView);
 		restoreUIState();
@@ -137,15 +172,17 @@ public class ToDoList extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu1, menu);
 		
-		MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE, R.string.add_new);
-		MenuItem itemRem = menu.add(0, REMOVE_TODO,  Menu.NONE, R.string.remove);
-		
-		itemAdd.setIcon(android.R.drawable.btn_plus);
-		itemRem.setIcon(android.R.drawable.btn_minus);
-		
-		itemAdd.setShortcut('0', 'a');
-		itemRem.setShortcut('1', 'r');
+//	    MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE, R.string.add_new);
+//	    MenuItem itemHep = menu.add(0, HELP_TODO, Menu.NONE, R.string.help);
+//		MenuItem itemRem = menu.add(0, REMOVE_TODO,  Menu.NONE, R.string.remove);
+//		
+	    
+//		
+//		itemAdd.setShortcut('0', 'a');
+//		itemRem.setShortcut('1', 'r');
 		return true;
 	}
 	@Override
@@ -160,11 +197,12 @@ public class ToDoList extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		int idx = myListView.getSelectedItemPosition();
-		String removeTitle = getString(addingNew ? R.string.cancel : R.string.remove);
-		MenuItem removeItem = menu.findItem(REMOVE_TODO);
-		removeItem.setTitle(removeTitle);
-		removeItem.setVisible(addingNew || idx > -1);
+//		int idx = myListView.getSelectedItemPosition();
+//		String removeTitle = getString(addingNew ? R.string.cancel : R.string.remove);
+//		MenuItem removeItem = menu.findItem(REMOVE_TODO);
+//		removeItem.setTitle(removeTitle);
+//		removeItem.setVisible(addingNew || idx > -1);
+
 		return true;
 	}
 	@Override
@@ -173,7 +211,7 @@ public class ToDoList extends Activity {
 		
 		int index = myListView.getSelectedItemPosition();
 		switch (item.getItemId()) {
-		case (REMOVE_TODO): {
+		case (R.id.menu_del): {
 			if (addingNew) {
 				cancelAdd();
 			} else {
@@ -181,9 +219,12 @@ public class ToDoList extends Activity {
 			}
 			return true;
 		}
-		case (ADD_NEW_TODO): {
+		case (R.id.menu_add): {
 			addNewItem();
 			return true;
+		}
+		case (R.id.menu_camera): {
+			getThumbailPicture();
 		}
 		}
 		return false;
@@ -220,6 +261,24 @@ public class ToDoList extends Activity {
 			}
 		}
 		return false;
+	}
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
+		switch (id) {
+		case DIALOG_MAIN:
+			dialog = null;
+			break;
+
+		default:
+			dialog = null;
+		}
+		return dialog;
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
 	}
 	@Override
 	protected void onPause() {
@@ -269,5 +328,24 @@ public class ToDoList extends Activity {
 		super.onDestroy();
 		// Close the database
 		toDoDBAdapter.close();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == TAKE_PICTURE) {
+			Uri imageUri = null;
+			// Check if the result includes a thumbnail Bitmap
+			if (data != null) {
+				if (data.hasExtra("data")) {
+					Bitmap thumbnail = data.getParcelableExtra("data");
+				}
+			}
+		}
+
+	}
+
+	private void getThumbailPicture() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, TAKE_PICTURE);
 	}
 }
