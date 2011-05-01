@@ -97,7 +97,7 @@ public class ToDoList extends Activity {
 							ToDoItem newItem = new ToDoItem(myEditText.getText().toString(), addr.toString());
 							toDoDBAdapter.insertTask(newItem);
 							updateListView();
-							todoItemCursor.notifyDataSetChanged();
+							//todoItemCursor.notifyDataSetChanged();
 							myEditText.setText("");
 							cancelAdd();
 						} catch (IOException e) {
@@ -132,6 +132,7 @@ public class ToDoList extends Activity {
 	    int[] to = new int[] {R.id.rowItem, R.id.rowAddr, R.id.rowDate}; 
 	    todoItemCursor = new ToDoItemCursorAdapter(this, resID, toDoListCursor, from, to);
 		myListView.setAdapter(todoItemCursor);
+		todoItemCursor.notifyDataSetChanged();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

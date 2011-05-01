@@ -20,14 +20,16 @@ public class ToDoDBAdapter {
 	public static final String KEY_TASK = "task";
 	public static final String KEY_CREATION_DATE = "creation_date";
 	public static final String KEY_ADDRESS = "address";
+	
+	//index of columns in the table
+	static final int ID_COLUMN = 0;
 	static final int TASK_COLUMN = 1;
 	static final int CREATION_DATE_COLUMN = 2;
 	static final int ADDR_COLUMN = 3;
 
 	public ToDoDBAdapter(Context _context) {
 		this.context = _context;
-		dbHelper = new toDoDBOpenHelper(context, DATABASE_NAME, null,
-				DATABASE_VERSION);
+		dbHelper = new toDoDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	public void close() {
@@ -55,6 +57,7 @@ public class ToDoDBAdapter {
 	}
 
 	// Remove a task based on its index
+	// Should change to remove a task based on other features
 	public boolean removeTask(long _rowIndex) {
 		return db.delete(DATABASE_TABLE, KEY_ID + "=" + _rowIndex, null) > 0;
 	}
