@@ -1,14 +1,12 @@
 package com.aripio.f_todolist;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Address;
@@ -29,22 +27,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class ToDoList extends Activity {
-	//menu order number
+	//Assign a unique ID for each menu item
 	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
-	static final private int CHECK_TODO = Menu.FIRST + 2;
+	//static final private int CHECK_TODO = Menu.FIRST + 2;
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	
-	
+	//status variable indicating whether adding a new item
 	private boolean addingNew = false;
+	
 	private ListView myListView;
-	private ArrayList<ToDoItem> todoItems;
 	private EditText myEditText;
-	//private ToDoItemAdapter aa;
+	
 	private ToDoDBAdapter toDoDBAdapter;
 	private Cursor toDoListCursor;
 	private ToDoItemCursorAdapter todoItemCursor;
@@ -60,21 +58,15 @@ public class ToDoList extends Activity {
 		myListView = (ListView) findViewById(R.id.myListView);
 		myEditText = (EditText) findViewById(R.id.myEditText);
 
-		todoItems = new ArrayList<ToDoItem>();
-
-		int resID = R.layout.todoitem_rel;
-		//aa = new ToDoItemAdapter(this, resID, todoItems);
-		//myListView.setAdapter(aa);
-
+		//set up the location information
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		//String locationprovider = mLocationManager.getBestProvider(criteria,
-				//true);
-		String locationprovider = LocationManager.GPS_PROVIDER;
+		String locationprovider = mLocationManager.getBestProvider(criteria, true);	
 		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
 
+		//add an to-do item to the database when 'ENTER' key is pressed
 		myEditText.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
@@ -89,27 +81,22 @@ public class ToDoList extends Activity {
 										mLocation.getLatitude(), mLocation.getLongitude(), 1);
 							}
 							else
-								addresses = mGC.getFromLocation(
-										40.88301, -72.9795, 1);
+								//my current address
+								addresses = mGC.getFromLocation(40.88301, -72.9795, 1);
 									
 							StringBuilder addr = new StringBuilder();
 							Address currentAddr = null;
 							if (addresses != null) {
 								currentAddr = addresses.get(0);
-
-								for (int i = 0; i < currentAddr
-										.getMaxAddressLineIndex(); i++) {
+								for (int i = 0; i < currentAddr.getMaxAddressLineIndex(); i++) {
 									addr.append(currentAddr.getAddressLine(i));
-									if (i != currentAddr
-											.getMaxAddressLineIndex() - 1)
+									if (i != currentAddr.getMaxAddressLineIndex() - 1)
 										addr.append("\n");
 								}
 							}
-							ToDoItem newItem = new ToDoItem(myEditText
-									.getText().toString(), addr.toString());
+							ToDoItem newItem = new ToDoItem(myEditText.getText().toString(), addr.toString());
 							toDoDBAdapter.insertTask(newItem);
-							updateArray();
-							//aa.notifyDataSetChanged();
+							updateListView();
 							todoItemCursor.notifyDataSetChanged();
 							myEditText.setText("");
 							cancelAdd();
@@ -134,30 +121,16 @@ public class ToDoList extends Activity {
     // Get all the todo list items from the database.
     	toDoListCursor = toDoDBAdapter. getAllToDoItemsCursor();
     	startManagingCursor(toDoListCursor);
-    // Update the array.
-    	updateArray();
+    // Update the list view
+    	updateListView();
     }
 
-	private void updateArray() {
+	private void updateListView() {
 		toDoListCursor.requery();
-		startManagingCursor(toDoListCursor);
-//		todoItems.clear();
-//		if (toDoListCursor.moveToFirst())
-//			do {
-//				String task = toDoListCursor
-//						.getString(ToDoDBAdapter.TASK_COLUMN);
-//				long created = toDoListCursor
-//						.getLong(ToDoDBAdapter.CREATION_DATE_COLUMN);
-//				
-//				String addr = toDoListCursor.getString(ToDoDBAdapter.ADDR_COLUMN);
-//				ToDoItem newItem = new ToDoItem(task, new Date(created),addr);
-//				todoItems.add(0, newItem);
-//			} while (toDoListCursor.moveToNext());
 		int resID = R.layout.todoitem_rel;
-		String[] from = new String[] {toDoDBAdapter.KEY_TASK, toDoDBAdapter.KEY_ADDRESS, toDoDBAdapter.KEY_CREATION_DATE};
+		String[] from = new String[] {ToDoDBAdapter.KEY_TASK, ToDoDBAdapter.KEY_ADDRESS, ToDoDBAdapter.KEY_CREATION_DATE};
 	    int[] to = new int[] {R.id.rowItem, R.id.rowAddr, R.id.rowDate}; 
 	    todoItemCursor = new ToDoItemCursorAdapter(this, resID, toDoListCursor, from, to);
-		//aa.notifyDataSetChanged();		
 		myListView.setAdapter(todoItemCursor);
 	}
 	@Override
@@ -221,28 +194,28 @@ public class ToDoList extends Activity {
 		myEditText.requestFocus();
 		
 	}
-	private void removeItem(int index) {
-		// Items are added to the listview in reverse order, so invert the index.
-		toDoDBAdapter.removeTask(todoItems.size()-index);
-		updateArray();
-		//aa.notifyDataSetChanged();
-		
+	private void removeItem(int index) {		
+		toDoDBAdapter.removeTask(index);
+		updateListView();			
 	}
 	private void cancelAdd() {
 		addingNew = false;
-		myEditText.setVisibility(View.GONE);
-		
+		myEditText.setVisibility(View.GONE);	
 	}
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		super.onContextItemSelected(item);
+		AdapterView.AdapterContextMenuInfo menuInfo;
+		menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int index = menuInfo.position;
 		switch (item.getItemId()) {
-		case (REMOVE_TODO): {
-			AdapterView.AdapterContextMenuInfo menuInfo;
-			menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-			int index = menuInfo.position;
+		case (REMOVE_TODO): {	
 			removeItem(index);
 			return true;
+			}
+		case (DETAIL_TODO):{
+			Intent detailInfo = new Intent(this, ItemDetailInfo.class);
+			startActivity(detailInfo);
 			}
 		}
 		return false;
@@ -277,8 +250,7 @@ public class ToDoList extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt(SELECTED_INDEX_KEY,
-				myListView.getSelectedItemPosition());
+		outState.putInt(SELECTED_INDEX_KEY, myListView.getSelectedItemPosition());
 
 	}
 

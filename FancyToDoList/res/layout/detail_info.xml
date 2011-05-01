@@ -3,6 +3,13 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#FFFFFFFF"
     >
+    <EditText android:layout_width="fill_parent" android:id="@+id/itemname" android:layout_height="wrap_content" android:text="Item Name"></EditText>
+    <EditText android:layout_width="fill_parent" android:id="@+id/description" android:layout_height="wrap_content" android:text="Description"></EditText>
+    <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent">
+        <Button android:text="Save" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+        <Button android:text="Cancel" android:id="@+id/button2" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+    </LinearLayout>
     
 </LinearLayout>
