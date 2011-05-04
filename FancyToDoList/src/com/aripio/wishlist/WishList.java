@@ -48,8 +48,6 @@ public class WishList extends Activity {
 	static final private int DETAIL_INFO_ACT = 2;
 	static final private int TAKE_PICTURE = 1;
 	
-	private Uri outputFileUri;
-	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
