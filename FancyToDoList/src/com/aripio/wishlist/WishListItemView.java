@@ -1,6 +1,6 @@
 package com.aripio.wishlist;
 
-import com.aripio.f_todolist.R;
+import com.aripio.wishlist.R;
 
 import android.content.Context;
 import android.content.res.Resources;

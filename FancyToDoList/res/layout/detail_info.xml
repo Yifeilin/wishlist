@@ -5,11 +5,65 @@
     android:layout_height="fill_parent"
     android:background="#FFFFFFFF"
     >
-    <EditText android:layout_width="fill_parent" android:id="@+id/itemname" android:layout_height="wrap_content" android:text="Item Name"></EditText>
-    <EditText android:layout_width="fill_parent" android:id="@+id/description" android:layout_height="200dp" android:text="Description"></EditText>
+    <EditText android:layout_width="fill_parent" 
+    android:id="@+id/itemname" 
+    android:layout_height="wrap_content" 
+    android:text="Item Name"
+    android:layout_weight="0"/>
+    
+    <EditText android:layout_width="fill_parent" 
+    android:id="@+id/description" 
+    android:text="Description"
+    android:layout_weight="1"/>
+    
+    <TextView android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Select a date"/>
+    
+    <Button android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:id="@+id/button_date" 
+    android:text="click to set due time"/>
+    
+    <TextView android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Select priority"/>
+    
+    <RadioGroup
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+      <RadioButton android:id="@+id/radio_high"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="High"
+          />
+      <RadioButton android:id="@+id/radio_medium"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Medium" 
+          />
+      <RadioButton android:id="@+id/radio_low"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Low"
+          />
+    </RadioGroup>
+    
     <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent">
-        <Button android:layout_width="100dp" android:layout_height="wrap_content" android:id="@+id/button1" android:text="Save"></Button>
-        <Button android:layout_width="100dp" android:layout_height="wrap_content" android:id="@+id/button2" android:text="Cancel"></Button>
+        <Button android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/button_save" 
+        android:text="Save"
+        android:layout_weight="1"/>
+        <Button android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/button_cancel" 
+        android:text="Cancel"
+        android:layout_weight="1"/>
     </LinearLayout>
     
 </LinearLayout>

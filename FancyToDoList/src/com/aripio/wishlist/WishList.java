@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.aripio.f_todolist.R;
+import com.aripio.wishlist.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,7 +45,9 @@ public class WishList extends Activity {
 	
 	static final private int DIALOG_MAIN = 0;
 	
-	private static int TAKE_PICTURE = 1;
+	static final private int DETAIL_INFO_ACT = 2;
+	static final private int TAKE_PICTURE = 1;
+	
 	private Uri outputFileUri;
 	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
@@ -176,15 +178,6 @@ public class WishList extends Activity {
 		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.menu1, menu);
-		
-//	    MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE, R.string.add_new);
-//	    MenuItem itemHep = menu.add(0, HELP_TODO, Menu.NONE, R.string.help);
-//		MenuItem itemRem = menu.add(0, REMOVE_TODO,  Menu.NONE, R.string.remove);
-//		
-	    
-//		
-//		itemAdd.setShortcut('0', 'a');
-//		itemRem.setShortcut('1', 'r');
 		return true;
 	}
 	@Override
@@ -204,7 +197,6 @@ public class WishList extends Activity {
 //		MenuItem removeItem = menu.findItem(REMOVE_TODO);
 //		removeItem.setTitle(removeTitle);
 //		removeItem.setVisible(addingNew || idx > -1);
-
 		return true;
 	}
 	@Override
@@ -222,7 +214,10 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.menu_add): {
-			addNewItem();
+			//addNewItem();
+			// let user generate a wish item
+			Intent detailInfo = new Intent(this, ItemDetailInfo.class);
+			startActivityForResult(detailInfo, DETAIL_INFO_ACT);
 			return true;
 		}
 		case (R.id.menu_camera): {
@@ -231,6 +226,7 @@ public class WishList extends Activity {
 		}
 		return false;
 	}
+	
 	
 	private void addNewItem() {
 		addingNew = true;
@@ -334,7 +330,9 @@ public class WishList extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == TAKE_PICTURE) {
+		if(requestCode == Activity.RESULT_OK){
+		switch(requestCode){ 
+		case TAKE_PICTURE: 
 			Uri imageUri = null;
 			// Check if the result includes a thumbnail Bitmap
 			if (data != null) {
@@ -342,8 +340,11 @@ public class WishList extends Activity {
 					Bitmap thumbnail = data.getParcelableExtra("data");
 				}
 			}
+			break;
+		case DETAIL_INFO_ACT:
+			//should retrieve the info from data and construct a wishitem object
 		}
-
+		}
 	}
 
 	private void getThumbailPicture() {
