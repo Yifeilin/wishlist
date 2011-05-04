@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class ToDoDBAdapter {
+public class WishListDBAdapter {
 	private static final String DATABASE_NAME = "todoList.db";
 	private static final String DATABASE_TABLE = "Items";
 	private static final int DATABASE_VERSION = 3;
@@ -27,7 +27,7 @@ public class ToDoDBAdapter {
 	static final int CREATION_DATE_COLUMN = 2;
 	static final int ADDR_COLUMN = 3;
 
-	public ToDoDBAdapter(Context _context) {
+	public WishListDBAdapter(Context _context) {
 		this.context = _context;
 		dbHelper = new toDoDBOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -45,7 +45,7 @@ public class ToDoDBAdapter {
 	}
 
 	// Insert a new task
-	public long insertTask(ToDoItem _task) {
+	public long insertTask(WishItem _task) {
 		// Create a new row of values to insert.
 		ContentValues newTaskValues = new ContentValues();
 		// Assign values for each row.
@@ -85,7 +85,7 @@ public class ToDoDBAdapter {
 		return result;
 	}
 
-	public ToDoItem getToDoItem(long _rowIndex) throws SQLException {
+	public WishItem getToDoItem(long _rowIndex) throws SQLException {
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
 				KEY_TASK }, KEY_ID + "=" + _rowIndex, null, null, null, null,
 				null);
@@ -95,7 +95,7 @@ public class ToDoDBAdapter {
 		String task = cursor.getString(TASK_COLUMN);
 		String created = cursor.getString(CREATION_DATE_COLUMN);
 		String addr = cursor.getString(ADDR_COLUMN);
-		ToDoItem result = new ToDoItem(task, created, addr);
+		WishItem result = new WishItem(task, created, addr);
 		return result;
 	}
 

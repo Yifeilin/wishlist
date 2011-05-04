@@ -36,7 +36,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class ToDoList extends Activity {
+public class WishList extends Activity {
 	//Assign a unique ID for each menu item
 	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
@@ -58,9 +58,9 @@ public class ToDoList extends Activity {
 	private ListView myListView;
 	private EditText myEditText;
 	
-	private ToDoDBAdapter toDoDBAdapter;
+	private WishListDBAdapter wishListDBAdapter;
 	private Cursor toDoListCursor;
-	private ToDoItemCursorAdapter todoItemCursor;
+	private WishListItemCursorAdapter todoItemCursor;
 
 	private LocationManager mLocationManager;
 	private Location mLocation;
@@ -122,8 +122,8 @@ public class ToDoList extends Activity {
 										addr.append("\n");
 								}
 							}
-							ToDoItem newItem = new ToDoItem(myEditText.getText().toString(), addr.toString());
-							toDoDBAdapter.insertTask(newItem);
+							WishItem newItem = new WishItem(myEditText.getText().toString(), addr.toString());
+							wishListDBAdapter.insertTask(newItem);
 							updateListView();
 							myEditText.setText("");
 							cancelAdd();
@@ -148,15 +148,15 @@ public class ToDoList extends Activity {
 		registerForContextMenu(myListView);
 		restoreUIState();
 
-		toDoDBAdapter = new ToDoDBAdapter(this);
+		wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
-		toDoDBAdapter.open();
+		wishListDBAdapter.open();
 		populateTodoList();
 	}
     
     private void populateTodoList() {
     // Get all the todo list items from the database.
-    	toDoListCursor = toDoDBAdapter. getAllToDoItemsCursor();
+    	toDoListCursor = wishListDBAdapter. getAllToDoItemsCursor();
     	startManagingCursor(toDoListCursor);
     // Update the list view
     	updateListView();
@@ -165,9 +165,9 @@ public class ToDoList extends Activity {
 	private void updateListView() {
 		toDoListCursor.requery();
 		int resID = R.layout.todoitem_rel;
-		String[] from = new String[] {ToDoDBAdapter.KEY_TASK, ToDoDBAdapter.KEY_ADDRESS, ToDoDBAdapter.KEY_CREATION_DATE};
+		String[] from = new String[] {WishListDBAdapter.KEY_TASK, WishListDBAdapter.KEY_ADDRESS, WishListDBAdapter.KEY_CREATION_DATE};
 	    int[] to = new int[] {R.id.rowItem, R.id.rowAddr, R.id.rowDate}; 
-	    todoItemCursor = new ToDoItemCursorAdapter(this, resID, toDoListCursor, from, to);
+	    todoItemCursor = new WishListItemCursorAdapter(this, resID, toDoListCursor, from, to);
 		myListView.setAdapter(todoItemCursor);
 		todoItemCursor.notifyDataSetChanged();
 	}
@@ -239,7 +239,7 @@ public class ToDoList extends Activity {
 		
 	}
 	private void removeItem(int index) {		
-		toDoDBAdapter.removeTask(index);
+		wishListDBAdapter.removeTask(index);
 		updateListView();			
 	}
 	private void cancelAdd() {
@@ -329,7 +329,7 @@ public class ToDoList extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Close the database
-		toDoDBAdapter.close();
+		wishListDBAdapter.close();
 	}
 	
 	@Override

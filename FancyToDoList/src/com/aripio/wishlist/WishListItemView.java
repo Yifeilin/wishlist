@@ -9,20 +9,20 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class ToDoListItemView extends TextView{
+public class WishListItemView extends TextView{
 
-	public ToDoListItemView(Context context, AttributeSet attrs, int defStyle) {
+	public WishListItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public ToDoListItemView(Context context, AttributeSet attrs) {
+	public WishListItemView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
 	
 
-	public ToDoListItemView(Context context) {
+	public WishListItemView(Context context) {
 		super(context);
 		init();
 	}

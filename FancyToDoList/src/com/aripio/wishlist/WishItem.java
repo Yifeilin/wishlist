@@ -3,7 +3,7 @@ package com.aripio.wishlist;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ToDoItem {
+public class WishItem {
 	String task;
 	String addr;
 	String created;
@@ -20,7 +20,7 @@ public class ToDoItem {
 		return addr;
 	}
 	
-	public ToDoItem(String _task){
+	public WishItem(String _task){
 		this(_task, null, null);
 		Date now = new Date(java.lang.System.currentTimeMillis());
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
@@ -29,7 +29,7 @@ public class ToDoItem {
 		
 	}
 	
-	public ToDoItem(String _task, String _addr) {
+	public WishItem(String _task, String _addr) {
 		this(_task, null, _addr);
 		Date now = new Date(java.lang.System.currentTimeMillis());
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
@@ -37,7 +37,7 @@ public class ToDoItem {
 	}
 	
 	
-	public ToDoItem(String _task, String _created, String _addr) {
+	public WishItem(String _task, String _created, String _addr) {
 		task = _task;
 		created = _created;
 		addr = _addr;
