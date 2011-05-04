@@ -49,9 +49,9 @@ public class WishListDBAdapter {
 		// Create a new row of values to insert.
 		ContentValues newTaskValues = new ContentValues();
 		// Assign values for each row.
-		newTaskValues.put(KEY_TASK, _task.getTask());
-		newTaskValues.put(KEY_CREATION_DATE, _task.getCreated());
-		newTaskValues.put(KEY_ADDRESS, _task.getAddr());
+		newTaskValues.put(KEY_TASK, _task.getName());
+		newTaskValues.put(KEY_CREATION_DATE, _task.getDate());
+		newTaskValues.put(KEY_ADDRESS, _task.getDesc());
 		// Insert the row.
 		return db.insert(DATABASE_TABLE, null, newTaskValues);
 	}

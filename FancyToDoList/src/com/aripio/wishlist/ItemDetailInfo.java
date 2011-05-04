@@ -7,12 +7,17 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 
 public class ItemDetailInfo extends Activity {
@@ -22,18 +27,22 @@ public class ItemDetailInfo extends Activity {
 	private Button btnSave;
 	private Button btnCancel;
 	private Button btnDate;
+	private Button btnPhoto;
 	private RadioButton radioHigh;
 	private RadioButton radioMedm;
 	private RadioButton radioLow;
+	private ImageView imageItem;
 	private Date mDate;
+	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String priority;
 	private OnClickListener radioListener;
-	
+	private WishListDBAdapter wishListDBAdapter;
 	private int mYear;
     private int mMonth;
     private int mDay;
 	static final private int DATE_DIALOG_ID = 0;
+	static final private int TAKE_PICTURE = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +55,33 @@ public class ItemDetailInfo extends Activity {
 		btnSave = (Button) findViewById(R.id.button_save);
 		btnCancel = (Button) findViewById(R.id.button_cancel);
 		btnDate = (Button) findViewById(R.id.button_date);
+		btnPhoto = (Button) findViewById(R.id.button_photo);
 		
 		radioHigh = (RadioButton) findViewById(R.id.radio_high);
 		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
 		radioLow = (RadioButton) findViewById(R.id.radio_low);
+		
+		imageItem = (ImageView) findViewById(R.id.image_photo);
 		
 		// get the current date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        
+        wishListDBAdapter = new WishListDBAdapter(this);
+		// Open or create the database
+		wishListDBAdapter.open();
 		
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, 
                                   int monthOfYear, int dayOfMonth) {
-                mYear = year;
+                mYear = year-1900;
                 mMonth = monthOfYear;
                 mDay = dayOfMonth;
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
-                String date = sdf.format(new Date(mYear-1900, mMonth, mDay));
+                String date = sdf.format(new Date(mYear, mMonth, mDay));
                 btnDate.setText(date);
             }
         };
@@ -116,7 +132,16 @@ public class ItemDetailInfo extends Activity {
 			public void onClick(View v) {
 				showDialog(DATE_DIALOG_ID);			
 			}			
-		});	
+		});
+		
+		btnPhoto.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				getThumbailPicture();
+			}
+			
+		});
 	}
 	/***
 	 * Save user input as a wish item
@@ -125,6 +150,11 @@ public class ItemDetailInfo extends Activity {
 		String itemName = myItemName.getText().toString();
 		String itemDesc = myDescription.getText().toString();
 		mDate = new Date(mYear, mMonth, mDay);
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+        String date = sdf.format(mDate);
+		WishItem newItem = new WishItem(itemName, itemDesc, date, priority, thumbnail);
+		wishListDBAdapter.insertTask(newItem);
+		finish();
 	}
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -135,5 +165,27 @@ public class ItemDetailInfo extends Activity {
 	                    mYear, mMonth, mDay);
 	    }
 	    return null;
-	}	
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(resultCode == Activity.RESULT_OK){
+			switch(requestCode){ 
+			case TAKE_PICTURE: 
+				// Check if the result includes a thumbnail Bitmap
+				if (data != null) {
+					if (data.hasExtra("data")) {
+						thumbnail = data.getParcelableExtra("data");
+						imageItem.setImageBitmap(thumbnail);
+					}
+				}
+				break;
+			}
+		}
+	}
+	
+	private void getThumbailPicture() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, TAKE_PICTURE);
+	}
 }

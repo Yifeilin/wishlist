@@ -230,8 +230,7 @@ public class WishList extends Activity {
 	private void addNewItem() {
 		addingNew = true;
 		myEditText.setVisibility(View.VISIBLE);
-		myEditText.requestFocus();
-		
+		myEditText.requestFocus();		
 	}
 	private void removeItem(int index) {		
 		wishListDBAdapter.removeTask(index);
@@ -342,7 +341,7 @@ public class WishList extends Activity {
 			break;
 		case DETAIL_INFO_ACT:
 			//should retrieve the info from data and construct a wishitem object
-		}
+			}
 		}
 	}
 
