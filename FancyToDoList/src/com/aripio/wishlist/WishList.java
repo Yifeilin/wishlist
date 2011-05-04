@@ -214,10 +214,9 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.menu_add): {
-			//addNewItem();
 			// let user generate a wish item
 			Intent detailInfo = new Intent(this, ItemDetailInfo.class);
-			startActivityForResult(detailInfo, DETAIL_INFO_ACT);
+			startActivity(detailInfo);
 			return true;
 		}
 		case (R.id.menu_camera): {

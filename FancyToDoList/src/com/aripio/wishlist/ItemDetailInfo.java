@@ -1,5 +1,6 @@
 package com.aripio.wishlist;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,7 +37,6 @@ public class ItemDetailInfo extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detail_info);
 		
@@ -51,69 +51,72 @@ public class ItemDetailInfo extends Activity {
 		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
 		radioLow = (RadioButton) findViewById(R.id.radio_low);
 		
-//		// get the current date
-//        final Calendar c = Calendar.getInstance();
-//        mYear = c.get(Calendar.YEAR);
-//        mMonth = c.get(Calendar.MONTH);
-//        mDay = c.get(Calendar.DAY_OF_MONTH);
-//		
-//        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-//
-//            public void onDateSet(DatePicker view, int year, 
-//                                  int monthOfYear, int dayOfMonth) {
-//                mYear = year;
-//                mMonth = monthOfYear;
-//                mDay = dayOfMonth;
-//            }
-//        };
-//        
-//        radioListener = new OnClickListener() {
-//    	    public void onClick(View v) {
-//    	        // Perform action on clicks
-//    	        RadioButton rb = (RadioButton) v;
-//    	        rb.setChecked(true);
-//    	    }
-//    	};
-//    	
-//    	radioHigh.setOnClickListener(new OnClickListener(){
-//			@Override
-//			public void onClick(View v) {
-//				priority = "high";
-//				v.setBackgroundColor(R.color.red);
-//			}   		
-//    	});
-//    	
-//    	radioMedm.setOnClickListener(new OnClickListener(){
-//			@Override
-//			public void onClick(View v) {
-//				priority = "medium";
-//				v.setBackgroundColor(R.color.yellow);
-//			}   		
-//    	});
-//    	
-//    	radioLow.setOnClickListener(new OnClickListener(){
-//			@Override
-//			public void onClick(View v) {
-//				priority = "Low";
-//				v.setBackgroundColor(R.color.green);
-//			}   		
-//    	});
-//        
-//		btnSave.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View v) {
-//				saveWishItem();
-//			}					
-//		});
-//		
-//		btnDate.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View v) {
-//				showDialog(DATE_DIALOG_ID);			
-//			}			
-//		});	
+		// get the current date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+		
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, 
+                                  int monthOfYear, int dayOfMonth) {
+                mYear = year;
+                mMonth = monthOfYear;
+                mDay = dayOfMonth;
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+                String date = sdf.format(new Date(mYear-1900, mMonth, mDay));
+                btnDate.setText(date);
+            }
+        };
+        
+        radioListener = new OnClickListener() {
+    	    public void onClick(View v) {
+    	        // Perform action on clicks
+    	        RadioButton rb = (RadioButton) v;
+    	        rb.setChecked(true);
+    	    }
+    	};
+    	
+    	radioHigh.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				priority = "high";
+				radioHigh.setBackgroundColor(R.color.red);
+			}   		
+    	});
+    	
+    	radioMedm.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				priority = "medium";
+				v.setBackgroundColor(R.color.yellow);
+			}   		
+    	});
+    	
+    	radioLow.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				priority = "Low";
+				v.setBackgroundColor(R.color.green);
+			}   		
+    	});
+        
+		btnSave.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				saveWishItem();
+			}					
+		});
+		
+		btnDate.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				showDialog(DATE_DIALOG_ID);			
+			}			
+		});	
 	}
 	/***
 	 * Save user input as a wish item
