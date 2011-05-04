@@ -9,7 +9,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -36,7 +35,6 @@ public class ItemDetailInfo extends Activity {
 	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String priority;
-	private OnClickListener radioListener;
 	private WishListDBAdapter wishListDBAdapter;
 	private int mYear;
     private int mMonth;
@@ -85,14 +83,6 @@ public class ItemDetailInfo extends Activity {
                 btnDate.setText(date);
             }
         };
-        
-        radioListener = new OnClickListener() {
-    	    public void onClick(View v) {
-    	        // Perform action on clicks
-    	        RadioButton rb = (RadioButton) v;
-    	        rb.setChecked(true);
-    	    }
-    	};
     	
     	radioHigh.setOnClickListener(new OnClickListener(){
 			@Override
