@@ -56,7 +56,7 @@ public class WishList extends Activity {
 	private boolean addingNew = false;
 	
 	private ListView myListView;
-	private EditText myEditText;
+	//private EditText myEditText;
 	
 	private WishListDBAdapter wishListDBAdapter;
 	private Cursor toDoListCursor;
@@ -84,7 +84,7 @@ public class WishList extends Activity {
 		alert.show();
 		
 		myListView = (ListView) findViewById(R.id.myListView);
-		myEditText = (EditText) findViewById(R.id.myEditText);
+		//myEditText = (EditText) findViewById(R.id.myEditText);
 
 		//set up the location information
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -95,46 +95,46 @@ public class WishList extends Activity {
 		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
 
 		//add an to-do item to the database when 'ENTER' key is pressed
-		myEditText.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						try {
-							Geocoder mGC = new Geocoder(
-									getApplicationContext(), Locale.ENGLISH);
-							List<Address> addresses;
-							if(mLocation != null)
-							{
-								addresses = mGC.getFromLocation(
-										mLocation.getLatitude(), mLocation.getLongitude(), 1);
-							}
-							else
-								//my current address
-								addresses = mGC.getFromLocation(40.88301, -72.9795, 1);
-									
-							StringBuilder addr = new StringBuilder();
-							Address currentAddr = null;
-							if (addresses != null) {
-								currentAddr = addresses.get(0);
-								for (int i = 0; i < currentAddr.getMaxAddressLineIndex(); i++) {
-									addr.append(currentAddr.getAddressLine(i));
-									if (i != currentAddr.getMaxAddressLineIndex() - 1)
-										addr.append("\n");
-								}
-							}
-							WishItem newItem = new WishItem(myEditText.getText().toString(), addr.toString());
-							wishListDBAdapter.insertTask(newItem);
-							updateListView();
-							myEditText.setText("");
-							cancelAdd();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						return true;
-					}
-				return false;
-			}
-		});
+//		myEditText.setOnKeyListener(new OnKeyListener() {
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//				if (event.getAction() == KeyEvent.ACTION_DOWN)
+//					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//						try {
+//							Geocoder mGC = new Geocoder(
+//									getApplicationContext(), Locale.ENGLISH);
+//							List<Address> addresses;
+//							if(mLocation != null)
+//							{
+//								addresses = mGC.getFromLocation(
+//										mLocation.getLatitude(), mLocation.getLongitude(), 1);
+//							}
+//							else
+//								//my current address
+//								addresses = mGC.getFromLocation(40.88301, -72.9795, 1);
+//									
+//							StringBuilder addr = new StringBuilder();
+//							Address currentAddr = null;
+//							if (addresses != null) {
+//								currentAddr = addresses.get(0);
+//								for (int i = 0; i < currentAddr.getMaxAddressLineIndex(); i++) {
+//									addr.append(currentAddr.getAddressLine(i));
+//									if (i != currentAddr.getMaxAddressLineIndex() - 1)
+//										addr.append("\n");
+//								}
+//							}
+//							WishItem newItem = new WishItem(myEditText.getText().toString(), addr.toString());
+//							wishListDBAdapter.insertTask(newItem);
+//							updateListView();
+//							myEditText.setText("");
+//							cancelAdd();
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
+//						return true;
+//					}
+//				return false;
+//			}
+//		});
 		
 		myListView.setOnItemClickListener(new OnItemClickListener(){
 
@@ -205,7 +205,7 @@ public class WishList extends Activity {
 		switch (item.getItemId()) {
 		case (R.id.menu_del): {
 			if (addingNew) {
-				cancelAdd();
+			//	cancelAdd();
 			} else {
 				removeItem(index);
 			}
@@ -225,19 +225,19 @@ public class WishList extends Activity {
 	}
 	
 	
-	private void addNewItem() {
-		addingNew = true;
-		myEditText.setVisibility(View.VISIBLE);
-		myEditText.requestFocus();		
-	}
+//	private void addNewItem() {
+//		addingNew = true;
+//		myEditText.setVisibility(View.VISIBLE);
+//		myEditText.requestFocus();		
+//	}
 	private void removeItem(int index) {		
 		wishListDBAdapter.removeTask(index);
 		updateListView();			
 	}
-	private void cancelAdd() {
-		addingNew = false;
-		myEditText.setVisibility(View.GONE);	
-	}
+//	private void cancelAdd() {
+//		addingNew = false;
+//		myEditText.setVisibility(View.GONE);	
+//	}
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		super.onContextItemSelected(item);
@@ -282,7 +282,7 @@ public class WishList extends Activity {
 		// Get the preferences editor.
 		SharedPreferences.Editor editor = uiState.edit();
 		// Add the UI state preference values.
-		editor.putString(TEXT_ENTRY_KEY, myEditText.getText().toString());
+	//	editor.putString(TEXT_ENTRY_KEY, myEditText.getText().toString());
 		editor.putBoolean(ADDING_ITEM_KEY, addingNew);
 		// Commit the preferences.
 		editor.commit();
@@ -295,17 +295,16 @@ public class WishList extends Activity {
 		String text = settings.getString(TEXT_ENTRY_KEY, "");
 		Boolean adding = settings.getBoolean(ADDING_ITEM_KEY, false);
 		// Restore the UI to the previous state.
-		if (adding) {
-			addNewItem();
-			myEditText.setText(text);
-		}
+//		if (adding) {
+//			addNewItem();
+//			myEditText.setText(text);
+//		}
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(SELECTED_INDEX_KEY, myListView.getSelectedItemPosition());
-
 	}
 
 	@Override
@@ -317,6 +316,7 @@ public class WishList extends Activity {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 		myListView.setSelection(pos);
 	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

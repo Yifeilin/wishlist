@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -35,10 +37,12 @@ public class ItemDetailInfo extends Activity {
 	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String priority;
+	private String date;
 	private WishListDBAdapter wishListDBAdapter;
 	private int mYear;
     private int mMonth;
     private int mDay;
+    private AlertDialog alert;
 	static final private int DATE_DIALOG_ID = 0;
 	static final private int TAKE_PICTURE = 1;
 	
@@ -59,6 +63,8 @@ public class ItemDetailInfo extends Activity {
 		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
 		radioLow = (RadioButton) findViewById(R.id.radio_low);
 		
+		radioLow.setChecked(true);
+		
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 		
 		// get the current date
@@ -71,6 +77,21 @@ public class ItemDetailInfo extends Activity {
 		// Open or create the database
 		wishListDBAdapter.open();
 		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure you want to exit?")
+		       .setCancelable(false)
+		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   ItemDetailInfo.this.finish();
+		           }
+		       })
+		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		alert = builder.create();
+		
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, 
@@ -79,7 +100,7 @@ public class ItemDetailInfo extends Activity {
                 mMonth = monthOfYear;
                 mDay = dayOfMonth;
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
-                String date = sdf.format(new Date(mYear, mMonth, mDay));
+                date = sdf.format(new Date(mYear, mMonth, mDay));
                 btnDate.setText(date);
             }
         };
@@ -109,10 +130,16 @@ public class ItemDetailInfo extends Activity {
     	});
         
 		btnSave.setOnClickListener(new OnClickListener(){
-
 			@Override
 			public void onClick(View v) {
 				saveWishItem();
+			}					
+		});
+		
+		btnCancel.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {			
+				alert.show();
 			}					
 		});
 		

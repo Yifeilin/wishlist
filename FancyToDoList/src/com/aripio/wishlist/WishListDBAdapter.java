@@ -13,7 +13,7 @@ import android.util.Log;
 public class WishListDBAdapter {
 	private static final String DATABASE_NAME = "todoList.db";
 	private static final String DATABASE_TABLE = "Items";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 1;
 	private SQLiteDatabase db;
 	private final Context context;
 	public static final String KEY_ID = "_id";
