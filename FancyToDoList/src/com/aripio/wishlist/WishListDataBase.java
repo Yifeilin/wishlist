@@ -1,0 +1,218 @@
+package com.aripio.wishlist;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
+import android.graphics.Bitmap;
+import android.util.Log;
+
+/**
+ * Provides access to the WishItem database.  Since this is not a Content Provider, no
+ * other applications will have access to the database.
+ */
+public class WishListDataBase extends  SQLiteOpenHelper {
+	/** The name of the database file on the file system */
+    private static final String DATABASE_NAME = "WishList";
+    /** The version of the database that this class understands. */
+    private static final int DATABASE_VERSION = 1;
+    /** Keep track of context so that we can load SQL from string resources */
+	private Context mContext;
+	
+	public static final String KEY_NAME = "name";
+	public static final String KEY_DESCRIPTION = "description";
+	public static final String KEY_DATE = "create_date";
+	public static final String KEY_STORENAME = "store_name";
+
+	public WishListDataBase(Context context, String name,
+			CursorFactory factory, int version) {
+		super(context, name, factory, version);
+		this.mContext = context;
+	}
+	
+	/** Constructor */
+    public WishListDataBase(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.mContext = context;
+	}
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		String[] sql = mContext.getString(R.string.WishListDataBase_Create).split("\n");
+		db.beginTransaction();
+		try {
+			// Create tables & test data
+			execMultipleSQL(db, sql);
+			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+            Log.e("Error creating tables and debug data", e.toString());
+        } finally {
+        	db.endTransaction();
+        }		
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		 Log.w(WishList.LOG_TAG, "Upgrading database from version " + oldVersion + " to " +
+	                newVersion + ", which will destroy all old data");
+
+			String[] sql = mContext.getString(R.string.WishListDataBase_Upgrade).split("\n");
+			db.beginTransaction();
+			try {
+				// Create tables & test data
+				execMultipleSQL(db, sql);
+				db.setTransactionSuccessful();
+			} catch (SQLException e) {
+	            Log.e("Error creating tables and debug data", e.toString());
+	        } finally {
+	        	db.endTransaction();
+	        }
+	        // This is cheating.  In the real world, you'll need to add columns, not rebuild from scratch
+	        onCreate(db);		
+	}
+	
+	/**
+     * Execute all of the SQL statements in the String[] array
+     * @param db The database on which to execute the statements
+     * @param sql An array of SQL statements to execute
+     */
+    private void execMultipleSQL(SQLiteDatabase db, String[] sql){
+    	for( String s : sql )
+    		if (s.trim().length()>0)
+    			db.execSQL(s);
+    }
+    
+    /**
+	 * Add a new item to the database.  The item will have a status of open.
+	 * @param item_id	unique id of the item
+	 * @param name			The item name
+	 * @param description	The name description
+	 */
+	public void addItem(String name, String description, String date, Bitmap picture){
+		String sql = String.format(
+			"INSERT INTO WishItems (_id, name, description, create_date, picture) " +
+			"VALUES ( NULL, '%s', '%s',  '%s', NULL)",
+			 name, description, date);
+		try{
+			getWritableDatabase().execSQL(sql);
+		} catch (SQLException e) {
+            Log.e("Error writing new item", e.toString());
+		}
+	}
+	
+	/**
+	 * Update a item in the database.
+	 * @param _id		The id of the existing item
+	 * @param name			The item name
+	 * @param description	The item description
+	 */
+	public void editItem(long _id, String name, String description) {
+		String sql = String.format(
+				"UPDATE WishItems " +
+				"SET _id = '%d', "+
+				" name = '%s',  "+
+				" description = '%s' "+
+				"WHERE item_id = '%d' ",
+				name, description, _id);
+		try{
+			getWritableDatabase().execSQL(sql);
+		} catch (SQLException e) {
+            Log.e("Error writing an exsiting item", e.toString());
+		}
+	}
+	
+	/**
+	 * Delete a item from the database.
+	 * @param _id		The id of the item to delete
+	 */
+	public void deleteItem(long _id) {
+		String sql = String.format(
+				"DELETE FROM WishItems " +
+				"WHERE _id = '%d' ",
+				_id);
+		try{
+			getWritableDatabase().execSQL(sql);
+		} catch (SQLException e) {
+            Log.e("Error deleteing item", e.toString());
+		}
+	}
+
+	/** Returns the number of Items */
+	public int getItemsCount(){
+
+		Cursor c = null;
+        try {
+            c = getReadableDatabase().rawQuery("SELECT count(*) FROM WishItems", null);
+            if (0 >= c.getCount()) { return 0; }
+            c.moveToFirst();
+            return c.getInt(0);
+        }
+        finally {
+            if (null != c) {
+                try { c.close(); }
+                catch (SQLException e) { }
+            }
+        }
+	}
+	
+	 public static class ItemsCursor extends SQLiteCursor{
+	    	public static enum SortBy{
+	    		name,
+	    		_id
+	    	}
+	    	private static final String QUERY = 
+	    		"SELECT _id, name, description, create_date "+
+	    	    "FROM WishItems ";
+	    	//+"ORDER BY "
+		    private ItemsCursor(SQLiteDatabase db, SQLiteCursorDriver driver,
+					String editTable, SQLiteQuery query) {
+				super(db, driver, editTable, query);
+			}
+		    private static class Factory implements SQLiteDatabase.CursorFactory{
+				@Override
+				public Cursor newCursor(SQLiteDatabase db,
+						SQLiteCursorDriver driver, String editTable,
+						SQLiteQuery query) {
+					return new ItemsCursor(db, driver, editTable, query);
+				}
+		    }
+	    	public long getColItemsId(){
+	    		return getLong(getColumnIndexOrThrow("_id"));
+	    	}
+			public String getColName(){
+				return getString(getColumnIndexOrThrow("name"));
+			}
+//	    	public String getColStoreName(){
+//	    		return getString(getColumnIndexOrThrow("store_name"));
+//	    	}
+//	    	public String getColAddress(){
+//	    		return getString(getColumnIndexOrThrow("address"));
+//	    	}	
+			public String getColDescription(){
+	    		return getString(getColumnIndexOrThrow("description"));
+	    	}	
+	    	public String getColCreateDate(){
+	    		return getString(getColumnIndexOrThrow("create_date"));
+	    	}	
+	    }
+	 
+	 /** Return a sorted JobsCursor
+	     * @param sortBy the sort criteria
+	     */
+	    public ItemsCursor getItems(ItemsCursor.SortBy sortBy) {
+	    	String sql = ItemsCursor.QUERY/*+sortBy.toString()*/;
+	    	SQLiteDatabase d = getReadableDatabase();
+	    	ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+	        	new ItemsCursor.Factory(),
+	        	sql,
+	        	null,
+	        	null);
+	        c.moveToFirst();
+	        return c;
+	    }
+}

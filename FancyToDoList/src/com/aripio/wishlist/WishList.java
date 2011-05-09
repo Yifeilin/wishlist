@@ -1,10 +1,13 @@
 package com.aripio.wishlist;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
 import com.aripio.wishlist.R;
+import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -52,18 +55,20 @@ public class WishList extends Activity {
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	
+	static final String LOG_TAG = "WishList";
 	//status variable indicating whether adding a new item
 	private boolean addingNew = false;
 	
 	private ListView myListView;
-	//private EditText myEditText;
 	
-	private WishListDBAdapter wishListDBAdapter;
-	private Cursor toDoListCursor;
-	private WishListItemCursorAdapter todoItemCursor;
+	//private WishListDBAdapter wishListDBAdapter;
+	private WishListDataBase wishListDB;
+	//private Cursor toDoListCursor;
+	private ItemsCursor wishItemCursor;
+	private WishListItemCursorAdapter wishListItemAdapterCursor;
 
-	private LocationManager mLocationManager;
-	private Location mLocation;
+//	private LocationManager mLocationManager;
+//	private Location mLocation;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -71,28 +76,26 @@ public class WishList extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Welcome to the Fancy ToDo List!").setCancelable(false)
-	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-	           public void onClick(DialogInterface dialog, int id) {
-	                dialog.cancel();
-	           }
-	       });
-		       
-		AlertDialog alert = builder.create();
-		alert.show();
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		builder.setMessage("Welcome to the Fancy ToDo List!").setCancelable(false)
+//	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+//	           public void onClick(DialogInterface dialog, int id) {
+//	                dialog.cancel();
+//	           }
+//	       });
+//		       
+//		AlertDialog alert = builder.create();
+//		alert.show();
 		
 		myListView = (ListView) findViewById(R.id.myListView);
-		//myEditText = (EditText) findViewById(R.id.myEditText);
-
+		
 		//set up the location information
-		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		String locationprovider = mLocationManager.getBestProvider(criteria, true);	
-		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
+//		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		Criteria criteria = new Criteria();
+//		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//		criteria.setPowerRequirement(Criteria.POWER_LOW);
+//		String locationprovider = mLocationManager.getBestProvider(criteria, true);	
+//		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
 
 		//add an to-do item to the database when 'ENTER' key is pressed
 //		myEditText.setOnKeyListener(new OnKeyListener() {
@@ -148,28 +151,37 @@ public class WishList extends Activity {
 		registerForContextMenu(myListView);
 		restoreUIState();
 
-		wishListDBAdapter = new WishListDBAdapter(this);
+		//wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
-		wishListDBAdapter.open();
-		populateTodoList();
+		wishListDB = new WishListDataBase(this);
+		//wishListDBAdapter.open();
+		
+		populateTodoList(ItemsCursor.SortBy.name);
 	}
     
-    private void populateTodoList() {
+    private void populateTodoList(ItemsCursor.SortBy sortBy) {
     // Get all the todo list items from the database.
-    	toDoListCursor = wishListDBAdapter. getAllToDoItemsCursor();
-    	startManagingCursor(toDoListCursor);
+    	//toDoListCursor = wishListDBAdapter. getAllToDoItemsCursor();
+    	//startManagingCursor(toDoListCursor);
+    // Create a new list to track the addition of TextViews
+        
+    // Get all of the rows from the database and create the table
+    // Keep track of the TextViews added in list lstTable
+        wishItemCursor = wishListDB.getItems(sortBy); 	
+    	
     // Update the list view
     	updateListView();
     }
 
 	private void updateListView() {
-		toDoListCursor.requery();
-		int resID = R.layout.todoitem_rel;
-		String[] from = new String[] {WishListDBAdapter.KEY_TASK, WishListDBAdapter.KEY_ADDRESS, WishListDBAdapter.KEY_CREATION_DATE};
-	    int[] to = new int[] {R.id.rowItem, R.id.rowAddr, R.id.rowDate}; 
-	    todoItemCursor = new WishListItemCursorAdapter(this, resID, toDoListCursor, from, to);
-		myListView.setAdapter(todoItemCursor);
-		todoItemCursor.notifyDataSetChanged();
+		//toDoListCursor.requery();
+		wishItemCursor.requery();
+		int resID = R.layout.wishitem_single;
+		String[] from = new String[] {WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
+	    int[] to = new int[] {R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+	    wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor, from, to);
+		myListView.setAdapter(wishListItemAdapterCursor);
+		wishListItemAdapterCursor.notifyDataSetChanged();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,11 +202,6 @@ public class WishList extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-//		int idx = myListView.getSelectedItemPosition();
-//		String removeTitle = getString(addingNew ? R.string.cancel : R.string.remove);
-//		MenuItem removeItem = menu.findItem(REMOVE_TODO);
-//		removeItem.setTitle(removeTitle);
-//		removeItem.setVisible(addingNew || idx > -1);
 		return true;
 	}
 	@Override
@@ -213,7 +220,7 @@ public class WishList extends Activity {
 		}
 		case (R.id.menu_add): {
 			// let user generate a wish item
-			Intent detailInfo = new Intent(this, ItemDetailInfo.class);
+			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
 			return true;
 		}
@@ -231,7 +238,7 @@ public class WishList extends Activity {
 //		myEditText.requestFocus();		
 //	}
 	private void removeItem(int index) {		
-		wishListDBAdapter.removeTask(index);
+		//wishListDBAdapter.removeTask(index);
 		updateListView();			
 	}
 //	private void cancelAdd() {
@@ -250,7 +257,7 @@ public class WishList extends Activity {
 			return true;
 			}
 		case (DETAIL_TODO):{
-			Intent detailInfo = new Intent(this, ItemDetailInfo.class);
+			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
 			}
 		}
@@ -321,7 +328,7 @@ public class WishList extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Close the database
-		wishListDBAdapter.close();
+		wishListDB.close();
 	}
 	
 	@Override
@@ -341,6 +348,12 @@ public class WishList extends Activity {
 			//should retrieve the info from data and construct a wishitem object
 			}
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateListView();
 	}
 
 	private void getThumbailPicture() {

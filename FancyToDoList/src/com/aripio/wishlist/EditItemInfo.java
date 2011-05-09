@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
-public class ItemDetailInfo extends Activity {
+public class EditItemInfo extends Activity {
 
 	private EditText myItemName;
 	private EditText myDescription;
@@ -38,7 +38,8 @@ public class ItemDetailInfo extends Activity {
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String priority;
 	private String date;
-	private WishListDBAdapter wishListDBAdapter;
+	private WishListDataBase wishListDB; 
+//	private WishListDBAdapter wishListDBAdapter;
 	private int mYear;
     private int mMonth;
     private int mDay;
@@ -49,7 +50,7 @@ public class ItemDetailInfo extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail_info);
+		setContentView(R.layout.add_item);
 		
 		myItemName  = (EditText) findViewById(R.id.itemname);
 		myDescription  = (EditText) findViewById(R.id.description);
@@ -73,16 +74,17 @@ public class ItemDetailInfo extends Activity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
         
-        wishListDBAdapter = new WishListDBAdapter(this);
+       // wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
-		wishListDBAdapter.open();
+		//wishListDBAdapter.open();
+        wishListDB = new WishListDataBase(this);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?")
 		       .setCancelable(false)
 		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
-		        	   ItemDetailInfo.this.finish();
+		        	   EditItemInfo.this.finish();
 		           }
 		       })
 		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -169,8 +171,11 @@ public class ItemDetailInfo extends Activity {
 		mDate = new Date(mYear, mMonth, mDay);
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
         String date = sdf.format(mDate);
-		WishItem newItem = new WishItem(itemName, itemDesc, date, priority, thumbnail);
-		wishListDBAdapter.insertTask(newItem);
+		
+        //WishItem newItem = new WishItem(itemName, itemDesc, date, priority, thumbnail);
+		
+		//wishListDBAdapter.insertTask(newItem);
+		wishListDB.addItem(itemName, itemDesc, date, thumbnail);
 		finish();
 	}
 	@Override

@@ -6,6 +6,7 @@
 
 
     <application android:label="@string/app_name" android:debuggable="true" android:icon="@drawable/checkicon">
+    <uses-library android:name="com.google.android.maps" />    
         <activity android:name=".WishList"
                   android:label="@string/app_name"
                   android:theme="@style/ToDoTheme"
@@ -15,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.aripio.wishlist.ItemDetailInfo"
+        <activity android:name="EditItemInfo"
         		  android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme"
                   android:screenOrientation="portrait">
@@ -23,5 +24,7 @@
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />  
     <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>
