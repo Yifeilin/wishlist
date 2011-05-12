@@ -11,13 +11,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -36,9 +40,6 @@ public class WishListMap extends MapActivity {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		 // start trace
-  //      Debug.startMethodTracing("x");
- 
         setContentView(R.layout.map);
 
         db = WishListDataBase.getDBInstance(this);
@@ -72,25 +73,25 @@ public class WishListMap extends MapActivity {
         mvMap.setSatellite(false);
         mvMap.setTraffic(false);
         mvMap.setStreetView(false);
-//        
-//        // start out with a general zoom
+        
+        // start out with a general zoom
         mc.setZoom(16);
         mvMap.invalidate();
-//
-//        // Create a button click listener for the List Jobs button.
-//        Button btnList = (Button) findViewById(R.id.btnShowList);
-//        btnList.setOnClickListener(new Button.OnClickListener() {
-//            public void onClick(View v) {
-////                Intent intent = new Intent(MicroJobs.this.getApplication(), MicroJobsList.class);
-////                startActivity(intent);
-//            }
-//        });
-//
-//        // Load a HashMap with locations and positions
-//        List<String> lsLocations = new ArrayList<String>();
-//        final HashMap<String, GeoPoint> hmLocations = new HashMap<String, GeoPoint>();
-//        hmLocations.put("Current Location", new GeoPoint(latitude, longitude));
-//        lsLocations.add("Current Location");
+
+        // Create a button click listener for the List Jobs button.
+        Button btnList = (Button) findViewById(R.id.btnShowList);
+        btnList.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(WishListMap.this.getApplicationContext(), WishList.class);
+                startActivity(intent);
+            }
+        });
+
+        // Load a HashMap with locations and positions
+        List<String> lsLocations = new ArrayList<String>();
+        final HashMap<String, GeoPoint> hmLocations = new HashMap<String, GeoPoint>();
+        hmLocations.put("Current Location", new GeoPoint(latitude, longitude));
+        lsLocations.add("Current Location");
 
         // Add favorite locations from this user's record in workers table
 //        worker = db.getWorker();
@@ -99,25 +100,53 @@ public class WishListMap extends MapActivity {
 //        hmLocations.put(worker.getColLoc2Name(), new GeoPoint((int)worker.getColLoc2Lat(), (int)worker.getColLoc2Long()));
 //        lsLocations.add(worker.getColLoc2Name());
 //        hmLocations.put(worker.getColLoc3Name(), new GeoPoint((int)worker.getColLoc3Lat(), (int)worker.getColLoc3Long()));
-//        lsLocations.add(worker.getColLoc3Name());       
-//        ArrayAdapter<String> aspnLocations
-//            = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lsLocations);
-//        aspnLocations.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spnLocations.setAdapter(aspnLocations);
+//        lsLocations.add(worker.getColLoc3Name());  
+        hmLocations.put("BeiJing", new GeoPoint(39904214,116407413));
+        lsLocations.add("BeiJing");  
+        hmLocations.put("ShangHai", new GeoPoint(31230393,121473704));
+        lsLocations.add("ShangHai"); 
+        
+        ArrayAdapter<String> aspnLocations
+            = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lsLocations);
+        aspnLocations.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnLocations.setAdapter(aspnLocations);
+        
+        // Setup a callback for the spinner
+        spnLocations.setOnItemSelectedListener(
+            new OnItemSelectedListener() {
+                public void onNothingSelected(AdapterView<?> arg0) { }
+
+                public void onItemSelected(AdapterView<?> parent, View v, int position, long id)  {
+                    TextView vt = (TextView) v;
+                    if ("Current Location".equals(vt.getText())) {
+                    	mMyLocationOverlay.enableMyLocation();
+                    	try {
+                    		mc.animateTo(mMyLocationOverlay.getMyLocation());
+                    	}
+                    	catch (Exception e) {
+                    		Log.i("MicroJobs", "Unable to animate map", e);
+                    	}
+                    	mvMap.invalidate();
+                    } else {
+                    	mMyLocationOverlay.disableMyLocation();
+                        mc.animateTo(hmLocations.get(vt.getText()));
+                    }
+                    mvMap.invalidate();
+                }
+            });
 	}
 
 	  /**
      * @return the current location
      */
     private Location getCurrentLocation(LocationManager lm) {
-         Location l = lm.getLastKnownLocation("gps");
+        Location l = lm.getLastKnownLocation("gps");
         if (null != l) { return l; }
 
         // getLastKnownLocation returns null if loc provider is not enabled
         l = new Location("gps");
         l.setLatitude(42.352299);
         l.setLatitude(-71.063979);
-
         return l;
     }
 
@@ -195,7 +224,7 @@ public class WishListMap extends MapActivity {
                 return true;
             case 5:
                 // Show the job list activity
-               // startActivity(new Intent(MicroJobs.this, MicroJobsList.class));
+                startActivity(new Intent(this, WishList.class));
                 return true;
         }
         return false;
@@ -238,12 +267,9 @@ public class WishListMap extends MapActivity {
         if (zoom < 5) { zoom = 5; }
         mvMap.getController().setZoom(zoom);
     }
-
-
-
+    
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-
 }
