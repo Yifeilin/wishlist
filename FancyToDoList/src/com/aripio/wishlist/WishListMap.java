@@ -41,7 +41,7 @@ public class WishListMap extends MapActivity {
  
         setContentView(R.layout.map);
 
-        db = new WishListDataBase(this);
+        db = WishListDataBase.getDBInstance(this);
 //
 //        // Get current position
         final Location myLocation

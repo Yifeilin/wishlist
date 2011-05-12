@@ -13,13 +13,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 
 public class EditItemInfo extends Activity {
 
@@ -29,14 +30,13 @@ public class EditItemInfo extends Activity {
 	private Button btnCancel;
 	private Button btnDate;
 	private Button btnPhoto;
-	private RadioButton radioHigh;
-	private RadioButton radioMedm;
-	private RadioButton radioLow;
+//	private RadioButton radioHigh;
+//	private RadioButton radioMedm;
+//	private RadioButton radioLow;
 	private ImageView imageItem;
 	private Date mDate;
 	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
-	private String priority;
 	private String date;
 	private WishListDataBase wishListDB; 
 //	private WishListDBAdapter wishListDBAdapter;
@@ -60,11 +60,10 @@ public class EditItemInfo extends Activity {
 		btnDate = (Button) findViewById(R.id.button_date);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
 		
-		radioHigh = (RadioButton) findViewById(R.id.radio_high);
-		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
-		radioLow = (RadioButton) findViewById(R.id.radio_low);
-		
-		radioLow.setChecked(true);
+//		radioHigh = (RadioButton) findViewById(R.id.radio_high);
+//		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
+//		radioLow = (RadioButton) findViewById(R.id.radio_low);
+//		radioLow.setChecked(true);
 		
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 		
@@ -77,7 +76,7 @@ public class EditItemInfo extends Activity {
        // wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
 		//wishListDBAdapter.open();
-        wishListDB = new WishListDataBase(this);
+        wishListDB = WishListDataBase.getDBInstance(this);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?")
@@ -94,6 +93,31 @@ public class EditItemInfo extends Activity {
 		       });
 		alert = builder.create();
 		
+		
+		
+        myItemName.setOnKeyListener(new OnKeyListener(){
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER){
+						myItemName.setSelected(false);				
+					}
+        	return false;
+			}
+        });
+        
+        myDescription.setOnKeyListener(new OnKeyListener(){
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER){
+						myDescription.setSelected(false);				
+					}
+        	return false;
+			}
+        });
+        
+        
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, 
@@ -106,30 +130,6 @@ public class EditItemInfo extends Activity {
                 btnDate.setText(date);
             }
         };
-    	
-    	radioHigh.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				priority = "high";
-				radioHigh.setBackgroundColor(R.color.red);
-			}   		
-    	});
-    	
-    	radioMedm.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				priority = "medium";
-				v.setBackgroundColor(R.color.yellow);
-			}   		
-    	});
-    	
-    	radioLow.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				priority = "Low";
-				v.setBackgroundColor(R.color.green);
-			}   		
-    	});
         
 		btnSave.setOnClickListener(new OnClickListener(){
 			@Override
@@ -171,11 +171,7 @@ public class EditItemInfo extends Activity {
 		mDate = new Date(mYear, mMonth, mDay);
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
         String date = sdf.format(mDate);
-		
-        //WishItem newItem = new WishItem(itemName, itemDesc, date, priority, thumbnail);
-		
-		//wishListDBAdapter.insertTask(newItem);
-		wishListDB.addItem(itemName, itemDesc, date, thumbnail);
+		wishListDB.addItem(itemName, itemDesc, date, -1, thumbnail);
 		finish();
 	}
 	@Override

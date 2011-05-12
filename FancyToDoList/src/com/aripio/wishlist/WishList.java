@@ -1,43 +1,24 @@
 package com.aripio.wishlist;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-
-import com.aripio.wishlist.R;
-import com.aripio.wishlist.WishListDataBase.ItemsCursor;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 
 public class WishList extends Activity {
 	//Assign a unique ID for each menu item
@@ -56,95 +37,25 @@ public class WishList extends Activity {
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	
 	static final String LOG_TAG = "WishList";
-	//status variable indicating whether adding a new item
-	private boolean addingNew = false;
 	
 	private ListView myListView;
 	
-	//private WishListDBAdapter wishListDBAdapter;
 	private WishListDataBase wishListDB;
-	//private Cursor toDoListCursor;
 	private ItemsCursor wishItemCursor;
 	private WishListItemCursorAdapter wishListItemAdapterCursor;
-
-//	private LocationManager mLocationManager;
-//	private Location mLocation;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
-//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//		builder.setMessage("Welcome to the Fancy ToDo List!").setCancelable(false)
-//	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-//	           public void onClick(DialogInterface dialog, int id) {
-//	                dialog.cancel();
-//	           }
-//	       });
-//		       
-//		AlertDialog alert = builder.create();
-//		alert.show();
-		
+			
 		myListView = (ListView) findViewById(R.id.myListView);
 		
-		//set up the location information
-//		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//		Criteria criteria = new Criteria();
-//		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//		criteria.setPowerRequirement(Criteria.POWER_LOW);
-//		String locationprovider = mLocationManager.getBestProvider(criteria, true);	
-//		mLocation = mLocationManager.getLastKnownLocation(locationprovider);
-
-		//add an to-do item to the database when 'ENTER' key is pressed
-//		myEditText.setOnKeyListener(new OnKeyListener() {
-//			public boolean onKey(View v, int keyCode, KeyEvent event) {
-//				if (event.getAction() == KeyEvent.ACTION_DOWN)
-//					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-//						try {
-//							Geocoder mGC = new Geocoder(
-//									getApplicationContext(), Locale.ENGLISH);
-//							List<Address> addresses;
-//							if(mLocation != null)
-//							{
-//								addresses = mGC.getFromLocation(
-//										mLocation.getLatitude(), mLocation.getLongitude(), 1);
-//							}
-//							else
-//								//my current address
-//								addresses = mGC.getFromLocation(40.88301, -72.9795, 1);
-//									
-//							StringBuilder addr = new StringBuilder();
-//							Address currentAddr = null;
-//							if (addresses != null) {
-//								currentAddr = addresses.get(0);
-//								for (int i = 0; i < currentAddr.getMaxAddressLineIndex(); i++) {
-//									addr.append(currentAddr.getAddressLine(i));
-//									if (i != currentAddr.getMaxAddressLineIndex() - 1)
-//										addr.append("\n");
-//								}
-//							}
-//							WishItem newItem = new WishItem(myEditText.getText().toString(), addr.toString());
-//							wishListDBAdapter.insertTask(newItem);
-//							updateListView();
-//							myEditText.setText("");
-//							cancelAdd();
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
-//						return true;
-//					}
-//				return false;
-//			}
-//		});
-		
 		myListView.setOnItemClickListener(new OnItemClickListener(){
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
 			}
 			
 		});
@@ -152,9 +63,8 @@ public class WishList extends Activity {
 		restoreUIState();
 
 		// Open or create the database
-		wishListDB = new WishListDataBase(this);
-		//wishListDBAdapter.open();
-		
+		wishListDB = WishListDataBase.getDBInstance(this);
+			
 		populateItemList(ItemsCursor.SortBy.name);
 	}
     
@@ -169,11 +79,10 @@ public class WishList extends Activity {
     }
 
 	private void updateListView() {
-		//toDoListCursor.requery();
 		wishItemCursor.requery();
 		int resID = R.layout.wishitem_single;
-		String[] from = new String[] {WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
-	    int[] to = new int[] {R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+		String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
+	    int[] to = new int[] {R.id.txtItemID, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
 	    wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor, from, to);
 		myListView.setAdapter(wishListItemAdapterCursor);
 		wishListItemAdapterCursor.notifyDataSetChanged();
@@ -202,15 +111,10 @@ public class WishList extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
-		
-		int index = myListView.getSelectedItemPosition();
+				
 		switch (item.getItemId()) {
-		case (R.id.menu_del): {
-			if (addingNew) {
-			//	cancelAdd();
-			} else {
-				removeItem(index);
-			}
+		case (R.id.menu_search): {
+			//should provide search service
 			return true;
 		}
 		case (R.id.menu_add): {
@@ -219,10 +123,6 @@ public class WishList extends Activity {
 			startActivity(detailInfo);
 			return true;
 		}
-		case (R.id.menu_camera): {
-			getThumbailPicture();
-		}
-		
 		case (R.id.menu_map):{
 			Intent mapIntent = new Intent(this, WishListMap.class);
 			startActivity(mapIntent);
@@ -243,9 +143,19 @@ public class WishList extends Activity {
 		AdapterView.AdapterContextMenuInfo menuInfo;
 		menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = menuInfo.position;
+		
+		//int list_index = myListView.getCheckedItemPosition ();
+		//WishListItemCursorAdapter cursor = (WishListItemCursorAdapter) myListView.getItemAtPosition(list_index);
+		View selected_view = myListView.getChildAt(index);
+		TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+		long item_id = Long.parseLong(itemIdTextView.getText().toString());
+		
 		switch (item.getItemId()) {
 		case (REMOVE_TODO): {	
-			removeItem(index);
+			
+			wishListDB.deleteItem(item_id);
+			//removeItem(index);
+			updateListView();
 			return true;
 			}
 		case (DETAIL_TODO):{
@@ -281,9 +191,7 @@ public class WishList extends Activity {
 		SharedPreferences uiState = getPreferences(0);
 		// Get the preferences editor.
 		SharedPreferences.Editor editor = uiState.edit();
-		// Add the UI state preference values.
-	//	editor.putString(TEXT_ENTRY_KEY, myEditText.getText().toString());
-		editor.putBoolean(ADDING_ITEM_KEY, addingNew);
+		// Add the UI state preference values.	
 		// Commit the preferences.
 		editor.commit();
 	}
@@ -295,10 +203,6 @@ public class WishList extends Activity {
 		String text = settings.getString(TEXT_ENTRY_KEY, "");
 		Boolean adding = settings.getBoolean(ADDING_ITEM_KEY, false);
 		// Restore the UI to the previous state.
-//		if (adding) {
-//			addNewItem();
-//			myEditText.setText(text);
-//		}
 	}
 
 	@Override
@@ -338,19 +242,13 @@ public class WishList extends Activity {
 			}
 			break;
 		case DETAIL_INFO_ACT:
-			//should retrieve the info from data and construct a wishitem object
+			//should retrieve the info from data and construct a wish item object
 			}
 		}
-	}
-	
+	}	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		updateListView();
-	}
-
-	private void getThumbailPicture() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, TAKE_PICTURE);
 	}
 }

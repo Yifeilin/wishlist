@@ -27,8 +27,29 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	public static final String KEY_NAME = "name";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_DATE = "create_date";
+	public static final String KEY_ITEMID = "_id";
 	public static final String KEY_STORENAME = "store_name";
 
+	private static WishListDataBase instance;
+	/**
+	 * Use singleton pattern to return a unique instance of WishListDataBase
+	 * @param context
+	 * @return
+	 */
+	public static synchronized WishListDataBase getDBInstance(Context context){
+		if(instance == null){
+			instance = new WishListDataBase(context);
+		}
+		else
+			instance.setContext(context);
+		
+		return instance;		
+	}
+	
+	public void setContext(Context context){
+		this.mContext = context;
+	}
+	
 	public WishListDataBase(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
@@ -36,7 +57,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	}
 	
 	/** Constructor */
-    public WishListDataBase(Context context) {
+    private WishListDataBase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
 	}
@@ -93,11 +114,11 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 * @param name			The item name
 	 * @param description	The name description
 	 */
-	public void addItem(String name, String description, String date, Bitmap picture){
+	public void addItem(String name, String description, String date, int store_id, Bitmap picture){
 		String sql = String.format(
-			"INSERT INTO WishItems (_id, name, description, create_date, picture) " +
-			"VALUES ( NULL, '%s', '%s',  '%s', NULL)",
-			 name, description, date);
+			"INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture) " +
+			"VALUES ( NULL, '%s', '%s', '%s', '%d', NULL)",
+			 name, description, date, store_id);
 		try{
 			getWritableDatabase().execSQL(sql);
 		} catch (SQLException e) {
@@ -111,14 +132,15 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 * @param name			The item name
 	 * @param description	The item description
 	 */
-	public void editItem(long _id, String name, String description) {
+	public void editItem(long _id, String name, String description,String date, int store_id, Bitmap picture) {
 		String sql = String.format(
 				"UPDATE WishItems " +
-				"SET _id = '%d', "+
-				" name = '%s',  "+
-				" description = '%s' "+
-				"WHERE item_id = '%d' ",
-				name, description, _id);
+				"SET name = '%s',  "+
+				" description = '%s', "+
+				" create_date = '%s', " +
+				" store_id = '%d' " +
+				"WHERE _id = '%d' ",
+				name, description,date, store_id, _id);
 		try{
 			getWritableDatabase().execSQL(sql);
 		} catch (SQLException e) {
@@ -166,9 +188,9 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	    		_id
 	    	}
 	    	private static final String QUERY = 
-	    		"SELECT _id, name, description, create_date "+
-	    	    "FROM WishItems ";
-	    	//+"ORDER BY "
+	    		"SELECT _id, name, description, create_date, store_id "+
+	    	    "FROM WishItems "+
+	    	    "ORDER BY ";
 		    private ItemsCursor(SQLiteDatabase db, SQLiteCursorDriver driver,
 					String editTable, SQLiteQuery query) {
 				super(db, driver, editTable, query);
@@ -187,9 +209,9 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 			public String getColName(){
 				return getString(getColumnIndexOrThrow("name"));
 			}
-//	    	public String getColStoreName(){
-//	    		return getString(getColumnIndexOrThrow("store_name"));
-//	    	}
+	    	public int getColStoreId(){
+	    		return Integer.parseInt(getString(getColumnIndexOrThrow("store_id")));
+	    	}
 //	    	public String getColAddress(){
 //	    		return getString(getColumnIndexOrThrow("address"));
 //	    	}	
@@ -205,7 +227,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	     * @param sortBy the sort criteria
 	     */
 	    public ItemsCursor getItems(ItemsCursor.SortBy sortBy) {
-	    	String sql = ItemsCursor.QUERY/*+sortBy.toString()*/;
+	    	String sql = ItemsCursor.QUERY+sortBy.toString();
 	    	SQLiteDatabase d = getReadableDatabase();
 	    	ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 	        	new ItemsCursor.Factory(),

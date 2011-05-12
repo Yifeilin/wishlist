@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, ToDoList!</string>
+	
 	<string name="app_name">WishList</string>
+	
 	<string name="add_new">Add</string>
+	
 	<string name="remove">Delete</string>
+	
+	<string name="search">Search</string>
+	
 	<string name="help">Help</string>
+	
 	<string name="detail">Detail Information</string>
+	
 	<string name="cancel">Cancel</string>
-	 <string name="map_menu_zoom_in">Zoom in</string> 
+	
+	<string name="map_menu_zoom_in">Zoom in</string> 
 
     <string name="map_menu_zoom_out">Zoom out</string> 
 
@@ -19,13 +28,15 @@
 
     <string name="map_menu_set_traffic">Toggle Traffic View</string>
 	<string name="WishListDataBase_Create">"
-	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, picture BLOB);
+	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture BLOB);
 	
-	CREATE TABLE ItemDetails (item_id INTEGER, store_name TEXT, address TEXT, create_date TEXT, picture BLOB)
+	CREATE TABLE StoreInfo (store_id INTEGER, store_name TEXT, address TEXT, latitude INTEGER, longitude INTEGER);
 	"</string>
+	
 	<string name="WishListDataBase_Upgrade">"
 	DROP TABLE IF EXISTS WishItems
 	
-	DROP TABLE IF EXISTS ItemDetails
+	DROP TABLE IF EXISTS StoreInfo
 	"</string>
+
 </resources>

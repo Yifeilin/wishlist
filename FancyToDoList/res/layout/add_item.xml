@@ -54,37 +54,7 @@
     <TextView android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="Select priority"
-    android:layout_weight="0"/>
-    
-     <RadioGroup
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:background="@color/black"
-      android:layout_weight="0">
-      <RadioButton android:id="@+id/radio_high"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="High"
-          android:textColor="@color/red"
-          />
-      <RadioButton android:id="@+id/radio_medium"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="Medium" 
-           android:textColor="@color/yellow"
-          />
-      <RadioButton android:id="@+id/radio_low"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="Low"
-           android:textColor="@color/green"
-          />
-    </RadioGroup>
-    
+    android:layout_weight="0"/>    
     <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent"
     android:padding="10dip">
         <Button android:layout_width="fill_parent" 
