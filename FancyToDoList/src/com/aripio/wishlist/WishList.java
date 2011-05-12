@@ -151,20 +151,15 @@ public class WishList extends Activity {
 		registerForContextMenu(myListView);
 		restoreUIState();
 
-		//wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
 		wishListDB = new WishListDataBase(this);
 		//wishListDBAdapter.open();
 		
-		populateTodoList(ItemsCursor.SortBy.name);
+		populateItemList(ItemsCursor.SortBy.name);
 	}
     
-    private void populateTodoList(ItemsCursor.SortBy sortBy) {
-    // Get all the todo list items from the database.
-    	//toDoListCursor = wishListDBAdapter. getAllToDoItemsCursor();
-    	//startManagingCursor(toDoListCursor);
-    // Create a new list to track the addition of TextViews
-        
+    private void populateItemList(ItemsCursor.SortBy sortBy) {
+   
     // Get all of the rows from the database and create the table
     // Keep track of the TextViews added in list lstTable
         wishItemCursor = wishListDB.getItems(sortBy); 	
@@ -194,7 +189,7 @@ public class WishList extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("Selected To Do Item");
+		menu.setHeaderTitle("Selected Wish Item");
 		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
 		menu.add(0, DETAIL_TODO, Menu.NONE, R.string.detail);
 	}
@@ -227,24 +222,21 @@ public class WishList extends Activity {
 		case (R.id.menu_camera): {
 			getThumbailPicture();
 		}
+		
+		case (R.id.menu_map):{
+			Intent mapIntent = new Intent(this, WishListMap.class);
+			startActivity(mapIntent);
+			return true;
+		}
 		}
 		return false;
 	}
 	
-	
-//	private void addNewItem() {
-//		addingNew = true;
-//		myEditText.setVisibility(View.VISIBLE);
-//		myEditText.requestFocus();		
-//	}
 	private void removeItem(int index) {		
 		//wishListDBAdapter.removeTask(index);
 		updateListView();			
 	}
-//	private void cancelAdd() {
-//		addingNew = false;
-//		myEditText.setVisibility(View.GONE);	
-//	}
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		super.onContextItemSelected(item);
@@ -281,6 +273,7 @@ public class WishList extends Activity {
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		super.onPrepareDialog(id, dialog);
 	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();

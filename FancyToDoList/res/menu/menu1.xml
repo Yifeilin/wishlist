@@ -7,7 +7,10 @@
     <item android1:id="@+id/menu_help" 
     	  android1:title="@string/help" android1:icon="@android:drawable/ic_menu_help"/>
     <item android1:id="@+id/menu_camera" 
-    	  android1:title="Camera" android1:icon="@android:drawable/ic_menu_camera"/>   
+    	  android1:title="Camera" android1:icon="@android:drawable/ic_menu_camera"/> 
+   	<item android1:id="@+id/menu_map" 
+   	 	  android1:title="Map"  android1:icon="@android:drawable/ic_menu_compass"/>
+   	  
 </menu>  
     
     
