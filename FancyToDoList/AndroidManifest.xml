@@ -7,7 +7,7 @@
 
     <application android:label="@string/app_name" android:debuggable="true" android:icon="@drawable/checkicon">
     <uses-library android:name="com.google.android.maps" />    
-        <activity android:name=".WishList"
+         <activity android:name=".WishListLogin"
                   android:label="@string/app_name"
                   android:theme="@style/ToDoTheme"
                   android:screenOrientation="portrait">
@@ -15,6 +15,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>    
+        <activity android:name=".WishList"
+                  android:label="@string/app_name"
+                  android:theme="@style/ToDoTheme"
+                  android:screenOrientation="portrait">
         </activity>
         <activity android:name="EditItemInfo"
         		  android:label="@string/app_name" 
