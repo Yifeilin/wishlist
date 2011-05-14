@@ -237,4 +237,19 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	        c.moveToFirst();
 	        return c;
 	    }
+	    /**
+	     * Return the cursor of item with id equal to _id
+	     * @param _id
+	     * @return
+	     */
+	public ItemsCursor getItem(long _id) {
+		String sql = String.format(
+				"SELECT FROM WishItems " +
+				"WHERE _id = '%d' ",
+				_id);
+		SQLiteDatabase d = getReadableDatabase();
+		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+				new ItemsCursor.Factory(), sql, null, null);
+		return c;
+	}
 }

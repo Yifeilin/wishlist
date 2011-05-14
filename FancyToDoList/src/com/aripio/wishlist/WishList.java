@@ -26,11 +26,13 @@ public class WishList extends Activity {
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
 	static final private int HELP_TODO = Menu.FIRST + 2;
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
+	static final private int POST_TODO = Menu.FIRST + 4;
 	
 	static final private int DIALOG_MAIN = 0;
 	
 	static final private int DETAIL_INFO_ACT = 2;
 	static final private int TAKE_PICTURE = 1;
+	static final private int POST_ITEM = 3;
 	
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
@@ -101,6 +103,7 @@ public class WishList extends Activity {
 		menu.setHeaderTitle("Selected Wish Item");
 		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
 		menu.add(0, DETAIL_TODO, Menu.NONE, R.string.detail);
+		menu.add(0, POST_TODO, Menu.NONE, R.string.post);
 	}
 	
 	@Override
@@ -128,15 +131,15 @@ public class WishList extends Activity {
 			startActivity(mapIntent);
 			return true;
 		}
+		case (R.id.menu_post):{
+			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+			startActivityForResult(snsIntent, POST_ITEM);
+			return true;
+		}
 		}
 		return false;
 	}
 	
-	private void removeItem(int index) {		
-		//wishListDBAdapter.removeTask(index);
-		updateListView();			
-	}
-
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		super.onContextItemSelected(item);
@@ -148,11 +151,11 @@ public class WishList extends Activity {
 		//WishListItemCursorAdapter cursor = (WishListItemCursorAdapter) myListView.getItemAtPosition(list_index);
 		View selected_view = myListView.getChildAt(index);
 		TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+		TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		
 		switch (item.getItemId()) {
-		case (REMOVE_TODO): {	
-			
+		case (REMOVE_TODO): {		
 			wishListDB.deleteItem(item_id);
 			//removeItem(index);
 			updateListView();
@@ -161,6 +164,12 @@ public class WishList extends Activity {
 		case (DETAIL_TODO):{
 			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
+			}
+		case (POST_TODO):{
+			String date = dateTextView.getText().toString();
+			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+			snsIntent.putExtra("wishItem", date);
+			startActivityForResult(snsIntent, POST_ITEM);
 			}
 		}
 		return false;
@@ -198,10 +207,10 @@ public class WishList extends Activity {
 	
 	private void restoreUIState() {
 		// Get the activity preferences object.
-		SharedPreferences settings = getPreferences(Activity.MODE_PRIVATE);
+		//SharedPreferences settings = getPreferences(Activity.MODE_PRIVATE);
 		// Read the UI state values, specifying default values.
-		String text = settings.getString(TEXT_ENTRY_KEY, "");
-		Boolean adding = settings.getBoolean(ADDING_ITEM_KEY, false);
+		//String text = settings.getString(TEXT_ENTRY_KEY, "");
+		//Boolean adding = settings.getBoolean(ADDING_ITEM_KEY, false);
 		// Restore the UI to the previous state.
 	}
 
@@ -232,15 +241,7 @@ public class WishList extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == Activity.RESULT_OK){
 		switch(requestCode){ 
-		case TAKE_PICTURE: 
-			Uri imageUri = null;
-			// Check if the result includes a thumbnail Bitmap
-			if (data != null) {
-				if (data.hasExtra("data")) {
-					Bitmap thumbnail = data.getParcelableExtra("data");
-				}
-			}
-			break;
+		
 		case DETAIL_INFO_ACT:
 			//should retrieve the info from data and construct a wish item object
 			}

@@ -6,8 +6,11 @@
           android:title="@string/search" android1:icon="@android:drawable/ic_search_category_default"/>  
    	<item android1:id="@+id/menu_map" 
    	 	  android1:title="Map"  android1:icon="@android:drawable/ic_menu_compass"/>
+   	<item android1:id="@+id/menu_post" 
+    	  android1:title="@string/post" android1:icon="@android:drawable/ic_menu_upload"/>
    	<item android1:id="@+id/menu_help" 
-    	  android1:title="@string/help" android1:icon="@android:drawable/ic_menu_help"/>   	  
+    	  android1:title="@string/help" android1:icon="@android:drawable/ic_menu_help"/>
+    	     	  
 </menu>  
     
     
