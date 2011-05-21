@@ -20,7 +20,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	/** The name of the database file on the file system */
     private static final String DATABASE_NAME = "WishList";
     /** The version of the database that this class understands. */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     /** Keep track of context so that we can load SQL from string resources */
 	private Context mContext;
 	
@@ -114,11 +114,11 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 * @param name			The item name
 	 * @param description	The name description
 	 */
-	public void addItem(String name, String description, String date, int store_id, Bitmap picture){
+	public void addItem(String name, String description, String date, int store_id, String picture_uri){
 		String sql = String.format(
 			"INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture) " +
-			"VALUES ( NULL, '%s', '%s', '%s', '%d', NULL)",
-			 name, description, date, store_id);
+			"VALUES ( NULL, '%s', '%s', '%s', '%d', %s)",
+			 name, description, date, store_id, picture_uri);
 		try{
 			getWritableDatabase().execSQL(sql);
 		} catch (SQLException e) {
@@ -212,9 +212,9 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	    	public int getColStoreId(){
 	    		return Integer.parseInt(getString(getColumnIndexOrThrow("store_id")));
 	    	}
-//	    	public String getColAddress(){
-//	    		return getString(getColumnIndexOrThrow("address"));
-//	    	}	
+	    	public String getColPicture(){
+	    		return getString(getColumnIndexOrThrow("picture"));
+	    	}	
 			public String getColDescription(){
 	    		return getString(getColumnIndexOrThrow("description"));
 	    	}	

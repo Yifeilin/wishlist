@@ -1,5 +1,6 @@
 package com.aripio.wishlist;
 
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,11 +9,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,16 +35,13 @@ public class EditItemInfo extends Activity {
 	private Button btnCancel;
 	private Button btnDate;
 	private Button btnPhoto;
-//	private RadioButton radioHigh;
-//	private RadioButton radioMedm;
-//	private RadioButton radioLow;
 	private ImageView imageItem;
 	private Date mDate;
 	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String date;
+	private String picture_uri;
 	private WishListDataBase wishListDB; 
-//	private WishListDBAdapter wishListDBAdapter;
 	private int mYear;
     private int mMonth;
     private int mDay;
@@ -60,11 +62,6 @@ public class EditItemInfo extends Activity {
 		btnDate = (Button) findViewById(R.id.button_date);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
 		
-//		radioHigh = (RadioButton) findViewById(R.id.radio_high);
-//		radioMedm = (RadioButton) findViewById(R.id.radio_medium);
-//		radioLow = (RadioButton) findViewById(R.id.radio_low);
-//		radioLow.setChecked(true);
-		
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 		
 		// get the current date
@@ -73,9 +70,8 @@ public class EditItemInfo extends Activity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
         
-       // wishListDBAdapter = new WishListDBAdapter(this);
 		// Open or create the database
-		//wishListDBAdapter.open();
+
         wishListDB = WishListDataBase.getDBInstance(this);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -171,7 +167,7 @@ public class EditItemInfo extends Activity {
 		mDate = new Date(mYear, mMonth, mDay);
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
         String date = sdf.format(mDate);
-		wishListDB.addItem(itemName, itemDesc, date, -1, thumbnail);
+		wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri);
 		finish();
 	}
 	@Override
@@ -195,6 +191,26 @@ public class EditItemInfo extends Activity {
 					if (data.hasExtra("data")) {
 						thumbnail = data.getParcelableExtra("data");
 						imageItem.setImageBitmap(thumbnail);
+						
+						//store thumbnail in some place
+						ContentValues values = new ContentValues();
+						values.put(Media.MIME_TYPE, "image/jpeg");
+						
+						Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+						
+						try {
+						    OutputStream outStream = getContentResolver().openOutputStream(uri);
+						    thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
+						    
+						    outStream.close();
+						    picture_uri = uri.getEncodedPath();
+						} catch (Exception e) {
+						    Log.e(WishList.LOG_TAG, "exception while writing image", e);
+						}
+						
+						 
+					        
+						
 					}
 				}
 				break;

@@ -29,8 +29,13 @@
     <string name="map_menu_set_map">Toggle Street View</string>
 
     <string name="map_menu_set_traffic">Toggle Traffic View</string>
+    
+    <string name="settings_description">Find Item</string>
+    
+    <string name="search_results">Search Result</string>
+    
 	<string name="WishListDataBase_Create">"
-	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture BLOB);
+	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL);
 	
 	CREATE TABLE StoreInfo (store_id INTEGER, store_name TEXT, address TEXT, latitude INTEGER, longitude INTEGER);
 	"</string>

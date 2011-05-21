@@ -28,7 +28,7 @@
     <Button android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:id="@+id/button_date" 
-    android:text="click to set due time"
+    android:text="click to set time"
     />
     
     <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" 
@@ -50,11 +50,7 @@
   	android:layout_weight="1"/>
     
     </LinearLayout>
-    
-    <TextView android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Select priority"
-    android:layout_weight="0"/>    
+     
     <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="fill_parent"
     android:padding="10dip">
         <Button android:layout_width="fill_parent" 
