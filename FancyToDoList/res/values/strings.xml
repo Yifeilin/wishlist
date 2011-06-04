@@ -34,6 +34,8 @@
     
     <string name="search_results">Search Result</string>
     
+    <string name="search_hint">Search your favorite item</string>
+    
 	<string name="WishListDataBase_Create">"
 	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL);
 	

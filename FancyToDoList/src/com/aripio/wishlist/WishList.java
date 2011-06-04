@@ -4,17 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class WishList extends Activity {
 	
 	private ListView myListView;
 	
+	private EditText mySearchText;
+	
 	private WishListDataBase wishListDB;
 	private ItemsCursor wishItemCursor;
 	private WishListItemCursorAdapter wishListItemAdapterCursor;
@@ -54,6 +57,8 @@ public class WishList extends Activity {
 			
 		myListView = (ListView) findViewById(R.id.myListView);
 		
+		mySearchText = (EditText) findViewById(R.id.mySearchText);
+		
 		myListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -61,6 +66,19 @@ public class WishList extends Activity {
 			}
 			
 		});
+		
+//		mySearchText.setOnKeyListener(new OnKeyListener() {
+//			@Override
+//			public boolean onKey(View view, int keyCode, KeyEvent event) {
+//				if (event.getAction() == KeyEvent.ACTION_DOWN)
+//					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+//						Intent searchIntent = new Intent(Intent.ACTION_SEARCH);
+//						searchIntent.putExtra("query", mySearchText.getText().toString());
+//						startActivity(searchIntent);	
+//					}
+//				return false;
+//			}
+//		});
 		registerForContextMenu(myListView);
 		restoreUIState();
 
@@ -70,7 +88,12 @@ public class WishList extends Activity {
 		populateItemList(ItemsCursor.SortBy.name);
 	}
     
-    private void populateItemList(ItemsCursor.SortBy sortBy) {
+    @Override
+	public boolean onSearchRequested() {
+		return super.onSearchRequested();
+	}
+
+	private void populateItemList(ItemsCursor.SortBy sortBy) {
    
     // Get all of the rows from the database and create the table
     // Keep track of the TextViews added in list lstTable
@@ -96,6 +119,22 @@ public class WishList extends Activity {
 	    inflater.inflate(R.menu.menu1, menu);
 		return true;
 	}
+	
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//			if(keyCode == KeyEvent.KEYCODE_SEARCH){
+//				if(mySearchText.getVisibility() == View.VISIBLE)
+//					mySearchText.setVisibility(View.INVISIBLE);
+//				else
+//					{
+//						mySearchText.setVisibility(View.VISIBLE);
+//						mySearchText.requestFocus();
+//					}
+//				return true;
+//			}
+//			return false;
+//	}
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -118,6 +157,7 @@ public class WishList extends Activity {
 		switch (item.getItemId()) {
 		case (R.id.menu_search): {
 			//should provide search service
+			onSearchRequested();
 			return true;
 		}
 		case (R.id.menu_add): {

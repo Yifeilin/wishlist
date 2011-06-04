@@ -1,5 +1,7 @@
 package com.aripio.wishlist;
 
+import com.aripio.wishlist.WishListDataBase.ItemsCursor;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -244,7 +246,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	     */
 	public ItemsCursor getItem(long _id) {
 		String sql = String.format(
-				"SELECT FROM WishItems " +
+				"SELECT * FROM WishItems " +
 				"WHERE _id = '%d' ",
 				_id);
 		SQLiteDatabase d = getReadableDatabase();
@@ -252,4 +254,13 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 				new ItemsCursor.Factory(), sql, null, null);
 		return c;
 	}
+
+		public ItemsCursor searchItems(String query) {
+			String sql = String.format("SELECT * FROM WishItems " + 
+									   "WHERE name like '%s' ", query);
+			SQLiteDatabase d = getReadableDatabase();
+			ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+					new ItemsCursor.Factory(), sql, null, null);
+			return null;
+		}
 }

@@ -4,11 +4,14 @@
 	<color name="notepad_lines">#FF0000FF</color>
 	<color name="notepad_margin">#90FF0000</color>
 	<color name="notepad_text">#AA0000FF</color>
-	<color name="red">#ffff0000</color>
-	<color name="yellow">#ffffff00</color>
-	<color name="green">#ff00ff00</color>
-	<color name="black">#ff000000</color>
-	<color name="white">#ffffffff</color>
+	
+	<color name="item_backgrd">#FFFFFFFF</color>
+	
+	<color name="red">#FFFF0000</color>
+	<color name="yellow">#FFFFFF00</color>
+	<color name="green">#FF00FF00</color>
+	<color name="black">#FF000000</color>
+	<color name="white">#FFFFFFFF</color>
 	<color name="logo_color">#FFFF0F</color>
 	<color name="version_color">#f0f0f0</color>
 	<color name="version_bkgrd">#1a1a48</color>

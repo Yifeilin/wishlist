@@ -4,13 +4,13 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/white">
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/TextViewTopTitle"
         android:text="@string/app_logo_top"
-        android:textColor="@color/logo_color"
+        android:textColor="@color/black"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="top|center"
         android:textSize="@dimen/logo_size"></TextView>
@@ -65,15 +65,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/TextViewBottomTitle"
         android:text="@string/app_logo_bottom"
-        android:textColor="@color/logo_color"
+        android:textColor="@color/black"
         android:gravity="center"
         android:textSize="@dimen/logo_size"></TextView>
     <TextView
         android:id="@+id/TextViewBottomVersion"
         android:text="@string/app_version_info"
         android:textSize="@dimen/version_size"
-        android:textColor="@color/version_color"
-        android:background="@color/version_bkgrd"
+        android:textColor="@color/black"
+        android:background="@color/white"
         android:layout_height="fill_parent"
         android:lineSpacingExtra="@dimen/version_spacing"
         android:layout_width="fill_parent"

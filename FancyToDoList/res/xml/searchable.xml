@@ -4,5 +4,6 @@
         android:searchSettingsDescription="@string/settings_description"
         android:includeInGlobalSearch="true"
         android:searchSuggestAuthority="dictionary"
-        android:searchSuggestIntentAction="android.intent.action.VIEW">
+        android:searchSuggestIntentAction="android.intent.action.VIEW"
+        android:hint="@string/search_hint">
 </searchable>
