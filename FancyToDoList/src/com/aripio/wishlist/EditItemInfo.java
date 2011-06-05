@@ -206,11 +206,7 @@ public class EditItemInfo extends Activity {
 						    picture_uri = uri.getEncodedPath();
 						} catch (Exception e) {
 						    Log.e(WishList.LOG_TAG, "exception while writing image", e);
-						}
-						
-						 
-					        
-						
+						}					
 					}
 				}
 				break;

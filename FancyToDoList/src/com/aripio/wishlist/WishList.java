@@ -167,7 +167,7 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.menu_map):{
-			Intent mapIntent = new Intent(this, WishListMap.class);
+			Intent mapIntent = new Intent(this, WishListNewMap.class);
 			startActivity(mapIntent);
 			return true;
 		}

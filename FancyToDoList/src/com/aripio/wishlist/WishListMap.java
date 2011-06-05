@@ -6,6 +6,8 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,17 +19,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
+import com.google.android.maps.Projection;
 
 public class WishListMap extends MapActivity {
 
@@ -35,7 +40,26 @@ public class WishListMap extends MapActivity {
     private WishListDataBase db;
     private MyLocationOverlay mMyLocationOverlay;
     private int latitude, longitude;
+    
+    private class WishListMapOverlay extends Overlay{      
       
+        @Override
+        public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+            if (!shadow) {
+                Point point = new Point();
+                Projection p = mapView.getProjection();
+                
+                final Location myLocation
+                = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+                GeoPoint myPoint = new GeoPoint((int)(myLocation.getLongitude()*1000000), (int)(myLocation.getLatitude()*1000000));
+                
+                p.toPixels(myPoint, point);
+                super.draw(canvas, mapView, shadow);
+                drawAt(canvas, getResources().getDrawable(R.drawable.map_pin), point.x, point.y, shadow);
+            }
+        }
+    }
+    
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -56,6 +80,7 @@ public class WishListMap extends MapActivity {
 
         mMyLocationOverlay = new MyLocationOverlay(this, mvMap);
         mMyLocationOverlay.enableMyLocation();
+        mMyLocationOverlay.enableCompass(); 
         mMyLocationOverlay.runOnFirstFix(
             new Runnable() {
                 public void run() {
@@ -66,8 +91,8 @@ public class WishListMap extends MapActivity {
 
         Drawable marker = getResources().getDrawable(R.drawable.android_tiny_image);
         marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-//       // mvMap.getOverlays().add(new MJJobsOverlay(marker));
-//
+        mvMap.getOverlays().add(new WishListMapOverlay());
+
         mvMap.setClickable(true);
         mvMap.setEnabled(true);
         mvMap.setSatellite(false);

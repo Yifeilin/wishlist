@@ -119,7 +119,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	public void addItem(String name, String description, String date, int store_id, String picture_uri){
 		String sql = String.format(
 			"INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture) " +
-			"VALUES ( NULL, '%s', '%s', '%s', '%d', %s)",
+			"VALUES ( NULL, '%s', '%s', '%s', '%d', '%s')",
 			 name, description, date, store_id, picture_uri);
 		try{
 			getWritableDatabase().execSQL(sql);
