@@ -11,5 +11,11 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter{
 	public WishListItemCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
+		
+        setViewBinder(new WishListItemViewBinder()); 
 	}		
+	
+//	setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+//		
+//	}
 }

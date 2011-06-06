@@ -41,6 +41,7 @@ public class EditItemInfo extends Activity {
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String date;
 	private String picture_uri;
+	// = R.drawable.chocolate
 	private WishListDataBase wishListDB; 
 	private int mYear;
     private int mMonth;

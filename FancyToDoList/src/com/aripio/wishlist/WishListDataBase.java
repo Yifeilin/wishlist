@@ -31,6 +31,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	public static final String KEY_DATE = "create_date";
 	public static final String KEY_ITEMID = "_id";
 	public static final String KEY_STORENAME = "store_name";
+	public static final String KEY_PHOTO_URL = "picture";
 
 	private static WishListDataBase instance;
 	/**
@@ -190,7 +191,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	    		_id
 	    	}
 	    	private static final String QUERY = 
-	    		"SELECT _id, name, description, create_date, store_id "+
+	    		"SELECT _id, name, description, create_date, store_id, picture "+
 	    	    "FROM WishItems "+
 	    	    "ORDER BY ";
 		    private ItemsCursor(SQLiteDatabase db, SQLiteCursorDriver driver,
