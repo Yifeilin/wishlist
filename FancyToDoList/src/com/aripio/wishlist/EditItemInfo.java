@@ -204,7 +204,13 @@ public class EditItemInfo extends Activity {
 						    thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
 						    
 						    outStream.close();
-						    picture_uri = uri.getEncodedPath();
+						    //picture_uri = uri.getEncodedPath();
+						    picture_uri = uri.toString();
+						    
+		    
+						    
+						    int a = 0;
+						    int b = 0;
 						} catch (Exception e) {
 						    Log.e(WishList.LOG_TAG, "exception while writing image", e);
 						}					
