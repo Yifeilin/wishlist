@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+    
+	<LinearLayout
+		android:id="@+id/itemDetail"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="center_horizontal"
+	    android:background="@color/white">
+	    
+	    <FrameLayout
+	    	android:layout_width="fill_parent" 
+		    android:layout_height="0dip"
+		    android:layout_weight="1"
+	        android:padding="10dip"> 
+	     
+	     	<LinearLayout
+			    android:orientation="vertical"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+	    		android:layout_gravity="center"
+			    android:gravity="center_horizontal"
+			    >
+			    
+ 			<TextView
+		    	android:id="@+id/itemNameDetail"
+		 		android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content" 
+			    android:textSize="20dip"
+			    android:singleLine="true"
+			    android:ellipsize="end"
+			    android:textColor="@color/notepad_text"
+			    android:paddingLeft="5dip"
+	   		    android:paddingRight="5dip" android:layout_gravity="top|center"/>
+
+		    
+				<ImageView 
+					android:id="@+id/imgPhotoDetail"
+					android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content"
+				    android:scaleType="fitCenter"
+				    android:adjustViewBounds="true"
+				    android:maxHeight="320dip"
+				    android:layout_alignParentTop="true"
+				    android:layout_centerHorizontal="true"
+		   		    android:layout_below="@+id/itemNameDetail"/>
+
+				    
+ 	            <TextView
+			    	android:id="@+id/itemDesriptDetail"
+			 		android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content" 
+				    android:textSize="16dip"
+				    android:ellipsize="end"
+		   		    android:paddingLeft="5dip"
+		   		    android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/imgPhotoDetail"
+				    android:layout_alignRight="@+id/imgPhotoDetail"
+					android:layout_below="@+id/imgPhotoDetail"
+				    android:paddingTop="5dip" android:paddingBottom="5dip"/>
+				    
+				  <TextView
+			    	android:id="@+id/itemDateDetail"
+			 		android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content" 
+				    android:textSize="16dip"
+				    android:singleLine="true"
+				    android:ellipsize="end"
+		   		    android:paddingLeft="5dip"
+		   		    android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/itemDesriptDetail"
+				    android:layout_alignRight="@+id/itemDesriptDetail"
+					android:layout_below="@+id/itemDesriptDetail"
+				    />
+		    </LinearLayout>
+		    
+	    </FrameLayout>
+		     
+<!-- 		<TextView -->
+<!-- 	 		android:layout_width="fill_parent"  -->
+<!-- 		    android:layout_height="wrap_content"  -->
+<!-- 		    android:textSize="13dip" -->
+<!-- 		    android:textColor="?android:attr/textColorSecondary" -->
+<!-- 			android:text="@string/copyright" -->
+<!-- 			android:gravity="center" -->
+<!-- 			android:paddingLeft="10dip" -->
+<!-- 			android:paddingRight="10dip" -->
+<!-- 		    /> -->
+			    
+	</LinearLayout>
+
+</ScrollView>

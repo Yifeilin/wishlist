@@ -18,6 +18,7 @@
             </intent-filter>
             
         </activity>    
+        
 	    <activity android:name=".WishListLoginReal">
 	    </activity>
         <activity android:name=".WishList"
@@ -35,6 +36,11 @@
         <activity android:name="WishListMap"
         		  android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme">
+        </activity> 
+        <activity android:name="WishItemDetail"
+        		  android:label="@string/app_name" 
+                  android:theme="@style/ToDoTheme">
+                  android:screenOrientation="portrait">
         </activity> 
          <activity android:name="WishItemPostToSNS"
         		  android:label="@string/app_name" 

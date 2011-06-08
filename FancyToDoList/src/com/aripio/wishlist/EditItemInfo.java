@@ -206,8 +206,7 @@ public class EditItemInfo extends Activity {
 						    outStream.close();
 						    //picture_uri = uri.getEncodedPath();
 						    picture_uri = uri.toString();
-						    
-		    
+ 
 						    
 						    int a = 0;
 						    int b = 0;

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 
+
 public class WishList extends Activity {
 	//Assign a unique ID for each menu item
 	static final private int ADD_NEW_TODO = Menu.FIRST;
@@ -59,10 +60,23 @@ public class WishList extends Activity {
 		
 		mySearchText = (EditText) findViewById(R.id.mySearchText);
 		
-		myListView.setOnItemClickListener(new OnItemClickListener(){
+		myListView.setOnItemClickListener( new OnItemClickListener(){
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+				//find which item has been clicked and get its _id in database
+				View selected_view = myListView.getChildAt(position);
+				TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+				//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
+				//String item_id_str = itemIdTextView.getText().toString();
+				long item_id = Long.parseLong(itemIdTextView.getText().toString());
+				
+				// Create an intent to show the item detail.
+		        // Pass the item_id along so the next activity can use it to 
+				//retrieve the info. about the item from database
+		        Intent i = new Intent(WishList.this, WishItemDetail.class);
+		        i.putExtra("item_id", item_id);
+		        startActivity(i);
+				
 			}
 			
 		});
@@ -108,9 +122,11 @@ public class WishList extends Activity {
 		int resID = R.layout.wishitem_single;
 
 		//String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
-		String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_PHOTO_URL, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
-	    //int[] to = new int[] {R.id.txtItemID, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
-	    int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+		//String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_PHOTO_URL, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
+		String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_PHOTO_URL, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DATE};
+		//int[] to = new int[] {R.id.txtItemID, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+	    //int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+	    int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDate}; 
 	    wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor, from, to);
 	    
 	    myListView.setAdapter(wishListItemAdapterCursor);
@@ -208,12 +224,14 @@ public class WishList extends Activity {
 		case (DETAIL_TODO):{
 			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
+			return true;
 			}
 		case (POST_TODO):{
 			String date = dateTextView.getText().toString();
 			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
 			snsIntent.putExtra("wishItem", date);
 			startActivityForResult(snsIntent, POST_ITEM);
+			return true;
 			}
 		}
 		return false;

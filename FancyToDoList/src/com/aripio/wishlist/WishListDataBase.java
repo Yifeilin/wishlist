@@ -253,6 +253,10 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 		SQLiteDatabase d = getReadableDatabase();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
+		
+        if (c != null) {
+            c.moveToFirst();
+        }
 		return c;
 	}
 
