@@ -57,7 +57,7 @@
 		    android:maxLines="1"/>
 <!-- 		    android:textColor="@color/notepad_text"/> -->
 			
-		<TextView android:id="@+id/txtItemID" android:visibility="gone"
+		<TextView android:id="@+id/txtItemID" android:visibility="visible"
 				  android:layout_width="fill_parent"
 			      android:layout_height="wrap_content"
 			      android:textSize="16dip" />

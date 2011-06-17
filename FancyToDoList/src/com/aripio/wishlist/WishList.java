@@ -64,17 +64,19 @@ public class WishList extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 				//find which item has been clicked and get its _id in database
-				View selected_view = myListView.getChildAt(position);
-				TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
-				//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
-				//String item_id_str = itemIdTextView.getText().toString();
-				long item_id = Long.parseLong(itemIdTextView.getText().toString());
-				
+				long item_id = getDBItemID(position);
+//				View selected_view = myListView.getChildAt(position);
+//				TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+//				//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
+//				//String item_id_str = itemIdTextView.getText().toString();
+//				long item_id = Long.parseLong(itemIdTextView.getText().toString());
+//				
 				// Create an intent to show the item detail.
 		        // Pass the item_id along so the next activity can use it to 
 				//retrieve the info. about the item from database
 		        Intent i = new Intent(WishList.this, WishItemDetail.class);
 		        i.putExtra("item_id", item_id);
+		        i.putExtra("position", position);
 		        startActivity(i);
 				
 			}
@@ -106,6 +108,19 @@ public class WishList extends Activity {
 	public boolean onSearchRequested() {
 		return super.onSearchRequested();
 	}
+    
+    //get the _ID of the item in wishitem database 
+    //whose position in the listview is pos.
+    public long getDBItemID(int pos){
+		View selected_view = myListView.getChildAt(pos);
+		TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+		//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
+		//String item_id_str = itemIdTextView.getText().toString();
+		long item_id = Long.parseLong(itemIdTextView.getText().toString());
+		return item_id;
+
+    	
+    }
 
 	private void populateItemList(ItemsCursor.SortBy sortBy) {
    

@@ -18,6 +18,7 @@ package com.aripio.wishlist;
 
 import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 import com.google.android.maps.GeoPoint;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -28,19 +29,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays the detail of an item.
  */
 public class WishItemDetail extends Activity {
-    private static final String TAG = "WishItemDetail";
-    
+	//private WishList mWishList;
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	private GestureDetector gestureDetector;
+	View.OnTouchListener gestureListener;
+	
+	private static final String TAG = "WishItemDetail";
+	
+	private ListView myListView;
 	private WishListDataBase wishListDB;
 	private ItemsCursor wishItemCursor;
 
@@ -67,6 +81,13 @@ public class WishItemDetail extends Activity {
     private View mDetailView;
     
     private TextView mDateView;
+    
+    //private long id_pos[];
+    private long mItem_id;
+    
+    private int mPosition;
+    private int mPrevPosition;
+    private int mNextPosition;
 
     //private int mMapZoom;
 
@@ -80,15 +101,20 @@ public class WishItemDetail extends Activity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.view_image);
         setContentView(R.layout.wishitem_detail);
+        
+		//myListView = (ListView) findViewById(R.id.myListView);
 
         // Remember the id of the item user selected
         Intent i = getIntent();
-        long item_id = i.getLongExtra("item_id", 0);
+        mItem_id = i.getLongExtra("item_id", 0);
+        mPosition = i.getIntExtra("position", 6);
+        
+        //mItem_id = getDBItemID(mPosition);
         
 		// retrieve the info. of the item from DB
 		wishListDB = WishListDataBase.getDBInstance(this);
 		
-        wishItemCursor = wishListDB.getItem(item_id);
+        wishItemCursor = wishListDB.getItem(mItem_id);
         
         startManagingCursor(wishItemCursor);
         String photoStr = wishItemCursor.getString(
@@ -123,9 +149,134 @@ public class WishItemDetail extends Activity {
 //        mDescrptView.setVisibility(View.GONE);
 //        getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,
 //                Window.PROGRESS_VISIBILITY_ON);
+        
+        //setting the gesture detection
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+        
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        
+        //myListView.getDBItemID();
 
     }
+    
+    //get the _ID of the item in wishitem database 
+    //whose position in the listview is pos.
+    private long[] getNextDBItemID(){
+		//View selected_view = myListView.getChildAt(pos);
+		//TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+		//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
+		//String item_id_str = itemIdTextView.getText().toString();
+    	
+        // Get all of the rows from the database in sorted order as in the 
+    	// wish list
+		// Open or create the database
+		//wishLite
+    	long[] next_pos_id = new long[2];
+    	ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
+    	long nextItemID;
+    	if (mPosition < c.getCount())
+        	mNextPosition = mPosition + 1;
+   	
+    	else 
+    		mNextPosition = mPosition;
+    		
+ 		c.move(mNextPosition);
+        nextItemID = c.getLong( 
+        		c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
+        
+		//long item_id = Long.parseLong(itemIdTextView.getText().toString());
+        next_pos_id[0] = mNextPosition;
+        next_pos_id[1] = nextItemID;
+		return next_pos_id;
+    }
+    
+    private long[] getPrevDBItemID(){
+    	
+    	long[] prev_pos_id = new long[2];
 
+    	ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
+        long prevItemID;
+        if (mPosition > 0)
+        	mPrevPosition = mPosition - 1;
+        
+        else
+        	mPrevPosition = mPosition;
+        
+        c.move(mPrevPosition);
+        prevItemID = c.getLong( 
+        		c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
+		//long item_id = Long.parseLong(itemIdTextView.getText().toString());
+        prev_pos_id[0] = mPrevPosition;
+        prev_pos_id[1] = prevItemID;   
+		return prev_pos_id;
+    }
+
+    class MyGestureDetector extends SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            try {
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                    return false;
+                // right to left swipe
+                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                	viewFlipper.setInAnimation(slideLeftIn);
+//                    viewFlipper.setOutAnimation(slideLeftOut);
+//                	viewFlipper.showNext();
+//                	Toast.makeText(WishItemDetail.this, "swipe to right", 
+//                			Toast.LENGTH_SHORT).show();
+                	
+                	//getDBItemID(2);
+                	long[] next_p_i = new long[2];
+                	next_p_i = getNextDBItemID();
+    		        Intent i = new Intent(WishItemDetail.this, WishItemDetail.class);
+    		        
+    		        i.putExtra("position", (int) next_p_i[0]);
+    		        i.putExtra("item_id", next_p_i[1] );
+    		        
+    		        startActivity(i);
+    		        //Set the transition -> method available from Android 2.0 and beyond  
+    		        overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+
+    		        //WishItemDetail.this.overridePendingTransition(0,0);
+    		        
+                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                	viewFlipper.setInAnimation(slideRightIn);
+//                    viewFlipper.setOutAnimation(slideRightOut);
+//                	viewFlipper.showPrevious();
+//                	Toast.makeText(WishItemDetail.this, "swipe to left", 
+//                			Toast.LENGTH_SHORT).show();
+                	
+                	long[] prev_p_i = new long[2];
+                	prev_p_i = getPrevDBItemID();
+    		        Intent i = new Intent(WishItemDetail.this, WishItemDetail.class);
+    		        i.putExtra("position", (int) prev_p_i[0]);
+    		        i.putExtra("item_id", prev_p_i[1]);
+    		        
+    		        startActivity(i);
+    		        overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+    		        //WishItemDetail.this.overridePendingTransition(0,0);
+                }
+            } catch (Exception e) {
+                // nothing
+            }
+            return false;
+        }
+    }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gestureDetector.onTouchEvent(event))
+	        return true;
+	    else
+	    	return false;
+    }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        super.onCreateOptionsMenu(menu);
