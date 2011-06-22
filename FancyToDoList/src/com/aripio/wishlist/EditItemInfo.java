@@ -166,7 +166,8 @@ public class EditItemInfo extends Activity {
 		String itemName = myItemName.getText().toString();
 		String itemDesc = myDescription.getText().toString();
 		mDate = new Date(mYear, mMonth, mDay);
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+		//SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
         String date = sdf.format(mDate);
 		wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri);
 		finish();

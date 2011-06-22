@@ -188,6 +188,7 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 public static class ItemsCursor extends SQLiteCursor{
 	    	public static enum SortBy{
 	    		name,
+	    		create_date,
 	    		_id
 	    	}
 	    	private static final String QUERY = 

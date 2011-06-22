@@ -29,6 +29,7 @@ public class WishList extends Activity {
 	static final private int HELP_TODO = Menu.FIRST + 2;
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	static final private int POST_TODO = Menu.FIRST + 4;
+	static final private int SORT_TODO = Menu.FIRST + 5;
 	
 	static final private int DIALOG_MAIN = 0;
 	
@@ -121,6 +122,14 @@ public class WishList extends Activity {
 
     	
     }
+    
+    private void onSortByTime(){
+		populateItemList(ItemsCursor.SortBy.create_date);
+    }
+    
+    private void onSortByName(){
+		populateItemList(ItemsCursor.SortBy.name);
+    }
 
 	private void populateItemList(ItemsCursor.SortBy sortBy) {
    
@@ -143,6 +152,7 @@ public class WishList extends Activity {
 	    //int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
 	    int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDate}; 
 	    wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor, from, to);
+	    //wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor);
 	    
 	    myListView.setAdapter(wishListItemAdapterCursor);
 		wishListItemAdapterCursor.notifyDataSetChanged();
@@ -211,6 +221,18 @@ public class WishList extends Activity {
 			startActivityForResult(snsIntent, POST_ITEM);
 			return true;
 		}
+		case (R.id.menu_sortByTime):{
+			onSortByTime();
+			return true;
+
+		}
+		
+		case (R.id.menu_sortByName):{
+			onSortByName();
+			return true;
+
+		}
+		
 		}
 		return false;
 	}
