@@ -19,6 +19,22 @@
     android:gravity="top"
     android:layout_weight="1"
    />
+   
+    <EditText android:layout_width="fill_parent" 
+    android:id="@+id/price"
+    android:layout_height="wrap_content"  
+    android:hint="price"
+    android:gravity="top"
+    android:layout_weight="1"
+   />
+   
+    <EditText android:layout_width="fill_parent" 
+    android:id="@+id/location"
+    android:layout_height="wrap_content"  
+    android:hint="location"
+    android:gravity="top"
+    android:layout_weight="1"
+   />
     
     <TextView android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 

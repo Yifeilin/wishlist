@@ -32,6 +32,10 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	public static final String KEY_ITEMID = "_id";
 	public static final String KEY_STORENAME = "store_name";
 	public static final String KEY_PHOTO_URL = "picture";
+	public static final String KEY_PRICE = "price";
+	public static final String KEY_LOCATION = "location";
+	public static final String KEY_PRIORITY = "priority";
+
 
 	private static WishListDataBase instance;
 	/**
@@ -117,11 +121,18 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 * @param name			The item name
 	 * @param description	The name description
 	 */
-	public void addItem(String name, String description, String date, int store_id, String picture_uri){
+	public void addItem(String name, 
+						String description,
+						String date,
+						int store_id,
+						String picture_uri,
+						float price,
+						String location,
+						int priority){
 		String sql = String.format(
-			"INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture) " +
-			"VALUES ( NULL, '%s', '%s', '%s', '%d', '%s')",
-			 name, description, date, store_id, picture_uri);
+			"INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) " +
+			"VALUES ( NULL, '%s', '%s', '%s', '%d', '%s', '%f', '%s', '%d')",
+			 name, description, date, store_id, picture_uri, price, location, priority);
 		try{
 			getWritableDatabase().execSQL(sql);
 		} catch (SQLException e) {
@@ -135,7 +146,13 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	 * @param name			The item name
 	 * @param description	The item description
 	 */
-	public void editItem(long _id, String name, String description,String date, int store_id, Bitmap picture) {
+	public void editItem(long _id, 
+						 String name, 
+						 String description,
+						 String date, 
+						 int store_id, 
+						 Bitmap picture) {
+		
 		String sql = String.format(
 				"UPDATE WishItems " +
 				"SET name = '%s',  "+
@@ -189,10 +206,13 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	    	public static enum SortBy{
 	    		name,
 	    		create_date,
-	    		_id
+	    		price,
+	    		priority,
+	    		_id,
+	    		
 	    	}
 	    	private static final String QUERY = 
-	    		"SELECT _id, name, description, create_date, store_id, picture "+
+	    		"SELECT _id, name, description, create_date, store_id, picture, price, location, priority "+
 	    	    "FROM WishItems "+
 	    	    "ORDER BY ";
 		    private ItemsCursor(SQLiteDatabase db, SQLiteCursorDriver driver,
@@ -224,6 +244,15 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 	    	}	
 	    	public String getColCreateDate(){
 	    		return getString(getColumnIndexOrThrow("create_date"));
+	    	}	
+	    	public String getColPrice(){
+	    		return getString(getColumnIndexOrThrow("price"));
+	    	}	
+	    	public String getColLocation(){
+	    		return getString(getColumnIndexOrThrow("location"));
+	    	}	
+	    	public String getColPriority(){
+	    		return getString(getColumnIndexOrThrow("priority"));
 	    	}	
 	    }
 	 

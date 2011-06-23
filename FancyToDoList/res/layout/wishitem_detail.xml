@@ -63,7 +63,7 @@
 					android:layout_below="@+id/imgPhotoDetail"
 				    android:paddingTop="5dip" android:paddingBottom="5dip"/>
 				    
-				  <TextView
+				 <TextView
 			    	android:id="@+id/itemDateDetail"
 			 		android:layout_width="wrap_content" 
 				    android:layout_height="wrap_content" 
@@ -75,6 +75,34 @@
 					android:layout_alignLeft="@+id/itemDesriptDetail"
 				    android:layout_alignRight="@+id/itemDesriptDetail"
 					android:layout_below="@+id/itemDesriptDetail"
+				    />
+				    
+				  <TextView
+			    	android:id="@+id/itemPriceDetail"
+			 		android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content" 
+				    android:textSize="16dip"
+				    android:singleLine="true"
+				    android:ellipsize="end"
+		   		    android:paddingLeft="5dip"
+		   		    android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/itemDateDetail"
+				    android:layout_alignRight="@+id/itemDateDetail"
+					android:layout_below="@+id/itemDateDetail"
+				    />
+				    
+				  <TextView
+			    	android:id="@+id/itemLocationDetail"
+			 		android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content" 
+				    android:textSize="16dip"
+				    android:singleLine="true"
+				    android:ellipsize="end"
+		   		    android:paddingLeft="5dip"
+		   		    android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/itemPriceDetail"
+				    android:layout_alignRight="@+id/itemPriceDetail"
+					android:layout_below="@+id/itemPriceDetail"
 				    />
 		    </LinearLayout>
 		    

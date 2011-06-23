@@ -13,7 +13,9 @@
    	<item android1:id="@+id/menu_sort" android1:title="Sort">
    		<menu>
    			<item android1:id="@+id/menu_sortByName" android1:title="by name"></item>
-   			<item android1:id="@+id/menu_sortByTime" android1:title="by time added"></item>
+   			<item android1:id="@+id/menu_sortByTime" android1:title="by time"></item>
+   			<item android1:id="@+id/menu_sortByPrice" android1:title="by price"></item>
+   			<item android1:id="@+id/menu_sortByPriority" android1:title="by priority"></item>
    		</menu>
    	</item>
     	     	  

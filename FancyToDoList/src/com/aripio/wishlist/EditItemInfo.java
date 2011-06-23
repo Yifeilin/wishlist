@@ -31,6 +31,9 @@ public class EditItemInfo extends Activity {
 
 	private EditText myItemName;
 	private EditText myDescription;
+	private EditText myPrice;
+	private EditText myLocation;
+	
 	private Button btnSave;
 	private Button btnCancel;
 	private Button btnDate;
@@ -61,6 +64,8 @@ public class EditItemInfo extends Activity {
 		
 		myItemName  = (EditText) findViewById(R.id.itemname);
 		myDescription  = (EditText) findViewById(R.id.description);
+		myPrice  = (EditText) findViewById(R.id.price);
+		myLocation  = (EditText) findViewById(R.id.location);
 		
 		btnSave = (Button) findViewById(R.id.button_save);
 		btnCancel = (Button) findViewById(R.id.button_cancel);
@@ -119,16 +124,38 @@ public class EditItemInfo extends Activity {
 			}
         });
         
+        myPrice.setOnKeyListener(new OnKeyListener(){
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER){
+						myPrice.setSelected(false);				
+					}
+        	return false;
+			}
+        });
+        
+        myLocation.setOnKeyListener(new OnKeyListener(){
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER){
+						myLocation.setSelected(false);				
+					}
+        	return false;
+			}
+        });
+        
         
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, 
                                   int monthOfYear, int dayOfMonth) {
-                mYear = year-1900;
+                mYear = year;
                 mMonth = monthOfYear;
                 mDay = dayOfMonth;
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
-                date = sdf.format(new Date(mYear, mMonth, mDay));
+                date = sdf.format(new Date(mYear-1900, mMonth, mDay));
                 btnDate.setText(date);
             }
         };
@@ -168,15 +195,35 @@ public class EditItemInfo extends Activity {
 	 * Save user input as a wish item
 	 */
 	private void saveWishItem() {
-		//read in the name and description of the item
-		String itemName = myItemName.getText().toString();
-		String itemDesc = myDescription.getText().toString();
+		
+		String itemName = "N/A";
+		String itemDesc = "N/A";
+		float itemPrice = 0;
+		String itemLocation = "N/A";
+		int itemPriority = 0;
+		
+		try{
+			//read in the name, description, price and location of the item
+			itemName = myItemName.getText().toString();
+			itemDesc = myDescription.getText().toString();
+			itemPrice = Float.valueOf(myPrice.getText().toString());
+			itemLocation = myLocation.getText().toString();
+			
+		}
+		
+		catch (NumberFormatException e){
+			//need some error message here
+			//price format incorrect
+			e.toString();
+			itemPrice = 0;
+		}
+
 		
 		//user did not specify datetime, use now as default
 		if (mYear == -1){
 			// get the current date
 	        final Calendar c = Calendar.getInstance();
-	        mYear = c.get(Calendar.YEAR) - 1900;
+	        mYear = c.get(Calendar.YEAR);
 	        mMonth = c.get(Calendar.MONTH);
 	        mDay = c.get(Calendar.DAY_OF_MONTH);
 	        mHour = c.get(Calendar.HOUR);
@@ -184,13 +231,13 @@ public class EditItemInfo extends Activity {
 	        mSec = c.get(Calendar.SECOND);
 		}
 		
-		mDate = new Date(mYear, mMonth, mDay, mHour, mMin, mSec);	
+		mDate = new Date(mYear-1900, mMonth, mDay, mHour, mMin, mSec);	
 
 
 		//SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
         String date = sdf.format(mDate);
-		wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri);
+		wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri, itemPrice, itemLocation, itemPriority);
 		finish();
 	}
 	@Override

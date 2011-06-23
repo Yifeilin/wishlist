@@ -30,6 +30,7 @@ public class WishList extends Activity {
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	static final private int POST_TODO = Menu.FIRST + 4;
 	static final private int SORT_TODO = Menu.FIRST + 5;
+
 	
 	static final private int DIALOG_MAIN = 0;
 	
@@ -130,6 +131,14 @@ public class WishList extends Activity {
     private void onSortByName(){
 		populateItemList(ItemsCursor.SortBy.name);
     }
+    
+    private void onSortByPrice(){
+		populateItemList(ItemsCursor.SortBy.price);
+    }
+    
+    private void onSortByPriority(){
+		populateItemList(ItemsCursor.SortBy.priority);
+    }
 
 	private void populateItemList(ItemsCursor.SortBy sortBy) {
    
@@ -229,6 +238,18 @@ public class WishList extends Activity {
 		
 		case (R.id.menu_sortByName):{
 			onSortByName();
+			return true;
+
+		}
+		
+		case (R.id.menu_sortByPrice):{
+			onSortByPrice();
+			return true;
+
+		}
+		
+		case (R.id.menu_sortByPriority):{
+			onSortByPriority();
 			return true;
 
 		}

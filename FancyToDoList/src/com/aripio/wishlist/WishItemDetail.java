@@ -85,6 +85,10 @@ public class WishItemDetail extends Activity {
     
     private TextView mDateView;
     
+    private TextView mPriceView;
+    
+    private TextView mLocationView;
+    
     //private long id_pos[];
     private long mItem_id;
     
@@ -133,6 +137,14 @@ public class WishItemDetail extends Activity {
         String itemDate = wishItemCursor.getString(
         		wishItemCursor.getColumnIndexOrThrow(WishListDataBase.KEY_DATE));
         
+        String itemPrice = wishItemCursor.getString(
+        		wishItemCursor.getColumnIndexOrThrow(WishListDataBase.KEY_PRICE));
+     
+        String itemLocation = wishItemCursor.getString(
+        		wishItemCursor.getColumnIndexOrThrow(WishListDataBase.KEY_LOCATION));
+        
+        String itemPriority = wishItemCursor.getString(
+        		wishItemCursor.getColumnIndexOrThrow(WishListDataBase.KEY_PRIORITY));
         
         //format the date time
 		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -146,6 +158,9 @@ public class WishItemDetail extends Activity {
 			e.printStackTrace();
 		}
 		
+		//format the price
+		String priceStrNew = "$"+itemPrice;
+		
        
         //if (wishItemCursor == null || wishItemCursor.getCount() == 0){
         
@@ -158,11 +173,17 @@ public class WishItemDetail extends Activity {
         mNameView = (TextView) findViewById(R.id.itemNameDetail);
         mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
         mDateView = (TextView) findViewById(R.id.itemDateDetail);
+        mPriceView = (TextView) findViewById(R.id.itemPriceDetail);
+        mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
+        //mPriorityView = (TextView) findViewById(R.id.itemDateDetail);
         
         mPhotoView.setImageURI(photoUri);
         mNameView.setText(itemName);
         mDescrptView.setText(itemDescrpt);
         mDateView.setText(dateTimeStrNew);
+        mPriceView.setText(priceStrNew);
+        mLocationView.setText(itemLocation);
+        
         
 //        mDescrptView.setVisibility(View.GONE);
 //        getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,

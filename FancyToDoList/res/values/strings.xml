@@ -37,7 +37,7 @@
     <string name="search_hint">Search your favorite item</string>
     
 	<string name="WishListDataBase_Create">"
-	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL);
+	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL, price REAL, location TEXT, priority INTEGER);
 	
 	CREATE TABLE StoreInfo (store_id INTEGER, store_name TEXT, address TEXT, latitude INTEGER, longitude INTEGER);
 	"</string>
