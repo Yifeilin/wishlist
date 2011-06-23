@@ -16,6 +16,9 @@
 
 package com.aripio.wishlist;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 import com.google.android.maps.GeoPoint;
 
@@ -107,7 +110,7 @@ public class WishItemDetail extends Activity {
         // Remember the id of the item user selected
         Intent i = getIntent();
         mItem_id = i.getLongExtra("item_id", 0);
-        mPosition = i.getIntExtra("position", 6);
+        mPosition = i.getIntExtra("position", 0);
         
         //mItem_id = getDBItemID(mPosition);
         
@@ -129,6 +132,21 @@ public class WishItemDetail extends Activity {
         	
         String itemDate = wishItemCursor.getString(
         		wishItemCursor.getColumnIndexOrThrow(WishListDataBase.KEY_DATE));
+        
+        
+        //format the date time
+		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdfTo = new SimpleDateFormat("MMMM dd, yyyy, hh:mm aaa");
+	
+		String dateTimeStrNew = null;
+		try {
+			dateTimeStrNew = sdfTo.format( sdfFrom.parse(itemDate) );
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+       
         //if (wishItemCursor == null || wishItemCursor.getCount() == 0){
         
        
@@ -144,7 +162,7 @@ public class WishItemDetail extends Activity {
         mPhotoView.setImageURI(photoUri);
         mNameView.setText(itemName);
         mDescrptView.setText(itemDescrpt);
-        mDateView.setText(itemDate);
+        mDateView.setText(dateTimeStrNew);
         
 //        mDescrptView.setVisibility(View.GONE);
 //        getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,

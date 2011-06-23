@@ -43,9 +43,13 @@ public class EditItemInfo extends Activity {
 	private String picture_uri;
 	// = R.drawable.chocolate
 	private WishListDataBase wishListDB; 
-	private int mYear;
-    private int mMonth;
-    private int mDay;
+	private int mYear = -1;
+    private int mMonth = -1;
+    private int mDay = -1;
+    private int mHour = 0;
+    private int mMin = 0;
+    private int mSec = 0;
+    
     private AlertDialog alert;
 	static final private int DATE_DIALOG_ID = 0;
 	static final private int TAKE_PICTURE = 1;
@@ -65,15 +69,16 @@ public class EditItemInfo extends Activity {
 		
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 		
+     
+		// Open or create the database
+
+        wishListDB = WishListDataBase.getDBInstance(this);
+        
 		// get the current date
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
-        
-		// Open or create the database
-
-        wishListDB = WishListDataBase.getDBInstance(this);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?")
@@ -163,9 +168,25 @@ public class EditItemInfo extends Activity {
 	 * Save user input as a wish item
 	 */
 	private void saveWishItem() {
+		//read in the name and description of the item
 		String itemName = myItemName.getText().toString();
 		String itemDesc = myDescription.getText().toString();
-		mDate = new Date(mYear, mMonth, mDay);
+		
+		//user did not specify datetime, use now as default
+		if (mYear == -1){
+			// get the current date
+	        final Calendar c = Calendar.getInstance();
+	        mYear = c.get(Calendar.YEAR) - 1900;
+	        mMonth = c.get(Calendar.MONTH);
+	        mDay = c.get(Calendar.DAY_OF_MONTH);
+	        mHour = c.get(Calendar.HOUR);
+	        mMin = c.get(Calendar.MINUTE);
+	        mSec = c.get(Calendar.SECOND);
+		}
+		
+		mDate = new Date(mYear, mMonth, mDay, mHour, mMin, mSec);	
+
+
 		//SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
         String date = sdf.format(mDate);
@@ -209,8 +230,8 @@ public class EditItemInfo extends Activity {
 						    picture_uri = uri.toString();
  
 						    
-						    int a = 0;
-						    int b = 0;
+						    //int a = 0;
+						    //int b = 0;
 						} catch (Exception e) {
 						    Log.e(WishList.LOG_TAG, "exception while writing image", e);
 						}					
