@@ -40,6 +40,14 @@
 	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL, price REAL, location TEXT, priority INTEGER);
 	
 	CREATE TABLE StoreInfo (store_id INTEGER, store_name TEXT, address TEXT, latitude INTEGER, longitude INTEGER);
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Car', 'It is a very nice car', '1983-07-06 11:30:00', '0', '7f020004', '25000.0', 'BMW, Shanghai, China', '0');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Book', 'It is a great book', '1984-03-17 18:22:35', '1', '7f020003', '9.990000', 'Chapter store, Toronto, ON Canada', '3');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Cake', 'It is a delicious cake', '2011-05-03 03:40:50', '2', '7f020006', '15.0', 'YuanZu Food, Jiaxing, Zhejiang, China', '2');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Heart', 'It is a warm heart', '2000-11-23 08:17:38', '3', '7f020008', '324.49', 'Hospital, Beijing, China', '1');
 	"</string>
 	
 	<string name="WishListDataBase_Upgrade">"

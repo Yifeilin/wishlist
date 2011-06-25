@@ -1,10 +1,21 @@
 package com.aripio.wishlist;
 
+import java.io.OutputStream;
+
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentProviderClient;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore.Images.Media;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -100,6 +111,7 @@ public class WishList extends Activity {
 		registerForContextMenu(myListView);
 		restoreUIState();
 
+		//saveDefaultImage();
 		// Open or create the database
 		wishListDB = WishListDataBase.getDBInstance(this);
 			
@@ -149,6 +161,52 @@ public class WishList extends Activity {
     // Update the list view
     	updateListView();
     }
+	
+	//this function needs to be re-written, because everytime the app
+	//starts, it will write additional image data to the media content provider
+	private void saveDefaultImage(){
+		//write some sample image to content provider
+		Bitmap bookBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.book);
+		//Bitmap car
+
+		ContentValues values = new ContentValues();
+		values.put(Media.MIME_TYPE, "image/jpeg");
+		
+		Uri PHOTO_URI = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+		ContentResolver cr = getContentResolver();
+		//final Uri PHOTO_URI = Uri.parse("content://com.aripio.wishlist.DefaultPhotoProvider");
+		
+		String[] columns = {Media.MIME_TYPE};
+		Cursor cur = managedQuery(PHOTO_URI, columns, null, null, null);
+		int count = cur.getCount();
+		
+		if (count == 0){
+			Uri uri = cr.insert(PHOTO_URI, values);
+
+			String picture_uri = null;
+			
+			try {
+			    OutputStream outStream = getContentResolver().openOutputStream(uri);
+			    bookBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
+			    
+			    outStream.close();
+			    //picture_uri = uri.getEncodedPath();
+			    picture_uri = uri.toString();
+			    
+			    int a = 0;
+			    int b = 0;
+
+
+			} catch (Exception e) {
+			    Log.e(WishList.LOG_TAG, "exception while writing image", e);
+			}		
+			
+		}
+		//ContentProviderClient crc = cr.acquireContentProviderClient(PHOTO_URI);
+		//crc.query(PHOTO_URI, null, selection, selectionArgs, null);
+		
+			
+	}
 
 	private void updateListView() {
 		wishItemCursor.requery();

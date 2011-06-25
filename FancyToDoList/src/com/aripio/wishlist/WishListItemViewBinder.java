@@ -3,6 +3,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,14 +24,39 @@ SimpleCursorAdapter.ViewBinder  {
       //set the photo to the image view  
       if(columnIndex == nImageIndex) 
       { 
+    	  Bitmap bitmap = null;
           ImageView photoView = (ImageView)view; 
           //int type = Integer.parseInt(cursor.getString(nImageIndex)); 
           //photoView.setImageResource(R.drawable.chocolate); 
           //int count = cursor.getCount();
-          String pic_uri_str = cursor.getString(columnIndex);
-          Uri pic_uri = Uri.parse(pic_uri_str);
-          //"content://media/external/images/media/4"
-          photoView.setImageURI(pic_uri);
+          
+          //read in the picture string from db
+          //it could be a resource id or a uri from content provider
+          String pic_str = cursor.getString(columnIndex);
+          
+          //check if pic_str is a resId          
+          try {
+        	  //view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+        	  int picResId = Integer.valueOf(pic_str, 16).intValue();
+        		  //Integer.parseInt(pic_str);
+              bitmap = BitmapFactory.decodeResource(view.getContext().getResources(), picResId);
+          } catch (NumberFormatException e) {
+              //Not a resId, so it must be a content provider uri
+              Uri pic_uri = Uri.parse(pic_str);
+              photoView.setImageURI(pic_uri);
+              return true;
+          }
+          
+          //it is resource id.
+          photoView.setImageBitmap(bitmap);
+          
+          //pic_uri = Uri.parse("android.resource://com.aripio.wishlist/" + R.drawable.car);
+          //pic_uri = Uri.parse("android.resource://com.aripio.wishlist/drawable/car");
+          
+          
+
+          //photoView.setImageResource(R.drawable.car);
+                    
            
           return true; 
       } 

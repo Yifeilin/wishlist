@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQuery;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 /**
@@ -82,6 +83,18 @@ public class WishListDataBase extends  SQLiteOpenHelper {
         } finally {
         	db.endTransaction();
         }		
+        
+        //Uri pic_uri = Uri.parse("android.resource://com.aripio.wishlist/" + R.drawable.book);
+        //String a = pic_uri.toString();
+        //insert some default items
+//        addItem("book", 
+//				"It is a very nice book",
+//				"2011-05-03 11:30:00",
+//				0,
+//				a,
+//				(float)9.99,
+//				"Chapter store, Toronto, ON Canada",
+//				3);
 	}
 
 	@Override
@@ -134,7 +147,10 @@ public class WishListDataBase extends  SQLiteOpenHelper {
 			"VALUES ( NULL, '%s', '%s', '%s', '%d', '%s', '%f', '%s', '%d')",
 			 name, description, date, store_id, picture_uri, price, location, priority);
 		try{
-			getWritableDatabase().execSQL(sql);
+			SQLiteDatabase sqlitedb; 
+			sqlitedb = getWritableDatabase();
+			sqlitedb.execSQL(sql);
+			//getWritableDatabase().execSQL(sql);
 		} catch (SQLException e) {
             Log.e("Error writing new item", e.toString());
 		}

@@ -59,6 +59,15 @@
         <activity android:name="WishListNewMap"
         android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme"></activity>
+                  
+<!--         <provider android:name="com.aripio.wishlist.defaultphotoprovider" -->
+<!--           android:authorities="com.aripio.wishlist.provider.defaultphotoprovider"> -->
+<!-- 		</provider> -->
+		
+<!-- 		<provider android:name="com.google.provider.NotePad" -->
+<!--           android:authorities="com.google.provider.NotePad"> -->
+<!-- 		</provider> -->
+		
              
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

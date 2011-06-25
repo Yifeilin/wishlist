@@ -28,6 +28,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -177,7 +178,24 @@ public class WishItemDetail extends Activity {
         mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
         //mPriorityView = (TextView) findViewById(R.id.itemDateDetail);
         
-        mPhotoView.setImageURI(photoUri);
+        Bitmap bitmap = null;
+         
+        //check if pic_str is a resId          
+        try {
+      	  	//view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+      	  	int picResId = Integer.valueOf(photoStr, 16).intValue();
+            bitmap = BitmapFactory.decodeResource(mPhotoView.getContext().getResources(), picResId);
+            //it is resource id.
+            mPhotoView.setImageBitmap(bitmap);
+            
+        } catch (NumberFormatException e) {
+            //Not a resId, so it must be a content provider uri
+            photoUri = Uri.parse(photoStr);
+            mPhotoView.setImageURI(photoUri);
+
+        }
+        
+        //mPhotoView.setImageURI(photoUri);
         mNameView.setText(itemName);
         mDescrptView.setText(itemDescrpt);
         mDateView.setText(dateTimeStrNew);

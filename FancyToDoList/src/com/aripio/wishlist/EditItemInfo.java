@@ -275,6 +275,7 @@ public class EditItemInfo extends Activity {
 						    outStream.close();
 						    //picture_uri = uri.getEncodedPath();
 						    picture_uri = uri.toString();
+						    //picture_uri = Integer.toString(R.drawable.car);
  
 						    
 						    //int a = 0;
