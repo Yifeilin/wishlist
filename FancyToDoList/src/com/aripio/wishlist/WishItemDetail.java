@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -333,6 +334,19 @@ public class WishItemDetail extends Activity {
 	        return true;
 	    else
 	    	return false;
+    }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // do something on back.
+			startActivity(new Intent(WishItemDetail.this, WishList.class));
+			WishItemDetail.this.finish();
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
