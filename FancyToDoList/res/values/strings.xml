@@ -154,5 +154,10 @@
         name="settings_friend_email_tip">Add a new friend by email</string>
     <string
         name="settings_button_friend_email">Add Friend</string>
+    <string name="change_view_prompt">Change view</string>
+    <string-array name="views_array">
+        <item>List View</item>
+        <item>Grid View</item>
+    </string-array>
 
 </resources>

@@ -115,7 +115,7 @@ public class WishItemDetail extends Activity {
 
         // Remember the id of the item user selected
         Intent i = getIntent();
-        mItem_id = i.getLongExtra("item_id", 0);
+        mItem_id = i.getLongExtra("item_id", 1);
         mPosition = i.getIntExtra("position", 0);
         
         //mItem_id = getDBItemID(mPosition);

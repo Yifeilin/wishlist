@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -23,14 +24,26 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.aripio.wishlist.WishListDataBase.ItemsCursor;
+
+
+
 
 
 public class WishList extends Activity {
@@ -54,10 +67,13 @@ public class WishList extends Activity {
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	
 	static final String LOG_TAG = "WishList";
+	private String viewOption = "list";
 	
+	private ViewFlipper myViewFlipper;
 	private ListView myListView;
-	
+	private GridView myGridView;
 	private EditText mySearchText;
+	private Spinner myViewSpinner;
 	
 	private WishListDataBase wishListDB;
 	private ItemsCursor wishItemCursor;
@@ -69,11 +85,70 @@ public class WishList extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 			
+		myViewFlipper = (ViewFlipper)findViewById(R.id.myFlipper);
 		myListView = (ListView) findViewById(R.id.myListView);
-		
+		myGridView = (GridView) findViewById(R.id.myGridView);
 		mySearchText = (EditText) findViewById(R.id.mySearchText);
-		
+	    myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
+	    
+	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+	            this, R.array.views_array, android.R.layout.simple_spinner_item);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    myViewSpinner.setAdapter(adapter);
+	    
+	    myViewSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+	    	@Override	
+	    	public void onItemSelected(AdapterView<?> parent,
+	    	            View view, int pos, long id) {
+	    			
+	    			  //list view
+	    			  if (pos == 0){
+	    				  myViewFlipper.setDisplayedChild(0);
+	    				  viewOption = "list";
+	    				  
+	    			  }
+	    			  
+	    			  //grid view
+	    			  else if(pos == 1){
+	    				  myViewFlipper.setDisplayedChild(1);
+	    				  viewOption = "grid";
+	    				  
+	    			  }
+//	    	          Toast.makeText(parent.getContext(), "The view is " +
+//	    	              parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
+	    	        }
+	    	
+	    	@Override
+	        public void onNothingSelected(AdapterView parent) {
+	          // Do nothing.
+	        }
+	    });
+	    
+	
 		myListView.setOnItemClickListener( new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+				//find which item has been clicked and get its _id in database
+				long item_id = getDBItemID(position);
+//				View selected_view = myListView.getChildAt(position);
+//				TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+//				//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
+//				//String item_id_str = itemIdTextView.getText().toString();
+//				long item_id = Long.parseLong(itemIdTextView.getText().toString());
+//				
+				// Create an intent to show the item detail.
+		        // Pass the item_id along so the next activity can use it to 
+				//retrieve the info. about the item from database
+		        Intent i = new Intent(WishList.this, WishItemDetail.class);
+		        i.putExtra("item_id", item_id);
+		        i.putExtra("position", position);
+		        startActivity(i);
+				
+			}
+			
+		});
+		
+		myGridView.setOnItemClickListener( new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 				//find which item has been clicked and get its _id in database
@@ -115,7 +190,15 @@ public class WishList extends Activity {
 		// Open or create the database
 		wishListDB = WishListDataBase.getDBInstance(this);
 			
-		populateItemList(ItemsCursor.SortBy.name);
+		//populateItemList(ItemsCursor.SortBy.name);
+		//populateItemGrid(ItemsCursor.SortBy.name);
+		initializeView(ItemsCursor.SortBy.name);
+		//populateItems(ItemsCursor.SortBy.name);
+		
+    	//myViewFlipper.showNext();
+    	
+//    	int a = 0;
+//    	int b = 0;
 	}
     
     @Override
@@ -126,8 +209,21 @@ public class WishList extends Activity {
     //get the _ID of the item in wishitem database 
     //whose position in the listview is pos.
     public long getDBItemID(int pos){
-		View selected_view = myListView.getChildAt(pos);
-		TextView itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+    	
+    	View selected_view = null;
+    	TextView itemIdTextView = null;
+    	if (viewOption == "list"){
+    		selected_view = myListView.getChildAt(pos);
+    		itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+    		
+    	}
+    	
+    	else if(viewOption == "grid"){
+    		selected_view = myGridView.getChildAt(pos);
+    		itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
+    		
+    	}
+
 		//TextView dateTextView = (TextView) selected_view.findViewById(R.id.txtDate);
 		//String item_id_str = itemIdTextView.getText().toString();
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
@@ -137,30 +233,73 @@ public class WishList extends Activity {
     }
     
     private void onSortByTime(){
-		populateItemList(ItemsCursor.SortBy.create_date);
+		//populateItemList(ItemsCursor.SortBy.create_date);
+		populateItems(ItemsCursor.SortBy.create_date);
     }
     
     private void onSortByName(){
-		populateItemList(ItemsCursor.SortBy.name);
+		//populateItemList(ItemsCursor.SortBy.name);
+		populateItems(ItemsCursor.SortBy.name);
     }
     
     private void onSortByPrice(){
-		populateItemList(ItemsCursor.SortBy.price);
+		//populateItemList(ItemsCursor.SortBy.price);
+		populateItems(ItemsCursor.SortBy.name);
     }
     
     private void onSortByPriority(){
-		populateItemList(ItemsCursor.SortBy.priority);
+		//populateItemList(ItemsCursor.SortBy.priority);
+		populateItems(ItemsCursor.SortBy.name);
+    }
+    
+    private void initializeView(ItemsCursor.SortBy sortBy){
+        wishItemCursor = wishListDB.getItems(sortBy); 
+    	updateListView();
+    	updateGridView();
+        
+    	
+    }
+    
+    private void populateItems(ItemsCursor.SortBy sortBy){
+    	
+        // Get all of the rows from the database and create the table
+        // Keep track of the TextViews added in list lstTable
+        wishItemCursor = wishListDB.getItems(sortBy); 
+        updateView();
+        
+        
+//    	if (viewOption == "list"){
+//    	    // Update the list view
+//        	updateListView();
+//    		
+//    	}
+//    	
+//    	else if(viewOption == "grid"){
+//    	    // Update the list view
+//        	updateGridView();
+//    		
+//    	}
     }
 
-	private void populateItemList(ItemsCursor.SortBy sortBy) {
-   
-    // Get all of the rows from the database and create the table
-    // Keep track of the TextViews added in list lstTable
-        wishItemCursor = wishListDB.getItems(sortBy); 	
-    	
-    // Update the list view
-    	updateListView();
-    }
+//	private void populateItemList(ItemsCursor.SortBy sortBy) {
+//   
+//    // Get all of the rows from the database and create the table
+//    // Keep track of the TextViews added in list lstTable
+//        wishItemCursor = wishListDB.getItems(sortBy); 	
+//    	
+//    // Update the list view
+//    	updateListView();
+//    }
+//	
+//	private void populateItemGrid(ItemsCursor.SortBy sortBy){
+//    // Get all of the rows from the database and create the table
+//    // Keep track of the TextViews added in list lstTable
+//        wishItemCursor = wishListDB.getItems(sortBy); 	
+//    	
+//    // Update the list view
+//    	updateGridView();
+//		
+//	}
 	
 	//this function needs to be re-written, because everytime the app
 	//starts, it will write additional image data to the media content provider
@@ -208,7 +347,47 @@ public class WishList extends Activity {
 			
 	}
 
-	private void updateListView() {
+	private void updateGridView() {
+		wishItemCursor.requery();
+		int resID = R.layout.wishitem_photo;
+
+		//String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
+		//String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_PHOTO_URL, WishListDataBase.KEY_NAME, WishListDataBase.KEY_DESCRIPTION, WishListDataBase.KEY_DATE};
+		String[] from = new String[] {WishListDataBase.KEY_ITEMID, WishListDataBase.KEY_PHOTO_URL};
+		//int[] to = new int[] {R.id.txtItemID, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+	    //int[] to = new int[] {R.id.txtItemID, R.id.imgPhoto, R.id.txtName, R.id.txtDesc, R.id.txtDate}; 
+	    int[] to = new int[] {R.id.txtItemID_Grid, R.id.imgPhotoGrid};
+	    wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor, from, to);
+	    //wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID, wishItemCursor);
+	    
+	    
+		//ImageAdapter m_imageAdapter = new ImageAdapter(this);
+	    //myGridView.setAdapter(m_imageAdapter);
+	    
+	    myGridView.setAdapter(wishListItemAdapterCursor);
+		wishListItemAdapterCursor.notifyDataSetChanged();
+		
+		
+	}
+	
+	private void updateView(){
+		
+		if (viewOption == "list"){
+		    // Update the list view
+	    	updateListView();
+			
+		}
+		
+		else if(viewOption == "grid"){
+		    // Update the list view
+	    	updateGridView();
+			
+		}
+		
+	}
+	
+	private void updateListView(){
+		
 		wishItemCursor.requery();
 		int resID = R.layout.wishitem_single;
 
@@ -223,6 +402,7 @@ public class WishList extends Activity {
 	    
 	    myListView.setAdapter(wishListItemAdapterCursor);
 		wishListItemAdapterCursor.notifyDataSetChanged();
+		
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -334,7 +514,8 @@ public class WishList extends Activity {
 		case (REMOVE_TODO): {		
 			wishListDB.deleteItem(item_id);
 			//removeItem(index);
-			updateListView();
+			//updateListView();
+			updateView();
 			return true;
 			}
 		case (DETAIL_TODO):{
@@ -428,6 +609,7 @@ public class WishList extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateListView();
+		updateView();
+		//updateListView();
 	}
 }
