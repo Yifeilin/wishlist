@@ -24,7 +24,8 @@
         <activity android:name=".WishList"
                   android:label="@string/app_name"
                   android:theme="@style/ToDoTheme"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  android:launchMode="singleTask">
                   <meta-data android:name="android.app.default_searchable"
                    	   android:value=".WishListSearchEngine" />
                 <intent-filter>

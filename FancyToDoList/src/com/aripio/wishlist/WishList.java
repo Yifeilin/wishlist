@@ -65,9 +65,13 @@ public class WishList extends Activity {
 	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
+	private static final String SORT_BY_KEY = "SORT_BY_KEY";
+
 	
+	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.name;
 	static final String LOG_TAG = "WishList";
 	private String viewOption = "list";
+	
 	
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
@@ -83,6 +87,11 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+//		String sortBy_str = savedInstanceState.getString(SORT_BY_KEY);
+//		SORT_BY = ItemsCursor.SortBy.valueOf(sortBy_str);
+		//Colour c = (Colour) Enum.Parse(typeof(Colour), "Red", true);
+
 		setContentView(R.layout.main);
 			
 		myViewFlipper = (ViewFlipper)findViewById(R.id.myFlipper);
@@ -244,12 +253,12 @@ public class WishList extends Activity {
     
     private void onSortByPrice(){
 		//populateItemList(ItemsCursor.SortBy.price);
-		populateItems(ItemsCursor.SortBy.name);
+		populateItems(ItemsCursor.SortBy.price);
     }
     
     private void onSortByPriority(){
 		//populateItemList(ItemsCursor.SortBy.priority);
-		populateItems(ItemsCursor.SortBy.name);
+		populateItems(ItemsCursor.SortBy.priority);
     }
     
     private void initializeView(ItemsCursor.SortBy sortBy){
@@ -577,6 +586,7 @@ public class WishList extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(SELECTED_INDEX_KEY, myListView.getSelectedItemPosition());
+		outState.putString(SORT_BY_KEY, SORT_BY.name());
 	}
 
 	@Override
