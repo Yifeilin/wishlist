@@ -7,6 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/***
+ * ItemCategoryDBAdapter provides access to operations on data in ItemCategory table
+ */
 public class ItemCategoryDBAdapter {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_NAME = "category_name";
@@ -68,7 +71,7 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Create a new car. If the car is successfully created return the new rowId
+	 * Create a new itemCategory. If the car is successfully created return the new rowId
 	 * for that car, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
@@ -81,7 +84,7 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Delete the car with the given rowId
+	 * Delete the itemCategory with the given rowId
 	 * 
 	 * @param rowId
 	 * @return true if deleted, false otherwise
@@ -92,7 +95,7 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all cars in the database
+	 * Return a Cursor over the list of all itemCategories in the database
 	 * 
 	 * @return Cursor over all cars
 	 */
@@ -103,10 +106,10 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor positioned at the car that matches the given rowId
+	 * Return a Cursor positioned at the itemCategory that matches the given rowId
 	 * 
 	 * @param rowId
-	 * @return Cursor positioned to matching car, if found
+	 * @return Cursor positioned to matching itemCategory, if found
 	 * @throws SQLException
 	 *             if car could not be found/retrieved
 	 */
@@ -123,7 +126,7 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Update the car.
+	 * Update the itemCategory.
 	 * 
 	 * @param rowId
 	 * @param name

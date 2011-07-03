@@ -83,8 +83,8 @@ public class ItemDBAdapter {
 	}
 
 	/**
-	 * Create a new item. If the car is successfully created return the new
-	 * rowId for that car, otherwise return a -1 to indicate failure.
+	 * Create a new item. If the item is successfully created return the new
+	 * rowId for that item, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed

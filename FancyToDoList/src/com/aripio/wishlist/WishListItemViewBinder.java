@@ -12,15 +12,20 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+/***
+ * WishListItemViewBinder defines how the item's photo and date_time are displayed in 
+ * the view. 
+ * 
+ * It retrieves the image file from the picture_uri saved in database and set the image
+ * to the view
+ * 
+ * It retrieves the date_time from the database and converts it to "July 6, 1983" format
+ * for display in the view 
+ */
 public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
-	// ResourceCursorAdapter.ViewBinder {
 
 	@Override
 	public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-		// int nImageIndex =
-		// cursor.getColumnIndexOrThrow(WishListDataBase.KEY_PHOTO_URL);
-		// int nDateIndex =
-		// cursor.getColumnIndexOrThrow(WishListDataBase.KEY_DATE);
 
 		int nImageIndex = cursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
@@ -30,46 +35,43 @@ public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
 		// set the photo to the image view
 		if (columnIndex == nImageIndex) {
 			Bitmap bitmap = null;
+			
+			//get the ImageView in which the photo should be displayed
 			ImageView photoView = (ImageView) view;
-			// int type = Integer.parseInt(cursor.getString(nImageIndex));
-			// photoView.setImageResource(R.drawable.chocolate);
-			// int count = cursor.getCount();
 
 			// read in the picture string from db
-			// it could be a resource id or a uri from content provider
+			// the string could be a resource id or a uri from content provider
 			String pic_str = cursor.getString(columnIndex);
 
-			// check if pic_str is a resId
+			// check if pic_str is a resId or a uri
 			try {
-				// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+				//if it's a resID, the following decodeResource will not 
+				//throw exception (this need to be changed for performance)
 				int picResId = Integer.valueOf(pic_str, 16).intValue();
-				// Integer.parseInt(pic_str);
 				bitmap = BitmapFactory.decodeResource(view.getContext()
 						.getResources(), picResId);
 			} catch (NumberFormatException e) {
 				// Not a resId, so it must be a content provider uri
+				// thus set image from uri
 				Uri pic_uri = Uri.parse(pic_str);
 				photoView.setImageURI(pic_uri);
 				return true;
 			}
 
-			// it is resource id.
+			// exception is not thrown, so it is resID.
+			// set the image decoded from resID
 			photoView.setImageBitmap(bitmap);
-
-			// pic_uri = Uri.parse("android.resource://com.aripio.wishlist/" +
-			// R.drawable.car);
-			// pic_uri =
-			// Uri.parse("android.resource://com.aripio.wishlist/drawable/car");
-
-			// photoView.setImageResource(R.drawable.car);
 
 			return true;
 		}
 
 		// set date and time to the text view in appropriate format
 		if (columnIndex == nDateIndex) {
+			
+			//get the TextView in which the date and time will be displayed
 			TextView viewDate = (TextView) view;
-			// viewDate.setText(cursor.getString(columnIndex));
+			
+			//get the date_time string from db and reformat it
 			String dateTimeStr = cursor.getString(columnIndex);
 			SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat sdfTo = new SimpleDateFormat("MMM dd, yyyy");
@@ -82,6 +84,7 @@ public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
 				e.printStackTrace();
 			}
 
+			//set the reformatted date_time
 			viewDate.setText(dateTimeStrNew);
 			return true;
 		}

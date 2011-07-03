@@ -1,3 +1,6 @@
+/***
+ * this class is no longer in use
+ */
 package com.aripio.wishlist;
 
 import com.aripio.wishlist.WishListDataBase.ItemsCursor;

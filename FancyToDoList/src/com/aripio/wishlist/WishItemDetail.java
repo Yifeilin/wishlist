@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2008 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.aripio.wishlist;
 
 import java.text.ParseException;
@@ -46,11 +30,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Activity which displays the detail of an item.
+/***
+ * WishItemDetail is responsible for displaying the detailed info. of an item. 
+ * It also handles the left/right swipe gesture form user, which correspond to 
+ * navigating to the previous and next item, respectively.
+ * 
+ * the order of the items during swiping is the order of the items displayed in 
+ * the WishList activity
  */
 public class WishItemDetail extends Activity {
-	// private WishList mWishList;
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -64,64 +52,33 @@ public class WishItemDetail extends Activity {
 	private ItemDBAdapter myItemDBAdapter;
 	private ItemsCursor wishItemCursor;
 
-	// private static final int MENU_RADAR = Menu.FIRST + 1;
-	//
-	// private static final int MENU_MAP = Menu.FIRST + 2;
-	//
-	// private static final int MENU_AUTHOR = Menu.FIRST + 3;
-	//
-	// private static final int MENU_VIEW = Menu.FIRST + 4;
-	//
-	// private static final int DIALOG_NO_RADAR = 1;
-
-	// PanoramioItem mItem;
-
 	private Handler mHandler;
-
 	private ImageView mPhotoView;
-
 	private TextView mNameView;
-
 	private TextView mDescrptView;
-
 	private View mDetailView;
-
 	private TextView mDateView;
-
 	private TextView mPriceView;
-
 	private TextView mLocationView;
 
-	// private long id_pos[];
 	private long mItem_id;
-
 	private int mPosition;
 	private int mPrevPosition;
 	private int mNextPosition;
 
-	// private int mMapZoom;
-
-	// private int mMapLatitudeE6;
-
-	// private int mMapLongitudeE6;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.view_image);
 		setContentView(R.layout.wishitem_detail);
 
-		// myListView = (ListView) findViewById(R.id.myListView);
-
-		// Remember the id of the item user selected
+		// Remember the id of the item user clicked
+		// in the previous activity (WishList.java)
 		Intent i = getIntent();
 		mItem_id = i.getLongExtra("item_id", 1);
 		mPosition = i.getIntExtra("position", 0);
 
-		// mItem_id = getDBItemID(mPosition);
-
-		// retrieve the info. of the item from DB
+		// open the Item table in the DB and
+		// retrieve the info. of the item via its id
 		// wishListDB = WishListDataBase.getDBInstance(this);
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
@@ -168,11 +125,7 @@ public class WishItemDetail extends Activity {
 		// format the price
 		String priceStrNew = "$" + itemPrice;
 
-		// if (wishItemCursor == null || wishItemCursor.getCount() == 0){
-
-		// long item_id = Long.parseLong(itemIdTextView.getText().toString());
-		// mHandler = new Handler();
-
+		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);
 		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
 		mNameView = (TextView) findViewById(R.id.itemNameDetail);
@@ -200,6 +153,7 @@ public class WishItemDetail extends Activity {
 
 		}
 
+		//display the item info. in the views
 		// mPhotoView.setImageURI(photoUri);
 		mNameView.setText(itemName);
 		mDescrptView.setText(itemDescrpt);
@@ -207,11 +161,7 @@ public class WishItemDetail extends Activity {
 		mPriceView.setText(priceStrNew);
 		mLocationView.setText(itemLocation);
 
-		// mDescrptView.setVisibility(View.GONE);
-		// getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,
-		// Window.PROGRESS_VISIBILITY_ON);
-
-		// setting the gesture detection
+		// set the gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());
 
 		gestureListener = new View.OnTouchListener() {
@@ -223,24 +173,18 @@ public class WishItemDetail extends Activity {
 			}
 		};
 
-		// myListView.getDBItemID();
-
 	}
 
-	// get the _ID of the item in wishitem database
-	// whose position in the listview is pos.
+	/***
+	 * get the _ID of the item in Item table
+	 * whose position in the listview is next 
+	 * to the current item
+	 * 
+	 * @return
+	 */
 	private long[] getNextDBItemID() {
-		// View selected_view = myListView.getChildAt(pos);
-		// TextView itemIdTextView = (TextView)
-		// selected_view.findViewById(R.id.txtItemID);
-		// TextView dateTextView = (TextView)
-		// selected_view.findViewById(R.id.txtDate);
-		// String item_id_str = itemIdTextView.getText().toString();
 
 		// Get all of the rows from the database in sorted order as in the
-		// wish list
-		// Open or create the database
-		// wishLite
 		long[] next_pos_id = new long[2];
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
 		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name);
@@ -261,6 +205,14 @@ public class WishItemDetail extends Activity {
 		next_pos_id[1] = nextItemID;
 		return next_pos_id;
 	}
+	
+	/***
+	 * get the _ID of the item in Item table
+	 * whose position in the listview is previous 
+	 * to the current item
+	 * 
+	 * @return
+	 */
 
 	private long[] getPrevDBItemID() {
 
@@ -295,13 +247,12 @@ public class WishItemDetail extends Activity {
 				// right to left swipe
 				if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					// viewFlipper.setInAnimation(slideLeftIn);
-					// viewFlipper.setOutAnimation(slideLeftOut);
-					// viewFlipper.showNext();
 					// Toast.makeText(WishItemDetail.this, "swipe to right",
 					// Toast.LENGTH_SHORT).show();
 
-					// getDBItemID(2);
+					//get the item id of the next item and
+					//start a new activity to display the
+					//next item's detailed info.
 					long[] next_p_i = new long[2];
 					next_p_i = getNextDBItemID();
 					Intent i = new Intent(WishItemDetail.this,
@@ -320,12 +271,13 @@ public class WishItemDetail extends Activity {
 
 				} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-					// viewFlipper.setInAnimation(slideRightIn);
-					// viewFlipper.setOutAnimation(slideRightOut);
-					// viewFlipper.showPrevious();
 					// Toast.makeText(WishItemDetail.this, "swipe to left",
 					// Toast.LENGTH_SHORT).show();
 
+
+					//get the item id of the previous item and
+					//start a new activity to display the
+					//previous item's detailed info.
 					long[] prev_p_i = new long[2];
 					prev_p_i = getPrevDBItemID();
 					Intent i = new Intent(WishItemDetail.this,
@@ -336,7 +288,6 @@ public class WishItemDetail extends Activity {
 					startActivity(i);
 					overridePendingTransition(R.anim.slide_right_in,
 							R.anim.slide_left_out);
-					// WishItemDetail.this.overridePendingTransition(0,0);
 				}
 			} catch (Exception e) {
 				// nothing
@@ -353,6 +304,11 @@ public class WishItemDetail extends Activity {
 			return false;
 	}
 
+	/***
+	 * called when the "return" button is clicked
+	 * it closes the WishItemDetail activity and starts
+	 * the WishList activity
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
@@ -365,114 +321,5 @@ public class WishItemDetail extends Activity {
 
 		return super.onKeyDown(keyCode, event);
 	}
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// super.onCreateOptionsMenu(menu);
-	// menu.add(0, MENU_RADAR, 0, R.string.menu_radar)
-	// .setIcon(R.drawable.ic_menu_radar)
-	// .setAlphabeticShortcut('R');
-	// menu.add(0, MENU_MAP, 0, R.string.menu_map)
-	// .setIcon(R.drawable.ic_menu_map)
-	// .setAlphabeticShortcut('M');
-	// menu.add(0, MENU_AUTHOR, 0, R.string.menu_author)
-	// .setIcon(R.drawable.ic_menu_author)
-	// .setAlphabeticShortcut('A');
-	// menu.add(0, MENU_VIEW, 0, R.string.menu_view)
-	// .setIcon(android.R.drawable.ic_menu_view)
-	// .setAlphabeticShortcut('V');
-	// return true;
-	// }
-
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case MENU_RADAR: {
-	// // Launch the radar activity (if it is installed)
-	// Intent i = new Intent("com.google.android.radar.SHOW_RADAR");
-	// GeoPoint location = mItem.getLocation();
-	// i.putExtra("latitude", (float)(location.getLatitudeE6() / 1000000f));
-	// i.putExtra("longitude", (float)(location.getLongitudeE6() / 1000000f));
-	// try {
-	// startActivity(i);
-	// } catch (ActivityNotFoundException ex) {
-	// showDialog(DIALOG_NO_RADAR);
-	// }
-	// return true;
-	// }
-	// case MENU_MAP: {
-	// // Display our custom map
-	// Intent i = new Intent(this, ViewMap.class);
-	// i.putExtra(ImageManager.PANORAMIO_ITEM_EXTRA, mItem);
-	// i.putExtra(ImageManager.ZOOM_EXTRA, mMapZoom);
-	// i.putExtra(ImageManager.LATITUDE_E6_EXTRA, mMapLatitudeE6);
-	// i.putExtra(ImageManager.LONGITUDE_E6_EXTRA, mMapLongitudeE6);
-	//            
-	// startActivity(i);
-	//
-	// return true;
-	// }
-	// case MENU_AUTHOR: {
-	// // Display the author info page in the browser
-	// Intent i = new Intent(Intent.ACTION_VIEW);
-	// i.setData(Uri.parse(mItem.getOwnerUrl()));
-	// startActivity(i);
-	// return true;
-	// }
-	// case MENU_VIEW: {
-	// // Display the photo info page in the browser
-	// Intent i = new Intent(Intent.ACTION_VIEW);
-	// i.setData(Uri.parse(mItem.getPhotoUrl()));
-	// startActivity(i);
-	// return true;
-	// }
-	// }
-	//
-	// return super.onOptionsItemSelected(item);
-	// }
-
-	// @Override
-	// protected Dialog onCreateDialog(int id) {
-	// switch (id) {
-	// case DIALOG_NO_RADAR:
-	// AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	// return builder.setTitle(R.string.no_radar_title)
-	// .setMessage(R.string.no_radar)
-	// .setIcon(android.R.drawable.ic_dialog_alert)
-	// .setPositiveButton(android.R.string.ok, null).create();
-	// }
-	// return null;
-	// }
-
-	// /**
-	// * Utility to load a larger version of the image in a separate thread.
-	// *
-	// */
-	// private class LoadThread extends Thread {
-	//
-	// public LoadThread() {
-	// }
-	//
-	// @Override
-	// public void run() {
-	// try {
-	// String uri = mItem.getThumbUrl();
-	// uri = uri.replace("thumbnail", "medium");
-	// final Bitmap b = BitmapUtils.loadBitmap(uri);
-	// mHandler.post(new Runnable() {
-	// public void run() {
-	//
-	// imgPhoto.setImageBitmap(b);
-	// mTitle.setText(mItem.getTitle());
-	// mOwner.setText(mItem.getOwner());
-	// mContent.setVisibility(View.VISIBLE);
-	// getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,
-	// Window.PROGRESS_VISIBILITY_OFF);
-	// }
-	// });
-	// } catch (Exception e) {
-	// Log.e(TAG, e.toString());
-	// }
-	// }
-	// }
 
 }

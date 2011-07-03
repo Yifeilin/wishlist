@@ -27,6 +27,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+/*** EditItemInfo.java is responsible for reading in the info. of a newly added item 
+ * including its name, description, time, price, location and photo, and saving them
+ * as a row in the Item table in the database
+ */
 public class EditItemInfo extends Activity {
 
 	private EditText myItemName;
@@ -63,6 +67,7 @@ public class EditItemInfo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
 
+		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
 		myDescription = (EditText) findViewById(R.id.description);
 		myPrice = (EditText) findViewById(R.id.price);
@@ -75,13 +80,12 @@ public class EditItemInfo extends Activity {
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 
-		// Open or create the database
-
+		// Open the Item table in the database
 		// wishListDB = WishListDataBase.getDBInstance(this);
 		mItemDBAdapter = new ItemDBAdapter(this);
 		mItemDBAdapter.open();
 
-		// get the current date
+		// get the current date_time
 		final Calendar c = Calendar.getInstance();
 		mYear = c.get(Calendar.YEAR);
 		mMonth = c.get(Calendar.MONTH);
@@ -102,6 +106,7 @@ public class EditItemInfo extends Activity {
 				});
 		alert = builder.create();
 
+		//set the keyListener for the Item Name EditText
 		myItemName.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
@@ -113,6 +118,7 @@ public class EditItemInfo extends Activity {
 			}
 		});
 
+		//set the keyListener for the Item Description EditText
 		myDescription.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
@@ -124,6 +130,7 @@ public class EditItemInfo extends Activity {
 			}
 		});
 
+		//set the keyListener for the Item Price EditText
 		myPrice.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
@@ -135,6 +142,8 @@ public class EditItemInfo extends Activity {
 			}
 		});
 
+
+		//set the keyListener for the Item Location EditText
 		myLocation.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
@@ -196,6 +205,7 @@ public class EditItemInfo extends Activity {
 	 */
 	private void saveWishItem() {
 
+		//define variables to hold the item info.
 		String itemName = "N/A";
 		String itemDesc = "N/A";
 		float itemPrice = 0;
@@ -204,6 +214,7 @@ public class EditItemInfo extends Activity {
 
 		try {
 			// read in the name, description, price and location of the item
+			// from the EditText
 			itemName = myItemName.getText().toString();
 			itemDesc = myDescription.getText().toString();
 			itemPrice = Float.valueOf(myPrice.getText().toString());
@@ -218,9 +229,9 @@ public class EditItemInfo extends Activity {
 			itemPrice = 0;
 		}
 
-		// user did not specify datetime, use now as default
+		// user did not specify date_time, use "now" as default date_time
 		if (mYear == -1) {
-			// get the current date
+			// get the current date_time
 			final Calendar c = Calendar.getInstance();
 			mYear = c.get(Calendar.YEAR);
 			mMonth = c.get(Calendar.MONTH);
@@ -230,15 +241,16 @@ public class EditItemInfo extends Activity {
 			mSec = c.get(Calendar.SECOND);
 		}
 
+		// Format the date_time and save it as a string 
 		mDate = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
-
-		// SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
 		String date = sdf.format(mDate);
-		// wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri,
-		// itemPrice, itemLocation, itemPriority);
+
+		// insert the item to the Item table in database
 		mItemDBAdapter.addItem(itemName, itemDesc, date, -1, picture_uri,
 				itemPrice, itemLocation, itemPriority);
+		
+		//close this activity
 		finish();
 	}
 
@@ -263,13 +275,17 @@ public class EditItemInfo extends Activity {
 						thumbnail = data.getParcelableExtra("data");
 						imageItem.setImageBitmap(thumbnail);
 
-						// store thumbnail in some place
+						// store thumbnail in the media content provider 
+						// and get the uri of the thumbnail
 						ContentValues values = new ContentValues();
 						values.put(Media.MIME_TYPE, "image/jpeg");
-
 						Uri uri = getContentResolver().insert(
 								Media.EXTERNAL_CONTENT_URI, values);
 
+						//compress the thumbnail to JPEG and write the JEPG to 
+						//the content provider. Save the uri of the JEPG as a string,
+						//which will be inserted in the column "picture_uri" of
+						//the Item table
 						try {
 							OutputStream outStream = getContentResolver()
 									.openOutputStream(uri);
@@ -277,12 +293,8 @@ public class EditItemInfo extends Activity {
 									outStream);
 
 							outStream.close();
-							// picture_uri = uri.getEncodedPath();
 							picture_uri = uri.toString();
-							// picture_uri = Integer.toString(R.drawable.car);
 
-							// int a = 0;
-							// int b = 0;
 						} catch (Exception e) {
 							Log.e(WishList.LOG_TAG,
 									"exception while writing image", e);

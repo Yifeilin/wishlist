@@ -7,6 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/***
+ * LocationDBAdapter provides access to operations on data in location table
+ */
 public class LocationDBAdapter {
 
 	public static final String KEY_ID = "_id";
@@ -51,7 +54,7 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Open the cars database. If it cannot be opened, try to create a new
+	 * Open the location database. If it cannot be opened, try to create a new
 	 * instance of the database. If it cannot be created, throw an exception to
 	 * signal the failure
 	 * 
@@ -74,8 +77,8 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Create a new car. If the car is successfully created return the new rowId
-	 * for that car, otherwise return a -1 to indicate failure.
+	 * Create a new location. If the car is successfully created return the new rowId
+	 * for that location, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
@@ -94,7 +97,7 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Delete the car with the given rowId
+	 * Delete the location with the given rowId
 	 * 
 	 * @param rowId
 	 * @return true if deleted, false otherwise
@@ -105,9 +108,9 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all cars in the database
+	 * Return a Cursor over the list of all location in the database
 	 * 
-	 * @return Cursor over all cars
+	 * @return Cursor over all location
 	 */
 	public Cursor getAllLocation() {
 
@@ -120,7 +123,7 @@ public class LocationDBAdapter {
 	 * @param rowId
 	 * @return Cursor positioned to matching car, if found
 	 * @throws SQLException
-	 *             if car could not be found/retrieved
+	 *             if location could not be found/retrieved
 	 */
 	public Cursor getLocation(long rowId) throws SQLException {
 
@@ -135,7 +138,7 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Update the car.
+	 * Update the location.
 	 * 
 	 * @param rowId
 	 * @param name

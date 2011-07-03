@@ -7,6 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/***
+ * StoreDBAdapter provides access to operations on data in store table
+ */
 public class StoreDBAdapter {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_NAME = "store_name";
@@ -45,7 +48,7 @@ public class StoreDBAdapter {
 	}
 
 	/**
-	 * Open the cars database. If it cannot be opened, try to create a new
+	 * Open the store database. If it cannot be opened, try to create a new
 	 * instance of the database. If it cannot be created, throw an exception to
 	 * signal the failure
 	 * 
@@ -68,8 +71,8 @@ public class StoreDBAdapter {
 	}
 
 	/**
-	 * Create a new car. If the car is successfully created return the new rowId
-	 * for that car, otherwise return a -1 to indicate failure.
+	 * Create a new store. If the store is successfully created return the new rowId
+	 * for that store, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
@@ -92,9 +95,9 @@ public class StoreDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor over the list of all cars in the database
+	 * Return a Cursor over the list of all stores in the database
 	 * 
-	 * @return Cursor over all cars
+	 * @return Cursor over all stores
 	 */
 	public Cursor getAllStores() {
 
@@ -108,7 +111,7 @@ public class StoreDBAdapter {
 	 * @param rowId
 	 * @return Cursor positioned to matching store, if found
 	 * @throws SQLException
-	 *             if car could not be found/retrieved
+	 *             if store could not be found/retrieved
 	 */
 	public Cursor getStore(long rowId) throws SQLException {
 
