@@ -33,7 +33,7 @@ public class EditItemInfo extends Activity {
 	private EditText myDescription;
 	private EditText myPrice;
 	private EditText myLocation;
-	
+
 	private Button btnSave;
 	private Button btnCancel;
 	private Button btnDate;
@@ -45,251 +45,255 @@ public class EditItemInfo extends Activity {
 	private String date;
 	private String picture_uri;
 	// = R.drawable.chocolate
-	private WishListDataBase wishListDB; 
+	// private WishListDataBase wishListDB;
+	private ItemDBAdapter mItemDBAdapter;
 	private int mYear = -1;
-    private int mMonth = -1;
-    private int mDay = -1;
-    private int mHour = 0;
-    private int mMin = 0;
-    private int mSec = 0;
-    
-    private AlertDialog alert;
+	private int mMonth = -1;
+	private int mDay = -1;
+	private int mHour = 0;
+	private int mMin = 0;
+	private int mSec = 0;
+
+	private AlertDialog alert;
 	static final private int DATE_DIALOG_ID = 0;
 	static final private int TAKE_PICTURE = 1;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
-		
-		myItemName  = (EditText) findViewById(R.id.itemname);
-		myDescription  = (EditText) findViewById(R.id.description);
-		myPrice  = (EditText) findViewById(R.id.price);
-		myLocation  = (EditText) findViewById(R.id.location);
-		
+
+		myItemName = (EditText) findViewById(R.id.itemname);
+		myDescription = (EditText) findViewById(R.id.description);
+		myPrice = (EditText) findViewById(R.id.price);
+		myLocation = (EditText) findViewById(R.id.location);
+
 		btnSave = (Button) findViewById(R.id.button_save);
 		btnCancel = (Button) findViewById(R.id.button_cancel);
 		btnDate = (Button) findViewById(R.id.button_date);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
-		
+
 		imageItem = (ImageView) findViewById(R.id.image_photo);
-		
-     
+
 		// Open or create the database
 
-        wishListDB = WishListDataBase.getDBInstance(this);
-        
-		// get the current date
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure you want to exit?")
-		       .setCancelable(false)
-		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		        	   EditItemInfo.this.finish();
-		           }
-		       })
-		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		                dialog.cancel();
-		           }
-		       });
-		alert = builder.create();
-		
-		
-		
-        myItemName.setOnKeyListener(new OnKeyListener(){
-			@Override
-			public boolean onKey(View view, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					if (keyCode == KeyEvent.KEYCODE_ENTER){
-						myItemName.setSelected(false);				
-					}
-        	return false;
-			}
-        });
-        
-        myDescription.setOnKeyListener(new OnKeyListener(){
-			@Override
-			public boolean onKey(View view, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					if (keyCode == KeyEvent.KEYCODE_ENTER){
-						myDescription.setSelected(false);				
-					}
-        	return false;
-			}
-        });
-        
-        myPrice.setOnKeyListener(new OnKeyListener(){
-			@Override
-			public boolean onKey(View view, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					if (keyCode == KeyEvent.KEYCODE_ENTER){
-						myPrice.setSelected(false);				
-					}
-        	return false;
-			}
-        });
-        
-        myLocation.setOnKeyListener(new OnKeyListener(){
-			@Override
-			public boolean onKey(View view, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					if (keyCode == KeyEvent.KEYCODE_ENTER){
-						myLocation.setSelected(false);				
-					}
-        	return false;
-			}
-        });
-        
-        
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		// wishListDB = WishListDataBase.getDBInstance(this);
+		mItemDBAdapter = new ItemDBAdapter(this);
+		mItemDBAdapter.open();
 
-            public void onDateSet(DatePicker view, int year, 
-                                  int monthOfYear, int dayOfMonth) {
-                mYear = year;
-                mMonth = monthOfYear;
-                mDay = dayOfMonth;
-                SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
-                date = sdf.format(new Date(mYear-1900, mMonth, mDay));
-                btnDate.setText(date);
-            }
-        };
-        
-		btnSave.setOnClickListener(new OnClickListener(){
+		// get the current date
+		final Calendar c = Calendar.getInstance();
+		mYear = c.get(Calendar.YEAR);
+		mMonth = c.get(Calendar.MONTH);
+		mDay = c.get(Calendar.DAY_OF_MONTH);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure you want to exit?").setCancelable(
+				false).setPositiveButton("Yes",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						EditItemInfo.this.finish();
+					}
+				}).setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		alert = builder.create();
+
+		myItemName.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+						myItemName.setSelected(false);
+					}
+				return false;
+			}
+		});
+
+		myDescription.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+						myDescription.setSelected(false);
+					}
+				return false;
+			}
+		});
+
+		myPrice.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+						myPrice.setSelected(false);
+					}
+				return false;
+			}
+		});
+
+		myLocation.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN)
+					if (keyCode == KeyEvent.KEYCODE_ENTER) {
+						myLocation.setSelected(false);
+					}
+				return false;
+			}
+		});
+
+		mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				mYear = year;
+				mMonth = monthOfYear;
+				mDay = dayOfMonth;
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+				date = sdf.format(new Date(mYear - 1900, mMonth, mDay));
+				btnDate.setText(date);
+			}
+		};
+
+		btnSave.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				saveWishItem();
-			}					
+			}
 		});
-		
-		btnCancel.setOnClickListener(new OnClickListener(){
+
+		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {			
+			public void onClick(View v) {
 				alert.show();
-			}					
+			}
 		});
-		
-		btnDate.setOnClickListener(new OnClickListener(){
+
+		btnDate.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				showDialog(DATE_DIALOG_ID);			
-			}			
+				showDialog(DATE_DIALOG_ID);
+			}
 		});
-		
-		btnPhoto.setOnClickListener(new OnClickListener(){
+
+		btnPhoto.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				getThumbailPicture();
 			}
-			
+
 		});
 	}
+
 	/***
 	 * Save user input as a wish item
 	 */
 	private void saveWishItem() {
-		
+
 		String itemName = "N/A";
 		String itemDesc = "N/A";
 		float itemPrice = 0;
 		String itemLocation = "N/A";
 		int itemPriority = 0;
-		
-		try{
-			//read in the name, description, price and location of the item
+
+		try {
+			// read in the name, description, price and location of the item
 			itemName = myItemName.getText().toString();
 			itemDesc = myDescription.getText().toString();
 			itemPrice = Float.valueOf(myPrice.getText().toString());
 			itemLocation = myLocation.getText().toString();
-			
+
 		}
-		
-		catch (NumberFormatException e){
-			//need some error message here
-			//price format incorrect
+
+		catch (NumberFormatException e) {
+			// need some error message here
+			// price format incorrect
 			e.toString();
 			itemPrice = 0;
 		}
 
-		
-		//user did not specify datetime, use now as default
-		if (mYear == -1){
+		// user did not specify datetime, use now as default
+		if (mYear == -1) {
 			// get the current date
-	        final Calendar c = Calendar.getInstance();
-	        mYear = c.get(Calendar.YEAR);
-	        mMonth = c.get(Calendar.MONTH);
-	        mDay = c.get(Calendar.DAY_OF_MONTH);
-	        mHour = c.get(Calendar.HOUR);
-	        mMin = c.get(Calendar.MINUTE);
-	        mSec = c.get(Calendar.SECOND);
+			final Calendar c = Calendar.getInstance();
+			mYear = c.get(Calendar.YEAR);
+			mMonth = c.get(Calendar.MONTH);
+			mDay = c.get(Calendar.DAY_OF_MONTH);
+			mHour = c.get(Calendar.HOUR);
+			mMin = c.get(Calendar.MINUTE);
+			mSec = c.get(Calendar.SECOND);
 		}
-		
-		mDate = new Date(mYear-1900, mMonth, mDay, mHour, mMin, mSec);	
 
+		mDate = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
 
-		//SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
+		// SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
-        String date = sdf.format(mDate);
-		wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri, itemPrice, itemLocation, itemPriority);
+		String date = sdf.format(mDate);
+		// wishListDB.addItem(itemName, itemDesc, date, -1, picture_uri,
+		// itemPrice, itemLocation, itemPriority);
+		mItemDBAdapter.addItem(itemName, itemDesc, date, -1, picture_uri,
+				itemPrice, itemLocation, itemPriority);
 		finish();
 	}
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-	    case DATE_DIALOG_ID:
-	        return new DatePickerDialog(this,
-	                    mDateSetListener,
-	                    mYear, mMonth, mDay);
-	    }
-	    return null;
+		case DATE_DIALOG_ID:
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+					mDay);
+		}
+		return null;
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode == Activity.RESULT_OK){
-			switch(requestCode){ 
-			case TAKE_PICTURE: 
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) {
+			case TAKE_PICTURE:
 				// Check if the result includes a thumbnail Bitmap
 				if (data != null) {
 					if (data.hasExtra("data")) {
 						thumbnail = data.getParcelableExtra("data");
 						imageItem.setImageBitmap(thumbnail);
-						
-						//store thumbnail in some place
+
+						// store thumbnail in some place
 						ContentValues values = new ContentValues();
 						values.put(Media.MIME_TYPE, "image/jpeg");
-						
-						Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
-						
+
+						Uri uri = getContentResolver().insert(
+								Media.EXTERNAL_CONTENT_URI, values);
+
 						try {
-						    OutputStream outStream = getContentResolver().openOutputStream(uri);
-						    thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, outStream);
-						    
-						    outStream.close();
-						    //picture_uri = uri.getEncodedPath();
-						    picture_uri = uri.toString();
-						    //picture_uri = Integer.toString(R.drawable.car);
- 
-						    
-						    //int a = 0;
-						    //int b = 0;
+							OutputStream outStream = getContentResolver()
+									.openOutputStream(uri);
+							thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+									outStream);
+
+							outStream.close();
+							// picture_uri = uri.getEncodedPath();
+							picture_uri = uri.toString();
+							// picture_uri = Integer.toString(R.drawable.car);
+
+							// int a = 0;
+							// int b = 0;
 						} catch (Exception e) {
-						    Log.e(WishList.LOG_TAG, "exception while writing image", e);
-						}					
+							Log.e(WishList.LOG_TAG,
+									"exception while writing image", e);
+						}
 					}
 				}
 				break;
 			}
 		}
 	}
-	
+
 	private void getThumbailPicture() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, TAKE_PICTURE);

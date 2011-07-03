@@ -39,8 +39,10 @@ public class WishListLogin extends Activity {
 
 			public void onAnimationEnd(Animation animation) {
 				// The animation has ended, transition to the Main Menu screen
-				//startActivity(new Intent(WishListLogin.this, WishList.class));
-				startActivity(new Intent(WishListLogin.this, WishListLoginReal.class));
+				// startActivity(new Intent(WishListLogin.this,
+				// WishList.class));
+				startActivity(new Intent(WishListLogin.this,
+						WishListLoginReal.class));
 				WishListLogin.this.finish();
 			}
 
