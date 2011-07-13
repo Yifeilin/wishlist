@@ -42,6 +42,12 @@ public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
 			// read in the picture string from db
 			// the string could be a resource id or a uri from content provider
 			String pic_str = cursor.getString(columnIndex);
+			
+			//check if pic_str is null, which user added this item without taking a pic.
+			if (pic_str == null){
+				//do nothing
+				return true;
+			}
 
 			// check if pic_str is a resId or a uri
 			try {

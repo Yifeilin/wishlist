@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -51,6 +52,8 @@ public class EditItemInfo extends Activity {
 	// = R.drawable.chocolate
 	// private WishListDataBase wishListDB;
 	private ItemDBAdapter mItemDBAdapter;
+	private StoreDBAdapter mStoreDBAdapter;
+	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
 	private int mMonth = -1;
 	private int mDay = -1;
@@ -84,6 +87,15 @@ public class EditItemInfo extends Activity {
 		// wishListDB = WishListDataBase.getDBInstance(this);
 		mItemDBAdapter = new ItemDBAdapter(this);
 		mItemDBAdapter.open();
+		
+		// Open the Store table in the database
+		mStoreDBAdapter = new StoreDBAdapter(this);
+		mStoreDBAdapter.open();
+	
+		// Open the Location table in the database
+		mLocationDBAdapter = new LocationDBAdapter(this);
+		mLocationDBAdapter.open();
+		
 
 		// get the current date_time
 		final Calendar c = Calendar.getInstance();
@@ -205,12 +217,23 @@ public class EditItemInfo extends Activity {
 	 */
 	private void saveWishItem() {
 
+		//get the location
+		PositionManager pManager = new PositionManager(this);
+		Location location = pManager.getCurrentLocation();
+		double lat = location.getLatitude();
+		double lng = location.getLongitude();
+		
+		//getCuttentAddStr use geocoder, may take a while, need to put this to a separate thread
+		String addStr = pManager.getCuttentAddStr();
+		
 		//define variables to hold the item info.
 		String itemName = "N/A";
 		String itemDesc = "N/A";
 		float itemPrice = 0;
 		String itemLocation = "N/A";
 		int itemPriority = 0;
+		
+		String storeName = "N/A";
 
 		try {
 			// read in the name, description, price and location of the item
@@ -246,8 +269,15 @@ public class EditItemInfo extends Activity {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
 		String date = sdf.format(mDate);
 
-		// insert the item to the Item table in database
-		mItemDBAdapter.addItem(itemName, itemDesc, date, -1, picture_uri,
+		// insert the location to the Location table in database
+		long locationID = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
+
+		// insert the store to the Store table in database, linked to the location
+		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
+	
+		
+		// insert the item to the Item table in database, linked to the store
+		mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_uri,
 				itemPrice, itemLocation, itemPriority);
 		
 		//close this activity

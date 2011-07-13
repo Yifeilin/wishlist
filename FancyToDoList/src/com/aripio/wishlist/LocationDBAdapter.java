@@ -13,6 +13,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LocationDBAdapter {
 
 	public static final String KEY_ID = "_id";
+	public static final String KEY_LATITUDE = "latitude";
+	public static final String KEY_LONGITUDE= "longitude";
+	public static final String KEY_ADDSTR = "addStr";
+//	public static final String KEY_ADDLINE2 = "AddLine2";
+//	public static final String KEY_ADDLINE3 = "AddLine3";
 	public static final String KEY_STREET_NO = "street_no";
 	public static final String KEY_STREET = "street";
 	public static final String KEY_CITY = "city";
@@ -77,15 +82,20 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Create a new location. If the car is successfully created return the new rowId
+	 * Add a new location. If the location is successfully created return the new rowId
 	 * for that location, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
 	 */
-	public long createLocation(int streetNO, String street, String city,
+	public long addLocation(double lat, double lng, String addStr, int streetNO, String street, String city,
 			String state, String country, String postcode) {
 		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_LATITUDE, lat);
+		initialValues.put(KEY_LONGITUDE, lng);
+		initialValues.put(KEY_ADDSTR, addStr);
+//		initialValues.put(KEY_ADDLINE2, addLine2);
+//		initialValues.put(KEY_ADDLINE3, addLine3);
 		initialValues.put(KEY_STREET_NO, streetNO);
 		initialValues.put(KEY_STREET, street);
 		initialValues.put(KEY_CITY, city);
@@ -144,9 +154,11 @@ public class LocationDBAdapter {
 	 * @param name
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateLocation(long rowId, int streetNO, String street,
+	public boolean updateLocation(long rowId, double lat, double lng, int streetNO, String street,
 			String city, String state, String country, String postcode) {
 		ContentValues args = new ContentValues();
+		args.put(KEY_LATITUDE, lat);
+		args.put(KEY_LONGITUDE, lng);
 		args.put(KEY_STREET_NO, streetNO);
 		args.put(KEY_STREET, street);
 		args.put(KEY_CITY, city);

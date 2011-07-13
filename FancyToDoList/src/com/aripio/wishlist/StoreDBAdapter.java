@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class StoreDBAdapter {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_NAME = "store_name";
+	public static final String KEY_LOCATION_ID = "location_id";
 
 	public static final String DB_TABLE = "store";
 
@@ -71,14 +72,15 @@ public class StoreDBAdapter {
 	}
 
 	/**
-	 * Create a new store. If the store is successfully created return the new rowId
+	 * Add a new store. If the store is successfully created return the new rowId
 	 * for that store, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
 	 */
-	public long createStore(String name) {
+	public long addStore(String name, long locationID) {
 		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_LOCATION_ID, locationID);		
 		initialValues.put(KEY_NAME, name);
 		return this.mDb.insert(DB_TABLE, null, initialValues);
 	}
@@ -101,7 +103,7 @@ public class StoreDBAdapter {
 	 */
 	public Cursor getAllStores() {
 
-		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME },
+		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_LOCATION_ID},
 				null, null, null, null, null);
 	}
 
@@ -117,7 +119,7 @@ public class StoreDBAdapter {
 
 		Cursor mCursor =
 
-		this.mDb.query(true, DB_TABLE, new String[] { KEY_ID, KEY_NAME },
+		this.mDb.query(true, DB_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_LOCATION_ID},
 				KEY_ID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -132,9 +134,10 @@ public class StoreDBAdapter {
 	 * @param name
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateStore(long rowId, String name) {
+	public boolean updateStore(long rowId, String name, long locationID) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_NAME, name);
+		args.put(KEY_LOCATION_ID, locationID);
 
 		return this.mDb.update(DB_TABLE, args, KEY_ID + "=" + rowId, null) > 0;
 	}

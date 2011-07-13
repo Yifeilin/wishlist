@@ -92,7 +92,7 @@
 				    />
 				    
 				  <TextView
-			    	android:id="@+id/itemLocationDetail"
+			    	android:id="@+id/itemStoreDetail"
 			 		android:layout_width="wrap_content" 
 				    android:layout_height="wrap_content" 
 				    android:textSize="16dip"
@@ -103,6 +103,20 @@
 					android:layout_alignLeft="@+id/itemPriceDetail"
 				    android:layout_alignRight="@+id/itemPriceDetail"
 					android:layout_below="@+id/itemPriceDetail"
+				    />
+				    
+				  <TextView
+			    	android:id="@+id/itemLocationDetail"
+			 		android:layout_width="wrap_content" 
+				    android:layout_height="wrap_content" 
+				    android:textSize="16dip"
+				    android:singleLine="false"
+				    android:ellipsize="end"
+		   		    android:paddingLeft="5dip"
+		   		    android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/itemStoreDetail"
+				    android:layout_alignRight="@+id/itemStoreDetail"
+					android:layout_below="@+id/itemStoreDetail"
 				    />
 		    </LinearLayout>
 		    

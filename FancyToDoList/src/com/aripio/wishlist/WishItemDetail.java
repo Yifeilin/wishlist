@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -51,6 +52,12 @@ public class WishItemDetail extends Activity {
 	// private WishListDataBase wishListDB;
 	private ItemDBAdapter myItemDBAdapter;
 	private ItemsCursor wishItemCursor;
+	
+	private StoreDBAdapter myStoreDBAdapter;
+	private Cursor mStoreCursor;
+	
+	private LocationDBAdapter myLocationDBAdapter;
+	private Cursor mLocationCursor;
 
 	private Handler mHandler;
 	private ImageView mPhotoView;
@@ -59,6 +66,7 @@ public class WishItemDetail extends Activity {
 	private View mDetailView;
 	private TextView mDateView;
 	private TextView mPriceView;
+	private TextView mStoreView;
 	private TextView mLocationView;
 
 	private long mItem_id;
@@ -82,14 +90,53 @@ public class WishItemDetail extends Activity {
 		// wishListDB = WishListDataBase.getDBInstance(this);
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-
+		
+		myStoreDBAdapter = new StoreDBAdapter(this);
+		myStoreDBAdapter.open();
+		
+		myLocationDBAdapter = new LocationDBAdapter(this);
+		myLocationDBAdapter.open();
+		
+		
 		// wishItemCursor = wishListDB.getItem(mItem_id);
+		
+		// get item
 		wishItemCursor = myItemDBAdapter.getItem(mItem_id);
+		
+		// get store_id from Item table
+		// get store name from store table
+		long storeID = wishItemCursor.getLong(wishItemCursor
+				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+		
+		mStoreCursor = myStoreDBAdapter.getStore(storeID);
+		String storeName = mStoreCursor.getString(mStoreCursor.
+				getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+		
+		// get location
+		long locationID = mStoreCursor.getLong(mStoreCursor
+				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+		
+		mLocationCursor = myLocationDBAdapter.getLocation(locationID);
+		double latitude = mLocationCursor.getDouble(mLocationCursor.
+				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+		
+		double longitude = mLocationCursor.getDouble(mLocationCursor.
+				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+		
+		String addStr =  mLocationCursor.getString(mLocationCursor.
+				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+		
+//		String addLine2 =  mLocationCursor.getString(mLocationCursor.
+//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE2));
+//		
+//		String addLine3 =  mLocationCursor.getString(mLocationCursor.
+//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE3));
+		
+		//String addLine = addLine1 + "\n" + addLine2 + "\n" + addLine3;
 
 		startManagingCursor(wishItemCursor);
 		String photoStr = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
-		Uri photoUri = Uri.parse(photoStr);
 
 		String itemName = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
@@ -132,25 +179,31 @@ public class WishItemDetail extends Activity {
 		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
 		mDateView = (TextView) findViewById(R.id.itemDateDetail);
 		mPriceView = (TextView) findViewById(R.id.itemPriceDetail);
+		mStoreView = (TextView) findViewById(R.id.itemStoreDetail);
 		mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
 		// mPriorityView = (TextView) findViewById(R.id.itemDateDetail);
 
 		Bitmap bitmap = null;
+		
+		//check if pic_str is null, which user added this item without taking a pic.
+		if (photoStr != null){
+			Uri photoUri = Uri.parse(photoStr);
+			
+			// check if pic_str is a resId
+			try {
+				// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+				int picResId = Integer.valueOf(photoStr, 16).intValue();
+				bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
+						.getResources(), picResId);
+				// it is resource id.
+				mPhotoView.setImageBitmap(bitmap);
 
-		// check if pic_str is a resId
-		try {
-			// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-			int picResId = Integer.valueOf(photoStr, 16).intValue();
-			bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
-					.getResources(), picResId);
-			// it is resource id.
-			mPhotoView.setImageBitmap(bitmap);
+			} catch (NumberFormatException e) {
+				// Not a resId, so it must be a content provider uri
+				photoUri = Uri.parse(photoStr);
+				mPhotoView.setImageURI(photoUri);
 
-		} catch (NumberFormatException e) {
-			// Not a resId, so it must be a content provider uri
-			photoUri = Uri.parse(photoStr);
-			mPhotoView.setImageURI(photoUri);
-
+			}
 		}
 
 		//display the item info. in the views
@@ -159,7 +212,10 @@ public class WishItemDetail extends Activity {
 		mDescrptView.setText(itemDescrpt);
 		mDateView.setText(dateTimeStrNew);
 		mPriceView.setText(priceStrNew);
-		mLocationView.setText(itemLocation);
+		mStoreView.setText("Store: " + storeName);
+		//mLocationView.setText(itemLocation);
+		//mLocationView.setText("latitude:" + Double.toString(latitude) + " longitude:" + Double.toString(longitude));
+		mLocationView.setText(addStr);	
 
 		// set the gesture detection
 		gestureDetector = new GestureDetector(new MyGestureDetector());

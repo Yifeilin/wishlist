@@ -17,6 +17,7 @@ import android.util.Log;
 public class ItemDBAdapter {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_STORE_ID = "store_id";
+	//public static final String KEY_LOCATION_ID = "location_id";
 	public static final String KEY_NAME = "item_name";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_DATE_TIME = "date_time";
@@ -160,8 +161,8 @@ public class ItemDBAdapter {
 	 * @param description
 	 *            The name description
 	 */
-	public void addItem(String name, String description, String date_time,
-			int store_id, String picture_uri, float price, String location,
+	public void addItem(long store_id, String name, String description, String date_time,
+			String picture_uri, float price, String location,
 			int priority) {
 		// String sql = String.format(
 		// "INSERT INTO ITEM (_id, name, description, create_date, store_id,  picture, price, location, priority) "
@@ -172,6 +173,8 @@ public class ItemDBAdapter {
 		//			
 		ContentValues initialValues = new ContentValues();
 
+		initialValues.put(KEY_STORE_ID, store_id);
+		//initialValues.put(KEY_LOCATION_ID, locationID);	
 		initialValues.put(KEY_NAME, name);
 		initialValues.put(KEY_DESCRIPTION, description);
 		initialValues.put(KEY_DATE_TIME, date_time);
