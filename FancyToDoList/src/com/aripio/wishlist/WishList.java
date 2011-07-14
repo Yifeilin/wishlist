@@ -64,6 +64,7 @@ public class WishList extends Activity {
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	static final private int POST_TODO = Menu.FIRST + 4;
 	static final private int SORT_TODO = Menu.FIRST + 5;
+	static final private int MARK_TODO = Menu.FIRST + 6;
 
 	static final private int DIALOG_MAIN = 0;
 
@@ -232,16 +233,12 @@ public class WishList extends Activity {
 		TextView itemIdTextView = null;
 		if (viewOption == "list") {
 			selected_view = myListView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view
-					.findViewById(R.id.txtItemID);
-
+			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
 		}
 
 		else if (viewOption == "grid") {
 			selected_view = myGridView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view
-					.findViewById(R.id.txtItemID_Grid);
-
+			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
 		}
 
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
@@ -389,6 +386,7 @@ public class WishList extends Activity {
 		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
 		menu.add(0, DETAIL_TODO, Menu.NONE, R.string.detail);
 		menu.add(0, POST_TODO, Menu.NONE, R.string.post);
+		menu.add(0, MARK_TODO, Menu.NONE, R.string.mark);
 	}
 
 	@Override
@@ -460,9 +458,9 @@ public class WishList extends Activity {
 
 		View selected_view = myListView.getChildAt(index);
 		TextView itemIdTextView = (TextView) selected_view
-				.findViewById(R.id.txtItemID);
+		.findViewById(R.id.txtItemID);
 		TextView dateTextView = (TextView) selected_view
-				.findViewById(R.id.txtDate);
+		.findViewById(R.id.txtDate);
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 
 		switch (item.getItemId()) {
@@ -484,6 +482,22 @@ public class WishList extends Activity {
 			startActivityForResult(snsIntent, POST_ITEM);
 			return true;
 		}
+
+		case (MARK_TODO):{
+			Intent mapIntent = new Intent(this, WishListNewMap.class);
+			
+			//get the latitude and longitude of the clicked item
+			double[] dLocation = new double[2];
+			dLocation = myItemDBAdapter.getItemLocation(item_id);
+			
+			mapIntent.putExtra("latitude", dLocation[0]);
+			mapIntent.putExtra("longitude", dLocation[1]);
+			
+			startActivity(mapIntent);
+			return true;
+
+		}
+
 		}
 		return false;
 	}

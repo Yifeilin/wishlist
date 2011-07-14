@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /*** EditItemInfo.java is responsible for reading in the info. of a newly added item 
  * including its name, description, time, price, location and photo, and saving them
@@ -220,11 +221,23 @@ public class EditItemInfo extends Activity {
 		//get the location
 		PositionManager pManager = new PositionManager(this);
 		Location location = pManager.getCurrentLocation();
-		double lat = location.getLatitude();
-		double lng = location.getLongitude();
 		
-		//getCuttentAddStr use geocoder, may take a while, need to put this to a separate thread
-		String addStr = pManager.getCuttentAddStr();
+		double lat = 0;
+		double lng = 0;
+		String addStr = "unknown";
+		
+		if (location == null){
+			Toast.makeText(this, "location not available", Toast.LENGTH_LONG);
+
+		}
+		else{
+			//get current latitude and longitude
+			lat = location.getLatitude();
+			lng = location.getLongitude();
+			
+			//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
+			addStr = pManager.getCuttentAddStr();
+		}
 		
 		//define variables to hold the item info.
 		String itemName = "N/A";

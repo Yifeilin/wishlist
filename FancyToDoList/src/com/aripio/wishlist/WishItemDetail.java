@@ -87,7 +87,7 @@ public class WishItemDetail extends Activity {
 
 		// open the Item table in the DB and
 		// retrieve the info. of the item via its id
-		// wishListDB = WishListDataBase.getDBInstance(this);
+		// wishListDB = WishListDatabase.getDBInstance(this);
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
 		

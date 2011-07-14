@@ -389,5 +389,55 @@ public class ItemDBAdapter {
 				new ItemsCursor.Factory(), sql, null, null);
 		return null;
 	}
+	
+	/**
+	 * get the latitude and longitude according to item id
+	 * @param _id the _id of the item in table Item
+	 * @return double[2] with [0] the latitude, [1] the longitude
+	 */
+	
+	public double[] getItemLocation(long _id){
+		double[] location = new double[2];
+		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
+				_id);
+		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
+				new ItemsCursor.Factory(), sql, null, null);
+
+		if (itemC != null) {
+			itemC.moveToFirst();
+			long storeID = itemC.getLong(itemC
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+			
+			StoreDBAdapter storeDBA;
+			storeDBA = new StoreDBAdapter(mCtx);
+			storeDBA.open();
+			
+			LocationDBAdapter locationDBA;
+			locationDBA = new LocationDBAdapter(mCtx);
+			locationDBA.open();
+			
+			// get location id from table store
+			Cursor storeC = storeDBA.getStore(storeID);
+			long locationID = storeC.getLong(storeC
+					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+			
+			// get the latitude and longitude from table location
+			Cursor locationC = locationDBA.getLocation(locationID);
+			double latitude = locationC.getDouble(locationC.
+					getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+			
+			double longitude = locationC.getDouble(locationC.
+					getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+			
+			storeDBA.close();
+			locationDBA.close();
+			
+			location[0] = latitude;
+			location[1] = longitude;
+		}
+		
+		return location;
+	}
 
 }

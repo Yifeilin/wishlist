@@ -55,6 +55,10 @@ public class WishListNewMap extends MapActivity {
 	private WishListOverlay mWishListOverlay;
 
 	private Location myLocation;
+	
+	private double mLatitude;
+	
+	private double mLongitude;
 
 	private GeoPoint myCurrentPoint;
 
@@ -63,51 +67,46 @@ public class WishListNewMap extends MapActivity {
 	private int mMarkerXOffset;
 
 	private int mMarkerYOffset;
+	
+	private List<Overlay> mOverlays;
+	
+	private MapController mController; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		FrameLayout frame = new FrameLayout(this);
-		mMapView = new MapView(this, "0f-k8vBkc4Y8OELOk1fFXUmKHOlpDPr9WxJNdqw");
+		//mMapView = new MapView(this, "0f-k8vBkc4Y8OELOk1fFXUmKHOlpDPr9WxJNdqw");
+		mMapView = new MapView(this, "0f2l_-BqB8u171fs9a6z5Iv8Uk83-H8-OwGQ9ow");
+		
 		frame.addView(mMapView, new FrameLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		setContentView(frame);
 
-		mMyLocationOverlay = new MyLocationOverlay(this, mMapView);
-		mMyLocationOverlay.enableMyLocation();
-		mMyLocationOverlay.enableCompass();
-
-		mMarker = getResources().getDrawable(R.drawable.map_pin);
-
-		// Make sure to give mMarker bounds so it will draw in the overlay
-		final int intrinsicWidth = mMarker.getIntrinsicWidth();
-		final int intrinsicHeight = mMarker.getIntrinsicHeight();
-		mMarker.setBounds(0, 0, intrinsicWidth, intrinsicHeight);
-
-		mMarkerXOffset = -(intrinsicWidth / 2);
-		mMarkerYOffset = -intrinsicHeight;
-
-		// Read the item we are displaying from the intent, along with the
-		// parameters used to set up the map
 		Intent i = getIntent();
+		
+		//prepare the marker
+		prepareMarker();
 
-		myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-		myCurrentPoint = new GeoPoint(
-				(int) (myLocation.getLatitude() * 1000000), (int) (myLocation
-						.getLongitude() * 1000000));
+		//get the overlays of this map
+		mOverlays = mMapView.getOverlays();
 
-		// int mapZoom = 15;
-		// int mapLatitudeE6 = (int)(myLocation.getLatitude()*1000000);
-		// int mapLongitudeE6 = (int)(myLocation.getLongitude()*1000000);
-
-		final List<Overlay> overlays = mMapView.getOverlays();
-		overlays.add(mMyLocationOverlay);
-		mWishListOverlay = new WishListOverlay(mMarker);
-		overlays.add(mWishListOverlay);
-		overlays.add(new MarkerOverlay());
-
-		final MapController controller = mMapView.getController();
+		//get the map controller
+		mController = mMapView.getController();
+		
+		//mark the item on map
+		markOneItem();
+		
+		//mark the current location
+		//markCurrentLocation();
+		
+		//set map zoom
+		mController.setZoom(15);
+		
+		//set map center to the item location
+		mController.animateTo(mWishListOverlay.getCenter());
+		
 		// if (mapZoom != Integer.MIN_VALUE && mapLatitudeE6 !=
 		// Integer.MIN_VALUE
 		// && mapLongitudeE6 != Integer.MIN_VALUE) {
@@ -115,15 +114,16 @@ public class WishListNewMap extends MapActivity {
 		// controller.setCenter(new GeoPoint(mapLatitudeE6, mapLongitudeE6));
 		// controller.setCenter(mMyLocationOverlay.getMyLocation());
 		// } else
-		{
-			controller.setZoom(15);
-			mMyLocationOverlay.runOnFirstFix(new Runnable() {
-				public void run() {
-					controller.animateTo(mMyLocationOverlay.getMyLocation());
-				}
-			});
-		}
+//		{
+//			mController.setZoom(15);
+//			mMyLocationOverlay.runOnFirstFix(new Runnable() {
+//				public void run() {
+//					mController.animateTo(mMyLocationOverlay.getMyLocation());
+//				}
+//			});
+//		}
 
+		//configure the map
 		mMapView.setClickable(true);
 		mMapView.setEnabled(true);
 		mMapView.setSatellite(false);
@@ -131,18 +131,18 @@ public class WishListNewMap extends MapActivity {
 		mMapView.setStreetView(false);
 		addZoomControls(frame);
 
-		new NetworkThread(myCurrentPoint, mWishListOverlay).start();
+		//new NetworkThread(myCurrentPoint, mWishListOverlay).start();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mMyLocationOverlay.enableMyLocation();
+		//mMyLocationOverlay.enableMyLocation();
 	}
 
 	@Override
 	protected void onStop() {
-		mMyLocationOverlay.disableMyLocation();
+		//mMyLocationOverlay.disableMyLocation();
 		super.onStop();
 	}
 
@@ -174,13 +174,76 @@ public class WishListNewMap extends MapActivity {
 
 		// getLastKnownLocation returns null if loc provider is not enabled
 		l = new Location("gps");
-		l.setLatitude(40.88301);
-		l.setLatitude(-72.9795);
+		
+		// yonge/eglinton
+		l.setLatitude(43.706739);
+		l.setLongitude(-79.398330);
 		return l;
+	}
+	
+//	/**
+//	 * 
+//	 * @return
+//	 */
+//	private Location getItemLocation(){
+//		mapIntent.putExtra("longitude", dLocation[1]);
+//	}
+	
+	
+	/**
+	 * mark the current location on the map
+	 */
+	private void markCurrentLocation(){
+		mMyLocationOverlay = new MyLocationOverlay(this, mMapView);
+		boolean locationEnabled = false;
+		boolean compassEnabled = false;
+		
+		locationEnabled = mMyLocationOverlay.enableMyLocation();
+		compassEnabled = mMyLocationOverlay.enableCompass();
+
+		// Get the current location
+		myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+		myCurrentPoint = new GeoPoint(
+				(int) (myLocation.getLatitude() * 1000000), (int) (myLocation
+						.getLongitude() * 1000000));
+
+		mOverlays.add(mMyLocationOverlay);
+	}
+	
+	/**
+	 * prepare the marker used to mark the item
+	 */
+	private void prepareMarker(){
+		mMarker = getResources().getDrawable(R.drawable.map_pin);
+
+		// Make sure to give mMarker bounds so it will draw in the overlay
+		final int intrinsicWidth = mMarker.getIntrinsicWidth();
+		final int intrinsicHeight = mMarker.getIntrinsicHeight();
+		mMarker.setBounds(0, 0, intrinsicWidth, intrinsicHeight);
+		
+//		mMarkerXOffset = -(intrinsicWidth / 2);
+//		mMarkerYOffset = -intrinsicHeight;
+
+	}
+	
+	/**
+	 * mark one item on the map
+	 */	
+	private void markOneItem(){
+		
+		// Read the item we are displaying from the intent, along with the
+		// parameters used to set up the map
+		Intent i = getIntent();
+		mLatitude = i.getDoubleExtra("latitude", 0);
+		mLongitude = i.getDoubleExtra("longitude", 0);
+		
+		mWishListOverlay = new WishListOverlay(mMarker);
+		mOverlays.add(mWishListOverlay);
+		
 	}
 
 	/**
-	 * Custom overlay to display the Panoramio pushpin
+	 * Custom overlay to display the pushpin as a marker for the item
 	 */
 	public class WishListOverlay extends ItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> items = new ArrayList<OverlayItem>();
@@ -189,12 +252,15 @@ public class WishListNewMap extends MapActivity {
 		public WishListOverlay(Drawable marker) {
 			super(marker);
 			this.marker = marker;
-			Location myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-			GeoPoint myCurrentPoint = new GeoPoint((int) (myLocation
-					.getLatitude() * 1000000),
-					(int) (myLocation.getLongitude() * 1000000));
+			//Location myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+//			GeoPoint myCurrentPoint = new GeoPoint((int) (myLocation
+//					.getLatitude() * 1000000),
+//					(int) (myLocation.getLongitude() * 1000000));
+			
+			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+					(int) (mLongitude * 1000000));
 
-			addOverlay(new OverlayItem(myCurrentPoint, "A", "B"));
+			addOverlay(new OverlayItem(itemPoint, "A", "B"));
 			boundCenterBottom(marker);
 			populate();
 		}

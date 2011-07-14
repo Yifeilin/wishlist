@@ -10,6 +10,7 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.widget.Toast;
 
 public class PositionManager {
 	private Context context;
@@ -36,11 +37,27 @@ public class PositionManager {
 	
 	public Location getCurrentLocation(){
 		String provider = locationManager.getBestProvider(criteria, true);
-		currentLocation = locationManager.getLastKnownLocation(provider);
+		try{
+			currentLocation = locationManager.getLastKnownLocation(provider);
+		}
 		
-		latitude = currentLocation.getLatitude();
-		longitude = currentLocation.getLongitude();
-		return currentLocation;
+		catch(SecurityException e){
+			Toast.makeText(context, "no suitable permission is present for the provider.", Toast.LENGTH_LONG);
+			return null;
+		}
+		
+		if (currentLocation != null){
+			latitude = currentLocation.getLatitude();
+			longitude = currentLocation.getLongitude();
+			return currentLocation;
+		}
+		
+		else{
+			return null;
+		}
+		
+
+
 		
 	}
 	
