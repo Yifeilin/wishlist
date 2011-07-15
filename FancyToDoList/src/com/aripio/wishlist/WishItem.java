@@ -9,8 +9,12 @@ public class WishItem {
 	private String name;
 	private String desc;
 	private String date;
-	private String priority;
+	private int priority;
 	private Bitmap thumbnail;
+	private String store_name;
+	//public static final String KEY_PHOTO_URL = "picture";
+	private double price;
+	private String address;
 
 	public Bitmap getThumbnail() {
 		return thumbnail;
@@ -19,13 +23,41 @@ public class WishItem {
 	public void setThumbnail(Bitmap thumnail) {
 		this.thumbnail = thumnail;
 	}
+	
+	public void setStoreName(String storeName){
+		this.store_name = storeName;
+	}
+	
+	public String getStoreName(){
+		return this.store_name;
+	}
+	
+	public void setPrice(double p){
+		this.price = p;
+	}
+	
+	public double getPrice(){
+		return this.price;
+	}
+	
+	public void setAddress(String add){
+		this.address = add;
+	}
+	
+	public String getAddress(){
+		return this.address;
+	}
 
-	public String getPriority() {
+	public String getPriorityStr() {
+		return Integer.toString(priority);
+	}
+	
+	public int getPriority() {
 		return priority;
 	}
 
 	public void setPriority(String priority) {
-		this.priority = priority;
+		this.priority = Integer.getInteger(priority);
 	}
 
 	public String getName() {
@@ -72,7 +104,7 @@ public class WishItem {
 		desc = _addr;
 	}
 
-	public WishItem(String name, String desc, String date, String priority,
+	public WishItem(String name, String desc, String date, int priority,
 			Bitmap thumbnail) {
 		this.name = name;
 		this.desc = desc;

@@ -128,10 +128,10 @@ public class LocationDBAdapter {
 	}
 
 	/**
-	 * Return a Cursor positioned at the car that matches the given rowId
+	 * Return a Cursor positioned at the location that matches the given rowId
 	 * 
 	 * @param rowId
-	 * @return Cursor positioned to matching car, if found
+	 * @return Cursor positioned to matching location, if found
 	 * @throws SQLException
 	 *             if location could not be found/retrieved
 	 */
@@ -145,6 +145,29 @@ public class LocationDBAdapter {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+	
+	/**
+	 * Return the address positioned at the location that matches the given rowId
+	 * 
+	 * @param rowId
+	 * @return String of address matching location id, if found; otherwise, return null
+	 */
+	public String getAddress(long _id){
+
+		String addressStr = null;
+		Cursor mCursor =
+
+		this.mDb.query(true, DB_TABLE, new String[] { KEY_ADDSTR }, KEY_ID + "=" + _id, null, null,
+				null, null, null);
+		if (mCursor != null) {
+			
+			mCursor.moveToFirst();
+			addressStr =  mCursor.getString(mCursor.
+					getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+			
+		}
+		return addressStr;
 	}
 
 	/**

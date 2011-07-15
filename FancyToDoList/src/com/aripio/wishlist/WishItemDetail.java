@@ -109,22 +109,24 @@ public class WishItemDetail extends Activity {
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
 		
 		mStoreCursor = myStoreDBAdapter.getStore(storeID);
-		String storeName = mStoreCursor.getString(mStoreCursor.
-				getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+//		String storeName = mStoreCursor.getString(mStoreCursor.
+//				getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+		String storeName = myStoreDBAdapter.getStoreName(storeID);
 		
 		// get location
 		long locationID = mStoreCursor.getLong(mStoreCursor
 				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
 		
-		mLocationCursor = myLocationDBAdapter.getLocation(locationID);
-		double latitude = mLocationCursor.getDouble(mLocationCursor.
-				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+//		mLocationCursor = myLocationDBAdapter.getLocation(locationID);
+//		double latitude = mLocationCursor.getDouble(mLocationCursor.
+//				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+//		
+//		double longitude = mLocationCursor.getDouble(mLocationCursor.
+//				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
 		
-		double longitude = mLocationCursor.getDouble(mLocationCursor.
-				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
-		
-		String addStr =  mLocationCursor.getString(mLocationCursor.
-				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+//		String addStr =  mLocationCursor.getString(mLocationCursor.
+//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+		String addStr = myLocationDBAdapter.getAddress(locationID);
 		
 //		String addLine2 =  mLocationCursor.getString(mLocationCursor.
 //				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE2));
@@ -150,8 +152,8 @@ public class WishItemDetail extends Activity {
 		String itemPrice = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
 
-		String itemLocation = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_LOCATION));
+//		String itemLocation = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_LOCATION));
 
 		String itemPriority = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));

@@ -115,16 +115,38 @@ public class StoreDBAdapter {
 	 * @throws SQLException
 	 *             if store could not be found/retrieved
 	 */
-	public Cursor getStore(long rowId) throws SQLException {
+	public Cursor getStore(long _id) throws SQLException {
 
 		Cursor mCursor =
 
 		this.mDb.query(true, DB_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_LOCATION_ID},
-				KEY_ID + "=" + rowId, null, null, null, null, null);
+				KEY_ID + "=" + _id, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+	
+	/**
+	 * Return a store name that matches the given Id
+	 * 
+	 * @param rowId
+	 * @return a String of store name positioned to matching store id, if found; otherwise, return null
+	 */
+	public String getStoreName(long _id){
+		String storeName = null;
+		Cursor mCursor =
+
+			this.mDb.query(true, DB_TABLE, new String[] { KEY_NAME },
+					KEY_ID + "=" + _id, null, null, null, null, null);
+			if (mCursor != null) {
+				mCursor.moveToFirst();
+				
+				storeName = mCursor.getString(mCursor.
+						getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+				
+			}
+		return storeName;
 	}
 
 	/**

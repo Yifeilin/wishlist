@@ -1,6 +1,6 @@
 package com.aripio.wishlist;
 
-import com.aripio.wishlist.WishListDataBase.ItemsCursor;
+//import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -398,46 +398,131 @@ public class ItemDBAdapter {
 	
 	public double[] getItemLocation(long _id){
 		double[] location = new double[2];
-		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
-				_id);
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
-		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
-				new ItemsCursor.Factory(), sql, null, null);
-
-		if (itemC != null) {
-			itemC.moveToFirst();
-			long storeID = itemC.getLong(itemC
-					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
-			
-			StoreDBAdapter storeDBA;
-			storeDBA = new StoreDBAdapter(mCtx);
-			storeDBA.open();
-			
-			LocationDBAdapter locationDBA;
-			locationDBA = new LocationDBAdapter(mCtx);
-			locationDBA.open();
-			
-			// get location id from table store
-			Cursor storeC = storeDBA.getStore(storeID);
-			long locationID = storeC.getLong(storeC
-					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+//		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
+//				_id);
+//		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+//		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
+//				new ItemsCursor.Factory(), sql, null, null);
+//
+//		if (itemC != null) {
+//			itemC.moveToFirst();
+//			long storeID = itemC.getLong(itemC
+//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+//			
+//			StoreDBAdapter storeDBA;
+//			storeDBA = new StoreDBAdapter(mCtx);
+//			storeDBA.open();
+//			
+//			LocationDBAdapter locationDBA;
+//			locationDBA = new LocationDBAdapter(mCtx);
+//			locationDBA.open();
+//			
+//			// get location id from table store
+//			Cursor storeC = storeDBA.getStore(storeID);
+//			long locationID = storeC.getLong(storeC
+//					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
 			
 			// get the latitude and longitude from table location
-			Cursor locationC = locationDBA.getLocation(locationID);
+			//Cursor locationC = locationDBA.getLocation(locationID);
+		Cursor locationC = getItemLocationCursor(_id);
+		if(locationC != null){
 			double latitude = locationC.getDouble(locationC.
 					getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
 			
 			double longitude = locationC.getDouble(locationC.
 					getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
 			
-			storeDBA.close();
-			locationDBA.close();
+			//storeDBA.close();
+			//locationDBA.close();
 			
 			location[0] = latitude;
 			location[1] = longitude;
 		}
 		
 		return location;
+	}
+	
+	/**
+	 * get the address string according to item id
+	 * @param _id the _id of the item in table Item
+	 * @return the address string of the item
+	 */
+	
+	public String getItemAddress(long _id){
+		String AddStr = null;
+		Cursor locationC = getItemLocationCursor(_id);
+		if(locationC != null){
+			AddStr = locationC.getString(locationC.
+					getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+		}
+	
+		return AddStr;
+	}
+	
+	/**
+	 * get the Cursor of table store according to item id
+	 * @param long _id: the _id of the item in table Item
+	 * @return the Cursor of store where the Item belongs to
+	 */
+	
+	public Cursor getItemStoreCursor(long _id){
+		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
+				_id);
+		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
+				new ItemsCursor.Factory(), sql, null, null);
+
+		Cursor storeC = null;
+		if (itemC != null) {
+			//get the store id
+			itemC.moveToFirst();
+			long storeID = itemC.getLong(itemC
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+			
+			//open the store table
+			StoreDBAdapter storeDBA;
+			storeDBA = new StoreDBAdapter(mCtx);
+			storeDBA.open();
+			
+			// get store cursor
+			storeC = storeDBA.getStore(storeID);
+						
+			//close store table
+			storeDBA.close();
+			
+		}
+		
+		return storeC;
+	}
+	
+	/**
+	 * get the Cursor of table location according to item id
+	 * @param long _id: the _id of the item in table Item
+	 * @return the Cursor of location where the Item is located
+	 */
+	
+	public Cursor getItemLocationCursor(long _id){
+		Cursor storeC = getItemStoreCursor(_id);
+		Cursor locationC = null;
+		if (storeC != null) {
+			//open the location table
+			LocationDBAdapter locationDBA;
+			locationDBA = new LocationDBAdapter(mCtx);
+			locationDBA.open();
+			
+			//get the location id
+			long locationID = storeC.getLong(storeC
+					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+			
+			// get the latitude and longitude from table location
+			locationC = locationDBA.getLocation(locationID);
+			
+			//close location table
+			locationDBA.close();
+			
+		}
+		
+		return locationC;
 	}
 
 }
