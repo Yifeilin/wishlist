@@ -10,7 +10,7 @@
     	android:layout_width="fill_parent" 
     	android:layout_height="fill_parent"
     	android:clickable="true"
-    	android:apiKey="0f2l_-BqB8u171fs9a6z5Iv8Uk83-H8-OwGQ9ow"
+    	android:apiKey="@+id/googleMapKey"
     />
 	<TextView  
 	    android:id="@+id/lblDealToday" 

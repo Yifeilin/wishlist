@@ -78,7 +78,9 @@ public class WishListNewMap extends MapActivity {
 
 		FrameLayout frame = new FrameLayout(this);
 		//mMapView = new MapView(this, "0f-k8vBkc4Y8OELOk1fFXUmKHOlpDPr9WxJNdqw");
-		mMapView = new MapView(this, "0f2l_-BqB8u171fs9a6z5Iv8Uk83-H8-OwGQ9ow");
+		//mMapView = new MapView(this, "0f2l_-BqB8u171fs9a6z5Iv8Uk83-H8-OwGQ9ow");
+		mMapView = new MapView(this, getString(R.string.googleMapKey));
+		
 		
 		frame.addView(mMapView, new FrameLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
