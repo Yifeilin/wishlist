@@ -3,7 +3,7 @@
         android:label="@string/app_name"
         android:searchSettingsDescription="@string/settings_description"
         android:includeInGlobalSearch="true"
-        android:searchSuggestAuthority="dictionary"
+        android:searchSuggestAuthority="wishlist"
         android:searchSuggestIntentAction="android.intent.action.VIEW"
         android:hint="@string/search_hint">
 </searchable>

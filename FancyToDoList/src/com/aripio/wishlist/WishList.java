@@ -6,6 +6,7 @@ import com.aripio.wishlist.ItemDBAdapter.ItemsCursor;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -98,8 +99,11 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	    // Get the intent, verify the action and get the query
+	    Intent intent = getIntent();
+	    
 		setContentView(R.layout.main);
-
+		
 		//get the resources by their IDs
 		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
 		myListView = (ListView) findViewById(R.id.myListView);
@@ -212,9 +216,19 @@ public class WishList extends Activity {
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
 
-		//display all the items saved in the Item table
-		//sorted by item name
-		initializeView(ItemsCursor.SortBy.item_name);
+	    //check if the activity is started from search
+	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+		      String query = intent.getStringExtra(SearchManager.QUERY);
+		      //doMySearch(query);
+		      displaySearchItem(query, ItemsCursor.SortBy.item_name);
+		    }
+	    else{
+			//display all the items saved in the Item table
+			//sorted by item name
+			initializeView(ItemsCursor.SortBy.item_name);
+	    	
+	    }
+
 
 	}
 
@@ -285,6 +299,20 @@ public class WishList extends Activity {
 		updateGridView();
 
 	}
+	
+	/***
+	 * display the items matching the search in both list and grid view,
+	 * called when the activity is created through search quest
+	 * @param sortBy
+	 * @param itemName the name to search
+	 */
+	
+	private void displaySearchItem(String itemName, ItemsCursor.SortBy sortBy){
+		wishItemCursor = myItemDBAdapter.searchItems(itemName);
+		updateListView();
+		updateGridView();
+		
+	}
 
 	/***
 	 * display the items in either list or grid view
@@ -338,20 +366,28 @@ public class WishList extends Activity {
 
 	private void updateListView() {
 
-		wishItemCursor.requery();
-		int resID = R.layout.wishitem_single;
+		if(wishItemCursor != null){
+			wishItemCursor.requery();
+			int resID = R.layout.wishitem_single;
 
-		String[] from = new String[] { ItemDBAdapter.KEY_ID,
-				ItemDBAdapter.KEY_PHOTO_URL, ItemDBAdapter.KEY_NAME,
-				ItemDBAdapter.KEY_DATE_TIME };
+			String[] from = new String[] { ItemDBAdapter.KEY_ID,
+					ItemDBAdapter.KEY_PHOTO_URL, ItemDBAdapter.KEY_NAME,
+					ItemDBAdapter.KEY_DATE_TIME };
 
-		int[] to = new int[] { R.id.txtItemID, R.id.imgPhoto, R.id.txtName,
-				R.id.txtDate };
-		wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID,
-				wishItemCursor, from, to);
+			int[] to = new int[] { R.id.txtItemID, R.id.imgPhoto, R.id.txtName,
+					R.id.txtDate };
+			wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID,
+					wishItemCursor, from, to);
 
-		myListView.setAdapter(wishListItemAdapterCursor);
-		wishListItemAdapterCursor.notifyDataSetChanged();
+			myListView.setAdapter(wishListItemAdapterCursor);
+			wishListItemAdapterCursor.notifyDataSetChanged();
+			
+		}
+		
+		else{
+			//give message about empty cursor
+		}
+
 
 	}
 
