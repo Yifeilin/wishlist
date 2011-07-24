@@ -99,6 +99,23 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// restore the current selected item in the list 
+		int pos = -1;
+		if (savedInstanceState != null){
+			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
+				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
+			// restore the sort order
+			SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
+
+			myListView.setSelection(pos);
+		}
+		
+
+		
+		int a = 0;
+		int b = 0;
+		
 	    // Get the intent, verify the action and get the query
 	    Intent intent = getIntent();
 	    
@@ -126,14 +143,19 @@ public class WishList extends Activity {
 
 				// list view is selected
 				if (pos == 0) {
-					myViewFlipper.setDisplayedChild(0);
+					//Recall populate here is inefficient
 					viewOption = "list";
+					populateItems(SORT_BY);
+					myViewFlipper.setDisplayedChild(0);
+					
 
 				}
 				// grid view is selected
 				else if (pos == 1) {
-					myViewFlipper.setDisplayedChild(1);
 					viewOption = "grid";
+					populateItems(SORT_BY);
+					myViewFlipper.setDisplayedChild(1);
+					
 
 				}
 				// Toast.makeText(parent.getContext(), "The view is " +
@@ -218,14 +240,16 @@ public class WishList extends Activity {
 
 	    //check if the activity is started from search
 	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	    	  //activity is started from search, get the search query and displayed the searched items
 		      String query = intent.getStringExtra(SearchManager.QUERY);
 		      //doMySearch(query);
-		      displaySearchItem(query, ItemsCursor.SortBy.item_name);
+		      displaySearchItem(query, SORT_BY);
 		    }
 	    else{
+	    	//activity is not started from search
 			//display all the items saved in the Item table
 			//sorted by item name
-			initializeView(ItemsCursor.SortBy.item_name);
+			initializeView(SORT_BY);
 	    	
 	    }
 
@@ -264,28 +288,32 @@ public class WishList extends Activity {
 	 * called when sort by time is selected
 	 */
 	private void onSortByTime() {
-		populateItems(ItemsCursor.SortBy.date_time);
+		SORT_BY = ItemsCursor.SortBy.date_time;
+		populateItems(SORT_BY);
 	}
 
 	/***
 	 * called when sort by name is selected
 	 */
 	private void onSortByName() {
-		populateItems(ItemsCursor.SortBy.item_name);
+		SORT_BY = ItemsCursor.SortBy.item_name;
+		populateItems(SORT_BY);
 	}
 
 	/***
 	 * called when sort by price is selected
 	 */
 	private void onSortByPrice() {
-		populateItems(ItemsCursor.SortBy.price);
+		SORT_BY = ItemsCursor.SortBy.price;
+		populateItems(SORT_BY);
 	}
 
 	/***
 	 * called when sort by priority is selected
 	 */
 	private void onSortByPriority() {
-		populateItems(ItemsCursor.SortBy.priority);
+		SORT_BY = ItemsCursor.SortBy.priority;
+		populateItems(SORT_BY);
 	}
 
 	/***
@@ -579,21 +607,40 @@ public class WishList extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(SELECTED_INDEX_KEY, myListView
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		// save the position of the currently selected item in the list
+		savedInstanceState.putInt(SELECTED_INDEX_KEY, myListView
 				.getSelectedItemPosition());
-		outState.putString(SORT_BY_KEY, SORT_BY.name());
+		// save the current sort criterion
+		savedInstanceState.putString(SORT_BY_KEY, SORT_BY.name());
+		
+		int c = 0;
+		int k = 0;
+
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		// restore the current selected item in the list 
 		int pos = -1;
 		if (savedInstanceState != null)
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 		myListView.setSelection(pos);
+		
+		// restore the sort order
+		SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
+		
+		int a = 0;
+		int b = 0;
+		
+		// restore the view type(list/grid)
+		
+		// restore the search results
+		
+		
 	}
 
 	@Override

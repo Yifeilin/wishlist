@@ -367,17 +367,17 @@ public class WishItemDetail extends Activity {
 	 * it closes the WishItemDetail activity and starts
 	 * the WishList activity
 	 */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// do something on back.
-			startActivity(new Intent(WishItemDetail.this, WishList.class));
-			WishItemDetail.this.finish();
-
-			return true;
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+//			// do something on back.
+//			startActivity(new Intent(WishItemDetail.this, WishList.class));
+//			WishItemDetail.this.finish();
+//
+//			return true;
+//		}
+//
+//		return super.onKeyDown(keyCode, event);
+//	}
 
 }
