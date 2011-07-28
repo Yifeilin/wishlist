@@ -295,8 +295,8 @@ public class ItemDBAdapter {
 		private static final String QUERY = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
 				+ "FROM Item " + "ORDER BY ";
 		
-		private static final String QUERY_NAME = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
-			+ "FROM Item " + "WHERE item_name LIKE Book " + "ORDER BY ";
+//		private static final String QUERY_NAME = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
+//			+ "FROM Item " + "WHERE item_name LIKE Book " + "ORDER BY ";
 
 		private ItemsCursor(SQLiteDatabase db, SQLiteCursorDriver driver,
 				String editTable, SQLiteQuery query) {
@@ -365,20 +365,20 @@ public class ItemDBAdapter {
 		return c;
 	}
 	
-	/**
-	 * Return a sorted ItemsCursor matching the search quest by name
-	 * 
-	 * @param sortBy
-	 *            the sort criteria
-	 */
-	public ItemsCursor getItemsByName(String name, ItemsCursor.SortBy sortBy) {
-		String sql = ItemsCursor.QUERY_NAME + sortBy.toString();
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
-		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
-				new ItemsCursor.Factory(), sql, null, null);
-		c.moveToFirst();
-		return c;
-	}
+//	/**
+//	 * Return a sorted ItemsCursor matching the search quest by name
+//	 * 
+//	 * @param sortBy
+//	 *            the sort criteria
+//	 */
+//	public ItemsCursor getItemsByName(String name, ItemsCursor.SortBy sortBy) {
+//		String sql = ItemsCursor.QUERY_NAME + sortBy.toString();
+//		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+//		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+//				new ItemsCursor.Factory(), sql, null, null);
+//		c.moveToFirst();
+//		return c;
+//	}
 
 	/**
 	 * Return the cursor of item with id equal to _id
@@ -399,11 +399,32 @@ public class ItemDBAdapter {
 		return c;
 	}
 
+	/**
+	 * Return a sorted ItemsCursor matching the search quest by name
+	 * 
+	 */
 	public ItemsCursor searchItems(String query) {
 		String sql = String.format("SELECT * FROM Item "
-				+ "WHERE item_name LIKE '%%%s%%'", query);
+				+ "WHERE item_name LIKE '%%%s%%' ", query);
+
+		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+				new ItemsCursor.Factory(), sql, null, null);
+		if (c != null) {
+			c.moveToFirst();
+		}
+		return c;
+	}
+	
+	/**
+	 * Return a sorted ItemsCursor matching the search quest by name
+	 * ordered by sortBy
+	 * 
+	 */
+	public ItemsCursor searchItems(String query, ItemsCursor.SortBy sortBy) {
+		String sql = String.format("SELECT * FROM Item "
+				+ "WHERE item_name LIKE '%%%s%%' " + "ORDER BY '%s'" , query, sortBy);
 		
-		//sql = "SELECT * FROM Item WHERE item_name LIKE 'Book'";
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);

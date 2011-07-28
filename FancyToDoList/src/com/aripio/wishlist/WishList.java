@@ -79,6 +79,7 @@ public class WishList extends Activity {
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
+	private String nameQuery = null;
 	static final String LOG_TAG = "WishList";
 	private String viewOption = "list";
 
@@ -100,21 +101,23 @@ public class WishList extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// restore the current selected item in the list 
-		int pos = -1;
-		if (savedInstanceState != null){
-			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
-				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
-			// restore the sort order
-			SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
-
-			myListView.setSelection(pos);
-		}
+//		// restore the current selected item in the list 
+//		int pos = -1;
+//		if (savedInstanceState != null){
+//			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
+//				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
+//			// restore the sort order
+//			SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
+//
+//			myListView.setSelection(pos);
+//		}
 		
-
+        // Get the saved ui preferences in onPause
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        viewOption = preferences.getString("viewOption", "list");
 		
-		int a = 0;
-		int b = 0;
+//		int a = 0;
+//		int b = 0;
 		
 	    // Get the intent, verify the action and get the query
 	    Intent intent = getIntent();
@@ -127,47 +130,6 @@ public class WishList extends Activity {
 		myGridView = (GridView) findViewById(R.id.myGridView);
 		mySearchText = (EditText) findViewById(R.id.mySearchText);
 		myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
-
-		//set the spinner for switching between list and grid views
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(this, R.array.views_array,
-						android.R.layout.simple_spinner_item);
-		
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		myViewSpinner.setAdapter(adapter);
-
-		myViewSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int pos, long id) {
-
-				// list view is selected
-				if (pos == 0) {
-					//Recall populate here is inefficient
-					viewOption = "list";
-					populateItems(SORT_BY);
-					myViewFlipper.setDisplayedChild(0);
-					
-
-				}
-				// grid view is selected
-				else if (pos == 1) {
-					viewOption = "grid";
-					populateItems(SORT_BY);
-					myViewFlipper.setDisplayedChild(1);
-					
-
-				}
-				// Toast.makeText(parent.getContext(), "The view is " +
-				// parent.getItemAtPosition(pos).toString(),
-				// Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView parent) {
-				// Do nothing.
-			}
-		});
 
 		//called when an item in the list view is clicked.
 		//it starts a new activity to display the clicked item's detailed info.
@@ -241,9 +203,10 @@ public class WishList extends Activity {
 	    //check if the activity is started from search
 	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 	    	  //activity is started from search, get the search query and displayed the searched items
-		      String query = intent.getStringExtra(SearchManager.QUERY);
-		      //doMySearch(query);
-		      displaySearchItem(query, SORT_BY);
+	    	  nameQuery = intent.getStringExtra(SearchManager.QUERY);
+
+//		      displaySearchItem(query, SORT_BY);
+		      populateItems(nameQuery, SORT_BY);
 		    }
 	    else{
 	    	//activity is not started from search
@@ -252,6 +215,56 @@ public class WishList extends Activity {
 			initializeView(SORT_BY);
 	    	
 	    }
+	    
+	  //set the spinner for switching between list and grid views
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter
+				.createFromResource(this, R.array.views_array,
+						android.R.layout.simple_spinner_item);
+		
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		myViewSpinner.setAdapter(adapter);
+		
+		//set the default spinner option
+		if(viewOption == "list"){
+			myViewSpinner.setSelection(0);			
+		}
+		else{
+			myViewSpinner.setSelection(1);	
+		}
+
+
+		myViewSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+
+				// list view is selected
+				if (pos == 0) {
+					//Recall populate here is inefficient
+					viewOption = "list";
+					populateItems(nameQuery, SORT_BY);
+					myViewFlipper.setDisplayedChild(0);
+					
+
+				}
+				// grid view is selected
+				else if (pos == 1) {
+					viewOption = "grid";
+					populateItems(nameQuery, SORT_BY);
+					myViewFlipper.setDisplayedChild(1);
+					
+
+				}
+				// Toast.makeText(parent.getContext(), "The view is " +
+				// parent.getItemAtPosition(pos).toString(),
+				// Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView parent) {
+				// Do nothing.
+			}
+		});
 
 
 	}
@@ -289,7 +302,7 @@ public class WishList extends Activity {
 	 */
 	private void onSortByTime() {
 		SORT_BY = ItemsCursor.SortBy.date_time;
-		populateItems(SORT_BY);
+		populateItems(null, SORT_BY);
 	}
 
 	/***
@@ -297,7 +310,7 @@ public class WishList extends Activity {
 	 */
 	private void onSortByName() {
 		SORT_BY = ItemsCursor.SortBy.item_name;
-		populateItems(SORT_BY);
+		populateItems(null, SORT_BY);
 	}
 
 	/***
@@ -305,7 +318,7 @@ public class WishList extends Activity {
 	 */
 	private void onSortByPrice() {
 		SORT_BY = ItemsCursor.SortBy.price;
-		populateItems(SORT_BY);
+		populateItems(null, SORT_BY);
 	}
 
 	/***
@@ -313,7 +326,7 @@ public class WishList extends Activity {
 	 */
 	private void onSortByPriority() {
 		SORT_BY = ItemsCursor.SortBy.priority;
-		populateItems(SORT_BY);
+		populateItems(null, SORT_BY);
 	}
 
 	/***
@@ -323,8 +336,18 @@ public class WishList extends Activity {
 	 */
 	private void initializeView(ItemsCursor.SortBy sortBy) {
 		wishItemCursor = myItemDBAdapter.getItems(sortBy);
-		updateListView();
-		updateGridView();
+		
+		if (viewOption == "list"){
+			updateListView();
+			myViewFlipper.setDisplayedChild(0);
+		}
+		
+		else{
+			updateGridView();
+			myViewFlipper.setDisplayedChild(1);
+		}
+
+
 
 	}
 	
@@ -335,24 +358,32 @@ public class WishList extends Activity {
 	 * @param itemName the name to search
 	 */
 	
-	private void displaySearchItem(String itemName, ItemsCursor.SortBy sortBy){
-		wishItemCursor = myItemDBAdapter.searchItems(itemName);
-		updateListView();
-		updateGridView();
-		
-	}
+//	private void displaySearchItem(String itemName, ItemsCursor.SortBy sortBy){
+//		wishItemCursor = myItemDBAdapter.searchItems(itemName);
+////		updateListView();
+////		updateGridView();
+//		updateView();
+//		
+//	}
 
 	/***
 	 * display the items in either list or grid view
 	 * sorted by "sortBy" 
 	 * @param sortBy
+	 * @param searchName: the item name to match, null for all items
 	 */
-	private void populateItems(ItemsCursor.SortBy sortBy) {
+	private void populateItems(String searchName, ItemsCursor.SortBy sortBy) {
 
-		// Get all of the rows from the Item table
-		// Keep track of the TextViews added in list lstTable
-		// wishItemCursor = wishListDB.getItems(sortBy);
-		wishItemCursor = myItemDBAdapter.getItems(sortBy);
+		if (searchName == null){
+			// Get all of the rows from the Item table
+			// Keep track of the TextViews added in list lstTable
+			// wishItemCursor = wishListDB.getItems(sortBy);
+			wishItemCursor = myItemDBAdapter.getItems(sortBy);
+			
+		}
+		else{
+			wishItemCursor = myItemDBAdapter.searchItems(searchName, sortBy);
+		}
 
 		updateView();
 	}
@@ -365,37 +396,43 @@ public class WishList extends Activity {
 		if (viewOption == "list") {
 			// Update the list view
 			updateListView();
+			myViewFlipper.setDisplayedChild(0);
 
 		}
 
 		else if (viewOption == "grid") {
 			// Update the grid view
 			updateGridView();
+			myViewFlipper.setDisplayedChild(1);
 
 		}
-
 	}
 
 	private void updateGridView() {
-		wishItemCursor.requery();
-		int resID = R.layout.wishitem_photo;
+		if(wishItemCursor != null){
+			//wishItemCursor.requery();
+			int resID = R.layout.wishitem_photo;
 
-		String[] from = new String[] { ItemDBAdapter.KEY_ID,
-				ItemDBAdapter.KEY_PHOTO_URL };
+			String[] from = new String[] { ItemDBAdapter.KEY_ID,
+					ItemDBAdapter.KEY_PHOTO_URL };
 
-		int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
-		wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID,
-				wishItemCursor, from, to);
+			int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
+			wishListItemAdapterCursor = new WishListItemCursorAdapter(this, resID,
+					wishItemCursor, from, to);
 
-		myGridView.setAdapter(wishListItemAdapterCursor);
-		wishListItemAdapterCursor.notifyDataSetChanged();
+			myGridView.setAdapter(wishListItemAdapterCursor);
+			wishListItemAdapterCursor.notifyDataSetChanged();
+		}
+		else{
+			//give message about empty cursor
+		}
 
 	}
 
 	private void updateListView() {
 
 		if(wishItemCursor != null){
-			wishItemCursor.requery();
+			//wishItemCursor.requery();
 			int resID = R.layout.wishitem_single;
 
 			String[] from = new String[] { ItemDBAdapter.KEY_ID,
@@ -593,10 +630,11 @@ public class WishList extends Activity {
 		// Get the preferences editor.
 		SharedPreferences.Editor editor = uiState.edit();
 		// Add the UI state preference values.
+        editor.putString("viewOption", viewOption); // value to store
 		// Commit the preferences.
 		editor.commit();
 	}
-
+	
 	private void restoreUIState() {
 		// Get the activity preferences object.
 		// SharedPreferences settings = getPreferences(Activity.MODE_PRIVATE);
@@ -614,9 +652,9 @@ public class WishList extends Activity {
 				.getSelectedItemPosition());
 		// save the current sort criterion
 		savedInstanceState.putString(SORT_BY_KEY, SORT_BY.name());
-		
-		int c = 0;
-		int k = 0;
+//		
+//		int c = 0;
+//		int k = 0;
 
 	}
 
@@ -631,10 +669,10 @@ public class WishList extends Activity {
 		myListView.setSelection(pos);
 		
 		// restore the sort order
-		SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
-		
-		int a = 0;
-		int b = 0;
+//		SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
+//		
+//		int a = 0;
+//		int b = 0;
 		
 		// restore the view type(list/grid)
 		
