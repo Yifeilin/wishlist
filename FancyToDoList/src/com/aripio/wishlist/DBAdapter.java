@@ -38,106 +38,7 @@ public class DBAdapter {
 			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER"
 			+ ");";
 
-	//Query string to insert item1 in table "Item"
-	private static final String INSERT_DEFAULT_ITEM1 = "INSERT INTO "
-			+ ItemDBAdapter.DB_TABLE 
-			+ " (" 
-			+ ItemDBAdapter.KEY_ID 			+ ", "
-			+ ItemDBAdapter.KEY_STORE_ID	+ ", "
-			+ ItemDBAdapter.KEY_NAME		+ ", "
-			+ ItemDBAdapter.KEY_DESCRIPTION	+ ", "
-			+ ItemDBAdapter.KEY_DATE_TIME	+ ", "
-			// + ItemDBAdapter.KEY_STORENAME + ", "
-			+ ItemDBAdapter.KEY_PHOTO_URL 	+ ", "
-			+ ItemDBAdapter.KEY_PRICE		+ ", "
-			+ ItemDBAdapter.KEY_LOCATION	+ ", "
-			+ ItemDBAdapter.KEY_PRIORITY 	
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"						+ ", " 	
-			+ "'1'"							+ ", " 
-			+ "'Car'" 						+ ", "
-			+ "'It is a very nice car'"		+ ", " 
-			+ "'1983-07-06 11:30:00'"		+ ", "
-			+ "'7f020004'" 					+ ", "
-			+ "'25000.0'" 					+ ", "
-			+ "'BMW, Shanghai, China'" 		+ ", "
-			+ "'0'"
-			+ ");";
 
-	//Query string to insert item2 in table "Item"
-	private static final String INSERT_DEFAULT_ITEM2 = "INSERT INTO "
-			+ ItemDBAdapter.DB_TABLE 		
-			+ " ("
-			+ ItemDBAdapter.KEY_ID 			+ ", "
-			+ ItemDBAdapter.KEY_STORE_ID	+ ", "
-			+ ItemDBAdapter.KEY_NAME		+ ", "
-			+ ItemDBAdapter.KEY_DESCRIPTION	+ ", "
-			+ ItemDBAdapter.KEY_DATE_TIME	+ ", "
-			// + ItemDBAdapter.KEY_STORENAME + ", "
-			+ ItemDBAdapter.KEY_PHOTO_URL	+ ", "
-			+ ItemDBAdapter.KEY_PRICE		+ ", " 
-			+ ItemDBAdapter.KEY_LOCATION 	+ ", "
-			+ ItemDBAdapter.KEY_PRIORITY 
-			+ ") "
-			+ "VALUES"
-			+ "("
-			+ "NULL"						+ ", "
-			+ "'2'"							+ ", "
-			+ "'Book'" 						+ ", "
-			+ "'It is a great book'"		+ ", "
-			+ "'1984-03-17 18:22:35'"		+ ", "
-			+ "'7f020003'" 					+ ", "
-			+ "'9.9'"						+ ", "
-			+ "'Chapter store, Toronto, ON Canada'" + ", "
-			+ "'3'"
-			+ ");";
-	
-	//Query string to insert item3 in table "Item"
-	private static final String INSERT_DEFAULT_ITEM3 = "INSERT INTO "
-			+ ItemDBAdapter.DB_TABLE + " (" + ItemDBAdapter.KEY_ID + ", "
-			+ ItemDBAdapter.KEY_STORE_ID
-			+ ", "
-			+ ItemDBAdapter.KEY_NAME
-			+ ", "
-			+ ItemDBAdapter.KEY_DESCRIPTION
-			+ ", "
-			+ ItemDBAdapter.KEY_DATE_TIME
-			+ ", "
-			// + ItemDBAdapter.KEY_STORENAME + ", "
-			+ ItemDBAdapter.KEY_PHOTO_URL + ", " + ItemDBAdapter.KEY_PRICE
-			+ ", " + ItemDBAdapter.KEY_LOCATION + ", "
-			+ ItemDBAdapter.KEY_PRIORITY + ") " + "VALUES" + "(" + "NULL"
-			+ ", " + "'3'" + ", " + "'Cake'" + ", "
-			+ "'It is a delicious cake'" + ", " + "'2011-05-03 03:40:50'"
-			+ ", " + "'7f020006'" + ", " + "'6.99'" + ", "
-			+ "'YuanZu Food, Jiaxing, Zhejiang, China'" + ", " + "'2'" + ");";
-
-	//Query string to insert item4 in table "Item"
-	private static final String INSERT_DEFAULT_ITEM4 = "INSERT INTO "
-			+ ItemDBAdapter.DB_TABLE + " (" + ItemDBAdapter.KEY_ID + ", "
-			+ ItemDBAdapter.KEY_STORE_ID
-			+ ", "
-			+ ItemDBAdapter.KEY_NAME
-			+ ", "
-			+ ItemDBAdapter.KEY_DESCRIPTION
-			+ ", "
-			+ ItemDBAdapter.KEY_DATE_TIME
-			+ ", "
-			// + ItemDBAdapter.KEY_STORENAME + ", "
-			+ ItemDBAdapter.KEY_PHOTO_URL + ", " + ItemDBAdapter.KEY_PRICE
-			+ ", " + ItemDBAdapter.KEY_LOCATION + ", "
-			+ ItemDBAdapter.KEY_PRIORITY + ") " + "VALUES" + "(" + "NULL"
-			+ ", " + "'4'" + ", " + "'Heart'" + ", "
-			+ "'It is a warm beating heart'" + ", " + "'2000-11-23 08:17:38'"
-			+ ", " + "'7f020008'" + ", " + "'324.49'" + ", "
-			+ "'Hospital, Beijing, China'" + ", " + "'1'" + ");";
-
-/*************************************************************************************/	
-/********************	Query string to create table ItemCategory	**************************/
-/******************** 	and insert default ItemCategory			**************************/
-/*************************************************************************************/	
 	//Query string to create table "ItemCategory"
 	private static final String CREATE_TABLE_ITEMCATEGORY = "create table "
 			+ ItemCategoryDBAdapter.DB_TABLE + " ("
@@ -146,10 +47,6 @@ public class DBAdapter {
 			+ ItemCategoryDBAdapter.KEY_NAME + " TEXT"
 			+ ");"; 
 
-/*************************************************************************************/	
-/********************	Query string to create table store	**************************/
-/******************** 	and insert default stores			**************************/
-/*************************************************************************************/
 	//Query string to create table "store"
 	private static final String CREATE_TABLE_STORE = "create table "
 			+ StoreDBAdapter.DB_TABLE 
@@ -159,70 +56,6 @@ public class DBAdapter {
 			+ StoreDBAdapter.KEY_NAME 			+ " TEXT" 
 			+ ");";
 	
-	//Query string to insert store1 in table "store"
-	private static final String INSERT_DEFAULT_STORE1 = "INSERT INTO "
-			+ StoreDBAdapter.DB_TABLE 
-			+ " (" 
-			+ StoreDBAdapter.KEY_ID 			+ ", "
-			+ StoreDBAdapter.KEY_LOCATION_ID	+ ", "
-			+ StoreDBAdapter.KEY_NAME
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'1'"								+ ", " 
-			+ "'BMW store'"			
-			+ ");";
-	
-	//Query string to insert store2 in table "store"
-	private static final String INSERT_DEFAULT_STORE2 = "INSERT INTO "
-			+ StoreDBAdapter.DB_TABLE 
-			+ " (" 
-			+ StoreDBAdapter.KEY_ID 			+ ", "
-			+ StoreDBAdapter.KEY_LOCATION_ID	+ ", "
-			+ StoreDBAdapter.KEY_NAME
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'2'"								+ ", " 
-			+ "'Chapter'"			
-			+ ");";
-	
-	//Query string to insert store3 in table "store"
-	private static final String INSERT_DEFAULT_STORE3 = "INSERT INTO "
-			+ StoreDBAdapter.DB_TABLE 
-			+ " (" 
-			+ StoreDBAdapter.KEY_ID 			+ ", "
-			+ StoreDBAdapter.KEY_LOCATION_ID	+ ", "
-			+ StoreDBAdapter.KEY_NAME
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'3'"								+ ", " 
-			+ "'Yuan Zu Food'"			
-			+ ");";
-	
-	//Query string to insert store4 in table "store"
-	private static final String INSERT_DEFAULT_STORE4 = "INSERT INTO "
-			+ StoreDBAdapter.DB_TABLE 
-			+ " (" 
-			+ StoreDBAdapter.KEY_ID 			+ ", "
-			+ StoreDBAdapter.KEY_LOCATION_ID	+ ", "
-			+ StoreDBAdapter.KEY_NAME
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'4'"								+ ", " 
-			+ "'Hospital'"			
-			+ ");";
-
-	/*************************************************************************************/	
-	/********************	Query string to create table location	**********************/
-	/******************** 	and insert default location			**************************/
-	/*************************************************************************************/
 	//Query string to create table "location"
 	private static final String CREATE_TABLE_LOCATION = "create table "
 			+ LocationDBAdapter.DB_TABLE
@@ -248,90 +81,6 @@ public class DBAdapter {
 			+ LocationDBAdapter.KEY_COUNTRY + " TEXT,"
 			+ LocationDBAdapter.KEY_POSTCODE + " TEXT" + ");";
 
-	//Query string to insert location1 in table "location"
-	private static final String INSERT_DEFAULT_LOCATION1 = "INSERT INTO "
-			+ LocationDBAdapter.DB_TABLE 
-			+ " (" 
-			+ LocationDBAdapter.KEY_ID 			+ ", "
-			+ LocationDBAdapter.KEY_LATITUDE	+ ", "
-			+ LocationDBAdapter.KEY_LONGITUDE	+ ", "
-			+ LocationDBAdapter.KEY_ADDSTR	//+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE2	+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE3
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'43.698643'"						+ ", " 
-			+ "'-79.390368'"					+ ", "
-			+ "'187 Balliol St\nToronto, ON M4S 1C8\nCanada'"				//+ ", "
-			//+ "'Toronto, ON M4S 1C8'"			+ ", "
-			//+ "'Canada'"
-			+ ");";
-	
-	//Query string to insert location2 in table "location"
-	private static final String INSERT_DEFAULT_LOCATION2 = "INSERT INTO "
-			+ LocationDBAdapter.DB_TABLE 
-			+ " (" 
-			+ LocationDBAdapter.KEY_ID 			+ ", "
-			+ LocationDBAdapter.KEY_LATITUDE	+ ", "
-			+ LocationDBAdapter.KEY_LONGITUDE	+ ", "
-			+ LocationDBAdapter.KEY_ADDSTR	//+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE2	+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE3
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'43.650997'"						+ ", " 
-			+ "'-79.476740'"					+ ", "
-			+ "'2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada'"				//+ ", "
-//			+ "'Toronto, ON M6S 1N7'"			+ ", "
-//			+ "'Canada'"
-			+ ");";
-	
-	//Query string to insert location3 in table "location"
-	private static final String INSERT_DEFAULT_LOCATION3 = "INSERT INTO "
-			+ LocationDBAdapter.DB_TABLE 
-			+ " (" 
-			+ LocationDBAdapter.KEY_ID 			+ ", "
-			+ LocationDBAdapter.KEY_LATITUDE	+ ", "
-			+ LocationDBAdapter.KEY_LONGITUDE	+ ", "
-			+ LocationDBAdapter.KEY_ADDSTR	//+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE2	+ ", "
-//			+ LocationDBAdapter.KEY_ADDLINE3
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'43.707563'"						+ ", " 
-			+ "'-79.398328'"					+ ", "
-			+ "'2315 Yonge ST\nToronto, ON M4P 2C7\nCanada'"					//+ ", "
-//			+ "'Toronto, ON M4P 2C7'"			+ ", "
-//			+ "'Canada'"
-			+ ");";
-	
-	//Query string to insert location4 in table "location"
-	private static final String INSERT_DEFAULT_LOCATION4 = "INSERT INTO "
-			+ LocationDBAdapter.DB_TABLE 
-			+ " (" 
-			+ LocationDBAdapter.KEY_ID 			+ ", "
-			+ LocationDBAdapter.KEY_LATITUDE	+ ", "
-			+ LocationDBAdapter.KEY_LONGITUDE	+ ", "
-			+ LocationDBAdapter.KEY_ADDSTR	//+ ", "
-			//+ LocationDBAdapter.KEY_ADDLINE2	+ ", "
-			//+ LocationDBAdapter.KEY_ADDLINE3
-			+ ") "
-			+ "VALUES"
-			+ "(" 
-			+ "NULL"							+ ", " 	
-			+ "'43.652243'"						+ ", " 
-			+ "'-79.371197'"					+ ", "
-			+ "'252 Adelaide ST E\nToronto, ON M5A 2N4\nCanada'"				//+ ", "
-//			+ "'Toronto, ON M5A 2N4'"			+ ", "
-//			+ "'Canada'"
-			+ ");";
-	
 	private final Context context;
 	private DatabaseHelper DBHelper;
 	private SQLiteDatabase db;
@@ -346,7 +95,9 @@ public class DBAdapter {
 		this.DBHelper = new DatabaseHelper(this.context);
 	}
 
-	private static class DatabaseHelper extends SQLiteOpenHelper {
+	//private static class DatabaseHelper extends SQLiteOpenHelper {
+	// not sure why DatabaseHelper needs to be static
+	private class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);
 		}
@@ -360,28 +111,83 @@ public class DBAdapter {
 			// create table item and insert into the table
 			// 4 default items
 			db.execSQL(CREATE_TABLE_ITEM);
-			db.execSQL(INSERT_DEFAULT_ITEM1);
-			db.execSQL(INSERT_DEFAULT_ITEM2);
-			db.execSQL(INSERT_DEFAULT_ITEM3);
-			db.execSQL(INSERT_DEFAULT_ITEM4);
+			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
+			mItemDBAdapter.open(db);
+			mItemDBAdapter.addItem(	1, 
+									"Car", 
+									"It is a very nice car", 
+									"1983-07-06 11:30:00", 
+									"7f020004", 
+									25000f,
+									"BMW, Shanghai, China",
+									0);
+			
+			mItemDBAdapter.addItem(	2, 
+									"Book", 
+									"It is a great book", 
+									"1984-03-17 18:22:35", 
+									"7f020003", 
+									9.9f,
+									"Chapter store, Toronto, ON Canada",
+									3);
+			
+			mItemDBAdapter.addItem(	3, 
+									"Cake", 
+									"It is a delicious cake", 
+									"2011-05-03 03:40:50", 
+									"7f020006", 
+									6.99f,
+									"YuanZu Food, Jiaxing, Zhejiang, China",
+									2);
+			
+			mItemDBAdapter.addItem(	4, 
+									"Heart", 
+									"It is a warm beating heart", 
+									"2000-11-23 08:17:38", 
+									"7f020008", 
+									324.49f,
+									"Hospital, Beijing, China",
+									1);
+
+			mItemDBAdapter.close();
 
 			// create table itemCategory
 			db.execSQL(CREATE_TABLE_ITEMCATEGORY);
 			// to be added
 			
-			//store
+			//create table store and insert 4 default stores
 			db.execSQL(CREATE_TABLE_STORE);
-			db.execSQL(INSERT_DEFAULT_STORE1);
-			db.execSQL(INSERT_DEFAULT_STORE2);
-			db.execSQL(INSERT_DEFAULT_STORE3);
-			db.execSQL(INSERT_DEFAULT_STORE4);
+			StoreDBAdapter mStoreDBAdapter = new StoreDBAdapter(context);
+			mStoreDBAdapter.open(db);
+			mStoreDBAdapter.addStore("BMW Store", 		1);
+			mStoreDBAdapter.addStore("Chapter",   		2);
+			mStoreDBAdapter.addStore("Yuan Zu Food",	3);
+			mStoreDBAdapter.addStore("Hospital",		4);
+			mStoreDBAdapter.close();
 			
-			//location
+			//create table location and insert 4 default locations
 			db.execSQL(CREATE_TABLE_LOCATION);
-			db.execSQL(INSERT_DEFAULT_LOCATION1);
-			db.execSQL(INSERT_DEFAULT_LOCATION2);
-			db.execSQL(INSERT_DEFAULT_LOCATION3);
-			db.execSQL(INSERT_DEFAULT_LOCATION4);
+			LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(context);
+			mLocationDBAdapter.open(db);
+			mLocationDBAdapter.addLocation(43.698643,
+										   -79.390368, 
+										   "187 Balliol St\nToronto, ON M4S 1C8\nCanada",
+										   0, null, null, null, null, null);
+			mLocationDBAdapter.addLocation(43.650997,
+										   -79.476740, 
+										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
+										   0, null, null, null, null, null);
+			mLocationDBAdapter.addLocation(43.707563,
+										   -79.398328, 
+										   "2315 Yonge ST\nToronto, ON M4P 2C7\nCanada",
+										   0, null, null, null, null, null);
+			mLocationDBAdapter.addLocation(43.652243,
+										   -79.371197, 
+										   "252 Adelaide ST E\nToronto, ON M5A 2N4\nCanada",
+										   0, null, null, null, null, null);
+
+			mLocationDBAdapter.close();
+		
 		}
 
 		/***

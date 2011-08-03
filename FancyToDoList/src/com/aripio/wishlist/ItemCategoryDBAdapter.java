@@ -48,7 +48,7 @@ public class ItemCategoryDBAdapter {
 	}
 
 	/**
-	 * Open the cars database. If it cannot be opened, try to create a new
+	 * Open the wishlist database. If it cannot be opened, try to create a new
 	 * instance of the database. If it cannot be created, throw an exception to
 	 * signal the failure
 	 * 
@@ -60,6 +60,25 @@ public class ItemCategoryDBAdapter {
 	public ItemCategoryDBAdapter open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
+		return this;
+	}
+	
+	/**
+	 * Open the wishlist database by passing the instance of the db.
+	 * its difference from open() is that it uses the db passed in as mDb
+	 * instead of getting mDb from calling this.mDbHelper.getWritableDatabase();
+	 * open(SQLiteDatabase db) is only called in DBAdapter.DatabaseHelper.onCreate() for 
+	 * inserting items into the item table the first time wishlist database is
+	 * created
+	 * 
+	 * @return this (self reference, allowing this to be chained in an
+	 *         initialization call)
+	 *         
+	 */
+	
+	public ItemCategoryDBAdapter open(SQLiteDatabase db) throws SQLException {
+		this.mDbHelper = new DatabaseHelper(this.mCtx);
+		this.mDb = db;
 		return this;
 	}
 

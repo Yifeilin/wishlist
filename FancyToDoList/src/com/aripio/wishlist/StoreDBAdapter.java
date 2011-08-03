@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /***
- * StoreDBAdapter provides access to operations on data in store table
+ * StoreDBAdapter provides access to opexarations on data in store table
  */
 public class StoreDBAdapter {
 	public static final String KEY_ID = "_id";
@@ -61,6 +61,24 @@ public class StoreDBAdapter {
 	public StoreDBAdapter open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
+		return this;
+	}
+	
+	/**
+	 * Open the wishlist database by passing the instance of the db.
+	 * its difference from open() is that it uses the db passed in as mDb
+	 * instead of getting mDb from calling this.mDbHelper.getWritableDatabase();
+	 * open(SQLiteDatabase db) is only called in DBAdapter.DatabaseHelper.onCreate() for 
+	 * inserting items into the item table the first time wishlist database is
+	 * created
+	 * 
+	 * @return this (self reference, allowing this to be chained in an
+	 *         initialization call)
+	 *         
+	 */
+	public StoreDBAdapter open(SQLiteDatabase db) throws SQLException {
+		this.mDbHelper = new DatabaseHelper(this.mCtx);
+		this.mDb = db;
 		return this;
 	}
 
