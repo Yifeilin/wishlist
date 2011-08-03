@@ -88,10 +88,10 @@ public class DBAdapter {
 	/**
 	 * Constructor
 	 * 
-	 * @param ctx
+	 * @param contenxt
 	 */
-	public DBAdapter(Context ctx) {
-		this.context = ctx;
+	public DBAdapter(Context contenxt) {
+		this.context = contenxt;
 		this.DBHelper = new DatabaseHelper(this.context);
 	}
 

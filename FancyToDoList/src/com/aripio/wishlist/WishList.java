@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -17,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -39,24 +39,28 @@ import android.widget.ViewFlipper;
  */ 
 public class WishList extends Activity {
 	// Assign a unique ID for each menu item
-	static final private int ADD_NEW_TODO = Menu.FIRST;
+//	static final private int ADD_NEW_TODO = Menu.FIRST;
 	static final private int REMOVE_TODO = Menu.FIRST + 1;
-	static final private int HELP_TODO = Menu.FIRST + 2;
+//	static final private int HELP_TODO = Menu.FIRST + 2;
 	static final private int DETAIL_TODO = Menu.FIRST + 3;
 	static final private int POST_TODO = Menu.FIRST + 4;
-	static final private int SORT_TODO = Menu.FIRST + 5;
+//	static final private int SORT_TODO = Menu.FIRST + 5;
 	static final private int MARK_TODO = Menu.FIRST + 6;
 
 	static final private int DIALOG_MAIN = 0;
 
 	static final private int DETAIL_INFO_ACT = 2;
-	static final private int TAKE_PICTURE = 1;
+//	static final private int TAKE_PICTURE = 1;
 	static final private int POST_ITEM = 3;
 
-	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
-	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
+//	private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
+//	private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
+
+	//other view mode can be extended in the future
+	private static final int LIST_MODE = 1;
+	private static final int GRID_MODE = 2;
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private String nameQuery = null;
@@ -66,7 +70,7 @@ public class WishList extends Activity {
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
 	private GridView myGridView;
-	private EditText mySearchText;
+//	private EditText mySearchText;
 	private Spinner myViewSpinner;
 
 	// private WishListDataBase wishListDB;
@@ -80,24 +84,10 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-//		// restore the current selected item in the list 
-//		int pos = -1;
-//		if (savedInstanceState != null){
-//			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
-//				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
-//			// restore the sort order
-//			SORT_BY = ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
-//
-//			myListView.setSelection(pos);
-//		}
-		
-        // Get the saved ui preferences in onPause
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        viewOption = preferences.getString("viewOption", "list");
-		
-//		int a = 0;
-//		int b = 0;
+				
+        // Get the saved UI preferences in onPause, the default option is list
+//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+//        viewOption = preferences.getString("viewOption", "list");
 		
 	    // Get the intent, verify the action and get the query
 	    Intent intent = getIntent();
@@ -108,18 +98,18 @@ public class WishList extends Activity {
 		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
 		myListView = (ListView) findViewById(R.id.myListView);
 		myGridView = (GridView) findViewById(R.id.myGridView);
-		mySearchText = (EditText) findViewById(R.id.mySearchText);
+//		mySearchText = (EditText) findViewById(R.id.mySearchText);
 		myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
 
-		//called when an item in the list view is clicked.
-		//it starts a new activity to display the clicked item's detailed info.
+		//Listener for myListView.
+		//When clicked, it starts a new activity to display the clicked item's detailed info.
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
 				// find which item in the list view has been clicked
 				// and get its _id in database
-				long item_id = getDBItemID(position);
+				long item_id = getDBItemID(position, LIST_MODE);
 				
 				// Create an intent to show the item detail.
 				// Pass the item_id along so the next activity can use it to
@@ -128,19 +118,17 @@ public class WishList extends Activity {
 				i.putExtra("item_id", item_id);
 				i.putExtra("position", position);
 				startActivity(i);
-
 			}
-
 		});
 
-		//called when an item in the grid view is clicked.
-		//it starts a new activity to display the clicked item's detailed info.
+		//Listener for myGridView
+		//When clicked, it starts a new activity to display the clicked item's detailed info.
 		myGridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
 				// find which item has been clicked and get its _id in database
-				long item_id = getDBItemID(position);
+				long item_id = getDBItemID(position, GRID_MODE);
 							
 				// Create an intent to show the item detail.
 				// Pass the item_id along so the next activity can use it to
@@ -154,19 +142,10 @@ public class WishList extends Activity {
 
 		});
 
-		// mySearchText.setOnKeyListener(new OnKeyListener() {
-		// @Override
-		// public boolean onKey(View view, int keyCode, KeyEvent event) {
-		// if (event.getAction() == KeyEvent.ACTION_DOWN)
-		// if (keyCode == KeyEvent.KEYCODE_ENTER) {
-		// Intent searchIntent = new Intent(Intent.ACTION_SEARCH);
-		// searchIntent.putExtra("query", mySearchText.getText().toString());
-		// startActivity(searchIntent);
-		// }
-		// return false;
-		// }
-		// });
+		//register context menu for both listview and gridview
 		registerForContextMenu(myListView);
+		registerForContextMenu(myGridView);
+		
 		restoreUIState();
 
 		// Open or create the database
@@ -254,27 +233,33 @@ public class WishList extends Activity {
 		return super.onSearchRequested();
 	}
 
-	/***
-	 * get the _id of the item in Item table 
-	 * whose position in the list/grid view is pos.
+	/**
+	 * Get the ID of the item in Item table 
+	 * whose position in the list/grid view is position.
+	 * @param position: position of item in the list
+	 * @param viewMode: the current view mode
+	 * @return the Item ID
 	 */
-	public long getDBItemID(int pos) {
+	public long getDBItemID(int position, int viewMode) {
 
-		View selected_view = null;
+		View selectedView = null;
 		TextView itemIdTextView = null;
-		if (viewOption == "list") {
-			selected_view = myListView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
-		}
-
-		else if (viewOption == "grid") {
-			selected_view = myGridView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
-		}
-
+		//Note that txtItemID is not visible in the UI but can be retrieved
+		switch(viewMode){
+		case LIST_MODE:
+			selectedView = myListView.getChildAt(position);
+			itemIdTextView = (TextView) selectedView.findViewById(R.id.txtItemID);
+			break;
+		case GRID_MODE:
+			selectedView = myGridView.getChildAt(position);
+			itemIdTextView = (TextView) selectedView.findViewById(R.id.txtItemID_Grid);
+			break;
+		default:
+			Log.e(LOG_TAG, "View mode not specified correctly.");
+			return -1;
+		}	
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		return item_id;
-
 	}
 
 	/***
@@ -606,7 +591,7 @@ public class WishList extends Activity {
 	protected void onPause() {
 		super.onPause();
 		// Get the activity preferences object.
-		SharedPreferences uiState = getPreferences(0);
+		SharedPreferences uiState = getPreferences(MODE_PRIVATE);
 		// Get the preferences editor.
 		SharedPreferences.Editor editor = uiState.edit();
 		// Add the UI state preference values.
@@ -617,10 +602,9 @@ public class WishList extends Activity {
 	
 	private void restoreUIState() {
 		// Get the activity preferences object.
-		// SharedPreferences settings = getPreferences(Activity.MODE_PRIVATE);
+		SharedPreferences settings = getPreferences(MODE_PRIVATE);
 		// Read the UI state values, specifying default values.
-		// String text = settings.getString(TEXT_ENTRY_KEY, "");
-		// Boolean adding = settings.getBoolean(ADDING_ITEM_KEY, false);
+		viewOption = settings.getString("viewOption", "list");
 		// Restore the UI to the previous state.
 	}
 
