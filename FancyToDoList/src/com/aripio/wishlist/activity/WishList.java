@@ -488,7 +488,7 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.menu_map): {
-			Intent mapIntent = new Intent(this, WishListNewMap.class);
+			Intent mapIntent = new Intent(this, WishListMap.class);
 			startActivity(mapIntent);
 			return true;
 		}
@@ -560,7 +560,7 @@ public class WishList extends Activity {
 		}
 
 		case (MARK_TODO):{
-			Intent mapIntent = new Intent(this, WishListNewMap.class);
+			Intent mapIntent = new Intent(this, WishListMap.class);
 			
 			//get the latitude and longitude of the clicked item
 			double[] dLocation = new double[2];
