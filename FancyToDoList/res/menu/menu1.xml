@@ -8,8 +8,8 @@
    	 	  android1:title="Map"  android1:icon="@android:drawable/ic_menu_compass"/>
    	<item android1:id="@+id/menu_post" 
     	  android1:title="@string/post" android1:icon="@android:drawable/ic_menu_upload"/>
-   	<item android1:id="@+id/menu_help" 
-    	  android1:title="@string/help" android1:icon="@android:drawable/ic_menu_help"/>
+   	<item android1:id="@+id/menu_scan" 
+    	  android1:title="@string/menu_scan" android1:icon="@android:drawable/ic_menu_view"/>
    	<item android1:id="@+id/menu_sort" android1:title="Sort">
    		<menu>
    			<item android1:id="@+id/menu_sortByName" android1:title="by name"></item>

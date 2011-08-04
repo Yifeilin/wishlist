@@ -78,6 +78,8 @@
         name="menu_item_scores">View Scores</string>
     <string
         name="menu_item_help">Help</string>
+        
+    <string name="menu_scan">Scan</string>
     <string
         name="all_scores">"All Scores"</string>
     <string
