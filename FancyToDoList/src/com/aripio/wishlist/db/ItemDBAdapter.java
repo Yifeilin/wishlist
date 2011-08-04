@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.db;
 
 //import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 

@@ -1,7 +1,9 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import com.aripio.wishlist.db.ItemDBAdapter;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;

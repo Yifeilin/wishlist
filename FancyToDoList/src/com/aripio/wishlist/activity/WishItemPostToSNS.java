@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.activity;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

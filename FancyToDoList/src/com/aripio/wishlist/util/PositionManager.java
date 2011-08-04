@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.util;
 
 import java.io.IOException;
 import java.util.List;

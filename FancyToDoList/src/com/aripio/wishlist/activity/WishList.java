@@ -1,6 +1,16 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.activity;
 
-import com.aripio.wishlist.ItemDBAdapter.ItemsCursor;
+import com.aripio.wishlist.R;
+import com.aripio.wishlist.R.array;
+import com.aripio.wishlist.R.id;
+import com.aripio.wishlist.R.layout;
+import com.aripio.wishlist.R.menu;
+import com.aripio.wishlist.R.string;
+import com.aripio.wishlist.db.DBAdapter;
+import com.aripio.wishlist.db.ItemDBAdapter;
+import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.aripio.wishlist.util.WishListItemCursorAdapter;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;

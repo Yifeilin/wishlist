@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.db;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -18,10 +18,6 @@ public class DBAdapter {
 	//Database version
 	public static final int DB_VERSION = 1;
 	
-/*************************************************************************************/	
-/********************	Query string to create table Item	**************************/
-/******************** 	and insert default items			**************************/
-/*************************************************************************************/	
 	//Query string to create table "Item"
 	private static final String CREATE_TABLE_ITEM = "create table "
 			+ ItemDBAdapter.DB_TABLE 
@@ -108,7 +104,7 @@ public class DBAdapter {
 		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			// create table item and insert into the table
+			// create table "item" and insert into the table
 			// 4 default items
 			db.execSQL(CREATE_TABLE_ITEM);
 			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
@@ -151,11 +147,11 @@ public class DBAdapter {
 
 			mItemDBAdapter.close();
 
-			// create table itemCategory
+			// create table "itemCategory"
 			db.execSQL(CREATE_TABLE_ITEMCATEGORY);
 			// to be added
 			
-			//create table store and insert 4 default stores
+			//create table "store" and insert 4 default stores
 			db.execSQL(CREATE_TABLE_STORE);
 			StoreDBAdapter mStoreDBAdapter = new StoreDBAdapter(context);
 			mStoreDBAdapter.open(db);
@@ -165,7 +161,7 @@ public class DBAdapter {
 			mStoreDBAdapter.addStore("Hospital",		4);
 			mStoreDBAdapter.close();
 			
-			//create table location and insert 4 default locations
+			//create table "location" and insert 4 default locations
 			db.execSQL(CREATE_TABLE_LOCATION);
 			LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(context);
 			mLocationDBAdapter.open(db);

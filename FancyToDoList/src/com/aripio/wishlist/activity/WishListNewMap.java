@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.activity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +33,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.aripio.wishlist.R;
+import com.aripio.wishlist.R.drawable;
+import com.aripio.wishlist.R.string;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;

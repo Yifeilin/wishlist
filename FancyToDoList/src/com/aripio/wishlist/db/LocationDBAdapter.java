@@ -1,4 +1,4 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.db;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -1,9 +1,16 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import com.aripio.wishlist.ItemDBAdapter.ItemsCursor;
+import com.aripio.wishlist.R;
+import com.aripio.wishlist.R.anim;
+import com.aripio.wishlist.R.id;
+import com.aripio.wishlist.R.layout;
+import com.aripio.wishlist.db.ItemDBAdapter;
+import com.aripio.wishlist.db.LocationDBAdapter;
+import com.aripio.wishlist.db.StoreDBAdapter;
+import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;

@@ -23,7 +23,7 @@
 	    </activity>
 	    
 	    <!-- The default activity of the app.  Can also display search results. -->
-        <activity android:name=".WishList"
+        <activity android:name=".activity.WishList"
                   android:label="@string/app_name"
                   android:theme="@style/ToDoTheme"
                   android:screenOrientation="portrait">
@@ -49,7 +49,7 @@
             
         </activity>
         
-        <activity android:name="EditItemInfo"
+        <activity android:name=".activity.EditItemInfo"
         		  android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme"
                   android:screenOrientation="portrait">
@@ -60,13 +60,13 @@
                   android:theme="@style/ToDoTheme">
         </activity> 
         
-        <activity android:name="WishItemDetail"
+        <activity android:name=".activity.WishItemDetail"
         		  android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme">
                   android:screenOrientation="portrait">
         </activity> 
         
-         <activity android:name="WishItemPostToSNS"
+         <activity android:name=".activity.WishItemPostToSNS"
         		  android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme">
         </activity> 
@@ -81,7 +81,7 @@
 <!--                     android:resource="@xml/searchable"/> -->
 <!--         </activity> -->
         
-        <activity android:name="WishListNewMap"
+        <activity android:name=".activity.WishListNewMap"
         android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme"></activity>
                   

@@ -1,9 +1,17 @@
-package com.aripio.wishlist;
+package com.aripio.wishlist.activity;
 
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.aripio.wishlist.R;
+import com.aripio.wishlist.R.id;
+import com.aripio.wishlist.R.layout;
+import com.aripio.wishlist.db.ItemDBAdapter;
+import com.aripio.wishlist.db.LocationDBAdapter;
+import com.aripio.wishlist.db.StoreDBAdapter;
+import com.aripio.wishlist.util.PositionManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
