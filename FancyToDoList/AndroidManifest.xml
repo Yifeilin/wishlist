@@ -81,7 +81,7 @@
 <!--                     android:resource="@xml/searchable"/> -->
 <!--         </activity> -->
         
-        <activity android:name=".activity.WishListNewMap"
+        <activity android:name="activity.WishListMap"
         android:label="@string/app_name" 
                   android:theme="@style/ToDoTheme"></activity>
                   
