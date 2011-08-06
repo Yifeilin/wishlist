@@ -273,37 +273,15 @@ public class WishList extends Activity {
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		return item_id;
 	}
-
+	
 	/***
-	 * called when sort by time is selected
+	 * called when sort is selected
+	 * @param sortBy
+	 *            : enum defined in ItemsCursor which determines the sort order 
+	 *              of the selected rows in db
 	 */
-	private void onSortByTime() {
-		SORT_BY = ItemsCursor.SortBy.date_time;
-		populateItems(null, SORT_BY);
-	}
-
-	/***
-	 * called when sort by name is selected
-	 */
-	private void onSortByName() {
-		SORT_BY = ItemsCursor.SortBy.item_name;
-		populateItems(null, SORT_BY);
-	}
-
-	/***
-	 * called when sort by price is selected
-	 */
-	private void onSortByPrice() {
-		SORT_BY = ItemsCursor.SortBy.price;
-		populateItems(null, SORT_BY);
-	}
-
-	/***
-	 * called when sort by priority is selected
-	 */
-	private void onSortByPriority() {
-		SORT_BY = ItemsCursor.SortBy.priority;
-		populateItems(null, SORT_BY);
+	private void onSort(ItemsCursor.SortBy sortBy) {
+		populateItems(null, sortBy);
 	}
 
 	/***
@@ -506,23 +484,27 @@ public class WishList extends Activity {
 		}
 
 		case (R.id.menu_sortByTime): {
-			onSortByTime();
+			SORT_BY = ItemsCursor.SortBy.date_time;
+			onSort(SORT_BY);
 			return true;
 
 		}
 
 		case (R.id.menu_sortByName): {
-			onSortByName();
+			SORT_BY = ItemsCursor.SortBy.item_name;
+			onSort(SORT_BY);
 			return true;
 		}
 
 		case (R.id.menu_sortByPrice): {
-			onSortByPrice();
+			SORT_BY = ItemsCursor.SortBy.price;
+			onSort(SORT_BY);
 			return true;
 		}
 
 		case (R.id.menu_sortByPriority): {
-			onSortByPriority();
+			SORT_BY = ItemsCursor.SortBy.priority;
+			onSort(SORT_BY);
 			return true;
 		}
 
