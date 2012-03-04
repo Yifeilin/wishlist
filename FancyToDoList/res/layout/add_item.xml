@@ -40,7 +40,7 @@
     android:layout_height="wrap_content" 
     android:text="Select a date"
     />
-    
+j    
     <Button android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:id="@+id/button_date" 
