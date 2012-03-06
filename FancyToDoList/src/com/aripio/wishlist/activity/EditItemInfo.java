@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
 
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.R.id;
@@ -288,6 +290,8 @@ public class EditItemInfo extends Activity {
 		// Format the date_time and save it as a string 
 		mDate = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
+		//sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		sdf.setTimeZone(TimeZone.getDefault());
 		String date = sdf.format(mDate);
 
 		// insert the location to the Location table in database
