@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -109,10 +110,10 @@ public class EditItemInfo extends Activity {
 		
 
 		// get the current date_time
-		final Calendar c = Calendar.getInstance();
-		mYear = c.get(Calendar.YEAR);
-		mMonth = c.get(Calendar.MONTH);
-		mDay = c.get(Calendar.DAY_OF_MONTH);
+//		final Calendar c = Calendar.getInstance();
+//		mYear = c.get(Calendar.YEAR);
+//		mMonth = c.get(Calendar.MONTH);
+//		mDay = c.get(Calendar.DAY_OF_MONTH);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?").setCancelable(
@@ -282,16 +283,17 @@ public class EditItemInfo extends Activity {
 			mYear = c.get(Calendar.YEAR);
 			mMonth = c.get(Calendar.MONTH);
 			mDay = c.get(Calendar.DAY_OF_MONTH);
-			mHour = c.get(Calendar.HOUR);
+			mHour = c.get(Calendar.HOUR_OF_DAY);//24 hour format
 			mMin = c.get(Calendar.MINUTE);
 			mSec = c.get(Calendar.SECOND);
 		}
 
 		// Format the date_time and save it as a string 
 		mDate = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		sdf.setTimeZone(TimeZone.getDefault());
+		TimeZone tz = TimeZone.getDefault();
+		//sdf.setTimeZone(TimeZone.getDefault());
 		String date = sdf.format(mDate);
 
 		// insert the location to the Location table in database
