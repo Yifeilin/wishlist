@@ -367,7 +367,7 @@ public class WishList extends Activity {
 
 	private void updateGridView() {
 		if (wishItemCursor != null) {
-			// wishItemCursor.requery();
+			wishItemCursor.requery();
 			int resID = R.layout.wishitem_photo;
 
 			String[] from = new String[] { ItemDBAdapter.KEY_ID,
@@ -388,7 +388,7 @@ public class WishList extends Activity {
 	private void updateListView() {
 
 		if (wishItemCursor != null) {
-			// wishItemCursor.requery();
+			wishItemCursor.requery();
 			int resID = R.layout.wishitem_single;
 
 			String[] from = new String[] { ItemDBAdapter.KEY_ID,
