@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -36,6 +37,8 @@ import android.widget.Toast;
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.R.drawable;
 import com.aripio.wishlist.R.string;
+import com.aripio.wishlist.db.LocationDBAdapter;
+import com.aripio.wishlist.db.StoreDBAdapter;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -87,7 +90,7 @@ public class WishListMap extends MapActivity {
 		setContentView(frame);
 
 		Intent i = getIntent();
-
+		
 		// prepare the marker
 		prepareMarker();
 
@@ -96,9 +99,15 @@ public class WishListMap extends MapActivity {
 
 		// get the map controller
 		mController = mMapView.getController();
-
-		// mark the item on map
-		markOneItem();
+		String type = i.getStringExtra("type");
+		if(i.getStringExtra("type").equals("markOne")){
+			// mark the item on map
+			markOneItem();
+		}
+		
+		else if(i.getStringExtra("type").equals("markAll")){
+			markAllItems();
+		}
 
 		// mark the current location
 		// markCurrentLocation();
@@ -242,6 +251,24 @@ public class WishListMap extends MapActivity {
 		mOverlays.add(mWishListOverlay);
 
 	}
+	
+	private void markAllItems() {
+		// Read all items from db
+		LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(this);
+		mLocationDBAdapter.open();
+		Cursor mLocationCursor = mLocationDBAdapter.getAllLocation();
+		mLocationCursor.moveToFirst();
+		while( !mLocationCursor.isAfterLast()){
+			mLatitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
+					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE)));
+			mLongitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
+					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE)));
+							
+			mWishListOverlay = new WishListOverlay(mMarker);
+			mOverlays.add(mWishListOverlay);
+			mLocationCursor.moveToNext();		
+		}
+	}
 
 	/**
 	 * Custom overlay to display the pushpin as a marker for the item
@@ -253,12 +280,6 @@ public class WishListMap extends MapActivity {
 		public WishListOverlay(Drawable marker) {
 			super(marker);
 			this.marker = marker;
-			// Location myLocation = getCurrentLocation((LocationManager)
-			// getSystemService(Context.LOCATION_SERVICE));
-			// GeoPoint myCurrentPoint = new GeoPoint((int) (myLocation
-			// .getLatitude() * 1000000),
-			// (int) (myLocation.getLongitude() * 1000000));
-
 			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
 					(int) (mLongitude * 1000000));
 

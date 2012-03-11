@@ -469,6 +469,7 @@ public class WishList extends Activity {
 		}
 		case (R.id.menu_map): {
 			Intent mapIntent = new Intent(this, WishListMap.class);
+			mapIntent.putExtra("type", "markAll");			
 			startActivity(mapIntent);
 			return true;
 		}
@@ -487,7 +488,6 @@ public class WishList extends Activity {
 			SORT_BY = ItemsCursor.SortBy.date_time;
 			onSort(SORT_BY);
 			return true;
-
 		}
 
 		case (R.id.menu_sortByName): {
@@ -517,13 +517,20 @@ public class WishList extends Activity {
 		super.onContextItemSelected(item);
 		AdapterView.AdapterContextMenuInfo menuInfo;
 		menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		int index = menuInfo.position;
 
-		View selected_view = myListView.getChildAt(index);
+		//get the position of the item in the list
+		int pos = menuInfo.position;
+				View selected_view = myListView.getChildAt(pos);
+		if(selected_view==null){
+			Log.e(WishList.LOG_TAG, "selected view is null");
+			return false;
+		}
 		TextView itemIdTextView = (TextView) selected_view
 				.findViewById(R.id.txtItemID);
 		TextView dateTextView = (TextView) selected_view
 				.findViewById(R.id.txtDate);
+		
+		//get the item_id from the selected item
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 
 		switch (item.getItemId()) {
@@ -548,7 +555,7 @@ public class WishList extends Activity {
 
 		case (MARK_TODO): {
 			Intent mapIntent = new Intent(this, WishListMap.class);
-
+			mapIntent.putExtra("type", "markOne");
 			// get the latitude and longitude of the clicked item
 			double[] dLocation = new double[2];
 			dLocation = myItemDBAdapter.getItemLocation(item_id);
