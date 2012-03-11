@@ -30,6 +30,7 @@ import com.aripio.wishlist.barscanner.IntentIntegrator;
 import com.aripio.wishlist.barscanner.IntentResult;
 import com.aripio.wishlist.db.DBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter;
+import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.aripio.wishlist.util.WishListItemCursorAdapter;
 
@@ -89,6 +90,7 @@ public class WishList extends Activity {
 
 	private DBAdapter myDBAdapter;
 	private ItemDBAdapter myItemDBAdapter;
+	private LocationDBAdapter myLocationDBAdapter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -170,6 +172,10 @@ public class WishList extends Activity {
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
+		
+		// open the db for operations of location table
+		myLocationDBAdapter = new LocationDBAdapter(this);
+		myLocationDBAdapter.open();
 
 		// check if the activity is started from search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -537,6 +543,7 @@ public class WishList extends Activity {
 		case (REMOVE_TODO): {
 			// wishListDB.deleteItem(item_id);
 			myItemDBAdapter.deleteItem(item_id);
+			//myLocationDBAdapter.deleteLocation(rowId);
 			updateView();
 			return true;
 		}

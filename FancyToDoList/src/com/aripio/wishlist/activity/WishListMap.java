@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.R.drawable;
 import com.aripio.wishlist.R.string;
+import com.aripio.wishlist.db.ItemDBAdapter;
 import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
 import com.google.android.maps.GeoPoint;
@@ -253,21 +254,38 @@ public class WishListMap extends MapActivity {
 	}
 	
 	private void markAllItems() {
-		// Read all items from db
-		LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(this);
-		mLocationDBAdapter.open();
-		Cursor mLocationCursor = mLocationDBAdapter.getAllLocation();
-		mLocationCursor.moveToFirst();
-		while( !mLocationCursor.isAfterLast()){
-			mLatitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
-					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE)));
-			mLongitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
-					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE)));
-							
-			mWishListOverlay = new WishListOverlay(mMarker);
-			mOverlays.add(mWishListOverlay);
-			mLocationCursor.moveToNext();		
+		// Read all item location from db
+		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(this);
+		mItemDBAdapter.open();
+		ArrayList<double[]> locationList = new ArrayList<double[]>();
+		locationList = mItemDBAdapter.getAllItemLocation();
+		
+		int i=0;
+		if(!locationList.isEmpty()){
+			while(i<locationList.size()){
+				mLatitude=locationList.get(i)[0];
+				mLongitude=locationList.get(i++)[1];
+				mWishListOverlay = new WishListOverlay(mMarker);
+				mOverlays.add(mWishListOverlay);	
+			}
 		}
+		
+//		//dLocation = myItemDBAdapter.getItemLocation(item_id);
+//		
+//		LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(this);
+//		mLocationDBAdapter.open();
+//		Cursor mLocationCursor = mLocationDBAdapter.getAllLocation();
+//		mLocationCursor.moveToFirst();
+//		while( !mLocationCursor.isAfterLast()){
+//			mLatitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
+//					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE)));
+//			mLongitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
+//					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE)));
+//							
+//			mWishListOverlay = new WishListOverlay(mMarker);
+//			mOverlays.add(mWishListOverlay);
+//			mLocationCursor.moveToNext();		
+//		}
 	}
 
 	/**

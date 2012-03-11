@@ -2,6 +2,9 @@ package com.aripio.wishlist.db;
 
 //import com.aripio.wishlist.WishListDataBase.ItemsCursor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -275,6 +278,7 @@ public class ItemDBAdapter {
 	 *            The id of the item to delete
 	 */
 	public void deleteItem(long _id) {
+		//delete from item table
 		String sql = String.format("DELETE FROM Item " + "WHERE _id = '%d' ",
 				_id);
 		try {
@@ -282,6 +286,12 @@ public class ItemDBAdapter {
 		} catch (SQLException e) {
 			Log.e("Error deleteing item", e.toString());
 		}
+		
+		//delete from location table
+		
+		
+		
+		//delete from store table
 	}
 
 	/** Returns the number of Items */
@@ -462,32 +472,7 @@ public class ItemDBAdapter {
 	
 	public double[] getItemLocation(long _id){
 		double[] location = new double[2];
-//		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
-//				_id);
-//		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
-//		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
-//				new ItemsCursor.Factory(), sql, null, null);
-//
-//		if (itemC != null) {
-//			itemC.moveToFirst();
-//			long storeID = itemC.getLong(itemC
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
-//			
-//			StoreDBAdapter storeDBA;
-//			storeDBA = new StoreDBAdapter(mCtx);
-//			storeDBA.open();
-//			
-//			LocationDBAdapter locationDBA;
-//			locationDBA = new LocationDBAdapter(mCtx);
-//			locationDBA.open();
-//			
-//			// get location id from table store
-//			Cursor storeC = storeDBA.getStore(storeID);
-//			long locationID = storeC.getLong(storeC
-//					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
-			
-			// get the latitude and longitude from table location
-			//Cursor locationC = locationDBA.getLocation(locationID);
+		// get the latitude and longitude from table location
 		Cursor locationC = getItemLocationCursor(_id);
 		if(locationC != null){
 			double latitude = locationC.getDouble(locationC.
@@ -505,6 +490,27 @@ public class ItemDBAdapter {
 		
 		return location;
 	}
+	
+	public ArrayList<double[]> getAllItemLocation(){
+		String sql = String.format("SELECT _id FROM Item");
+		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
+				new ItemsCursor.Factory(), sql, null, null);
+
+		long id;
+		ArrayList<double[]> locationList = new ArrayList<double[]>();
+		if (c != null) {
+			c.moveToFirst();
+			while(!c.isAfterLast()){
+				id = c.getLong(c.getColumnIndexOrThrow(KEY_ID));
+				double[] location = getItemLocation(id);
+				locationList.add(location);
+				c.moveToNext();
+			}
+		}
+		return locationList;
+	}
+	
 	
 	/**
 	 * get the address string according to item id
