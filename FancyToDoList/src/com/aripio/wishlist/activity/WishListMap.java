@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -89,51 +90,28 @@ public class WishListMap extends MapActivity {
 		frame.addView(mMapView, new FrameLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		setContentView(frame);
-
 		Intent i = getIntent();
-		
-		// prepare the marker
 		prepareMarker();
 
-		// get the overlays of this map
 		mOverlays = mMapView.getOverlays();
-
-		// get the map controller
 		mController = mMapView.getController();
-		String type = i.getStringExtra("type");
 		if(i.getStringExtra("type").equals("markOne")){
-			// mark the item on map
+			// mark one item on map, mapview is invoked from item context menu
 			markOneItem();
 		}
 		
 		else if(i.getStringExtra("type").equals("markAll")){
-			markAllItems();
+			markAllItems();//map view is invoked from main menu->map
 		}
 
+		mController.animateTo(mWishListOverlay.getSpanCenter());//what if there is no item?
 		// mark the current location
 		// markCurrentLocation();
 
 		// set map zoom
-		mController.setZoom(15);
-
-		// set map center to the item location
-		mController.animateTo(mWishListOverlay.getCenter());
-
-		// if (mapZoom != Integer.MIN_VALUE && mapLatitudeE6 !=
-		// Integer.MIN_VALUE
-		// && mapLongitudeE6 != Integer.MIN_VALUE) {
-		// controller.setZoom(mapZoom);
-		// controller.setCenter(new GeoPoint(mapLatitudeE6, mapLongitudeE6));
-		// controller.setCenter(mMyLocationOverlay.getMyLocation());
-		// } else
-		// {
-		// mController.setZoom(15);
-		// mMyLocationOverlay.runOnFirstFix(new Runnable() {
-		// public void run() {
-		// mController.animateTo(mMyLocationOverlay.getMyLocation());
-		// }
-		// });
-		// }
+//		mController.setZoom(15);
+		int[] spanE6=mWishListOverlay.getSpanE6(1.2f);
+		mController.zoomToSpan(spanE6[0], spanE6[1]);
 
 		// configure the map
 		mMapView.setClickable(true);
@@ -241,7 +219,6 @@ public class WishListMap extends MapActivity {
 	 * mark one item on the map
 	 */
 	private void markOneItem() {
-
 		// Read the item we are displaying from the intent, along with the
 		// parameters used to set up the map
 		Intent i = getIntent();
@@ -249,8 +226,10 @@ public class WishListMap extends MapActivity {
 		mLongitude = i.getDoubleExtra("longitude", 0);
 
 		mWishListOverlay = new WishListOverlay(mMarker);
+		GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+				(int) (mLongitude * 1000000));
+		mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
 		mOverlays.add(mWishListOverlay);
-
 	}
 	
 	private void markAllItems() {
@@ -260,32 +239,20 @@ public class WishListMap extends MapActivity {
 		ArrayList<double[]> locationList = new ArrayList<double[]>();
 		locationList = mItemDBAdapter.getAllItemLocation();
 		
+		mWishListOverlay = new WishListOverlay(mMarker);
 		int i=0;
 		if(!locationList.isEmpty()){
 			while(i<locationList.size()){
 				mLatitude=locationList.get(i)[0];
 				mLongitude=locationList.get(i++)[1];
-				mWishListOverlay = new WishListOverlay(mMarker);
+//				mWishListOverlay = new WishListOverlay(mMarker);
+				GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+						(int) (mLongitude * 1000000));
+				mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
+//				mWishListOverlay.addOverlay(overlay)
 				mOverlays.add(mWishListOverlay);	
 			}
 		}
-		
-//		//dLocation = myItemDBAdapter.getItemLocation(item_id);
-//		
-//		LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(this);
-//		mLocationDBAdapter.open();
-//		Cursor mLocationCursor = mLocationDBAdapter.getAllLocation();
-//		mLocationCursor.moveToFirst();
-//		while( !mLocationCursor.isAfterLast()){
-//			mLatitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
-//					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE)));
-//			mLongitude = Double.parseDouble(mLocationCursor.getString(mLocationCursor
-//					.getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE)));
-//							
-//			mWishListOverlay = new WishListOverlay(mMarker);
-//			mOverlays.add(mWishListOverlay);
-//			mLocationCursor.moveToNext();		
-//		}
 	}
 
 	/**
@@ -298,12 +265,12 @@ public class WishListMap extends MapActivity {
 		public WishListOverlay(Drawable marker) {
 			super(marker);
 			this.marker = marker;
-			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
-					(int) (mLongitude * 1000000));
-
-			addOverlay(new OverlayItem(itemPoint, "A", "B"));
+//			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+//					(int) (mLongitude * 1000000));
+//
+//			addOverlay(new OverlayItem(itemPoint, "A", "B"));
 			boundCenterBottom(marker);
-			populate();
+//			populate();
 		}
 
 		public void addOverlay(OverlayItem overlay) {
@@ -324,6 +291,33 @@ public class WishListMap extends MapActivity {
 		@Override
 		public int size() {
 			return (items.size());
+		}
+		
+		/**
+		 * return the center of all overlays as a GeoPoint
+		 */
+		public GeoPoint getSpanCenter() {
+			if(items.size()>0){
+				int minLat = Integer.MAX_VALUE;
+				int maxLat = Integer.MIN_VALUE;
+				int minLng = Integer.MAX_VALUE;
+				int maxLng = Integer.MIN_VALUE;
+				for (OverlayItem item:items){
+					minLat = Math.min(minLat, item.getPoint().getLatitudeE6());
+					maxLat = Math.max(maxLat, item.getPoint().getLatitudeE6());
+					minLng = Math.min(minLng, item.getPoint().getLongitudeE6());
+					maxLng = Math.max(maxLng, item.getPoint().getLongitudeE6());
+				}
+				int centerLat = (minLat + maxLat)/2;
+				int centerLng = (minLng + maxLng)/2;			
+				return new GeoPoint(centerLat, centerLng);
+			}
+			else return null;
+		}
+		
+		public int[] getSpanE6(float scale){
+			return new int[]{ (int) (WishListOverlay.this.getLatSpanE6() * scale), 
+					(int) (WishListOverlay.this.getLonSpanE6() * scale) };
 		}
 	}
 
