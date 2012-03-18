@@ -1,5 +1,7 @@
 package com.aripio.wishlist.db;
 
+import com.aripio.wishlist.R;
+
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -109,38 +111,41 @@ public class DBAdapter {
 			db.execSQL(CREATE_TABLE_ITEM);
 			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
 			mItemDBAdapter.open(db);
+			String picUrl;
+			picUrl = Integer.toHexString(R.drawable.car);
 			mItemDBAdapter.addItem(	1, 
 									"Car", 
 									"It is a very nice car", 
 									"1983-07-06 11:30:00", 
-									"7f020004", 
+									picUrl,
 									25000f,
 									"BMW, Shanghai, China",
 									0);
 			
+			picUrl = Integer.toHexString(R.drawable.book);
 			mItemDBAdapter.addItem(	2, 
 									"Book", 
 									"It is a great book", 
 									"1984-03-17 18:22:35", 
-									"7f020003", 
+									picUrl, 
 									9.9f,
 									"Chapter store, Toronto, ON Canada",
 									3);
-			
+			picUrl = Integer.toHexString(R.drawable.chocolate);
 			mItemDBAdapter.addItem(	3, 
 									"Cake", 
 									"It is a delicious cake", 
 									"2011-05-03 03:40:50", 
-									"7f020006", 
+									picUrl, 
 									6.99f,
 									"YuanZu Food, Jiaxing, Zhejiang, China",
 									2);
-			
+			picUrl = Integer.toHexString(R.drawable.heart);
 			mItemDBAdapter.addItem(	4, 
 									"Heart", 
 									"It is a warm beating heart", 
 									"2000-11-23 08:17:38", 
-									"7f020008", 
+									picUrl, 
 									324.49f,
 									"Hospital, Beijing, China",
 									1);
