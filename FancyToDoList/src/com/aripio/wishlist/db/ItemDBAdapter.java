@@ -503,8 +503,11 @@ public class ItemDBAdapter {
 			c.moveToFirst();
 			while(!c.isAfterLast()){
 				id = c.getLong(c.getColumnIndexOrThrow(KEY_ID));
-				double[] location = getItemLocation(id);
-				locationList.add(location);
+				//skip the items having unknown locations
+				if(!getItemAddress(id).equals("unknown")){
+					double[] location = getItemLocation(id);
+					locationList.add(location);
+				}
 				c.moveToNext();
 			}
 		}
