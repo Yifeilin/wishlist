@@ -61,8 +61,6 @@ public class EditItemInfo extends Activity {
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String date;
 	private String picture_uri;
-	// = R.drawable.chocolate
-	// private WishListDataBase wishListDB;
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
@@ -108,13 +106,6 @@ public class EditItemInfo extends Activity {
 		mLocationDBAdapter = new LocationDBAdapter(this);
 		mLocationDBAdapter.open();
 		
-
-		// get the current date_time
-//		final Calendar c = Calendar.getInstance();
-//		mYear = c.get(Calendar.YEAR);
-//		mMonth = c.get(Calendar.MONTH);
-//		mDay = c.get(Calendar.DAY_OF_MONTH);
-
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?").setCancelable(
 				false).setPositiveButton("Yes",
@@ -291,9 +282,6 @@ public class EditItemInfo extends Activity {
 		// Format the date_time and save it as a string 
 		mDate = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		//sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		TimeZone tz = TimeZone.getDefault();
-		//sdf.setTimeZone(TimeZone.getDefault());
 		String date = sdf.format(mDate);
 
 		// insert the location to the Location table in database
@@ -301,8 +289,9 @@ public class EditItemInfo extends Activity {
 
 		// insert the store to the Store table in database, linked to the location
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
-	
-		
+
+		//set the default pic url
+		picture_uri = Integer.toHexString(R.drawable.logo);
 		// insert the item to the Item table in database, linked to the store
 		mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_uri,
 				itemPrice, itemLocation, itemPriority);

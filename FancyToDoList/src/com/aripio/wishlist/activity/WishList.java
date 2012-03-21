@@ -559,18 +559,24 @@ public class WishList extends Activity {
 			startActivityForResult(snsIntent, POST_ITEM);
 			return true;
 		}
-
 		case (MARK_TODO): {
-			Intent mapIntent = new Intent(this, WishListMap.class);
-			mapIntent.putExtra("type", "markOne");
-			// get the latitude and longitude of the clicked item
-			double[] dLocation = new double[2];
-			dLocation = myItemDBAdapter.getItemLocation(item_id);
+			String a = myItemDBAdapter.getItemAddress(item_id);
+			if (myItemDBAdapter.getItemAddress(item_id).equals("unknown")){
+				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else{
+				Intent mapIntent = new Intent(this, WishListMap.class);
+				mapIntent.putExtra("type", "markOne");
+				// get the latitude and longitude of the clicked item
+				double[] dLocation = new double[2];
+				dLocation = myItemDBAdapter.getItemLocation(item_id);
 
-			mapIntent.putExtra("latitude", dLocation[0]);
-			mapIntent.putExtra("longitude", dLocation[1]);
+				mapIntent.putExtra("latitude", dLocation[0]);
+				mapIntent.putExtra("longitude", dLocation[1]);
 
-			startActivity(mapIntent);
+				startActivity(mapIntent);
+			}
 			return true;
 
 		}
