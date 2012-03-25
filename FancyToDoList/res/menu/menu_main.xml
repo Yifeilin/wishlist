@@ -10,7 +10,7 @@
     	  android1:title="@string/post" android1:icon="@android:drawable/ic_menu_upload"/>
    	<item android1:id="@+id/menu_scan" 
     	  android1:title="@string/menu_scan" android1:icon="@android:drawable/ic_menu_view"/>
-   	<item android1:id="@+id/menu_sort" android1:title="Sort">
+   	<item android1:id="@+id/menu_sort" android1:title="Sort" android1:icon="@android:drawable/ic_menu_sort_by_size">
    		<menu>
    			<item android1:id="@+id/menu_sortByName" android1:title="by name"></item>
    			<item android1:id="@+id/menu_sortByTime" android1:title="by time"></item>
