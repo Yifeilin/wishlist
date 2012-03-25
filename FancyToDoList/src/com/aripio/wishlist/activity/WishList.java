@@ -51,12 +51,12 @@ import com.aripio.wishlist.util.WishListItemCursorAdapter;
 public class WishList extends Activity {
 	// Assign a unique ID for each menu item
 	// static final private int ADD_NEW_TODO = Menu.FIRST;
-	static final private int REMOVE_TODO = Menu.FIRST + 1;
-	// static final private int HELP_TODO = Menu.FIRST + 2;
-	static final private int DETAIL_TODO = Menu.FIRST + 3;
-	static final private int POST_TODO = Menu.FIRST + 4;
-	// static final private int SORT_TODO = Menu.FIRST + 5;
-	static final private int MARK_TODO = Menu.FIRST + 6;
+//	static final private int REMOVE_TODO = Menu.FIRST + 1;
+//	// static final private int HELP_TODO = Menu.FIRST + 2;
+//	static final private int DETAIL_TODO = Menu.FIRST + 3;
+//	static final private int POST_TODO = Menu.FIRST + 4;
+//	// static final private int SORT_TODO = Menu.FIRST + 5;
+//	static final private int MARK_TODO = Menu.FIRST + 6;
 
 	static final private int DIALOG_MAIN = 0;
 
@@ -421,7 +421,7 @@ public class WishList extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu1, menu);
+		inflater.inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
@@ -445,10 +445,9 @@ public class WishList extends Activity {
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.setHeaderTitle("Selected Wish Item");
-		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
-		menu.add(0, DETAIL_TODO, Menu.NONE, R.string.detail);
-		menu.add(0, POST_TODO, Menu.NONE, R.string.post);
-		menu.add(0, MARK_TODO, Menu.NONE, R.string.mark);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_item_context, menu);
+		return;
 	}
 
 	@Override
@@ -540,26 +539,26 @@ public class WishList extends Activity {
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 
 		switch (item.getItemId()) {
-		case (REMOVE_TODO): {
+		case (R.id.REMOVE_TODO): {
 			// wishListDB.deleteItem(item_id);
 			myItemDBAdapter.deleteItem(item_id);
 			//myLocationDBAdapter.deleteLocation(rowId);
 			updateView();
 			return true;
 		}
-		case (DETAIL_TODO): {
+		case (R.id.DETAIL_TODO): {
 			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
 			return true;
 		}
-		case (POST_TODO): {
+		case (R.id.POST_TODO): {
 			String date = dateTextView.getText().toString();
 			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
 			snsIntent.putExtra("wishItem", date);
 			startActivityForResult(snsIntent, POST_ITEM);
 			return true;
 		}
-		case (MARK_TODO): {
+		case (R.id.MARK_TODO): {
 			String a = myItemDBAdapter.getItemAddress(item_id);
 			if (myItemDBAdapter.getItemAddress(item_id).equals("unknown")){
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
