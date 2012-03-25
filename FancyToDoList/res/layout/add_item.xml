@@ -26,6 +26,7 @@
     android:hint="price"
     android:gravity="top"
     android:layout_weight="1"
+    android:inputType="number"
    />
    
     <EditText android:layout_width="fill_parent" 
