@@ -49,15 +49,6 @@ import com.aripio.wishlist.util.WishListItemCursorAdapter;
  * 
  */
 public class WishList extends Activity {
-	// Assign a unique ID for each menu item
-	// static final private int ADD_NEW_TODO = Menu.FIRST;
-//	static final private int REMOVE_TODO = Menu.FIRST + 1;
-//	// static final private int HELP_TODO = Menu.FIRST + 2;
-//	static final private int DETAIL_TODO = Menu.FIRST + 3;
-//	static final private int POST_TODO = Menu.FIRST + 4;
-//	// static final private int SORT_TODO = Menu.FIRST + 5;
-//	static final private int MARK_TODO = Menu.FIRST + 6;
-
 	static final private int DIALOG_MAIN = 0;
 
 	static final private int DETAIL_INFO_ACT = 2;
@@ -444,7 +435,7 @@ public class WishList extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("Selected Wish Item");
+		//menu.setHeaderTitle("Selected Wish Item");
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_item_context, menu);
 		return;
