@@ -516,19 +516,35 @@ public class WishList extends Activity {
 
 		//get the position of the item in the list
 		int pos = menuInfo.position;
-				View selected_view = myListView.getChildAt(pos);
+		View selected_view=null;
+		TextView itemIdTextView=null;
+		if(viewOption.equals("list")){
+			selected_view = myListView.getChildAt(pos);
+			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+		}
+		else if(viewOption.equals("grid")){
+			selected_view = myGridView.getChildAt(pos);
+			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
+		}
+		
 		if(selected_view==null){
 			Log.e(WishList.LOG_TAG, "selected view is null");
 			return false;
 		}
-		TextView itemIdTextView = (TextView) selected_view
-				.findViewById(R.id.txtItemID);
+		
 		TextView dateTextView = (TextView) selected_view
 				.findViewById(R.id.txtDate);
 		
 		//get the item_id from the selected item
-		long item_id = Long.parseLong(itemIdTextView.getText().toString());
-
+		long item_id;
+		if(itemIdTextView !=null){
+			item_id = Long.parseLong(itemIdTextView.getText().toString());
+		}
+		else{
+			Log.e(WishList.LOG_TAG, "selectedIdTextView is null");
+			return false;
+		}
+		
 		switch (item.getItemId()) {
 		case (R.id.REMOVE_TODO): {
 			// wishListDB.deleteItem(item_id);
