@@ -60,7 +60,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap thumbnail;
 	private DatePickerDialog.OnDateSetListener mDateSetListener;
 	private String date;
-	private String picture_uri;
+	private String picture_uri = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
@@ -290,8 +290,6 @@ public class EditItemInfo extends Activity {
 		// insert the store to the Store table in database, linked to the location
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
 
-		//set the default pic url
-		picture_uri = Integer.toHexString(R.drawable.logo);
 		// insert the item to the Item table in database, linked to the store
 		mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_uri,
 				itemPrice, itemLocation, itemPriority);
