@@ -298,6 +298,11 @@ public class EditItemInfo extends Activity {
 		
 		//close this activity
 		finish();
+		
+		//start the WishList activity and move the focus to the newly added item
+		Intent wishList = new Intent(this, WishList.class);
+		startActivity(wishList);
+
 	}
 
 	@Override
