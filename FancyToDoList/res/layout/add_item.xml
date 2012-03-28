@@ -18,8 +18,9 @@
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
 		<ImageButton style="@style/TitleBarAction"
+			android:id="@+id/imageButton_save"
 			android:contentDescription="@string/description_save" android:src="@drawable/ic_menu_save"
-			android:onClick="onClickAbout" />
+			android:onClick="onClickSave" />
 	</LinearLayout>
 
 	<ScrollView android:orientation="vertical"

@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class EditItemInfo extends Activity {
 	private EditText myPrice;
 	private EditText myLocation;
 
+	private ImageButton saveImageButton;
 	private Button btnSave;
 	private Button btnCancel;
 	private Button btnPhoto;
@@ -74,6 +76,7 @@ public class EditItemInfo extends Activity {
 		myPrice = (EditText) findViewById(R.id.price);
 		myLocation = (EditText) findViewById(R.id.location);
 
+		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
 		btnSave = (Button) findViewById(R.id.button_save);
 		btnCancel = (Button) findViewById(R.id.button_cancel);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
@@ -107,6 +110,15 @@ public class EditItemInfo extends Activity {
 					}
 				});
 		alert = builder.create();
+
+		 
+		saveImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+				saveWishItem();
+ 			}
+ 
+		});
 
 		//set the keyListener for the Item Name EditText
 		myItemName.setOnKeyListener(new OnKeyListener() {
@@ -143,7 +155,6 @@ public class EditItemInfo extends Activity {
 				return false;
 			}
 		});
-
 
 		//set the keyListener for the Item Location EditText
 		myLocation.setOnKeyListener(new OnKeyListener() {
