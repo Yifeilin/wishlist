@@ -88,7 +88,6 @@ public class EditItemInfo extends Activity {
 
 		btnSave = (Button) findViewById(R.id.button_save);
 		btnCancel = (Button) findViewById(R.id.button_cancel);
-		btnDate = (Button) findViewById(R.id.button_date);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
@@ -197,14 +196,6 @@ public class EditItemInfo extends Activity {
 			}
 		});
 
-		btnDate.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				showDialog(DATE_DIALOG_ID);
-			}
-		});
-
 		btnPhoto.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -303,15 +294,15 @@ public class EditItemInfo extends Activity {
 
 	}
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-					mDay);
-		}
-		return null;
-	}
+//	@Override
+//	protected Dialog onCreateDialog(int id) {
+//		switch (id) {
+//		case DATE_DIALOG_ID:
+//			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
+//					mDay);
+//		}
+//		return null;
+//	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

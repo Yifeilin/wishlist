@@ -45,14 +45,6 @@
 				android:layout_height="wrap_content" android:hint="location"
 				android:gravity="top" android:layout_weight="1" />
 
-			<TextView android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="Select a date"
-				android:layout_weight="1" />
-
-			<Button android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/button_date"
-				android:text="click to set time" android:layout_weight="1" />
-
 			<LinearLayout android:layout_height="wrap_content"
 				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
 				android:padding="10dip" android:layout_weight="1">
