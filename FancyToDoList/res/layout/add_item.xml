@@ -58,18 +58,6 @@
 					android:layout_height="wrap_content" android:id="@+id/image_photo"
 					android:tint="#55ff0000" android:src="@drawable/icon"
 					android:layout_weight="1" />
-
-			</LinearLayout>
-
-			<LinearLayout android:layout_height="wrap_content"
-				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
-				android:padding="10dip" android:layout_weight="1">
-				<Button android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:id="@+id/button_save"
-					android:text="Save" android:layout_weight="1" />
-				<Button android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:id="@+id/button_cancel"
-					android:text="Cancel" android:layout_weight="1" />
 			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>

@@ -45,7 +45,6 @@ public class EditItemInfo extends Activity {
 	private EditText myLocation;
 
 	private ImageButton saveImageButton;
-	private Button btnSave;
 	private Button btnCancel;
 	private Button btnPhoto;
 	private ImageView imageItem;
@@ -77,8 +76,7 @@ public class EditItemInfo extends Activity {
 		myLocation = (EditText) findViewById(R.id.location);
 
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
-		btnSave = (Button) findViewById(R.id.button_save);
-		btnCancel = (Button) findViewById(R.id.button_cancel);
+		//btnCancel = (Button) findViewById(R.id.button_cancel);
 		btnPhoto = (Button) findViewById(R.id.button_photo);
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
@@ -96,22 +94,6 @@ public class EditItemInfo extends Activity {
 		mLocationDBAdapter = new LocationDBAdapter(this);
 		mLocationDBAdapter.open();
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure you want to exit?").setCancelable(
-				false).setPositiveButton("Yes",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						EditItemInfo.this.finish();
-					}
-				}).setNegativeButton("No",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
-		alert = builder.create();
-
-		 
 		saveImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
@@ -168,19 +150,12 @@ public class EditItemInfo extends Activity {
 			}
 		});
 
-		btnSave.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				saveWishItem();
-			}
-		});
-
-		btnCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alert.show();
-			}
-		});
+//		btnCancel.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				alert.show();
+//			}
+//		});
 
 		btnPhoto.setOnClickListener(new OnClickListener() {
 
@@ -336,4 +311,34 @@ public class EditItemInfo extends Activity {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, TAKE_PICTURE);
 	}
+	
+	/***
+	 * called when the "return" button is clicked
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			// do something on back.
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Discard the wish?").setCancelable(
+					false).setPositiveButton("Yes",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							EditItemInfo.this.finish();
+							//return super.onKeyDown(keyCode, event);
+						}
+					}).setNegativeButton("No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+							//return false;
+						}
+					});
+			alert = builder.create();
+			alert.show();
+		}
+
+		return false;
+	}
+
 }
