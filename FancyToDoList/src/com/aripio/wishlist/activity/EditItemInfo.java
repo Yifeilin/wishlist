@@ -45,8 +45,10 @@ public class EditItemInfo extends Activity {
 	private EditText myLocation;
 
 	private ImageButton saveImageButton;
+	private ImageButton cameraImageButton;
+	private ImageButton galleryImageButton;
 	private Button btnCancel;
-	private Button btnPhoto;
+//	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
 	private Bitmap thumbnail;
@@ -76,8 +78,10 @@ public class EditItemInfo extends Activity {
 		myLocation = (EditText) findViewById(R.id.location);
 
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
+		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
+		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
 		//btnCancel = (Button) findViewById(R.id.button_cancel);
-		btnPhoto = (Button) findViewById(R.id.button_photo);
+		//btnPhoto = (Button) findViewById(R.id.button_photo);
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 
@@ -98,6 +102,22 @@ public class EditItemInfo extends Activity {
  			@Override
 			public void onClick(View view) {
 				saveWishItem();
+ 			}
+ 
+		});
+		
+		cameraImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				getThumbailPicture();
+ 			}
+ 
+		});
+
+		galleryImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//open gallery;
  			}
  
 		});
@@ -157,14 +177,14 @@ public class EditItemInfo extends Activity {
 //			}
 //		});
 
-		btnPhoto.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				getThumbailPicture();
-			}
-
-		});
+//		btnPhoto.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				getThumbailPicture();
+//			}
+//
+//		});
 	}
 
 	/***

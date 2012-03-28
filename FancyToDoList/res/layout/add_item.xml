@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/addItem" android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
 	<LinearLayout android:id="@+id/addItem_top"
 	android:layout_width="fill_parent"
         android:layout_height="45dip"
@@ -50,10 +50,6 @@
 				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
 				android:padding="10dip" android:layout_weight="1">
 
-				<Button android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:id="@+id/button_photo"
-					android:text="Take a photo" android:layout_weight="1" />
-
 				<ImageView android:layout_width="fill_parent"
 					android:layout_height="wrap_content" android:id="@+id/image_photo"
 					android:tint="#55ff0000" android:src="@drawable/icon"
@@ -68,11 +64,13 @@
         android:layout_alignParentBottom="true"
         android:background="@color/title_background">
 		<ImageButton style="@style/TitleBarAction"
-			android:contentDescription="@string/description_about" android:src="@drawable/title_about"
-			android:onClick="onClickAbout" />
+			android:id="@+id/imageButton_camera"
+			android:contentDescription="@string/description_camera" android:src="@drawable/ic_menu_camera"
+			android:onClick="onClickCamera" android:layout_gravity="center_horizontal"/>
 		<ImageButton style="@style/TitleBarAction"
-			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
-			android:onClick="onClickSearch" />
+			android:id="@+id/imageButton_gallery"
+			android:contentDescription="@string/description_gallery" android:src="@drawable/ic_menu_gallery"
+			android:onClick="onClickGallery" android:layout_gravity="center_horizontal" />
 	</LinearLayout>
 
 </RelativeLayout>

@@ -22,6 +22,9 @@
     <string name="description_search">Search</string>
     <string name="description_save">Save</string>
     
+    <string name="description_camera">Camera</string>
+   <string name="description_gallery">Gallery</string>
+   
     <string name="title_new_item">New item</string>
     <string name="title_wishlist">Wishlist</string>
     <string name="title_camera">Camera</string>
