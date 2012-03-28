@@ -4,13 +4,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
 
 import com.aripio.wishlist.R;
-import com.aripio.wishlist.R.id;
-import com.aripio.wishlist.R.layout;
 import com.aripio.wishlist.db.ItemDBAdapter;
 import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
@@ -18,8 +13,6 @@ import com.aripio.wishlist.util.PositionManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,7 +28,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -53,13 +45,10 @@ public class EditItemInfo extends Activity {
 
 	private Button btnSave;
 	private Button btnCancel;
-	private Button btnDate;
 	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
 	private Bitmap thumbnail;
-	private DatePickerDialog.OnDateSetListener mDateSetListener;
-	private String date;
 	private String picture_uri = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
@@ -72,7 +61,6 @@ public class EditItemInfo extends Activity {
 	private int mSec = 0;
 
 	private AlertDialog alert;
-	static final private int DATE_DIALOG_ID = 0;
 	static final private int TAKE_PICTURE = 1;
 
 	@Override
@@ -168,19 +156,6 @@ public class EditItemInfo extends Activity {
 				return false;
 			}
 		});
-
-		mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				mYear = year;
-				mMonth = monthOfYear;
-				mDay = dayOfMonth;
-				SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy");
-				date = sdf.format(new Date(mYear - 1900, mMonth, mDay));
-				btnDate.setText(date);
-			}
-		};
 
 		btnSave.setOnClickListener(new OnClickListener() {
 			@Override
