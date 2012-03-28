@@ -9,17 +9,17 @@
         android:background="@color/title_background"
 		android:layout_alignParentTop="true">
 		
-		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/description_logo" android:text="@string/app_name" />
-
-		<ImageView style="@style/TitleBarSeparator" />
-		<TextView style="@style/TitleBarText" />
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_about" android:src="@drawable/title_about"
 			android:onClick="onClickAbout" />
+		<TextView style="@style/TitleBarText"
+			android:contentDescription="@string/make_a_wish" android:text="@string/make_a_wish" />
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
+		<ImageButton style="@style/TitleBarAction"
+			android:contentDescription="@string/description_save" android:src="@drawable/ic_menu_save"
+			android:onClick="onClickAbout" />
 	</LinearLayout>
 
 	<ScrollView android:orientation="vertical"
