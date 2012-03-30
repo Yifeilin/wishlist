@@ -87,7 +87,15 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
-
+    
+    <style name="FooterBar">
+    	<item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">45dip</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@color/title_background</item>
+	</style>
+	
     <style name="TextBody">
         <item name="android:textSize">15sp</item>
         <item name="android:lineSpacingMultiplier">1.1</item>
