@@ -62,9 +62,10 @@
 
     <style name="TitleBarLogo">
         <item name="android:id">@id/title_logo</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">@dimen/title_height</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:clickable">true</item>
+        <item name="android:gravity">left</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="TitleBarSpring">

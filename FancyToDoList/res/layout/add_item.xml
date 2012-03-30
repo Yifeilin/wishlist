@@ -6,9 +6,9 @@
 	android:id="@+id/addItem_top"
 	android:layout_alignParentTop="true">
 		
-		<ImageButton style="@style/TitleBarAction"
-			android:contentDescription="@string/description_about" android:src="@drawable/title_about"
-			android:onClick="onClickAbout" />
+		<ImageView style="@style/TitleBarLogo"
+			android:contentDescription="@string/description_logo" android:src="@drawable/ic_logo"/>
+			
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/make_a_wish" android:text="@string/make_a_wish" />
 		<ImageButton style="@style/TitleBarAction"
