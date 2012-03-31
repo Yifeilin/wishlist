@@ -19,12 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
+//import android.widget.AdapterView.OnItemSelectedListener;
+//import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
+//import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -78,7 +78,7 @@ public class WishList extends Activity {
 	private ListView myListView;
 	private GridView myGridView;
 	// private EditText mySearchText;
-	private Spinner myViewSpinner;
+//	private Spinner myViewSpinner;
 	private ImageButton viewImageButton;
 
 	// private WishListDataBase wishListDB;
@@ -108,7 +108,7 @@ public class WishList extends Activity {
 		myListView = (ListView) findViewById(R.id.myListView);
 		myGridView = (GridView) findViewById(R.id.myGridView);
 		// mySearchText = (EditText) findViewById(R.id.mySearchText);
-		myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
+//		myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
 
 		// Listener for myListView.
 		// When clicked, it starts a new activity to display the clicked item's
@@ -191,12 +191,12 @@ public class WishList extends Activity {
 		}
 
 		// set the spinner for switching between list and grid views
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(this, R.array.views_array,
-						android.R.layout.simple_spinner_item);
+//		ArrayAdapter<CharSequence> adapter = ArrayAdapter
+//				.createFromResource(this, R.array.views_array,
+//						android.R.layout.simple_spinner_item);
 
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		myViewSpinner.setAdapter(adapter);
+//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		myViewSpinner.setAdapter(adapter);
 		
 		viewImageButton = (ImageButton) findViewById(R.id.imageButton_view);
 		viewImageButton.setOnClickListener(new OnClickListener() {
@@ -206,43 +206,43 @@ public class WishList extends Activity {
  			}
  
 		});
-		// set the default spinner option
-		if (viewOption == "list") {
-			myViewSpinner.setSelection(0);
-		} else {
-			myViewSpinner.setSelection(1);
-		}
-
-		myViewSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int pos, long id) {
-
-				// list view is selected
-				if (pos == 0) {
-					// Recall populate here is inefficient
-					viewOption = "list";
-					populateItems(nameQuery, SORT_BY);
-					myViewFlipper.setDisplayedChild(0);
-
-				}
-				// grid view is selected
-				else if (pos == 1) {
-					viewOption = "grid";
-					populateItems(nameQuery, SORT_BY);
-					myViewFlipper.setDisplayedChild(1);
-
-				}
-				// Toast.makeText(parent.getContext(), "The view is " +
-				// parent.getItemAtPosition(pos).toString(),
-				// Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView parent) {
-				// Do nothing.
-			}
-		});
+//		// set the default spinner option
+//		if (viewOption == "list") {
+//			myViewSpinner.setSelection(0);
+//		} else {
+//			myViewSpinner.setSelection(1);
+//		}
+//
+//		myViewSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view,
+//					int pos, long id) {
+//
+//				// list view is selected
+//				if (pos == 0) {
+//					// Recall populate here is inefficient
+//					viewOption = "list";
+//					populateItems(nameQuery, SORT_BY);
+//					myViewFlipper.setDisplayedChild(0);
+//
+//				}
+//				// grid view is selected
+//				else if (pos == 1) {
+//					viewOption = "grid";
+//					populateItems(nameQuery, SORT_BY);
+//					myViewFlipper.setDisplayedChild(1);
+//
+//				}
+//				// Toast.makeText(parent.getContext(), "The view is " +
+//				// parent.getItemAtPosition(pos).toString(),
+//				// Toast.LENGTH_LONG).show();
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView parent) {
+//				// Do nothing.
+//			}
+//		});
 
 	}
 
@@ -580,7 +580,6 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.MARK_TODO): {
-			String a = myItemDBAdapter.getItemAddress(item_id);
 			if (myItemDBAdapter.getItemAddress(item_id).equals("unknown")){
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
 				toast.show();
