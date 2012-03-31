@@ -11,9 +11,10 @@
 			
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/make_a_wish" android:text="@string/make_a_wish" />
-		<ImageButton style="@style/TitleBarAction"
+<!-- 	<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
+-->
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_save"
 			android:contentDescription="@string/description_save" android:src="@drawable/ic_menu_save"
