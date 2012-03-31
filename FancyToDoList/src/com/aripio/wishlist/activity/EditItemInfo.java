@@ -47,7 +47,7 @@ public class EditItemInfo extends Activity {
 	private ImageButton saveImageButton;
 	private ImageButton cameraImageButton;
 	private ImageButton galleryImageButton;
-	private Button btnCancel;
+//	private Button btnCancel;
 //	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
