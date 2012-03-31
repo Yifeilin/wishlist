@@ -1,15 +1,18 @@
 package com.aripio.wishlist.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -50,6 +54,7 @@ import com.aripio.wishlist.util.WishListItemCursorAdapter;
  */
 public class WishList extends Activity {
 	static final private int DIALOG_MAIN = 0;
+	static final private int DIALOG_VIEW = 1;
 
 	static final private int DETAIL_INFO_ACT = 2;
 	// static final private int TAKE_PICTURE = 1;
@@ -74,6 +79,7 @@ public class WishList extends Activity {
 	private GridView myGridView;
 	// private EditText mySearchText;
 	private Spinner myViewSpinner;
+	private ImageButton viewImageButton;
 
 	// private WishListDataBase wishListDB;
 	private ItemsCursor wishItemCursor;
@@ -191,7 +197,15 @@ public class WishList extends Activity {
 
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		myViewSpinner.setAdapter(adapter);
-
+		
+		viewImageButton = (ImageButton) findViewById(R.id.imageButton_view);
+		viewImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				showDialog(DIALOG_VIEW);
+ 			}
+ 
+		});
 		// set the default spinner option
 		if (viewOption == "list") {
 			myViewSpinner.setSelection(0);
@@ -598,7 +612,30 @@ public class WishList extends Activity {
 		case DIALOG_MAIN:
 			dialog = null;
 			break;
+		case DIALOG_VIEW:
+			final CharSequence[] items = {"List", "Grid"};
 
+			AlertDialog.Builder builder = new AlertDialog.Builder(WishList.this);
+			builder.setTitle("Show wishes in");
+			builder.setItems(items, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					if(items[item].equals("List")){
+						// Recall populate here is inefficient
+						viewOption = "list";
+						populateItems(nameQuery, SORT_BY);
+						myViewFlipper.setDisplayedChild(0);
+					}
+
+					else{
+						viewOption = "grid";
+						populateItems(nameQuery, SORT_BY);
+						myViewFlipper.setDisplayedChild(1);
+					}
+					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+				}
+			});
+			dialog = builder.create();
+			break;
 		default:
 			dialog = null;
 		}
