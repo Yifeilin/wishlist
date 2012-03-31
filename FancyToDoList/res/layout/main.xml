@@ -13,14 +13,14 @@
 			android:contentDescription="@string/description_logo" android:src="@drawable/ic_logo"/>
 			
 		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/my_wishes" android:text="@string/make_a_wish" />
+			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
 		<ImageButton style="@style/TitleBarAction"
-			android:id="@+id/imageButton_save"
-			android:contentDescription="@string/description_save" android:src="@drawable/ic_menu_save"
-			android:onClick="onClickSave" />
+			android:id="@+id/imageButton_view"
+			android:contentDescription="@string/description_view" android:src="@drawable/ic_menu_view"
+			android:onClick="onClickView" />
 	</LinearLayout>
 
 	<EditText
