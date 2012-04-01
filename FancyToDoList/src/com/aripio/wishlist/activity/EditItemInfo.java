@@ -45,12 +45,16 @@ public class EditItemInfo extends Activity {
 	private EditText myLocation;
 
 	private ImageButton saveImageButton;
+	private ImageButton mapImageButton;
 	private ImageButton cameraImageButton;
 	private ImageButton galleryImageButton;
 //	private Button btnCancel;
 //	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
+	private double lat = 0;
+	private double lng = 0;
+	private String addStr = "unknown";
 	private Bitmap thumbnail;
 	private String picture_uri = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private ItemDBAdapter mItemDBAdapter;
@@ -78,6 +82,7 @@ public class EditItemInfo extends Activity {
 		myLocation = (EditText) findViewById(R.id.location);
 
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
+		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
 		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
 		//btnCancel = (Button) findViewById(R.id.button_cancel);
@@ -106,6 +111,30 @@ public class EditItemInfo extends Activity {
  
 		});
 		
+		mapImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//get the location
+ 				PositionManager pManager = new PositionManager(EditItemInfo.this);
+ 				Location location = pManager.getCurrentLocation();
+ 				
+ 				if (location == null){
+ 					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+ 				}
+ 				else{
+ 					//get current latitude and longitude
+ 					lat = location.getLatitude();
+ 					lng = location.getLongitude();
+ 					
+ 					//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
+ 					addStr = pManager.getCuttentAddStr();
+ 				}
+ 				myLocation.setText(addStr);
+ 				
+ 			}
+ 
+		});
+
 		cameraImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
@@ -192,26 +221,22 @@ public class EditItemInfo extends Activity {
 	 */
 	private void saveWishItem() {
 
-		//get the location
-		PositionManager pManager = new PositionManager(this);
-		Location location = pManager.getCurrentLocation();
-		
-		double lat = 0;
-		double lng = 0;
-		String addStr = "unknown";
-		
-		if (location == null){
-			Toast.makeText(this, "location not available", Toast.LENGTH_LONG);
-
-		}
-		else{
-			//get current latitude and longitude
-			lat = location.getLatitude();
-			lng = location.getLongitude();
-			
-			//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
-			addStr = pManager.getCuttentAddStr();
-		}
+//		//get the location
+//		PositionManager pManager = new PositionManager(this);
+//		Location location = pManager.getCurrentLocation();
+//		
+//		if (location == null){
+//			Toast.makeText(this, "location not available", Toast.LENGTH_LONG);
+//
+//		}
+//		else{
+//			//get current latitude and longitude
+//			lat = location.getLatitude();
+//			lng = location.getLongitude();
+//			
+//			//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
+//			addStr = pManager.getCuttentAddStr();
+//		}
 		
 		//define variables to hold the item info.
 		String itemName = "N/A";

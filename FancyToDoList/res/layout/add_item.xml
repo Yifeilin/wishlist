@@ -59,6 +59,11 @@
 
 	<LinearLayout style="@style/FooterBar">"
 		<ImageButton style="@style/TitleBarAction"
+			android:id="@+id/imageButton_map"
+			android:contentDescription="@string/description_location" android:src="@drawable/ic_map_pin"
+			android:onClick="onClickMap" android:layout_gravity="left"
+			android:layout_weight="1"/>
+		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_camera"
 			android:contentDescription="@string/description_camera" android:src="@drawable/ic_menu_camera"
 			android:onClick="onClickCamera" android:layout_gravity="left"

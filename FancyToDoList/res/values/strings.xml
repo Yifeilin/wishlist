@@ -23,6 +23,7 @@
     <string name="description_save">Save</string>
     <string name="description_view">View</string>
     <string name="description_camera">Camera</string>
+    <string name="description_location">Map</string>
    <string name="description_gallery">Gallery</string>
    
     <string name="title_new_item">New item</string>
