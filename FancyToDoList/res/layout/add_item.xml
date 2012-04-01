@@ -42,7 +42,8 @@
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
 				android:layout_height="wrap_content" android:hint="location"
-				android:gravity="top" android:layout_weight="1" />
+				android:gravity="top" android:inputType="textPostalAddress"
+				android:layout_weight="1" />
 
 			<LinearLayout android:layout_height="wrap_content"
 				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
