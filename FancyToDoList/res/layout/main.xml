@@ -15,6 +15,7 @@
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
 		<ImageButton style="@style/TitleBarAction"
+			android:id="@+id/imageButton_search"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
 		<ImageButton style="@style/TitleBarAction"

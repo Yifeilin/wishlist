@@ -80,6 +80,7 @@ public class WishList extends Activity {
 	// private EditText mySearchText;
 //	private Spinner myViewSpinner;
 	private ImageButton viewImageButton;
+	private ImageButton searchImageButton;
 
 	// private WishListDataBase wishListDB;
 	private ItemsCursor wishItemCursor;
@@ -197,6 +198,15 @@ public class WishList extends Activity {
 
 //		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //		myViewSpinner.setAdapter(adapter);
+		
+		searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
+		searchImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				onSearchRequested();
+ 			}
+ 
+		});		
 		
 		viewImageButton = (ImageButton) findViewById(R.id.imageButton_view);
 		viewImageButton.setOnClickListener(new OnClickListener() {
