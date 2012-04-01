@@ -37,7 +37,7 @@
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/price"
 				android:layout_height="wrap_content" android:hint="price"
-				android:gravity="top" android:inputType="number"
+				android:gravity="top" android:inputType="numberDecimal"
 				android:layout_weight="1" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
