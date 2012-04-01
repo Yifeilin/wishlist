@@ -364,6 +364,16 @@ public class EditItemInfo extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			// do something on back.
+			if(myItemName.getText().toString().length() == 0 &&
+					myDescription.getText().toString().length() == 0 &&
+					myPrice.getText().toString().length() == 0 &&
+					myLocation.getText().toString().length() == 0){
+
+				EditItemInfo.this.finish();
+				return false;
+
+			}
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("Discard the wish?").setCancelable(
 					false).setPositiveButton("Yes",
