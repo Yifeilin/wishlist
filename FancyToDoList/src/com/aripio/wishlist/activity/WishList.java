@@ -499,10 +499,10 @@ public class WishList extends Activity {
 			return true;
 		}
 
-		case (R.id.menu_scan): {
-			IntentIntegrator.initiateScan(this);
-			return true;
-		}
+//		case (R.id.menu_scan): {
+//			IntentIntegrator.initiateScan(this);
+//			return true;
+//		}
 
 		case (R.id.menu_sortByTime): {
 			SORT_BY = ItemsCursor.SortBy.date_time;
