@@ -48,7 +48,7 @@ public class EditItemInfo extends Activity {
 	private ImageButton mapImageButton;
 	private ImageButton cameraImageButton;
 	private ImageButton galleryImageButton;
-//	private Button btnCancel;
+//	private Button btnCancel;<
 //	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
@@ -120,6 +120,7 @@ public class EditItemInfo extends Activity {
  				
  				if (location == null){
  					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+ 					myLocation.setText("unknown");
  				}
  				else{
  					//get current latitude and longitude
@@ -128,9 +129,9 @@ public class EditItemInfo extends Activity {
  					
  					//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
  					addStr = pManager.getCuttentAddStr();
+ 	 				myLocation.setText(addStr);
  				}
- 				myLocation.setText(addStr);
- 				
+			
  			}
  
 		});
