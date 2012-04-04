@@ -1,138 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true">
-    
-	<LinearLayout
-		android:id="@+id/itemDetail"
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:gravity="center_horizontal"
-	    android:background="@color/white">
-	    
-	    <FrameLayout
-	    	android:layout_width="fill_parent" 
-		    android:layout_height="0dip"
-		    android:layout_weight="1"
-	        android:padding="10dip"> 
-	     
-	     	<LinearLayout
-			    android:orientation="vertical"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-	    		android:layout_gravity="center"
-			    android:gravity="center_horizontal"
-			    >
-			    
- 			<TextView
-		    	android:id="@+id/itemNameDetail"
-		 		android:layout_width="wrap_content" 
-			    android:layout_height="wrap_content" 
-			    android:textSize="20dip"
-			    android:singleLine="true"
-			    android:ellipsize="end"
-			    android:textColor="@color/notepad_text"
-			    android:paddingLeft="5dip"
-	   		    android:paddingRight="5dip" android:layout_gravity="top|center"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@color/white">
 
-		    
-				<ImageView 
-					android:id="@+id/imgPhotoDetail"
-					android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content"
-				    android:scaleType="fitCenter"
-				    android:adjustViewBounds="true"
-				    android:maxHeight="320dip"
-				    android:layout_alignParentTop="true"
-				    android:layout_centerHorizontal="true"
-		   		    android:layout_below="@+id/itemNameDetail"/>
+	<LinearLayout style="@style/TitleBar" android:id="@+id/itemDetail_top"
+		android:layout_alignParentTop="true">
 
-				    
- 	            <TextView
-			    	android:id="@+id/itemDesriptDetail"
-			 		android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content" 
-				    android:textSize="16dip"
-				    android:ellipsize="end"
-		   		    android:paddingLeft="5dip"
-		   		    android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/imgPhotoDetail"
-				    android:layout_alignRight="@+id/imgPhotoDetail"
-					android:layout_below="@+id/imgPhotoDetail"
-				    android:paddingTop="5dip" android:paddingBottom="5dip"/>
-				    
-				 <TextView
-			    	android:id="@+id/itemDateDetail"
-			 		android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content" 
-				    android:textSize="16dip"
-				    android:singleLine="true"
-				    android:ellipsize="end"
-		   		    android:paddingLeft="5dip"
-		   		    android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/itemDesriptDetail"
-				    android:layout_alignRight="@+id/itemDesriptDetail"
-					android:layout_below="@+id/itemDesriptDetail"
-				    />
-				    
-				  <TextView
-			    	android:id="@+id/itemPriceDetail"
-			 		android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content" 
-				    android:textSize="16dip"
-				    android:singleLine="true"
-				    android:ellipsize="end"
-		   		    android:paddingLeft="5dip"
-		   		    android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/itemDateDetail"
-				    android:layout_alignRight="@+id/itemDateDetail"
-					android:layout_below="@+id/itemDateDetail"
-				    />
-				    
-				  <TextView
-			    	android:id="@+id/itemStoreDetail"
-			 		android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content" 
-				    android:textSize="16dip"
-				    android:singleLine="true"
-				    android:ellipsize="end"
-		   		    android:paddingLeft="5dip"
-		   		    android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/itemPriceDetail"
-				    android:layout_alignRight="@+id/itemPriceDetail"
-					android:layout_below="@+id/itemPriceDetail"
-				    />
-				    
-				  <TextView
-			    	android:id="@+id/itemLocationDetail"
-			 		android:layout_width="wrap_content" 
-				    android:layout_height="wrap_content" 
-				    android:textSize="16dip"
-				    android:singleLine="false"
-				    android:ellipsize="end"
-		   		    android:paddingLeft="5dip"
-		   		    android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/itemStoreDetail"
-				    android:layout_alignRight="@+id/itemStoreDetail"
-					android:layout_below="@+id/itemStoreDetail"
-				    />
-		    </LinearLayout>
-		    
-	    </FrameLayout>
-		     
-<!-- 		<TextView -->
-<!-- 	 		android:layout_width="fill_parent"  -->
-<!-- 		    android:layout_height="wrap_content"  -->
-<!-- 		    android:textSize="13dip" -->
-<!-- 		    android:textColor="?android:attr/textColorSecondary" -->
-<!-- 			android:text="@string/copyright" -->
-<!-- 			android:gravity="center" -->
-<!-- 			android:paddingLeft="10dip" -->
-<!-- 			android:paddingRight="10dip" -->
-<!-- 		    /> -->
-			    
+		<ImageView style="@style/TitleBarLogo"
+			android:contentDescription="@string/description_logo" android:src="@drawable/ic_logo" />
+		<TextView style="@style/TitleBarText"
+			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
+			android:contentDescription="@string/description_delete" android:src="@drawable/ic_menu_delete"
+			android:onClick="onClickDelete" />
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_edit"
+			android:contentDescription="@string/description_edit" android:src="@drawable/ic_menu_edit"
+			android:onClick="onClickEdit" />
 	</LinearLayout>
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:fillViewport="true">
 
-</ScrollView>
+		<LinearLayout android:id="@+id/itemDetail"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:gravity="center_horizontal"
+			android:background="@color/white">
+
+			<!--
+				<FrameLayout android:layout_width="fill_parent"
+				android:layout_height="0dip" android:layout_weight="1"
+				android:padding="10dip">
+			-->
+			<LinearLayout android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center" android:gravity="center_horizontal">
+
+				<TextView android:id="@+id/itemNameDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="20dip" android:singleLine="true"
+					android:ellipsize="end" android:textColor="@color/notepad_text"
+					android:paddingLeft="5dip" android:paddingRight="5dip"
+					android:layout_gravity="top|center" />
+
+
+				<ImageView android:id="@+id/imgPhotoDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:scaleType="fitCenter" android:adjustViewBounds="true"
+					android:maxHeight="320dip" android:layout_alignParentTop="true"
+					android:layout_centerHorizontal="true" android:layout_below="@+id/itemNameDetail" />
+
+
+				<TextView android:id="@+id/itemDesriptDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:ellipsize="end"
+					android:paddingLeft="5dip" android:paddingRight="5dip"
+					android:layout_alignLeft="@+id/imgPhotoDetail"
+					android:layout_alignRight="@+id/imgPhotoDetail"
+					android:layout_below="@+id/imgPhotoDetail" android:paddingTop="5dip"
+					android:paddingBottom="5dip" />
+
+				<TextView android:id="@+id/itemDateDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:singleLine="true"
+					android:ellipsize="end" android:paddingLeft="5dip"
+					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemDesriptDetail"
+					android:layout_alignRight="@+id/itemDesriptDetail"
+					android:layout_below="@+id/itemDesriptDetail" />
+
+				<TextView android:id="@+id/itemPriceDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:singleLine="true"
+					android:ellipsize="end" android:paddingLeft="5dip"
+					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemDateDetail"
+					android:layout_alignRight="@+id/itemDateDetail"
+					android:layout_below="@+id/itemDateDetail" />
+
+				<TextView android:id="@+id/itemStoreDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:singleLine="true"
+					android:ellipsize="end" android:paddingLeft="5dip"
+					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemPriceDetail"
+					android:layout_alignRight="@+id/itemPriceDetail"
+					android:layout_below="@+id/itemPriceDetail" />
+
+				<TextView android:id="@+id/itemLocationDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:singleLine="false"
+					android:ellipsize="end" android:paddingLeft="5dip"
+					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemStoreDetail"
+					android:layout_alignRight="@+id/itemStoreDetail"
+					android:layout_below="@+id/itemStoreDetail" />
+			</LinearLayout>
+
+			<!--  	    </FrameLayout> -->
+
+			<!-- 		<TextView -->
+			<!-- 	 		android:layout_width="fill_parent"  -->
+			<!-- 		    android:layout_height="wrap_content"  -->
+			<!-- 		    android:textSize="13dip" -->
+			<!-- 		    android:textColor="?android:attr/textColorSecondary" -->
+			<!-- 			android:text="@string/copyright" -->
+			<!-- 			android:gravity="center" -->
+			<!-- 			android:paddingLeft="10dip" -->
+			<!-- 			android:paddingRight="10dip" -->
+			<!-- 		    /> -->
+
+		</LinearLayout>
+
+	</ScrollView>
+</LinearLayout>
