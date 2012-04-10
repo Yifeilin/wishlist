@@ -10,6 +10,9 @@
 			android:contentDescription="@string/description_logo" android:src="@drawable/ic_logo" />
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
+			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"
+			android:onClick="onClickShare" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
 			android:contentDescription="@string/description_delete" android:src="@drawable/ic_menu_delete"
 			android:onClick="onClickDelete" />

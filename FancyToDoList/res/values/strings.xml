@@ -21,6 +21,7 @@
     <string name="description_home">Home</string>
     <string name="description_search">Search</string>
     <string name="description_delete">Delete</string>
+    <string name="description_share">Share</string>
     <string name="description_edit">Edit</string>
     <string name="description_save">Save</string>
     <string name="description_view">View</string>

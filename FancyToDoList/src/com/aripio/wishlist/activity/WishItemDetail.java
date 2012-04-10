@@ -78,6 +78,7 @@ public class WishItemDetail extends Activity {
 	private TextView mPriceView;
 	private TextView mStoreView;
 	private TextView mLocationView;
+	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
 	
@@ -91,6 +92,14 @@ public class WishItemDetail extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wishitem_detail);
+
+		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
+		shareImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+//				shareItem();
+ 			}
+		});
 
 		deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
 		deleteImageButton.setOnClickListener(new OnClickListener() {
