@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,6 +34,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,17 +78,36 @@ public class WishItemDetail extends Activity {
 	private TextView mPriceView;
 	private TextView mStoreView;
 	private TextView mLocationView;
-
+	private ImageButton deleteImageButton;
+	private ImageButton editImageButton;
+	
 	private long mItem_id;
 	private int mPosition;
 	private int mPrevPosition;
 	private int mNextPosition;
+	private AlertDialog alert;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wishitem_detail);
 
+		deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
+		deleteImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+				deleteItem();
+ 			}
+		});
+		
+		editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
+		editImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+				//editWishItem();
+ 			}
+		});
+		
 		// Remember the id of the item user clicked
 		// in the previous activity (WishList.java)
 		Intent i = getIntent();
@@ -300,6 +322,26 @@ public class WishItemDetail extends Activity {
 		prev_pos_id[0] = mPrevPosition;
 		prev_pos_id[1] = prevItemID;
 		return prev_pos_id;
+	}
+	
+	private void deleteItem(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Discard the wish?").setCancelable(
+				false).setPositiveButton("Yes",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						myItemDBAdapter.deleteItem(mItem_id);
+						WishItemDetail.this.finish();
+						//return super.onKeyDown(keyCode, event);
+					}
+				}).setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		alert = builder.create();
+		alert.show();
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener {
