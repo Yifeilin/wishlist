@@ -239,6 +239,12 @@ public class EditItemInfo extends Activity {
 //			addStr = pManager.getCuttentAddStr();
 //		}
 		
+		if(myItemName.getText().toString().length() == 0){
+			Toast toast = Toast.makeText(this, "Please give a name to your wish", Toast.LENGTH_SHORT);
+			toast.show();
+			return;
+		}
+		
 		//define variables to hold the item info.
 		String itemName = "N/A";
 		String itemDesc = "N/A";
