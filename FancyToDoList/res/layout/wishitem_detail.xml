@@ -41,14 +41,6 @@
 					android:paddingLeft="5dip" android:paddingRight="5dip"
 					android:layout_gravity="top|center" />
 
-
-				<ImageView android:id="@+id/imgPhotoDetail"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:scaleType="fitCenter" android:adjustViewBounds="true"
-					android:maxHeight="320dip" android:layout_alignParentTop="true"
-					android:layout_centerHorizontal="true" android:layout_below="@+id/itemNameDetail" />
-
-
 				<TextView android:id="@+id/itemDesriptDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textSize="16dip" android:ellipsize="end"
@@ -89,6 +81,13 @@
 					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemStoreDetail"
 					android:layout_alignRight="@+id/itemStoreDetail"
 					android:layout_below="@+id/itemStoreDetail" />
+					
+				<ImageView android:id="@+id/imgPhotoDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:scaleType="fitCenter" android:adjustViewBounds="true"
+					android:maxHeight="320dip" android:layout_alignParentTop="true"
+					android:layout_centerHorizontal="true" android:layout_below="@+id/itemNameDetail" />
+					
 			</LinearLayout>
 
 			<!--  	    </FrameLayout> -->
