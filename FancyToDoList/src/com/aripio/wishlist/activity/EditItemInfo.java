@@ -59,7 +59,7 @@ public class EditItemInfo extends Activity {
 	private double lng = 0;
 	private String addStr = "unknown";
 	private Bitmap thumbnail;
-	private String picture_uri = Integer.toHexString(R.drawable.logo);//default pic is logo
+	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
@@ -128,7 +128,7 @@ public class EditItemInfo extends Activity {
 			String addStr = mLocationDBAdapter.getAddress(locationID);
 			
 			startManagingCursor(wishItemCursor);
-			String photoStr = wishItemCursor.getString(wishItemCursor
+			picture_str = wishItemCursor.getString(wishItemCursor
 					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
 
 			String itemName = wishItemCursor.getString(wishItemCursor
@@ -154,13 +154,13 @@ public class EditItemInfo extends Activity {
 			Bitmap bitmap = null;
 			
 			//check if pic_str is null, which user added this item without taking a pic.
-			if (photoStr != null){
-				Uri photoUri = Uri.parse(photoStr);
+			if (picture_str != null){
+				Uri picture_Uri = Uri.parse(picture_str);
 				
 				// check if pic_str is a resId
 				try {
 					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-					int picResId = Integer.valueOf(photoStr, 16).intValue();
+					int picResId = Integer.valueOf(picture_str, 16).intValue();
 					bitmap = BitmapFactory.decodeResource(imageItem.getContext()
 							.getResources(), picResId);
 					// it is resource id.
@@ -168,8 +168,8 @@ public class EditItemInfo extends Activity {
 
 				} catch (NumberFormatException e) {
 					// Not a resId, so it must be a content provider uri
-					photoUri = Uri.parse(photoStr);
-					imageItem.setImageURI(photoUri);
+					picture_Uri = Uri.parse(picture_str);
+					imageItem.setImageURI(picture_Uri);
 
 				}
 			}
@@ -367,12 +367,18 @@ public class EditItemInfo extends Activity {
 		// insert the store to the Store table in database, linked to the location
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
 
-		// insert the item to the Item table in database, linked to the store
-		mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_uri,
-				itemPrice, itemLocation, itemPriority);
+		// insert or update the item to the Item table in database, linked to the store
+		if(mItem_id == -1){ //this is a new item, insert
+			mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_str,
+					itemPrice, itemLocation, itemPriority);
+		}
+		else{// old item to update
+			mItemDBAdapter.updateItem(mItem_id, storeID, itemName, itemDesc, date, picture_str,
+					itemPrice, itemLocation, itemPriority);			
+		}
 		
 		//close this activity
-		finish();
+		//finish();
 		
 		//start the WishList activity and move the focus to the newly added item
 		Intent wishList = new Intent(this, WishList.class);
@@ -419,7 +425,7 @@ public class EditItemInfo extends Activity {
 									outStream);
 
 							outStream.close();
-							picture_uri = uri.toString();
+							picture_str = uri.toString();
 
 						} catch (Exception e) {
 							Log.e(WishList.LOG_TAG,

@@ -193,7 +193,6 @@ public class ItemDBAdapter {
 		// "VALUES ( NULL, '%s', '%s', '%s', '%d', '%s', '%f', '%s', '%d')",
 		// name, description, date, store_id, picture_uri, price, location,
 		// priority);
-		//			
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(KEY_STORE_ID, store_id);
@@ -208,43 +207,6 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PRIORITY, priority);
 
 		this.mDb.insert(DB_TABLE, null, initialValues);
-
-		// String sql =
-		// "INSERT INTO "
-		// + DB_TABLE
-		// + " ("
-		// + KEY_ID + ", "
-		// + KEY_NAME + ", "
-		// + KEY_DESCRIPTION + ", "
-		// + KEY_DATE_TIME + ", "
-		// + KEY_STORENAME + ", "
-		// + KEY_PHOTO_URL + ", "
-		// + KEY_PRICE + ", "
-		// + KEY_LOCATION + ", "
-		// + KEY_PRIORITY
-		// + ") "
-		//					
-		// + "VALUES"
-		// + " ("
-		// + "NULL" + ", "
-		// + name + ", "
-		// + description + ", "
-		// + date + ", "
-		// + store_id + ", "
-		// + picture_uri + ", "
-		// + price + ", "
-		// + location + ", "
-		// + priority
-		// + " )";
-
-		// try{
-		// SQLiteDatabase sqlitedb;
-		// sqlitedb = getWritableDatabase();
-		// sqlitedb.execSQL(sql);
-		// //getWritableDatabase().execSQL(sql);
-		// } catch (SQLException e) {
-		// Log.e("Error writing new item", e.toString());
-		// }
 	}
 
 	/**
@@ -257,18 +219,37 @@ public class ItemDBAdapter {
 	 * @param description
 	 *            The item description
 	 */
-	public void editItem(long _id, String name, String description,
-			String date, int store_id, Bitmap picture) {
+	public void updateItem(long _id, long store_id, String name, String description, String date_time,
+			String picture_uri, float price, String location,
+			int priority) {
 
-		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
-				+ " description = '%s', " + " date_time = '%s', "
-				+ " store_id = '%d' " + "WHERE _id = '%d' ", name, description,
-				date, store_id, _id);
-		try {
-			this.mDbHelper.getWritableDatabase().execSQL(sql);
-		} catch (SQLException e) {
-			Log.e("Error writing an exsiting item", e.toString());
-		}
+//		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
+//				+ " description = '%s', " + " date_time = '%s', "
+//				+ " store_id = '%d' " + "WHERE _id = '%d' ", name, description,
+//				date, store_id, _id);
+//		try {
+//			this.mDbHelper.getWritableDatabase().execSQL(sql);
+//		} catch (SQLException e) {
+//			Log.e("Error writing an exsiting item", e.toString());
+//		}
+		
+		ContentValues initialValues = new ContentValues();
+
+		//initialValues.put(KEY_ID, _id);
+		initialValues.put(KEY_STORE_ID, store_id);
+		//initialValues.put(KEY_LOCATION_ID, locationID);	
+		initialValues.put(KEY_NAME, name);
+		initialValues.put(KEY_DESCRIPTION, description);
+		initialValues.put(KEY_DATE_TIME, date_time);
+		// initialValues.put(KEY_STORENAME, name);
+		initialValues.put(KEY_PHOTO_URL, picture_uri);
+		initialValues.put(KEY_PRICE, price);
+		initialValues.put(KEY_LOCATION, location);
+		initialValues.put(KEY_PRIORITY, priority);
+		
+		String where = String.format("_id = '%d'", _id);
+		this.mDb.update(DB_TABLE, initialValues, where, null);
+
 	}
 
 	/**
