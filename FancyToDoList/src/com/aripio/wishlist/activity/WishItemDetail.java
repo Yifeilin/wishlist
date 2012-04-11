@@ -113,7 +113,7 @@ public class WishItemDetail extends Activity {
 		editImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
-				//editWishItem();
+				editItem();
  			}
 		});
 		
@@ -351,6 +351,13 @@ public class WishItemDetail extends Activity {
 				});
 		alert = builder.create();
 		alert.show();
+	}
+	
+	private void editItem(){
+		Intent i = new Intent(WishItemDetail.this, EditItemInfo.class);
+		i.putExtra("item_id", mItem_id);
+		//i.putExtra("position", position);
+		startActivity(i);
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener {

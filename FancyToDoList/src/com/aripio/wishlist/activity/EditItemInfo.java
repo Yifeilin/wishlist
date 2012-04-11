@@ -9,6 +9,7 @@ import com.aripio.wishlist.R;
 import com.aripio.wishlist.db.ItemDBAdapter;
 import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
+import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.aripio.wishlist.util.PositionManager;
 
 import android.app.Activity;
@@ -16,7 +17,9 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,7 +69,8 @@ public class EditItemInfo extends Activity {
 	private int mHour = 0;
 	private int mMin = 0;
 	private int mSec = 0;
-
+	private long mItem_id = -1;
+	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
 
@@ -74,6 +78,19 @@ public class EditItemInfo extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
+		
+		// Open the Item table in the database
+		// wishListDB = WishListDataBase.getDBInstance(this);
+		mItemDBAdapter = new ItemDBAdapter(this);
+		mItemDBAdapter.open();
+
+		// Open the Store table in the database
+		mStoreDBAdapter = new StoreDBAdapter(this);
+		mStoreDBAdapter.open();
+
+		// Open the Location table in the database
+		mLocationDBAdapter = new LocationDBAdapter(this);
+		mLocationDBAdapter.open();
 
 		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
@@ -90,19 +107,75 @@ public class EditItemInfo extends Activity {
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 
-		// Open the Item table in the database
-		// wishListDB = WishListDataBase.getDBInstance(this);
-		mItemDBAdapter = new ItemDBAdapter(this);
-		mItemDBAdapter.open();
+		//get item id from previous intent, if there is an item id, we know this EditItemInfo is launched
+		//from ItemDetail, so fill the empty box
+		Intent i = getIntent();
+		mItem_id = i.getLongExtra("item_id", -1);
 		
-		// Open the Store table in the database
-		mStoreDBAdapter = new StoreDBAdapter(this);
-		mStoreDBAdapter.open();
-	
-		// Open the Location table in the database
-		mLocationDBAdapter = new LocationDBAdapter(this);
-		mLocationDBAdapter.open();
-		
+		if(mItem_id != -1){// this is fucking ugly!
+			ItemsCursor wishItemCursor;
+			Cursor mStoreCursor;
+			wishItemCursor = mItemDBAdapter.getItem(mItem_id);
+			long storeID = wishItemCursor.getLong(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+			
+			mStoreCursor = mStoreDBAdapter.getStore(storeID);
+			String storeName = mStoreDBAdapter.getStoreName(storeID);
+			
+			// get location
+			long locationID = mStoreCursor.getLong(mStoreCursor
+					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+			String addStr = mLocationDBAdapter.getAddress(locationID);
+			
+			startManagingCursor(wishItemCursor);
+			String photoStr = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
+
+			String itemName = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
+
+			String itemDescrpt = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DESCRIPTION));
+
+			String itemDate = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
+
+			String itemPrice = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
+
+			String itemPriority = wishItemCursor.getString(wishItemCursor
+					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
+
+			myItemName.setText(itemName);
+			myDescription.setText(itemDescrpt);
+			myPrice.setText(itemPrice);
+			myLocation.setText(addStr);
+			
+			Bitmap bitmap = null;
+			
+			//check if pic_str is null, which user added this item without taking a pic.
+			if (photoStr != null){
+				Uri photoUri = Uri.parse(photoStr);
+				
+				// check if pic_str is a resId
+				try {
+					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+					int picResId = Integer.valueOf(photoStr, 16).intValue();
+					bitmap = BitmapFactory.decodeResource(imageItem.getContext()
+							.getResources(), picResId);
+					// it is resource id.
+					imageItem.setImageBitmap(bitmap);
+
+				} catch (NumberFormatException e) {
+					// Not a resId, so it must be a content provider uri
+					photoUri = Uri.parse(photoStr);
+					imageItem.setImageURI(photoUri);
+
+				}
+			}
+
+		}
+
 		saveImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
