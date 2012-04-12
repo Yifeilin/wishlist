@@ -577,9 +577,10 @@ public class WishList extends Activity {
 			updateView();
 			return true;
 		}
-		case (R.id.DETAIL_TODO): {
-			Intent detailInfo = new Intent(this, EditItemInfo.class);
-			startActivity(detailInfo);
+		case (R.id.EDIT_TODO): {
+			Intent i = new Intent(this, EditItemInfo.class);
+			i.putExtra("item_id", item_id);
+			startActivity(i);
 			return true;
 		}
 		case (R.id.POST_TODO): {
