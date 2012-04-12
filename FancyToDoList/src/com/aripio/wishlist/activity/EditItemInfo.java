@@ -70,6 +70,7 @@ public class EditItemInfo extends Activity {
 	private int mMin = 0;
 	private int mSec = 0;
 	private long mItem_id = -1;
+	private boolean mEditNew = true;
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
@@ -113,6 +114,7 @@ public class EditItemInfo extends Activity {
 		mItem_id = i.getLongExtra("item_id", -1);
 		
 		if(mItem_id != -1){// this is fucking ugly!
+			mEditNew = false;
 			ItemsCursor wishItemCursor;
 			Cursor mStoreCursor;
 			wishItemCursor = mItemDBAdapter.getItem(mItem_id);
@@ -449,7 +451,9 @@ public class EditItemInfo extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// do something on back.
+			// do something on back button.
+			
+			//all fields are empty
 			if(myItemName.getText().toString().length() == 0 &&
 					myDescription.getText().toString().length() == 0 &&
 					myPrice.getText().toString().length() == 0 &&
@@ -457,26 +461,31 @@ public class EditItemInfo extends Activity {
 
 				EditItemInfo.this.finish();
 				return false;
-
 			}
 			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Discard the wish?").setCancelable(
-					false).setPositiveButton("Yes",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							EditItemInfo.this.finish();
-							//return super.onKeyDown(keyCode, event);
-						}
-					}).setNegativeButton("No",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-							//return false;
-						}
-					});
-			alert = builder.create();
-			alert.show();
+			//only show warnning if user is editing a new item
+			if(mEditNew){
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage("Discard the wish?").setCancelable(
+						false).setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								EditItemInfo.this.finish();
+								//return super.onKeyDown(keyCode, event);
+							}
+						}).setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+								//return false;
+							}
+						});
+				alert = builder.create();
+				alert.show();
+			}
+			else{
+				EditItemInfo.this.finish();
+			}
 		}
 
 		return false;
