@@ -89,6 +89,8 @@ public class WishList extends Activity {
 	private DBAdapter myDBAdapter;
 	private ItemDBAdapter myItemDBAdapter;
 	private LocationDBAdapter myLocationDBAdapter;
+	
+	private long selectedItem_id;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -432,6 +434,30 @@ public class WishList extends Activity {
 
 	}
 
+	private void deleteItem(long item_id){
+		selectedItem_id = item_id;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Delete the wish?");
+		builder.setCancelable(false);
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						myItemDBAdapter.deleteItem(selectedItem_id);
+						updateView();
+					}
+				});
+		builder.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+						//return false;
+					}
+				});
+
+		AlertDialog alert;
+		alert = builder.create();
+		alert.show();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -572,9 +598,7 @@ public class WishList extends Activity {
 		switch (item.getItemId()) {
 		case (R.id.REMOVE_TODO): {
 			// wishListDB.deleteItem(item_id);
-			myItemDBAdapter.deleteItem(item_id);
-			//myLocationDBAdapter.deleteLocation(rowId);
-			updateView();
+			deleteItem(item_id);
 			return true;
 		}
 		case (R.id.EDIT_TODO): {
