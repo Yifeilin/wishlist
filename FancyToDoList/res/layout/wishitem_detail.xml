@@ -37,59 +37,101 @@
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_gravity="center" android:gravity="center_horizontal">
 
+			    
+				<TextView android:id="@+id/itemDateDetail"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="12dip" android:singleLine="true"
+					android:ellipsize="end" 
+					android:paddingTop="15dip"
+					android:paddingLeft="5dip"
+					android:paddingRight="5dip" 
+					android:layout_gravity="top|right" />
+				<!-- 	android:layout_alignLeft="@+id/itemDesriptDetail"
+					android:layout_alignRight="@+id/itemDesriptDetail"
+					android:layout_below="@+id/itemDesriptDetail"
+				 -->
+				 
+				<!--  <View
+				     android:layout_width="fill_parent"
+				     android:layout_height="2dip"
+				     android:layout_below="@+id/itemDateDetail"
+				     android:background="#999999" />
+ 				-->
+		
+				<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center" 
+				android:gravity="center_horizontal">
+				
+				<TextView android:text="     "
+			    android:color="#00000000"
+		        android:gravity="center_horizontal"
+          		android:layout_width="wrap_content"
+          		android:layout_height="fill_parent"
+          		android:layout_weight="1"/>
+				    						
+				<LinearLayout android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center" 
+				android:background="@color/light_yellow"
+				android:layout_weight="5"
+				android:gravity="center_horizontal">
+
 				<TextView android:id="@+id/itemNameDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:textSize="20dip" android:singleLine="true"
+					android:textSize="18dip" android:singleLine="true"
 					android:ellipsize="end" android:textColor="@color/notepad_text"
 					android:paddingLeft="5dip" android:paddingRight="5dip"
-					android:layout_gravity="top|center" />
+					android:layout_gravity="top|left" />
 
+	
 				<TextView android:id="@+id/itemDesriptDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textSize="16dip" android:ellipsize="end"
 					android:paddingLeft="5dip" android:paddingRight="5dip"
-					android:layout_alignLeft="@+id/imgPhotoDetail"
-					android:layout_alignRight="@+id/imgPhotoDetail"
-					android:layout_below="@+id/imgPhotoDetail" android:paddingTop="5dip"
-					android:paddingBottom="5dip" />
-
-				<TextView android:id="@+id/itemDateDetail"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:textSize="16dip" android:singleLine="true"
-					android:ellipsize="end" android:paddingLeft="5dip"
-					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemDesriptDetail"
-					android:layout_alignRight="@+id/itemDesriptDetail"
-					android:layout_below="@+id/itemDesriptDetail" />
+					android:paddingTop="5dip"
+					android:paddingBottom="5dip"
+					android:layout_gravity="left" />
 
 				<TextView android:id="@+id/itemPriceDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textSize="16dip" android:singleLine="true"
 					android:ellipsize="end" android:paddingLeft="5dip"
-					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemDateDetail"
-					android:layout_alignRight="@+id/itemDateDetail"
-					android:layout_below="@+id/itemDateDetail" />
+					android:paddingRight="5dip" 
+					android:layout_gravity="left" />
 
 				<TextView android:id="@+id/itemStoreDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textSize="16dip" android:singleLine="true"
 					android:ellipsize="end" android:paddingLeft="5dip"
-					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemPriceDetail"
-					android:layout_alignRight="@+id/itemPriceDetail"
-					android:layout_below="@+id/itemPriceDetail" />
-
+					android:paddingRight="5dip" 
+					android:layout_gravity="left" />
+				
 				<TextView android:id="@+id/itemLocationDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textSize="16dip" android:singleLine="false"
 					android:ellipsize="end" android:paddingLeft="5dip"
-					android:paddingRight="5dip" android:layout_alignLeft="@+id/itemStoreDetail"
-					android:layout_alignRight="@+id/itemStoreDetail"
-					android:layout_below="@+id/itemStoreDetail" />
+					android:paddingRight="5dip" 
+					android:layout_gravity="left" />
+				
+				</LinearLayout>
+				
+				<TextView android:text="     "
+				android:color="#00000000"
+		        android:gravity="center_horizontal"
+        		android:layout_width="wrap_content"
+          		android:layout_height="fill_parent"
+          		android:layout_weight="1"/>
+												
+				</LinearLayout>
 					
 				<ImageView android:id="@+id/imgPhotoDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:scaleType="fitCenter" android:adjustViewBounds="true"
 					android:maxHeight="320dip" android:layout_alignParentTop="true"
-					android:layout_centerHorizontal="true" android:layout_below="@+id/itemNameDetail" />
+					android:paddingTop="15dip"
+					android:layout_centerHorizontal="true" />
+				<!-- 	android:layout_below="@+id/itemNameDetail" />  -->
 					
 			</LinearLayout>
 
