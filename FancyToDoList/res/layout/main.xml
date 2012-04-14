@@ -9,8 +9,9 @@
 	android:id="@+id/itemList_top"
 	android:layout_alignParentTop="true">
 		
-		<ImageView style="@style/TitleBarLogo"
-			android:contentDescription="@string/description_logo" android:src="@drawable/ic_logo"/>
+		<ImageView style="@style/TitleBarBackLogo"
+		    android:id="@+id/imageButton_back_logo"
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/ic_back_logo"/>
 			
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
