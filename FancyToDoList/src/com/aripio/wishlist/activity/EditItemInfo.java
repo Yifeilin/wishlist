@@ -100,7 +100,7 @@ public class EditItemInfo extends Activity {
 		myPrice = (EditText) findViewById(R.id.price);
 		myLocation = (EditText) findViewById(R.id.location);
 
-		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo1);
+		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
 		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
