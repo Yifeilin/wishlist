@@ -78,6 +78,7 @@ public class WishItemDetail extends Activity {
 	private TextView mPriceView;
 	private TextView mStoreView;
 	private TextView mLocationView;
+	private ImageButton homeImageButton;
 	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
@@ -92,6 +93,21 @@ public class WishItemDetail extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wishitem_detail);
+		
+		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+		homeImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//close this activity
+ 				finish();
+ 				
+ 				//start the WishList activity and move the focus to the newly added item
+ 				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
+ 				startActivity(home);
+ 				//onSearchRequested();
+ 				
+ 			}
+		});	
 
 		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
 		shareImageButton.setOnClickListener(new OnClickListener() {

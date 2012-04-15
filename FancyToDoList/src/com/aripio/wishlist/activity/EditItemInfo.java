@@ -47,6 +47,7 @@ public class EditItemInfo extends Activity {
 	private EditText myPrice;
 	private EditText myLocation;
 
+	private ImageButton homeImageButton;
 	private ImageButton saveImageButton;
 	private ImageButton mapImageButton;
 	private ImageButton cameraImageButton;
@@ -99,6 +100,7 @@ public class EditItemInfo extends Activity {
 		myPrice = (EditText) findViewById(R.id.price);
 		myLocation = (EditText) findViewById(R.id.location);
 
+		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo1);
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
 		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
@@ -177,6 +179,21 @@ public class EditItemInfo extends Activity {
 			}
 
 		}
+		
+
+		homeImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//close this activity
+ 				finish();
+ 				
+ 				//start the WishList activity and move the focus to the newly added item
+ 				Intent home = new Intent(EditItemInfo.this, DashBoard.class);
+ 				startActivity(home);
+ 				//onSearchRequested();
+ 				
+ 			}
+		});	
 
 		saveImageButton.setOnClickListener(new OnClickListener() {
  			@Override

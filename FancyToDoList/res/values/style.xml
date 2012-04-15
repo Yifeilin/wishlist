@@ -69,11 +69,11 @@
     </style>
     
     <style name="TitleBarBackLogo">
-        <item name="android:id">@id/title_backLogo</item>
         <item name="android:layout_width">@dimen/title_backLogo_width</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:gravity">left</item>
         <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/title_button</item>
     </style>
     
 

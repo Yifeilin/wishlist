@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+//import com.aripio.wishlist.activity;
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.barscanner.IntentIntegrator;
 import com.aripio.wishlist.barscanner.IntentResult;
@@ -79,6 +80,7 @@ public class WishList extends Activity {
 	private GridView myGridView;
 	// private EditText mySearchText;
 //	private Spinner myViewSpinner;
+	private ImageButton homeImageButton;
 	private ImageButton viewImageButton;
 	private ImageButton searchImageButton;
 
@@ -201,6 +203,24 @@ public class WishList extends Activity {
 //		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //		myViewSpinner.setAdapter(adapter);
 		
+		
+
+		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+		homeImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//close this activity
+ 				finish();
+ 				
+ 				//start the WishList activity and move the focus to the newly added item
+ 				Intent home = new Intent(WishList.this, DashBoard.class);
+ 				startActivity(home);
+ 				//onSearchRequested();
+ 				
+ 			}
+ 
+		});		
+
 		searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
 		searchImageButton.setOnClickListener(new OnClickListener() {
  			@Override

@@ -6,9 +6,10 @@
 	<LinearLayout style="@style/TitleBar" android:id="@+id/itemDetail_top"
 		android:layout_alignParentTop="true">
 
-		<ImageView style="@style/TitleBarBackLogo"
+		<ImageButton style="@style/TitleBarBackLogo"
 		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/ic_back_logo"/>
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/ic_back_logo"
+			android:onClick="onClickHome" />
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
