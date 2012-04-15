@@ -213,8 +213,8 @@ public class WishList extends Activity {
  				finish();
  				
  				//start the WishList activity and move the focus to the newly added item
- 				Intent home = new Intent(WishList.this, DashBoard.class);
- 				startActivity(home);
+// 				Intent home = new Intent(WishList.this, DashBoard.class);
+// 				startActivity(home);
  				//onSearchRequested();
  				
  			}

@@ -184,14 +184,7 @@ public class EditItemInfo extends Activity {
 		homeImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
- 				//close this activity
- 				finish();
- 				
- 				//start the WishList activity and move the focus to the newly added item
- 				Intent home = new Intent(EditItemInfo.this, DashBoard.class);
- 				startActivity(home);
- 				//onSearchRequested();
- 				
+ 				navigateBack();
  			}
 		});	
 
@@ -462,6 +455,44 @@ public class EditItemInfo extends Activity {
 		startActivityForResult(intent, TAKE_PICTURE);
 	}
 	
+	private boolean navigateBack(){
+		//all fields are empty
+		if(myItemName.getText().toString().length() == 0 &&
+				myDescription.getText().toString().length() == 0 &&
+				myPrice.getText().toString().length() == 0 &&
+				myLocation.getText().toString().length() == 0){
+
+			EditItemInfo.this.finish();
+			return false;
+		}
+		
+		//only show warnning if user is editing a new item
+		if(mEditNew){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Discard the wish?").setCancelable(
+					false).setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							EditItemInfo.this.finish();
+							//return super.onKeyDown(keyCode, event);
+						}
+					}).setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+							//return false;
+						}
+					});
+			alert = builder.create();
+			alert.show();
+		}
+		else{
+			EditItemInfo.this.finish();
+		}
+	return false;
+		
+	}
+	
 	/***
 	 * called when the "return" button is clicked
 	 */
@@ -469,42 +500,8 @@ public class EditItemInfo extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			// do something on back button.
-			
-			//all fields are empty
-			if(myItemName.getText().toString().length() == 0 &&
-					myDescription.getText().toString().length() == 0 &&
-					myPrice.getText().toString().length() == 0 &&
-					myLocation.getText().toString().length() == 0){
-
-				EditItemInfo.this.finish();
-				return false;
-			}
-			
-			//only show warnning if user is editing a new item
-			if(mEditNew){
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setMessage("Discard the wish?").setCancelable(
-						false).setPositiveButton("Yes",
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								EditItemInfo.this.finish();
-								//return super.onKeyDown(keyCode, event);
-							}
-						}).setNegativeButton("No",
-								new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-								//return false;
-							}
-						});
-				alert = builder.create();
-				alert.show();
-			}
-			else{
-				EditItemInfo.this.finish();
-			}
+			return navigateBack();
 		}
-
 		return false;
 	}
 

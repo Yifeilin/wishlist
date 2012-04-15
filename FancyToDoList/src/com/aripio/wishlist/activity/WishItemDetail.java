@@ -100,10 +100,9 @@ public class WishItemDetail extends Activity {
 			public void onClick(View view) {
  				//close this activity
  				finish();
- 				
  				//start the WishList activity and move the focus to the newly added item
- 				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
- 				startActivity(home);
+// 				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
+// 				startActivity(home);
  				//onSearchRequested();
  				
  			}

@@ -9,7 +9,7 @@
 	<LinearLayout style="@style/TitleBar"
 	android:id="@+id/addItem_top"
 	android:layout_alignParentTop="true">
-		
+
 		<ImageButton
 		    android:id="@+id/imageButton_back_logo"
 		    style="@style/TitleBarBackLogo"
