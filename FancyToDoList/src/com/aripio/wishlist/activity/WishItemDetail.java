@@ -272,17 +272,17 @@ public class WishItemDetail extends Activity {
 		//mLocationView.setText("latitude:" + Double.toString(latitude) + " longitude:" + Double.toString(longitude));
 		mLocationView.setText(addStr);	
 
-		// set the gesture detection
-		gestureDetector = new GestureDetector(new MyGestureDetector());
-
-		gestureListener = new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				if (gestureDetector.onTouchEvent(event)) {
-					return true;
-				}
-				return false;
-			}
-		};
+//		// set the gesture detection
+//		gestureDetector = new GestureDetector(new MyGestureDetector());
+//
+//		gestureListener = new View.OnTouchListener() {
+//			public boolean onTouch(View v, MotionEvent event) {
+//				if (gestureDetector.onTouchEvent(event)) {
+//					return true;
+//				}
+//				return false;
+//			}
+//		};
 
 	}
 

@@ -202,8 +202,6 @@ public class WishList extends Activity {
 
 //		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //		myViewSpinner.setAdapter(adapter);
-		
-		
 
 		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 		backImageButton.setOnClickListener(new OnClickListener() {
