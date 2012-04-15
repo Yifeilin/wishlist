@@ -80,7 +80,7 @@ public class WishList extends Activity {
 	private GridView myGridView;
 	// private EditText mySearchText;
 //	private Spinner myViewSpinner;
-	private ImageButton homeImageButton;
+	private ImageButton backImageButton;
 	private ImageButton viewImageButton;
 	private ImageButton searchImageButton;
 
@@ -205,8 +205,8 @@ public class WishList extends Activity {
 		
 		
 
-		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-		homeImageButton.setOnClickListener(new OnClickListener() {
+		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+		backImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
  				//close this activity

@@ -78,7 +78,7 @@ public class WishItemDetail extends Activity {
 	private TextView mPriceView;
 	private TextView mStoreView;
 	private TextView mLocationView;
-	private ImageButton homeImageButton;
+	private ImageButton backImageButton;
 	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
@@ -94,8 +94,8 @@ public class WishItemDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wishitem_detail);
 		
-		homeImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-		homeImageButton.setOnClickListener(new OnClickListener() {
+		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+		backImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
  				//close this activity
