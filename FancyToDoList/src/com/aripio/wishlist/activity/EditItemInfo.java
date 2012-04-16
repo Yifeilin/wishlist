@@ -110,6 +110,14 @@ public class EditItemInfo extends Activity {
 
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 
+		imageItem.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
+				i.putExtra("pic_str", picture_str);
+				startActivity(i);
+			}
+		});
 		//get item id from previous intent, if there is an item id, we know this EditItemInfo is launched
 		//from ItemDetail, so fill the empty box
 		Intent i = getIntent();

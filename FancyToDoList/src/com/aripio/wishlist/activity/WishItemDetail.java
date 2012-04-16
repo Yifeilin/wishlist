@@ -88,6 +88,7 @@ public class WishItemDetail extends Activity {
 	private int mPrevPosition;
 	private int mNextPosition;
 	private AlertDialog alert;
+	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +191,7 @@ public class WishItemDetail extends Activity {
 		//String addLine = addLine1 + "\n" + addLine2 + "\n" + addLine3;
 
 		startManagingCursor(wishItemCursor);
-		String photoStr = wishItemCursor.getString(wishItemCursor
+		picture_str = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
 
 		String itemName = wishItemCursor.getString(wishItemCursor
@@ -241,13 +242,13 @@ public class WishItemDetail extends Activity {
 		Bitmap bitmap = null;
 		
 		//check if pic_str is null, which user added this item without taking a pic.
-		if (photoStr != null){
-			Uri photoUri = Uri.parse(photoStr);
+		if (picture_str != null){
+			Uri photoUri = Uri.parse(picture_str);
 			
 			// check if pic_str is a resId
 			try {
 				// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-				int picResId = Integer.valueOf(photoStr, 16).intValue();
+				int picResId = Integer.valueOf(picture_str, 16).intValue();
 				bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
 						.getResources(), picResId);
 				// it is resource id.
@@ -255,7 +256,7 @@ public class WishItemDetail extends Activity {
 
 			} catch (NumberFormatException e) {
 				// Not a resId, so it must be a content provider uri
-				photoUri = Uri.parse(photoStr);
+				photoUri = Uri.parse(picture_str);
 				mPhotoView.setImageURI(photoUri);
 
 			}
@@ -270,7 +271,7 @@ public class WishItemDetail extends Activity {
 		mStoreView.setText("Store: " + storeName);
 		//mLocationView.setText(itemLocation);
 		//mLocationView.setText("latitude:" + Double.toString(latitude) + " longitude:" + Double.toString(longitude));
-		mLocationView.setText(addStr);	
+		mLocationView.setText(addStr);
 
 //		// set the gesture detection
 //		gestureDetector = new GestureDetector(new MyGestureDetector());
@@ -283,6 +284,16 @@ public class WishItemDetail extends Activity {
 //				return false;
 //			}
 //		};
+		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
+
+		mPhotoView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
+				i.putExtra("pic_str", picture_str);
+				startActivity(i);
+			}
+		});
 
 	}
 
