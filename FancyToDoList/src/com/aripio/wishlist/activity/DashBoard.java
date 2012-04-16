@@ -6,19 +6,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.barscanner.IntentIntegrator;
 
 
-
 public class DashBoard extends Activity {
 	static final private int TAKE_PICTURE = 1;
+	private ImageButton prefImageButton;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
+		
+		prefImageButton = (ImageButton) findViewById(R.id.imageButton_pref);
+		prefImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+ 				//navigateBack();
+ 			}
+		});	
 	}
 	
 	/**
@@ -119,6 +130,7 @@ public class DashBoard extends Activity {
 	 * @return void
 	 */
 
+	
 	public void setTitleFromActivityLabel (int textViewId)
 	{
 	    TextView tv = (TextView) findViewById (textViewId);

@@ -11,13 +11,19 @@
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/description_logo" android:text="@string/app_name" />
 
-		<ImageView style="@style/TitleBarSeparator" />
-		<ImageButton style="@style/TitleBarAction"
+	<!--	<ImageView style="@style/TitleBarSeparator" />
+	 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_about" android:src="@drawable/title_about"
 			android:onClick="onClickAbout" />
+	-->
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
+		<ImageButton style="@style/TitleBarAction"
+   			android:id="@+id/imageButton_pref"
+			android:contentDescription="@string/description_pref" android:src="@drawable/ic_menu_preferences"
+			android:onClick="onClickPref" />
+		
 	</LinearLayout>
 	
 	<LinearLayout android:orientation="vertical"
