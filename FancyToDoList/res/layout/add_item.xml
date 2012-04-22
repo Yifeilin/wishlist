@@ -68,7 +68,7 @@
 	<LinearLayout style="@style/FooterBar">"
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_map"
-			android:contentDescription="@string/description_location" android:src="@drawable/ic_location_blue_default_72by72"
+			android:contentDescription="@string/description_location" android:src="@drawable/ic_pin_blue_default_72by72"
 			android:onClick="onClickMap" android:layout_gravity="left"
 			android:layout_weight="1"/>
 		<ImageButton style="@style/TitleBarAction"
