@@ -16,7 +16,7 @@
 			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"
 			android:onClick="onClickShare" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
-			android:contentDescription="@string/description_delete" android:src="@drawable/ic_menu_delete"
+			android:contentDescription="@string/description_delete" android:src="@drawable/ic_trashbin_default_72by72"
 			android:onClick="onClickDelete" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_edit"
 			android:contentDescription="@string/description_edit" android:src="@drawable/ic_menu_edit"
