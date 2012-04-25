@@ -1,5 +1,7 @@
 package com.aripio.wishlist.activity;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,6 +13,9 @@ import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.aripio.wishlist.util.PositionManager;
+import com.aripio.wishlist.util.AlbumStorageDirFactory;
+import com.aripio.wishlist.util.BaseAlbumDirFactory;
+import com.aripio.wishlist.util.FroyoAlbumDirFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +27,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
@@ -60,6 +67,7 @@ public class EditItemInfo extends Activity {
 	private double lng = 0;
 	private String addStr = "unknown";
 	private Bitmap thumbnail;
+	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
@@ -75,11 +83,23 @@ public class EditItemInfo extends Activity {
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
+	private String mCurrentPhotoPath;
+	private static final String JPEG_FILE_PREFIX = "IMG_";
+	private static final String JPEG_FILE_SUFFIX = ".jpg";
+
+	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+		} else {
+			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+		}
 		
 		// Open the Item table in the database
 		// wishListDB = WishListDataBase.getDBInstance(this);
@@ -232,7 +252,8 @@ public class EditItemInfo extends Activity {
 		cameraImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
- 				getThumbailPicture();
+ 				dispatchTakePictureIntent();
+ 				//getThumbailPicture();
  			}
  
 		});
@@ -421,46 +442,84 @@ public class EditItemInfo extends Activity {
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case TAKE_PICTURE:
-				// Check if the result includes a thumbnail Bitmap
 				if (data != null) {
-					if (data.hasExtra("data")) {
-						thumbnail = data.getParcelableExtra("data");
-						imageItem.setImageBitmap(thumbnail);
-
-						// store thumbnail in the media content provider 
-						// and get the uri of the thumbnail
-						ContentValues values = new ContentValues();
-						values.put(Media.MIME_TYPE, "image/jpeg");
-						Uri uri = getContentResolver().insert(
-								Media.EXTERNAL_CONTENT_URI, values);
-
-						//compress the thumbnail to JPEG and write the JEPG to 
-						//the content provider. Save the uri of the JEPG as a string,
-						//which will be inserted in the column "picture_uri" of
-						//the Item table
-						try {
-							OutputStream outStream = getContentResolver()
-									.openOutputStream(uri);
-							thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
-									outStream);
-
-							outStream.close();
-							picture_str = uri.toString();
-
-						} catch (Exception e) {
-							Log.e(WishList.LOG_TAG,
-									"exception while writing image", e);
-						}
-					}
+					handleBigCameraPhoto();
+					//if (data.hasExtra("data")) {
+					handleSmallCameraPhoto(data);
+					//}
 				}
 				break;
 			}
 		}
 	}
-
+	
 	private void getThumbailPicture() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(intent, TAKE_PICTURE);
+	}
+	
+	private void dispatchTakePictureIntent() {	
+
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+		File f = null;
+
+		try {
+			f = setUpPhotoFile();
+			mCurrentPhotoPath = f.getAbsolutePath();
+			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			takePictureIntent.putExtra("full_size_ouptut", Uri.fromFile(f));
+		} catch (IOException e) {
+			e.printStackTrace();
+			f = null;
+			mCurrentPhotoPath = null;
+		}
+		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+	}
+		
+	private void handleSmallCameraPhoto(Intent intent) {
+//		Bundle extras = intent.getExtras();
+//		mImageBitmap = (Bitmap) extras.get("data");
+		//mImageView.setImageBitmap(mImageBitmap);
+		//mVideoUri = null;
+//		mImageView.setVisibility(View.VISIBLE);
+//		mVideoView.setVisibility(View.INVISIBLE);
+		
+		thumbnail = intent.getParcelableExtra("data");
+		imageItem.setImageBitmap(thumbnail);
+
+		// store thumbnail in the media content provider 
+		// and get the uri of the thumbnail
+		ContentValues values = new ContentValues();
+		values.put(Media.MIME_TYPE, "image/jpeg");
+		Uri uri = getContentResolver().insert(
+				Media.EXTERNAL_CONTENT_URI, values);
+
+		//compress the thumbnail to JPEG and write the JEPG to 
+		//the content provider. Save the uri of the JEPG as a string,
+		//which will be inserted in the column "picture_uri" of
+		//the Item table
+		try {
+			OutputStream outStream = getContentResolver()
+					.openOutputStream(uri);
+			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+					outStream);
+
+			outStream.close();
+			picture_str = uri.toString();
+		} catch (Exception e) {
+			Log.e(WishList.LOG_TAG,
+					"exception while writing image", e);
+		}
+	}
+
+	private void handleBigCameraPhoto() {
+
+		if (mCurrentPhotoPath != null) {
+			setPic();
+			//galleryAddPic();
+			mCurrentPhotoPath = null;
+		}
 	}
 	
 	private boolean navigateBack(){
@@ -512,5 +571,91 @@ public class EditItemInfo extends Activity {
 		}
 		return false;
 	}
+	
+	private String getAlbumName() {
+		//return getString(R.string.album_name);
+		return "WishListPhoto";
+	}
 
+	
+	private File getAlbumDir() {
+		File storageDir = null;
+
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			
+			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+
+			if (storageDir != null) {
+				if (! storageDir.mkdirs()) {
+					if (! storageDir.exists()){
+						Log.d("CameraSample", "failed to create directory");
+						return null;
+					}
+				}
+			}
+			
+		} else {
+//			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
+			Log.v("wishlist", "External storage is not mounted READ/WRITE.");
+		}
+		
+		return storageDir;
+	}
+
+	private File createImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+		File albumF = getAlbumDir();
+		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+		return imageF;
+	}
+
+	private File setUpPhotoFile() throws IOException {
+		
+		File f = createImageFile();
+		mCurrentPhotoPath = f.getAbsolutePath();
+		
+		return f;
+	}
+
+	private void setPic() {
+
+		/* There isn't enough memory to open up more than a couple camera photos */
+		/* So pre-scale the target bitmap into which the file is decoded */
+
+		/* Get the size of the ImageView */
+//		int targetW = mImageView.getWidth();
+//		int targetH = mImageView.getHeight();
+
+		/* Get the size of the image */
+		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+		bmOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		int photoW = bmOptions.outWidth;
+		int photoH = bmOptions.outHeight;
+		
+		/* Figure out which way needs to be reduced less */
+		int scaleFactor = 1;
+//		if ((targetW > 0) || (targetH > 0)) {
+//			scaleFactor = Math.min(photoW/targetW, photoH/targetH);	
+//		}
+
+		/* Set bitmap options to scale the image decode target */
+		bmOptions.inJustDecodeBounds = false;
+		bmOptions.inSampleSize = scaleFactor;
+		bmOptions.inPurgeable = true;
+
+		/* Decode the JPEG file into a Bitmap */
+		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		
+		//to-do save mCurrentPhotoPath to db
+		
+		
+		/* Associate the Bitmap to the ImageView */
+//		mImageView.setImageBitmap(bitmap);
+//		mVideoUri = null;
+//		mImageView.setVisibility(View.VISIBLE);
+//		mVideoView.setVisibility(View.INVISIBLE);
+	}
 }
