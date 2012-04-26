@@ -69,6 +69,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
+	private String mCurrentPhotoPath;
 	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
@@ -83,7 +84,6 @@ public class EditItemInfo extends Activity {
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
-	private String mCurrentPhotoPath;
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 
@@ -134,7 +134,9 @@ public class EditItemInfo extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
-				i.putExtra("pic_str", picture_str);
+				//i.putExtra("pic_str", picture_str);
+				i.putExtra("pic_str", mCurrentPhotoPath);
+				String s=mCurrentPhotoPath;
 				startActivity(i);
 			}
 		});
@@ -410,12 +412,12 @@ public class EditItemInfo extends Activity {
 
 		// insert or update the item to the Item table in database, linked to the store
 		if(mItem_id == -1){ //this is a new item, insert
-			mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_str,
+			mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath, 
 					itemPrice, itemLocation, itemPriority);
 		}
 		else{// old item to update
-			mItemDBAdapter.updateItem(mItem_id, storeID, itemName, itemDesc, date, picture_str,
-					itemPrice, itemLocation, itemPriority);			
+			mItemDBAdapter.updateItem(mItem_id, storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath,
+					itemPrice, itemLocation, itemPriority);
 		}
 		
 		//close this activity
@@ -442,12 +444,12 @@ public class EditItemInfo extends Activity {
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case TAKE_PICTURE:
-				if (data != null) {
+				//if (data != null) {
 					handleBigCameraPhoto();
 					//if (data.hasExtra("data")) {
-					handleSmallCameraPhoto(data);
+					//handleSmallCameraPhoto(data);
 					//}
-				}
+				//}
 				break;
 			}
 		}
@@ -467,8 +469,9 @@ public class EditItemInfo extends Activity {
 		try {
 			f = setUpPhotoFile();
 			mCurrentPhotoPath = f.getAbsolutePath();
-			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-			takePictureIntent.putExtra("full_size_ouptut", Uri.fromFile(f));
+			String s = mCurrentPhotoPath;
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			//takePictureIntent.putExtra(getString(R.string.fullSizePhotoLocation), Uri.fromFile(f));
 		} catch (IOException e) {
 			e.printStackTrace();
 			f = null;
@@ -515,11 +518,11 @@ public class EditItemInfo extends Activity {
 
 	private void handleBigCameraPhoto() {
 
-		if (mCurrentPhotoPath != null) {
+		//if (mCurrentPhotoPath != null) {
 			setPic();
 			//galleryAddPic();
-			mCurrentPhotoPath = null;
-		}
+			//mCurrentPhotoPath = null;
+		//}
 	}
 	
 	private boolean navigateBack(){
@@ -588,7 +591,7 @@ public class EditItemInfo extends Activity {
 			if (storageDir != null) {
 				if (! storageDir.mkdirs()) {
 					if (! storageDir.exists()){
-						Log.d("CameraSample", "failed to create directory");
+						Log.d("wishlist", "failed to create directory");
 						return null;
 					}
 				}
@@ -615,47 +618,55 @@ public class EditItemInfo extends Activity {
 		
 		File f = createImageFile();
 		mCurrentPhotoPath = f.getAbsolutePath();
+		String s = mCurrentPhotoPath;
 		
 		return f;
 	}
 
 	private void setPic() {
-
+		
+		//MediaStore.Images.Thumbnails.getThumbnail();
+		int width =128;
+		int height=128;
+		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,null);
+		Bitmap thumbnail=android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
+		imageItem.setImageBitmap(thumbnail);
+		
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
 
-		/* Get the size of the ImageView */
-//		int targetW = mImageView.getWidth();
-//		int targetH = mImageView.getHeight();
-
-		/* Get the size of the image */
-		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-		bmOptions.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-		int photoW = bmOptions.outWidth;
-		int photoH = bmOptions.outHeight;
-		
-		/* Figure out which way needs to be reduced less */
-		int scaleFactor = 1;
+//		/* Get the size of the ImageView */s
+//		int targetW = imageItem.getWidth();
+//		int targetH = imageItem.getHeight();
+//
+//		/* Get the size of the image */
+//		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//		bmOptions.inJustDecodeBounds = true;
+//		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+//		int photoW = bmOptions.outWidth;
+//		int photoH = bmOptions.outHeight;
+//		
+//		/* Figure out which way needs to be reduced less */
+//		int scaleFactor = 1;
 //		if ((targetW > 0) || (targetH > 0)) {
 //			scaleFactor = Math.min(photoW/targetW, photoH/targetH);	
 //		}
-
-		/* Set bitmap options to scale the image decode target */
-		bmOptions.inJustDecodeBounds = false;
-		bmOptions.inSampleSize = scaleFactor;
-		bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-		
-		//to-do save mCurrentPhotoPath to db
-		
-		
-		/* Associate the Bitmap to the ImageView */
-//		mImageView.setImageBitmap(bitmap);
-//		mVideoUri = null;
-//		mImageView.setVisibility(View.VISIBLE);
-//		mVideoView.setVisibility(View.INVISIBLE);
+//
+//		/* Set bitmap options to scale the image decode target */
+//		bmOptions.inJustDecodeBounds = false;
+//		bmOptions.inSampleSize = scaleFactor;
+//		bmOptions.inPurgeable = true;
+//
+//		/* Decode the JPEG file into a Bitmap */
+//		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+//		
+//		//to-do save mCurrentPhotoPath to db
+//		
+//		/* Associate the Bitmap to the ImageView */
+//		imageItem.setImageBitmap(bitmap);
+////		mImageView.setImageBitmap(bitmap);
+////		mVideoUri = null;
+//		imageItem.setVisibility(View.VISIBLE);
+////		mVideoView.setVisibility(View.INVISIBLE);
 	}
 }

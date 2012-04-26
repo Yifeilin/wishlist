@@ -191,5 +191,6 @@
     <string name="make_a_wish">Make a Wish</string>
 	<string name="my_wishes">My wishes</string>
 	<string name="album_name">WishListPhoto</string>
+	<string name="fullSizePhotoLocation">FullSizeOutput</string>
 
 </resources>

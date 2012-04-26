@@ -31,6 +31,7 @@ public class DBAdapter {
 			+ ItemDBAdapter.KEY_DATE_TIME 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_STORENAME 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PHOTO_URL 	+ " TEXT, " 
+			+ ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PRICE 		+ " REAL, " 
 			+ ItemDBAdapter.KEY_LOCATION 	+ " TEXT, "
 			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER"
@@ -118,6 +119,7 @@ public class DBAdapter {
 									"It is a very nice car", 
 									"1983-07-06 11:30:00", 
 									picUrl,
+									"",
 									25000f,
 									"BMW, Shanghai, China",
 									0);
@@ -127,7 +129,8 @@ public class DBAdapter {
 									"Book", 
 									"It is a great book", 
 									"1984-03-17 18:22:35", 
-									picUrl, 
+									picUrl,
+									"",
 									9.9f,
 									"Chapter store, Toronto, ON Canada",
 									3);
@@ -136,7 +139,8 @@ public class DBAdapter {
 									"Cake", 
 									"It is a delicious cake", 
 									"2011-05-03 03:40:50", 
-									picUrl, 
+									picUrl,
+									"",
 									6.99f,
 									"YuanZu Food, Jiaxing, Zhejiang, China",
 									2);
@@ -145,7 +149,8 @@ public class DBAdapter {
 									"Heart", 
 									"It is a warm beating heart", 
 									"2000-11-23 08:17:38", 
-									picUrl, 
+									picUrl,
+									"",
 									324.49f,
 									"Hospital, Beijing, China",
 									1);

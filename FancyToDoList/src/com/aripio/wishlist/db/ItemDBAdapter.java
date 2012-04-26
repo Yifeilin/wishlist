@@ -26,6 +26,7 @@ public class ItemDBAdapter {
 	public static final String KEY_DATE_TIME = "date_time";
 	public static final String KEY_STORENAME = "store_name";
 	public static final String KEY_PHOTO_URL = "picture";
+	public static final String KEY_FULLSIZE_PHOTO_PATH = "fullsize_picture";
 	public static final String KEY_PRICE = "price";
 	public static final String KEY_LOCATION = "location";
 	public static final String KEY_PRIORITY = "priority";
@@ -185,7 +186,7 @@ public class ItemDBAdapter {
 	 *            The name description
 	 */
 	public void addItem(long store_id, String name, String description, String date_time,
-			String picture_uri, float price, String location,
+			String picture_uri, String fullsize_picture_path, float price, String location,
 			int priority) {
 		// String sql = String.format(
 		// "INSERT INTO ITEM (_id, name, description, create_date, store_id,  picture, price, location, priority) "
@@ -202,6 +203,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_DATE_TIME, date_time);
 		// initialValues.put(KEY_STORENAME, name);
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
+		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
 		initialValues.put(KEY_LOCATION, location);
 		initialValues.put(KEY_PRIORITY, priority);
@@ -220,7 +222,7 @@ public class ItemDBAdapter {
 	 *            The item description
 	 */
 	public void updateItem(long _id, long store_id, String name, String description, String date_time,
-			String picture_uri, float price, String location,
+			String picture_uri, String fullsize_picture_path, float price, String location,
 			int priority) {
 
 //		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
@@ -243,6 +245,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_DATE_TIME, date_time);
 		// initialValues.put(KEY_STORENAME, name);
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
+		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
 		initialValues.put(KEY_LOCATION, location);
 		initialValues.put(KEY_PRIORITY, priority);
