@@ -89,6 +89,7 @@ public class WishItemDetail extends Activity {
 	private int mNextPosition;
 	private AlertDialog alert;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
+	private String fullsize_picture_str=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +194,9 @@ public class WishItemDetail extends Activity {
 		startManagingCursor(wishItemCursor);
 		picture_str = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
+		
+		fullsize_picture_str = wishItemCursor.getString(wishItemCursor
+				.getColumnIndexOrThrow(ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH));
 
 		String itemName = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
@@ -290,7 +294,7 @@ public class WishItemDetail extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
-				i.putExtra("pic_str", picture_str);
+				i.putExtra("fullsize_pic_str", fullsize_picture_str);
 				startActivity(i);
 			}
 		});

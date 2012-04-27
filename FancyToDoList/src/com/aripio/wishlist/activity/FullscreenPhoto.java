@@ -16,10 +16,14 @@ public class FullscreenPhoto extends Activity {
 		super.onCreate(savedInstanceState);
 		   setContentView(R.layout.fullscreen_photo);
 		   Intent intent = getIntent();
-		   String picture_str = intent.getStringExtra("pic_str");
+		   String fullsize_pic_str = intent.getStringExtra("fullsize_pic_str");
 		   ImageView imageItem = (ImageView) findViewById(R.id.fullscreen_photo);
-
-//		   Bitmap bitmap = null;
+		   
+		   if (fullsize_pic_str != null){
+			   Bitmap bitmap = BitmapFactory.decodeFile(fullsize_pic_str,null);
+			   imageItem.setImageBitmap(bitmap);
+		   }
+		   //Bitmap bitmap = null;
 //			
 //			//check if pic_str is null, which user added this item without taking a pic.
 //			if (picture_str != null){
@@ -78,11 +82,10 @@ public class FullscreenPhoto extends Activity {
 
 			/* Decode the JPEG file into a Bitmap */
 //			Bitmap bitmap = BitmapFactory.decodeFile(picture_str, bmOptions);
-			Bitmap bitmap = BitmapFactory.decodeFile(picture_str, null);
 			//to-do save mCurrentPhotoPath to db
 			
 			/* Associate the Bitmap to the ImageView */
-			imageItem.setImageBitmap(bitmap);
+//			imageItem.setImageBitmap(bitmap);
 //			mVideoUri = null;
 //			mImageView.setVisibility(View.VISIBLE);
 //			mVideoView.setVisibility(View.INVISIBLE);
