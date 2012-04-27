@@ -306,7 +306,7 @@ public class ItemDBAdapter {
 
 		}
 
-		private static final String QUERY = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
+		private static final String QUERY = "SELECT _id, item_name, description, date_time, store_id, picture, fullsize_picture, price, location, priority "
 				+ "FROM Item " + "ORDER BY ";
 		
 //		private static final String QUERY_NAME = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
@@ -341,6 +341,10 @@ public class ItemDBAdapter {
 
 		public String getColPicture() {
 			return getString(getColumnIndexOrThrow("picture"));
+		}
+		
+		public String getColFullsizePicture() {
+			return getString(getColumnIndexOrThrow("fullsize_picture"));
 		}
 
 		public String getColDescription() {

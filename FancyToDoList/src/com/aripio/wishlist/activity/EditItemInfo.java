@@ -632,6 +632,29 @@ public class EditItemInfo extends Activity {
 		Bitmap thumbnail=android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
 		imageItem.setImageBitmap(thumbnail);
 		
+		ContentValues values = new ContentValues();
+		values.put(Media.MIME_TYPE, "image/jpeg");
+		Uri uri = getContentResolver().insert(
+				Media.EXTERNAL_CONTENT_URI, values);
+
+		//compress the thumbnail to JPEG and write the JEPG to 
+		//the content provider. Save the uri of the JEPG as a string,
+		//which will be inserted in the column "picture_uri" of
+		//the Item table
+		try {
+			OutputStream outStream = getContentResolver()
+					.openOutputStream(uri);
+			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+					outStream);
+
+			outStream.close();
+			picture_str = uri.toString();
+		} catch (Exception e) {
+			Log.e(WishList.LOG_TAG,
+					"exception while writing image", e);
+		}
+
+		
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
 
