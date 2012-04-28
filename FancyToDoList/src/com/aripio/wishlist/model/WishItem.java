@@ -10,8 +10,8 @@ import android.graphics.Bitmap;
 
 public class WishItem {
 	private final Context _ctx;
-	private int _id = -1;
-	private int _storeId;
+	private long _id = -1;
+	private long _storeId;
 	private String _name;
 	private String _comments;
 	private String _desc;
@@ -20,7 +20,7 @@ public class WishItem {
 	private String _fullsizePicPath;
 	private int _priority;
 	private Bitmap _thumbnail;
-	private Bitmap _fullsizePhoto;
+	//private Bitmap _fullsizePhoto;
 	private String _store_name;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private float _price;
@@ -47,10 +47,12 @@ public class WishItem {
 		_desc = addr;
 	}
 
-	public WishItem(Context ctx, int storeId, String name, String desc, 
-			String date, String picStr, String fullsizePicPath, int priority,
-			Bitmap thumbnail) {
+	public WishItem(Context ctx, long storeId, String name, String desc, 
+			String date, String picStr, String fullsizePicPath, float price, 
+			String address, int priority) {
 		_fullsizePicPath = fullsizePicPath;
+		_price = price;
+		_address = address;
 		_picStr = picStr;
 		_storeId = storeId;
 		_ctx = ctx;
@@ -58,7 +60,7 @@ public class WishItem {
 		_desc = desc;
 		_date = date;
 		_priority = priority;
-		_thumbnail = thumbnail;
+		//_thumbnail = thumbnail;
 	}
 
 	public Bitmap getThumbnail() {
@@ -136,7 +138,6 @@ public class WishItem {
 	public void setComments(String com) {
 		this._comments = com;
 	}
-
 
 	@Override
 	public String toString() {

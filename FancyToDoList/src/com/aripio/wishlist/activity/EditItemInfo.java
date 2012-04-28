@@ -12,6 +12,7 @@ import com.aripio.wishlist.db.ItemDBAdapter;
 import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.aripio.wishlist.model.WishItem;
 import com.aripio.wishlist.util.PositionManager;
 import com.aripio.wishlist.util.AlbumStorageDirFactory;
 import com.aripio.wishlist.util.BaseAlbumDirFactory;
@@ -20,6 +21,7 @@ import com.aripio.wishlist.util.FroyoAlbumDirFactory;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -410,14 +412,25 @@ public class EditItemInfo extends Activity {
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
 
 		// insert or update the item to the Item table in database, linked to the store
-		if(mItem_id == -1){ //this is a new item, insert
-			mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath, 
-					itemPrice, itemLocation, itemPriority);
-		}
-		else{// old item to update
-			mItemDBAdapter.updateItem(mItem_id, storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath,
-					itemPrice, itemLocation, itemPriority);
-		}
+//		Context ctx, int storeId, String name, String desc, 
+//		String date, String picStr, String fullsizePicPath, float price, 
+//		String address, int priority
+//		
+		
+		WishItem item = new WishItem(this, storeID, itemName, itemDesc, 
+				date, picture_str, mCurrentPhotoPath, itemPrice,
+				itemLocation, itemPriority);
+		
+		item.save();
+		
+//		if(mItem_id == -1){ //this is a new item, insert
+//			mItemDBAdapter.addItem(storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath, 
+//					itemPrice, itemLocation, itemPriority);
+//		}
+//		else{// old item to update
+//			mItemDBAdapter.updateItem(mItem_id, storeID, itemName, itemDesc, date, picture_str, mCurrentPhotoPath,
+//					itemPrice, itemLocation, itemPriority);
+//		}
 		
 		//close this activity
 		finish();
