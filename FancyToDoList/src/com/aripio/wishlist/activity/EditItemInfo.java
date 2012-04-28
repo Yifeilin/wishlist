@@ -37,7 +37,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,7 +69,6 @@ public class EditItemInfo extends Activity {
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private String mCurrentPhotoPath = " ";
-	private ItemDBAdapter mItemDBAdapter;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
@@ -100,12 +98,6 @@ public class EditItemInfo extends Activity {
 		} else {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
-//		
-//		// Open the Item table in the database
-//		// wishListDB = WishListDataBase.getDBInstance(this);
-//		mItemDBAdapter = new ItemDBAdapter(this);
-//		mItemDBAdapter.open();
-//
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);
 		mStoreDBAdapter.open();
@@ -147,38 +139,6 @@ public class EditItemInfo extends Activity {
 		
 		if(mItem_id != -1){// this is fucking ugly!
 			mEditNew = false;
-//			ItemsCursor wishItemCursor;
-//			Cursor mStoreCursor;
-//			wishItemCursor = mItemDBAdapter.getItem(mItem_id);
-//			long storeID = wishItemCursor.getLong(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
-//			
-//			mStoreCursor = mStoreDBAdapter.getStore(storeID);
-//			String storeName = mStoreDBAdapter.getStoreName(storeID);
-//			
-//			// get location
-//			long locationID = mStoreCursor.getLong(mStoreCursor
-//					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
-//			String addStr = mLocationDBAdapter.getAddress(locationID);
-//			
-//			startManagingCursor(wishItemCursor);
-//			picture_str = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
-//
-//			String itemName = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
-//
-//			String itemDescrpt = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DESCRIPTION));
-//
-//			String itemDate = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
-//
-//			String itemPrice = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
-//
-//			String itemPriority = wishItemCursor.getString(wishItemCursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 
@@ -186,12 +146,6 @@ public class EditItemInfo extends Activity {
 			myDescription.setText(item.getDesc());
 			myPrice.setText(Double.toString(item.getPrice()));
 			myLocation.setText(item.getAddress());
-			
-//			myItemName.setText(itemName);
-//			myDescription.setText(itemDescrpt);
-//			myPrice.setText(itemPrice);
-//			myLocation.setText(addStr);
-//			
 			Bitmap bitmap = null;
 			
 			//check if pic_str is null, which user added this item without taking a pic.
