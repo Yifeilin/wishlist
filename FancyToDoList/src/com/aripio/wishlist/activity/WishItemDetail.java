@@ -11,6 +11,8 @@ import com.aripio.wishlist.db.ItemDBAdapter;
 import com.aripio.wishlist.db.LocationDBAdapter;
 import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.aripio.wishlist.model.WishItem;
+import com.aripio.wishlist.model.WishItemManager;
 import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;
@@ -140,82 +142,82 @@ public class WishItemDetail extends Activity {
 		mItem_id = i.getLongExtra("item_id", 1);
 		mPosition = i.getIntExtra("position", 0);
 
-		// open the Item table in the DB and
-		// retrieve the info. of the item via its id
-		// wishListDB = WishListDatabase.getDBInstance(this);
-		myItemDBAdapter = new ItemDBAdapter(this);
-		myItemDBAdapter.open();
-		
-		myStoreDBAdapter = new StoreDBAdapter(this);
-		myStoreDBAdapter.open();
-		
-		myLocationDBAdapter = new LocationDBAdapter(this);
-		myLocationDBAdapter.open();
-		
-		
-		// wishItemCursor = wishListDB.getItem(mItem_id);
-		
-		// get item
-		wishItemCursor = myItemDBAdapter.getItem(mItem_id);
-		
-		// get store_id from Item table
-		// get store name from store table
-		long storeID = wishItemCursor.getLong(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
-		
-		mStoreCursor = myStoreDBAdapter.getStore(storeID);
-//		String storeName = mStoreCursor.getString(mStoreCursor.
-//				getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
-		String storeName = myStoreDBAdapter.getStoreName(storeID);
-		
-		// get location
-		long locationID = mStoreCursor.getLong(mStoreCursor
-				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
-		
-//		mLocationCursor = myLocationDBAdapter.getLocation(locationID);
-//		double latitude = mLocationCursor.getDouble(mLocationCursor.
-//				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+//		// open the Item table in the DB and
+//		// retrieve the info. of the item via its id
+//		// wishListDB = WishListDatabase.getDBInstance(this);
+//		myItemDBAdapter = new ItemDBAdapter(this);
+//		myItemDBAdapter.open();
 //		
-//		double longitude = mLocationCursor.getDouble(mLocationCursor.
-//				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
-		
-//		String addStr =  mLocationCursor.getString(mLocationCursor.
-//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
-		String addStr = myLocationDBAdapter.getAddress(locationID);
-		
-//		String addLine2 =  mLocationCursor.getString(mLocationCursor.
-//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE2));
+//		myStoreDBAdapter = new StoreDBAdapter(this);
+//		myStoreDBAdapter.open();
 //		
-//		String addLine3 =  mLocationCursor.getString(mLocationCursor.
-//				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE3));
+//		myLocationDBAdapter = new LocationDBAdapter(this);
+//		myLocationDBAdapter.open();
+//		
 		
-		//String addLine = addLine1 + "\n" + addLine2 + "\n" + addLine3;
+//		// get item
+//		wishItemCursor = myItemDBAdapter.getItem(mItem_id);
+//		
+//		// get store_id from Item table
+//		// get store name from store table
+//		long storeID = wishItemCursor.getLong(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+//		
+//		mStoreCursor = myStoreDBAdapter.getStore(storeID);
+////		String storeName = mStoreCursor.getString(mStoreCursor.
+////				getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+//		String storeName = myStoreDBAdapter.getStoreName(storeID);
+//		
+//		// get location
+//		long locationID = mStoreCursor.getLong(mStoreCursor
+//				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+//		
+////		mLocationCursor = myLocationDBAdapter.getLocation(locationID);
+////		double latitude = mLocationCursor.getDouble(mLocationCursor.
+////				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+////		
+////		double longitude = mLocationCursor.getDouble(mLocationCursor.
+////				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+//		
+////		String addStr =  mLocationCursor.getString(mLocationCursor.
+////				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+//		String addStr = myLocationDBAdapter.getAddress(locationID);
+//		
+////		String addLine2 =  mLocationCursor.getString(mLocationCursor.
+////				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE2));
+////		
+////		String addLine3 =  mLocationCursor.getString(mLocationCursor.
+////				getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDLINE3));
+//		
+//		//String addLine = addLine1 + "\n" + addLine2 + "\n" + addLine3;
+//
+//		startManagingCursor(wishItemCursor);
+//		picture_str = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
+//		
+//		fullsize_picture_str = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH));
+//
+//		String itemName = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
+//
+//		String itemDescrpt = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DESCRIPTION));
+//
+//		String itemDate = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
+//
+//		String itemPrice = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
+//
+////		String itemLocation = wishItemCursor.getString(wishItemCursor
+////				.getColumnIndexOrThrow(ItemDBAdapter.KEY_LOCATION));
+//
+//		String itemPriority = wishItemCursor.getString(wishItemCursor
+//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
 
-		startManagingCursor(wishItemCursor);
-		picture_str = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
+		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 		
-		fullsize_picture_str = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH));
-
-		String itemName = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
-
-		String itemDescrpt = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DESCRIPTION));
-
-		String itemDate = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
-
-		String itemPrice = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
-
-//		String itemLocation = wishItemCursor.getString(wishItemCursor
-//				.getColumnIndexOrThrow(ItemDBAdapter.KEY_LOCATION));
-
-		String itemPriority = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
-
 		// format the date time
 		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		SimpleDateFormat sdfTo = new SimpleDateFormat(
@@ -223,14 +225,14 @@ public class WishItemDetail extends Activity {
 
 		String dateTimeStrNew = null;
 		try {
-			dateTimeStrNew = sdfTo.format(sdfFrom.parse(itemDate));
+			dateTimeStrNew = sdfTo.format(sdfFrom.parse(item.getDate()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		// format the price
-		String priceStrNew = "$" + itemPrice;
+		String priceStrNew = "$" + Double.toString(item.getPrice());
 
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);
@@ -267,15 +269,23 @@ public class WishItemDetail extends Activity {
 		}
 
 		//display the item info. in the views
-		// mPhotoView.setImageURI(photoUri);
-		mNameView.setText(itemName);
-		mDescrptView.setText(itemDescrpt);
+		mNameView.setText(item.getName());
+		mDescrptView.setText(item.getDesc());
 		mDateView.setText(dateTimeStrNew);
 		mPriceView.setText(priceStrNew);
-		mStoreView.setText("Store: " + storeName);
-		//mLocationView.setText(itemLocation);
-		//mLocationView.setText("latitude:" + Double.toString(latitude) + " longitude:" + Double.toString(longitude));
-		mLocationView.setText(addStr);
+		mStoreView.setText("At " + item.getStoreName());
+		mLocationView.setText(item.getAddress());
+//		
+//		//display the item info. in the views
+//		// mPhotoView.setImageURI(photoUri);
+//		mNameView.setText(itemName);
+//		mDescrptView.setText(itemDescrpt);
+//		mDateView.setText(dateTimeStrNew);
+//		mPriceView.setText(priceStrNew);
+//		mStoreView.setText("Store: " + storeName);
+//		//mLocationView.setText(itemLocation);
+//		//mLocationView.setText("latitude:" + Double.toString(latitude) + " longitude:" + Double.toString(longitude));
+//		mLocationView.setText(addStr);
 
 //		// set the gesture detection
 //		gestureDetector = new GestureDetector(new MyGestureDetector());

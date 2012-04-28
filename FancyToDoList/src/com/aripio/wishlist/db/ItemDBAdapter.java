@@ -28,7 +28,7 @@ public class ItemDBAdapter {
 	public static final String KEY_PHOTO_URL = "picture";
 	public static final String KEY_FULLSIZE_PHOTO_PATH = "fullsize_picture";
 	public static final String KEY_PRICE = "price";
-	public static final String KEY_LOCATION = "location";
+	public static final String KEY_ADDRESS = "location";
 	public static final String KEY_PRIORITY = "priority";
 
 	public static final String DB_TABLE = "Item";
@@ -205,7 +205,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
 		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
-		initialValues.put(KEY_LOCATION, location);
+		initialValues.put(KEY_ADDRESS, location);
 		initialValues.put(KEY_PRIORITY, priority);
 
 		this.mDb.insert(DB_TABLE, null, initialValues);
@@ -222,7 +222,7 @@ public class ItemDBAdapter {
 	 *            The item description
 	 */
 	public void updateItem(long _id, long store_id, String name, String description, String date_time,
-			String picture_uri, String fullsize_picture_path, float price, String location,
+			String picture_uri, String fullsize_picture_path, float price, String address,
 			int priority) {
 
 //		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
@@ -247,7 +247,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
 		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
-		initialValues.put(KEY_LOCATION, location);
+		initialValues.put(KEY_ADDRESS, address);
 		initialValues.put(KEY_PRIORITY, priority);
 		
 		String where = String.format("_id = '%d'", _id);
@@ -261,7 +261,7 @@ public class ItemDBAdapter {
 	  */ 
 
 	public void updateOrReplaceItem(long _id, long store_id, String name, String description, String date_time,
-			String picture_uri, String fullsize_picture_path, float price, String location,
+			String picture_uri, String fullsize_picture_path, float price, String address,
 			int priority) {
 		ContentValues initialValues = new ContentValues();
 
@@ -274,7 +274,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
 		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
-		initialValues.put(KEY_LOCATION, location);
+		initialValues.put(KEY_ADDRESS, address);
 		initialValues.put(KEY_PRIORITY, priority);
 
 		this.mDb.replace(DB_TABLE, null, initialValues);
@@ -401,10 +401,10 @@ public class ItemDBAdapter {
 	 *            the sort criteria
 	 */
 	public ItemsCursor getItems(ItemsCursor.SortBy sortBy) {
-		String sql = ItemsCursor.QUERY + sortBy.toString();
+		String sqlQuery = ItemsCursor.QUERY + sortBy.toString();
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
-				new ItemsCursor.Factory(), sql, null, null);
+				new ItemsCursor.Factory(), sqlQuery, null, null);
 		c.moveToFirst();
 		return c;
 	}
@@ -430,6 +430,7 @@ public class ItemDBAdapter {
 	 * @param _id
 	 * @return
 	 */
+	//public Cursor getItem(long _id) {
 	public ItemsCursor getItem(long _id) {
 		String sql = String.format("SELECT * FROM Item " + "WHERE _id = '%d' ",
 				_id);

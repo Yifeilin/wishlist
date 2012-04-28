@@ -33,7 +33,7 @@ public class DBAdapter {
 			+ ItemDBAdapter.KEY_PHOTO_URL 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PRICE 		+ " REAL, " 
-			+ ItemDBAdapter.KEY_LOCATION 	+ " TEXT, "
+			+ ItemDBAdapter.KEY_ADDRESS 	+ " TEXT, "
 			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER"
 			+ ");";
 
