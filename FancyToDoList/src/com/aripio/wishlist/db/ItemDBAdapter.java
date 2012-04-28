@@ -255,6 +255,32 @@ public class ItemDBAdapter {
 
 	}
 
+	 /** Replace or Update an item in the database. 
+	  *  if the _id (primary key) already exists in db, a row will be updated
+	  *  if not, a new row will be inserted
+	  */ 
+
+	public void updateOrReplaceItem(long _id, long store_id, String name, String description, String date_time,
+			String picture_uri, String fullsize_picture_path, float price, String location,
+			int priority) {
+		ContentValues initialValues = new ContentValues();
+
+		initialValues.put(KEY_STORE_ID, store_id);
+		//initialValues.put(KEY_LOCATION_ID, locationID);	
+		initialValues.put(KEY_NAME, name);
+		initialValues.put(KEY_DESCRIPTION, description);
+		initialValues.put(KEY_DATE_TIME, date_time);
+		// initialValues.put(KEY_STORENAME, name);
+		initialValues.put(KEY_PHOTO_URL, picture_uri);
+		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
+		initialValues.put(KEY_PRICE, price);
+		initialValues.put(KEY_LOCATION, location);
+		initialValues.put(KEY_PRIORITY, priority);
+
+		this.mDb.replace(DB_TABLE, null, initialValues);
+	}
+
+
 	/**
 	 * Delete a item from the database.
 	 * 

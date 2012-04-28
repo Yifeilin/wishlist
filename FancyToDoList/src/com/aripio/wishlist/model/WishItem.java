@@ -3,127 +3,159 @@ package com.aripio.wishlist.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.aripio.wishlist.db.ItemDBAdapter;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 
 public class WishItem {
-	private String name;
-	private String comments;
-	private String desc;
-	private String date;
-	private int priority;
-	private Bitmap thumbnail;
-	private Bitmap fullsizePhoto;
-	private String store_name;
+	private final Context _ctx;
+	private int _id = -1;
+	private int _storeId;
+	private String _name;
+	private String _comments;
+	private String _desc;
+	private String _date;
+	private String _picStr;
+	private String _fullsizePicPath;
+	private int _priority;
+	private Bitmap _thumbnail;
+	private Bitmap _fullsizePhoto;
+	private String _store_name;
 	//public static final String KEY_PHOTO_URL = "picture";
-	private double price;
-	private String address;
+	private float _price;
+	private String _address;
+
+	public WishItem(Context ctx ,String name) {
+		this(ctx, name, null, null);
+		Date now = new Date(java.lang.System.currentTimeMillis());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		_date = sdf.format(now);
+	}
+
+	public WishItem(Context ctx, String name, String addr) {
+		this(ctx, name, null, addr);
+		Date now = new Date(java.lang.System.currentTimeMillis());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		_date = sdf.format(now);
+	}
+
+	public WishItem(Context ctx, String name, String created, String addr) {
+		_ctx = ctx;
+		_name = name;
+		_date = created;
+		_desc = addr;
+	}
+
+	public WishItem(Context ctx, int storeId, String name, String desc, 
+			String date, String picStr, String fullsizePicPath, int priority,
+			Bitmap thumbnail) {
+		_fullsizePicPath = fullsizePicPath;
+		_picStr = picStr;
+		_storeId = storeId;
+		_ctx = ctx;
+		_name = name;
+		_desc = desc;
+		_date = date;
+		_priority = priority;
+		_thumbnail = thumbnail;
+	}
 
 	public Bitmap getThumbnail() {
-		return thumbnail;
+		return _thumbnail;
 	}
 
 	public void setThumbnail(Bitmap thumnail) {
-		this.thumbnail = thumnail;
+		this._thumbnail = thumnail;
 	}
 	
 	public void setStoreName(String storeName){
-		this.store_name = storeName;
+		this._store_name = storeName;
 	}
 	
 	public String getStoreName(){
-		return this.store_name;
+		return this._store_name;
 	}
 	
-	public void setPrice(double p){
-		this.price = p;
+	public void setPrice(float p){
+		this._price = p;
 	}
 	
 	public double getPrice(){
-		return this.price;
+		return this._price;
 	}
 	
 	public void setAddress(String add){
-		this.address = add;
+		this._address = add;
 	}
 	
 	public String getAddress(){
-		return this.address;
+		return this._address;
 	}
 
 	public String getPriorityStr() {
-		return Integer.toString(priority);
+		return Integer.toString(_priority);
 	}
 	
 	public int getPriority() {
-		return priority;
+		return _priority;
 	}
 
 	public void setPriority(String priority) {
-		this.priority = Integer.getInteger(priority);
+		this._priority = Integer.getInteger(priority);
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this._name = name;
 	}
 
 	public String getDate() {
-		return date;
+		return _date;
 	}
 
 	public void setDate(String date) {
-		this.date = date;
+		this._date = date;
 	}
 
 	public String getDesc() {
-		return desc;
+		return _desc;
 	}
 
 	public void setDesc(String desc) {
-		this.desc = desc;
+		this._desc = desc;
+	}
+	
+	public String getComments() {
+		return _comments;
 	}
 
-	public WishItem(String _task) {
-		this(_task, null, null);
-		Date now = new Date(java.lang.System.currentTimeMillis());
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-		date = sdf.format(now);
+	public void setComments(String com) {
+		this._comments = com;
 	}
 
-	public WishItem(String _task, String _addr) {
-		this(_task, null, _addr);
-		Date now = new Date(java.lang.System.currentTimeMillis());
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-		date = sdf.format(now);
-	}
-
-	public WishItem(String _task, String _created, String _addr) {
-		name = _task;
-		date = _created;
-		desc = _addr;
-	}
-
-	public WishItem(String name, String desc, String date, int priority,
-			Bitmap thumbnail) {
-		this.name = name;
-		this.desc = desc;
-		this.date = date;
-		this.priority = priority;
-		this.thumbnail = thumbnail;
-	}
 
 	@Override
 	public String toString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-		String dateString = sdf.format(date);
-		return "(" + dateString + ") " + name + " " + desc;
+		String dateString = sdf.format(_date);
+		return "(" + dateString + ") " + _name + " " + _desc;
 	}
 	
 	public boolean save() {
+		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
+		mItemDBAdapter.open();
+		if(_id == -1) {
+			mItemDBAdapter.addItem(_storeId, _name, _desc, _date, _picStr, _fullsizePicPath, 
+					_price, _address, _priority);
+		}
+		else {
+			mItemDBAdapter.updateItem(_id, _storeId, _name, _desc, _date, _picStr, _fullsizePicPath, 
+					_price, _address, _priority);
+		}
 		return true;
-		
 	}
 }
