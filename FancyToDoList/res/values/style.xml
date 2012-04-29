@@ -103,7 +103,7 @@
         <item name="android:layout_height">@dimen/footBar_height</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:background">@color/title_background</item>
+        <item name="android:background">@color/footerBarBackground_dark_grey</item>
 	</style>
 	
     <style name="TextBody">
