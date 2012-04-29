@@ -68,7 +68,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
-	private String mCurrentPhotoPath = " ";
+	private String _fullsizePhotoPath = " ";
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
@@ -127,7 +127,7 @@ public class EditItemInfo extends Activity {
 			public void onClick(View view) {
 				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
 				//i.putExtra("pic_str", picture_str);
-				i.putExtra("fullsize_pic_str", mCurrentPhotoPath);
+				i.putExtra("fullsize_pic_str", _fullsizePhotoPath);
 				startActivity(i);
 			}
 		});
@@ -137,7 +137,7 @@ public class EditItemInfo extends Activity {
 		Intent i = getIntent();
 		mItem_id = i.getLongExtra("item_id", -1);
 		
-		if(mItem_id != -1){// this is fucking ugly!
+		if(mItem_id != -1) {
 			mEditNew = false;
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
@@ -371,7 +371,7 @@ public class EditItemInfo extends Activity {
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
 
 		WishItem item = new WishItem(this, storeID, itemName, itemDesc, 
-				date, picture_str, mCurrentPhotoPath, itemPrice,
+				date, picture_str, _fullsizePhotoPath, itemPrice,
 				itemLocation, itemPriority);
 		
 		item.save();
@@ -423,14 +423,14 @@ public class EditItemInfo extends Activity {
 
 		try {
 			f = setUpPhotoFile();
-			mCurrentPhotoPath = f.getAbsolutePath();
-			String s = mCurrentPhotoPath;
+			_fullsizePhotoPath = f.getAbsolutePath();
+			String s = _fullsizePhotoPath;
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			//takePictureIntent.putExtra(getString(R.string.fullSizePhotoLocation), Uri.fromFile(f));
 		} catch (IOException e) {
 			e.printStackTrace();
 			f = null;
-			mCurrentPhotoPath = null;
+			_fullsizePhotoPath = null;
 		}
 		startActivityForResult(takePictureIntent, TAKE_PICTURE);
 	}
@@ -553,7 +553,6 @@ public class EditItemInfo extends Activity {
 			}
 			
 		} else {
-//			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
 			Log.v("wishlist", "External storage is not mounted READ/WRITE.");
 		}
 		
@@ -572,8 +571,8 @@ public class EditItemInfo extends Activity {
 	private File setUpPhotoFile() throws IOException {
 		
 		File f = createImageFile();
-		mCurrentPhotoPath = f.getAbsolutePath();
-		String s = mCurrentPhotoPath;
+		_fullsizePhotoPath = f.getAbsolutePath();
+		String s = _fullsizePhotoPath;
 		
 		return f;
 	}
@@ -583,7 +582,7 @@ public class EditItemInfo extends Activity {
 		//MediaStore.Images.Thumbnails.getThumbnail();
 		int width =128;
 		int height=128;
-		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,null);
+		Bitmap bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath,null);
 		Bitmap thumbnail=android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
 		imageItem.setImageBitmap(thumbnail);
 		

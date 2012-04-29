@@ -17,4 +17,17 @@
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
+    
+    <dimen name="headBar_height">50dip</dimen>
+    <dimen name="footBar_height">50dip</dimen>
+    
+<!--     <dimen name="headBarText_size">48pt</dimen>  -->
+    <dimen name="headBarText_size">20sp</dimen>
+    <dimen name="itemName_detail_size">30pt</dimen>
+	<dimen name="itemInfo_detail_size">25pt</dimen>
+	
+	<dimen name="iconName_dashboard_size">30pt</dimen>
+    
+    
+    
  </resources>

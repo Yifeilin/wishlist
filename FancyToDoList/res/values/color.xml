@@ -32,4 +32,13 @@
     <color name="title_separator">#40ffffff</color>
     <color name="light_yellow">#F5E856</color>
     
+    <color name="headBarBackground_dark_grey">#222222</color>
+    <color name="headBarText_light_grey">#aeaeae</color>
+    
+    <color name="bodyBackground_light_grey">#F1F1F1</color>
+	<color name="bodyText_dark_grey">#424242</color>
+    
+    <color name="dark_purple">#790980</color>
+    
+    
 </resources>
