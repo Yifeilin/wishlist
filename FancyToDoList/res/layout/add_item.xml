@@ -4,16 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+	android:background="@color/bodyBackground_light_grey">
 
 	<LinearLayout style="@style/TitleBar"
 	android:id="@+id/addItem_top"
 	android:layout_alignParentTop="true">
-
 		<ImageButton
 		    android:id="@+id/imageButton_back_logo"
 		    style="@style/TitleBarBackLogo"
-		    android:contentDescription="@string/description_back_logo"
 		    android:onClick="onClickHome"
 		    android:src="@drawable/ic_back_logo" />
 			
@@ -31,10 +30,12 @@
 
 	<ScrollView android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_below="@+id/addItem_top">
+		android:layout_below="@+id/addItem_top"
+		android:background="@color/bodyBackground_light_grey">
 
 		<LinearLayout android:orientation="vertical"
-			android:layout_width="fill_parent" android:layout_height="wrap_content">
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@color/bodyBackground_light_grey">
 			<EditText android:layout_width="fill_parent" android:id="@+id/itemname"
 				android:layout_height="wrap_content" android:hint="Item Name"
 				android:layout_weight="1" />
@@ -51,21 +52,21 @@
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
 				android:layout_height="wrap_content" android:hint="location"
 				android:gravity="top" android:inputType="textPostalAddress"
-				android:layout_weight="1" />
+				android:layout_weight="1"/>
 
-			<LinearLayout android:layout_height="wrap_content"
+		<!--	<LinearLayout android:layout_height="wrap_content"
 				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
-				android:padding="10dip" android:layout_weight="1">
-
+				android:background="@color/bodyBackground_light_grey">
+				android:padding="10dip"
+		-->
 				<ImageView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/image_photo"
-					android:src="@drawable/icon"
-					android:layout_weight="1" />
+					android:src="@drawable/icon"/>
 			</LinearLayout>
-		</LinearLayout>
+		<!-- </LinearLayout>  -->
 	</ScrollView>
 
-	<LinearLayout style="@style/FooterBar">"
+	<LinearLayout style="@style/FooterBar">
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_map"
 			android:contentDescription="@string/description_location" android:src="@drawable/ic_pin_blue_default_72by72"
