@@ -40,8 +40,8 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 
 			int nImageIndex = cursor
 					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
-			int nDateIndex = cursor
-					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME);
+//			int nDateIndex = cursor
+//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME);
 
 			// set the photo to the image view
 			if (columnIndex == nImageIndex) {
@@ -82,31 +82,32 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				return true;
 			}
 
-			// set date and time to the text view in appropriate format
-			if (columnIndex == nDateIndex) {
-				
-				//get the TextView in which the date and time will be displayed
-				TextView viewDate = (TextView) view;
-				
-				//get the date_time string from db and reformat it
-				String dateTimeStr = cursor.getString(columnIndex);
-				SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat sdfTo = new SimpleDateFormat("MMM dd, yyyy");
-
-				String dateTimeStrNew = null;
-				try {
-					dateTimeStrNew = sdfTo.format(sdfFrom.parse(dateTimeStr));
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				//set the reformatted date_time
-				viewDate.setText(dateTimeStrNew);
-				return true;
-			}
+//			// set date and time to the text view in appropriate format
+//			if (columnIndex == nDateIndex) {
+//				
+//				//get the TextView in which the date and time will be displayed
+//				TextView viewDate = (TextView) view;
+//				
+//				//get the date_time string from db and reformat it
+//				String dateTimeStr = cursor.getString(columnIndex);
+//				SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd");
+//				SimpleDateFormat sdfTo = new SimpleDateFormat("MMM dd, yyyy");
+//
+//				String dateTimeStrNew = null;
+//				try {
+//					dateTimeStrNew = sdfTo.format(sdfFrom.parse(dateTimeStr));
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//				//set the reformatted date_time
+//				viewDate.setText(dateTimeStrNew);
+//				return true;
+//			}
 
 			return false;
+//			return true;
 		}
 
 	}

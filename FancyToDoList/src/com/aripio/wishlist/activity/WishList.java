@@ -90,7 +90,7 @@ public class WishList extends Activity {
 
 	private DBAdapter myDBAdapter;
 	private ItemDBAdapter myItemDBAdapter;
-	private LocationDBAdapter myLocationDBAdapter;
+//	private LocationDBAdapter myLocationDBAdapter;
 	
 	private long selectedItem_id;
 
@@ -176,8 +176,8 @@ public class WishList extends Activity {
 		myItemDBAdapter.open();
 		
 		// open the db for operations of location table
-		myLocationDBAdapter = new LocationDBAdapter(this);
-		myLocationDBAdapter.open();
+//		myLocationDBAdapter = new LocationDBAdapter(this);
+//		myLocationDBAdapter.open();
 
 		// check if the activity is started from search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -434,10 +434,12 @@ public class WishList extends Activity {
 
 			String[] from = new String[] { ItemDBAdapter.KEY_ID,
 					ItemDBAdapter.KEY_PHOTO_URL, ItemDBAdapter.KEY_NAME,
-					ItemDBAdapter.KEY_DATE_TIME };
-
+					ItemDBAdapter.KEY_PRICE,
+					ItemDBAdapter.KEY_ADDRESS};
+//			ItemDBAdapter.KEY_STORENAME,
 			int[] to = new int[] { R.id.txtItemID, R.id.imgPhoto, R.id.txtName,
-					R.id.txtDate };
+					R.id.txtPrice, R.id.txtAddress};
+//			R.id.txtStore, 
 			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, wishItemCursor, from, to);
 
@@ -600,8 +602,8 @@ public class WishList extends Activity {
 			return false;
 		}
 		
-		TextView dateTextView = (TextView) selected_view
-				.findViewById(R.id.txtDate);
+//		TextView dateTextView = (TextView) selected_view
+//				.findViewById(R.id.txtDate);
 		
 		//get the item_id from the selected item
 		long item_id;
@@ -625,13 +627,13 @@ public class WishList extends Activity {
 			startActivity(i);
 			return true;
 		}
-		case (R.id.POST_TODO): {
-			String date = dateTextView.getText().toString();
-			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
-			snsIntent.putExtra("wishItem", date);
-			startActivityForResult(snsIntent, POST_ITEM);
-			return true;
-		}
+//		case (R.id.POST_TODO): {
+//			String date = dateTextView.getText().toString();
+//			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+//			snsIntent.putExtra("wishItem", date);
+//			startActivityForResult(snsIntent, POST_ITEM);
+//			return true;
+//		}
 		case (R.id.MARK_TODO): {
 			if (myItemDBAdapter.getItemAddress(item_id).equals("unknown")){
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);

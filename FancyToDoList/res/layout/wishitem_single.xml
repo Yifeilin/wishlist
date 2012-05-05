@@ -31,10 +31,30 @@
 		<TextView android:id="@+id/txtName"	
 	 		android:textSize="20dip"
 		    android:maxLines="2"
-		    android:textColor="@color/notepad_text"
+		    android:textColor="@color/dark_purple"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"/>
-			
+		
+		 	<TextView android:id="@+id/txtPrice"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content" 
+ 			android:textSize="16dip"
+ 			android:textColor="@color/bodyText_dark_grey"/>
+ 			 <!--  		android:layout_weight="1"-->
+  			<!--  android:scrollbars="vertical" android:fadingEdge="vertical" -->
+<!--   			 			android:padding="12dp"  --> 
+		 	
+			<TextView android:id="@+id/txtStore"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content" 
+ 			android:textSize="16dip"
+ 			android:textColor="@color/bodyText_dark_grey"/>
+						
+			<TextView android:id="@+id/txtAddress"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content" 
+ 			android:textSize="16dip"
+ 			android:textColor="@color/bodyText_dark_grey"/>
 <!-- 		<TextView android:id="@+id/txtDesc" android:layout_width="fill_parent" -->
 <!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
 <!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
@@ -48,17 +68,19 @@
 <!-- 			android:layout_weight="1" -->
 <!-- 			android:textSize="10dip" -->
 <!-- 			android:textColor="@color/notepad_text"/> -->
-		<TextView
+<!--		<TextView
 	    	android:id="@+id/txtDate"
 	 		android:layout_width="fill_parent"
 		    android:layout_height="wrap_content" 
 		    android:textSize="16dip"
 		    android:maxLines="1"/>
+		    -->
 <!-- 		    android:textColor="@color/notepad_text"/> -->
 			
-		<TextView android:id="@+id/txtItemID" android:visibility="visible"
+ 		<TextView android:id="@+id/txtItemID" android:visibility="invisible"
 				  android:layout_width="fill_parent"
 			      android:layout_height="wrap_content"
 			      android:textSize="16dip" />
+	
 	</LinearLayout>
 </LinearLayout>
