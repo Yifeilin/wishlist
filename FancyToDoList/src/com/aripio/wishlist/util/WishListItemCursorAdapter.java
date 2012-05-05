@@ -42,7 +42,11 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
 //			int nDateIndex = cursor
 //					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME);
+			int nPriceIndex = cursor
+			.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE);
 
+			int nAddIndex = cursor
+			.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS);
 			// set the photo to the image view
 			if (columnIndex == nImageIndex) {
 				Bitmap bitmap = null;
@@ -105,6 +109,21 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 //				viewDate.setText(dateTimeStrNew);
 //				return true;
 //			}
+			
+			else if (columnIndex == nPriceIndex) {
+				TextView viewPrice = (TextView) view;
+				int price = cursor.getInt(columnIndex);
+				String priceStr = "$ " + Integer.toString(price);
+				viewPrice.setText(priceStr);
+				return true;
+			}
+			
+			else if (columnIndex == nAddIndex) {
+				TextView viewAdd = (TextView) view;
+				String Add = "At " + cursor.getString(columnIndex);
+				viewAdd.setText(Add);
+				return true;
+			}
 
 			return false;
 //			return true;
