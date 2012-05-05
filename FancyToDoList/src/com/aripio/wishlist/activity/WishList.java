@@ -546,11 +546,11 @@ public class WishList extends Activity {
 			startActivity(mapIntent);
 			return true;
 		}
-		case (R.id.menu_post): {
-			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
-			startActivityForResult(snsIntent, POST_ITEM);
-			return true;
-		}
+//		case (R.id.menu_post): {
+//			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+//			startActivityForResult(snsIntent, POST_ITEM);
+//			return true;
+//		}
 
 //		case (R.id.menu_scan): {
 //			IntentIntegrator.initiateScan(this);

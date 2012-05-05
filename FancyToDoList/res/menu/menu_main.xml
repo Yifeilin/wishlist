@@ -6,9 +6,9 @@
           android:title="@string/search" android1:icon="@android:drawable/ic_search_category_default"/>  
    	<item android1:id="@+id/menu_map" 
    	 	  android1:title="Map" android1:icon="@android:drawable/ic_menu_mapmode"/>
-   	<item android1:id="@+id/menu_post" 
+ <!--   	<item android1:id="@+id/menu_post" 
     	  android1:title="@string/post" android1:icon="@android:drawable/ic_menu_upload"/>
- <!--    <item android1:id="@+id/menu_scan" 
+    <item android1:id="@+id/menu_scan" 
     	  android1:title="@string/menu_scan" android1:icon="@android:drawable/ic_menu_view"/>
  -->
    	<item android1:id="@+id/menu_sort" android1:title="Sort" android1:icon="@android:drawable/ic_menu_sort_by_size">
