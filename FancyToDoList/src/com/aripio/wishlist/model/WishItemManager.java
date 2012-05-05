@@ -55,12 +55,14 @@ public class WishItemManager {
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
 		
 		mStoreCursor = mStoreDBAdapter.getStore(storeID);
-		// storeName = mStoreDBAdapter.getStoreName(storeID);
+		//String storeName = mStoreDBAdapter.getStoreName(storeID);
 		
-		// get location
 		long locationID = mStoreCursor.getLong(mStoreCursor
 				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
 		String itemLocation = mLocationDBAdapter.getAddress(locationID);
+		
+		String storeName = wishItemCursor.getString(wishItemCursor
+				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORENAME));		
 		
 		String picture_str = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
@@ -83,7 +85,7 @@ public class WishItemManager {
 		int itemPriority = wishItemCursor.getInt(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
 		
-		WishItem item = new WishItem(_ctx, storeID, itemName, itemDesc, 
+		WishItem item = new WishItem(_ctx, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, fullsize_pic_path, itemPrice,
 				itemLocation, itemPriority);
 

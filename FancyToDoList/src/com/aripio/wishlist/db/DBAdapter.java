@@ -26,10 +26,10 @@ public class DBAdapter {
 			+ " (" 
 			+ ItemDBAdapter.KEY_ID			+ " integer primary key autoincrement, " 
 			+ ItemDBAdapter.KEY_STORE_ID 	+ " INTEGER, "
+			+ ItemDBAdapter.KEY_STORENAME	+ " TEXT, "
 			+ ItemDBAdapter.KEY_NAME 		+ " TEXT, " 
 			+ ItemDBAdapter.KEY_DESCRIPTION + " TEXT, " 
 			+ ItemDBAdapter.KEY_DATE_TIME 	+ " TEXT, " 
-			+ ItemDBAdapter.KEY_STORENAME 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PHOTO_URL 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PRICE 		+ " REAL, " 
@@ -114,7 +114,8 @@ public class DBAdapter {
 			mItemDBAdapter.open(db);
 			String picUrl;
 			picUrl = Integer.toHexString(R.drawable.car);
-			mItemDBAdapter.addItem(	1, 
+			mItemDBAdapter.addItem(	1,
+									"BMW Store",
 									"Car", 
 									"It is a very nice car", 
 									"1983-07-06 11:30:00", 
@@ -126,33 +127,36 @@ public class DBAdapter {
 			
 			picUrl = Integer.toHexString(R.drawable.book);
 			mItemDBAdapter.addItem(	2, 
+									"Chapter",
 									"Book", 
 									"It is a great book", 
 									"1984-03-17 18:22:35", 
 									picUrl,
 									" ",
 									9.9f,
-									"Chapter store, Toronto, ON Canada",
+									"#33 Dudas, Toronto, ON Canada",
 									3);
 			picUrl = Integer.toHexString(R.drawable.chocolate);
-			mItemDBAdapter.addItem(	3, 
+			mItemDBAdapter.addItem(	3,
+									"Yuan Zu Food",
 									"Cake", 
 									"It is a delicious cake", 
 									"2011-05-03 03:40:50", 
 									picUrl,
 									" ",
 									6.99f,
-									"YuanZu Food, Jiaxing, Zhejiang, China",
+									"Jiaxing, Zhejiang, China",
 									2);
 			picUrl = Integer.toHexString(R.drawable.heart);
 			mItemDBAdapter.addItem(	4, 
-									"Heart", 
+									"Sunnybrook Hospital",
+									"Heart",
 									"It is a warm beating heart", 
 									"2000-11-23 08:17:38", 
 									picUrl,
 									" ",
 									324.49f,
-									"Hospital, Beijing, China",
+									"Beijing, China",
 									1);
 
 			mItemDBAdapter.close();
@@ -168,7 +172,7 @@ public class DBAdapter {
 			mStoreDBAdapter.addStore("BMW Store", 		1);
 			mStoreDBAdapter.addStore("Chapter",   		2);
 			mStoreDBAdapter.addStore("Yuan Zu Food",	3);
-			mStoreDBAdapter.addStore("Hospital",		4);
+			mStoreDBAdapter.addStore("Sunnybrook Hospital",		4);
 			mStoreDBAdapter.close();
 			
 			//create table "location" and insert 4 default locations

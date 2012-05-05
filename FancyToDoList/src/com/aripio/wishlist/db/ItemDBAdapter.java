@@ -20,11 +20,11 @@ import android.util.Log;
 public class ItemDBAdapter {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_STORE_ID = "store_id";
+	public static final String KEY_STORENAME = "store_name";
 	//public static final String KEY_LOCATION_ID = "location_id";
 	public static final String KEY_NAME = "item_name";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_DATE_TIME = "date_time";
-	public static final String KEY_STORENAME = "store_name";
 	public static final String KEY_PHOTO_URL = "picture";
 	public static final String KEY_FULLSIZE_PHOTO_PATH = "fullsize_picture";
 	public static final String KEY_PRICE = "price";
@@ -185,7 +185,7 @@ public class ItemDBAdapter {
 	 * @param description
 	 *            The name description
 	 */
-	public void addItem(long store_id, String name, String description, String date_time,
+	public void addItem(long store_id, String store_name, String name, String description, String date_time,
 			String picture_uri, String fullsize_picture_path, float price, String location,
 			int priority) {
 		// String sql = String.format(
@@ -197,11 +197,11 @@ public class ItemDBAdapter {
 		ContentValues initialValues = new ContentValues();
 
 		initialValues.put(KEY_STORE_ID, store_id);
+		initialValues.put(KEY_STORENAME, store_name);
 		//initialValues.put(KEY_LOCATION_ID, locationID);	
 		initialValues.put(KEY_NAME, name);
 		initialValues.put(KEY_DESCRIPTION, description);
 		initialValues.put(KEY_DATE_TIME, date_time);
-		// initialValues.put(KEY_STORENAME, name);
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
 		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
@@ -221,7 +221,7 @@ public class ItemDBAdapter {
 	 * @param description
 	 *            The item description
 	 */
-	public void updateItem(long _id, long store_id, String name, String description, String date_time,
+	public void updateItem(long _id, long store_id, String store_name, String name, String description, String date_time,
 			String picture_uri, String fullsize_picture_path, float price, String address,
 			int priority) {
 
@@ -239,11 +239,11 @@ public class ItemDBAdapter {
 
 		//initialValues.put(KEY_ID, _id);
 		initialValues.put(KEY_STORE_ID, store_id);
+		initialValues.put(KEY_STORENAME, store_name);
 		//initialValues.put(KEY_LOCATION_ID, locationID);	
 		initialValues.put(KEY_NAME, name);
 		initialValues.put(KEY_DESCRIPTION, description);
 		initialValues.put(KEY_DATE_TIME, date_time);
-		// initialValues.put(KEY_STORENAME, name);
 		initialValues.put(KEY_PHOTO_URL, picture_uri);
 		initialValues.put(KEY_FULLSIZE_PHOTO_PATH, fullsize_picture_path);
 		initialValues.put(KEY_PRICE, price);
@@ -332,7 +332,7 @@ public class ItemDBAdapter {
 
 		}
 
-		private static final String QUERY = "SELECT _id, item_name, description, date_time, store_id, picture, fullsize_picture, price, location, priority "
+		private static final String QUERY = "SELECT _id, item_name, store_name, description, date_time, store_id, picture, fullsize_picture, price, location, priority "
 				+ "FROM Item " + "ORDER BY ";
 		
 //		private static final String QUERY_NAME = "SELECT _id, item_name, description, date_time, store_id, picture, price, location, priority "
@@ -360,6 +360,10 @@ public class ItemDBAdapter {
 			return getString(getColumnIndexOrThrow("item_name"));
 		}
 
+		public String getColStoreName() {
+			return getString(getColumnIndexOrThrow("store_name"));
+		}
+		
 		public int getColStoreId() {
 			return Integer
 					.parseInt(getString(getColumnIndexOrThrow("store_id")));

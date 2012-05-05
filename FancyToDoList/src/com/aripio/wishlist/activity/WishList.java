@@ -432,20 +432,27 @@ public class WishList extends Activity {
 			wishItemCursor.requery();
 			int resID = R.layout.wishitem_single;
 
-			String[] from = new String[] { ItemDBAdapter.KEY_ID,
-					ItemDBAdapter.KEY_PHOTO_URL, ItemDBAdapter.KEY_NAME,
+			String[] from = new String[] { 
+					ItemDBAdapter.KEY_ID,
+					ItemDBAdapter.KEY_PHOTO_URL,
+					ItemDBAdapter.KEY_NAME,
 					ItemDBAdapter.KEY_PRICE,
+					ItemDBAdapter.KEY_STORENAME,
 					ItemDBAdapter.KEY_ADDRESS};
-//			ItemDBAdapter.KEY_STORENAME,
-			int[] to = new int[] { R.id.txtItemID, R.id.imgPhoto, R.id.txtName,
-					R.id.txtPrice, R.id.txtAddress};
-//			R.id.txtStore, 
+			
+			int[] to = new int[] {
+					R.id.txtItemID, 
+					R.id.imgPhoto,
+					R.id.txtName,
+					R.id.txtPrice,
+					R.id.txtStore, 
+					R.id.txtAddress};
+			
 			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, wishItemCursor, from, to);
 
 			myListView.setAdapter(wishListItemAdapterCursor);
 			wishListItemAdapterCursor.notifyDataSetChanged();
-
 		}
 
 		else {

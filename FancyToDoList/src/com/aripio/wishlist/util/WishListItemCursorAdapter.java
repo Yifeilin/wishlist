@@ -19,7 +19,6 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 	public WishListItemCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
-
 		setViewBinder(new WishListItemViewBinder());
 	}
 	
@@ -38,15 +37,14 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 
-			int nImageIndex = cursor
-					.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
+			int nImageIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
 //			int nDateIndex = cursor
 //					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME);
-			int nPriceIndex = cursor
-			.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE);
+			int nPriceIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE);
+			
+			int nStoreNameIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORENAME);
 
-			int nAddIndex = cursor
-			.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS);
+			int nAddIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS);
 			// set the photo to the image view
 			if (columnIndex == nImageIndex) {
 				Bitmap bitmap = null;
@@ -118,13 +116,20 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				return true;
 			}
 			
-			else if (columnIndex == nAddIndex) {
-				TextView viewAdd = (TextView) view;
-				String Add = "At " + cursor.getString(columnIndex);
-				viewAdd.setText(Add);
+			else if (columnIndex == nStoreNameIndex){
+				TextView viewStore = (TextView) view;
+				String storeName = "At " + cursor.getString(columnIndex);
+				viewStore.setText(storeName);
 				return true;
 			}
 
+			else if (columnIndex == nAddIndex) {
+				TextView viewAdd = (TextView) view;
+				String Add = cursor.getString(columnIndex);
+				viewAdd.setText(Add);
+				return true;
+			}
+		
 			return false;
 //			return true;
 		}

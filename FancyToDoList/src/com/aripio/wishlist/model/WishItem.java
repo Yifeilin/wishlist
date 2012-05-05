@@ -12,6 +12,7 @@ public class WishItem {
 	private final Context _ctx;
 	private long _id = -1;
 	private long _storeId;
+	private String _storeName;
 	private String _name;
 	private String _comments;
 	private String _desc;
@@ -21,7 +22,6 @@ public class WishItem {
 	private int _priority;
 	private Bitmap _thumbnail;
 	//private Bitmap _fullsizePhoto;
-	private String _store_name;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private float _price;
 	private String _address;
@@ -47,7 +47,7 @@ public class WishItem {
 		_desc = addr;
 	}
 
-	public WishItem(Context ctx, long storeId, String name, String desc, 
+	public WishItem(Context ctx, long storeId, String storeName, String name, String desc, 
 			String date, String picStr, String fullsizePicPath, float price, 
 			String address, int priority) {
 		_fullsizePicPath = fullsizePicPath;
@@ -55,6 +55,7 @@ public class WishItem {
 		_address = address;
 		_picStr = picStr;
 		_storeId = storeId;
+		_storeName = storeName;
 		_ctx = ctx;
 		_name = name;
 		_desc = desc;
@@ -72,11 +73,11 @@ public class WishItem {
 	}
 	
 	public void setStoreName(String storeName){
-		this._store_name = storeName;
+		this._storeName = storeName;
 	}
 	
 	public String getStoreName(){
-		return this._store_name;
+		return this._storeName;
 	}
 	
 	public void setPrice(float p){
@@ -150,11 +151,11 @@ public class WishItem {
 		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
 		mItemDBAdapter.open();
 		if(_id == -1) {
-			mItemDBAdapter.addItem(_storeId, _name, _desc, _date, _picStr, _fullsizePicPath, 
+			mItemDBAdapter.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
 					_price, _address, _priority);
 		}
 		else {
-			mItemDBAdapter.updateItem(_id, _storeId, _name, _desc, _date, _picStr, _fullsizePicPath, 
+			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
 					_price, _address, _priority);
 		}
 		return true;
