@@ -18,11 +18,13 @@
 	-->
 		<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
-			android:onClick="onClickSearch" />
+			android:onClick="onClickSearch"
+			android:visibility="invisible"  />
 		<ImageButton style="@style/TitleBarAction"
    			android:id="@+id/imageButton_pref"
 			android:contentDescription="@string/description_pref" android:src="@drawable/ic_menu_preferences"
-			android:onClick="onClickPref" />
+			android:onClick="onClickPref"
+			android:visibility="invisible"  />
 		
 	</LinearLayout>
 	
@@ -47,10 +49,11 @@
 			<Button android:id="@+id/home_btn_camera" style="@style/HomeButton"
 				android:onClick="onClickFeature" android:text="@string/title_camera"
 				android:drawableTop="@drawable/ic_camera_96by96" />
-			<Button android:id="@+id/home_btn_settings" style="@style/HomeButton"
+		<!--  	<Button android:id="@+id/home_btn_settings" style="@style/HomeButton"
 				android:onClick="onClickFeature" android:text="@string/title_settings"
-				android:drawableTop="@drawable/ic_tools_96by96" />
-				
+				android:drawableTop="@drawable/ic_tools_96by96" 
+				android:visibility="invisible" />
+			-->	
 <!-- 			<Button android:id="@+id/home_btn_scan" style="@style/HomeButton"
 				android:onClick="onClickFeature" android:text="@string/title_scan"
 				android:drawableTop="@drawable/home_button4" />
