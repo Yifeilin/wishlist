@@ -529,11 +529,11 @@ public class WishList extends Activity {
 		super.onOptionsItemSelected(item);
 
 		switch (item.getItemId()) {
-		case (R.id.menu_search): {
-			// should provide search service
-			onSearchRequested();
-			return true;
-		}
+//		case (R.id.menu_search): {
+//			// should provide search service
+//			onSearchRequested();
+//			return true;
+//		}
 		case (R.id.menu_add): {
 			// let user generate a wish item
 			Intent detailInfo = new Intent(this, EditItemInfo.class);
