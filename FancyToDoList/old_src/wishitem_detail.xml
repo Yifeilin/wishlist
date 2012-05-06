@@ -14,7 +14,6 @@
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
-		    android:visibility = "invisible"
 			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"
 			android:onClick="onClickShare" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
