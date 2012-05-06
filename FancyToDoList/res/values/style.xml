@@ -111,4 +111,23 @@
         <item name="android:lineSpacingMultiplier">1.1</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style> 
+    
+    <style name="ItemNameText">
+ 		<item name="android:textSize">18dip</item>
+	 	<item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+	    <item name="android:textColor">@color/dark_purple</item>
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>  
+    </style>
+    
+    <style name="ItemInfoText">
+ 		<item name="android:textSize">15dip</item>
+	 	<item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+	    <item name="android:textColor">@color/bodyText_dark_grey</item>
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>  
+    </style>
+    
 </resources>
