@@ -145,6 +145,7 @@ public class WishItemDetail extends Activity {
 		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 		fullsize_picture_str = item.getFullsizePicPath();
 		
+		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
 		if (fullsize_picture_str != null) {
 			Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
 			mPhotoView.setImageBitmap(bitmap);
@@ -193,7 +194,6 @@ public class WishItemDetail extends Activity {
 
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);
-		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
 		mNameView = (TextView) findViewById(R.id.itemNameDetail);
 		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
 		mDateView = (TextView) findViewById(R.id.itemDateDetail);
