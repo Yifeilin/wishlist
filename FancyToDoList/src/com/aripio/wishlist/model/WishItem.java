@@ -139,7 +139,17 @@ public class WishItem {
 	public void setComments(String com) {
 		this._comments = com;
 	}
+	
+	public String getFullsizePicPath() {
+		if (_fullsizePicPath.equals(" "))
+			return null;
+		else return _fullsizePicPath;
+	}
 
+	public String getPicStr() {
+		return _picStr;
+	}
+	
 	@Override
 	public String toString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");

@@ -68,7 +68,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
-	private String _fullsizePhotoPath = " ";
+	private String _fullsizePhotoPath = "stupid";
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
@@ -396,88 +396,85 @@ public class EditItemInfo extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-			case TAKE_PICTURE:
-				//if (data != null) {
+		switch (requestCode) {
+			case TAKE_PICTURE: {
+				if (resultCode == RESULT_OK) {
 					handleBigCameraPhoto();
-					//if (data.hasExtra("data")) {
-					//handleSmallCameraPhoto(data);
-					//}
-				//}
+				}
 				break;
-			}
-		}
+			} 
+		}//switch
 	}
 	
-	private void getThumbailPicture() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(intent, TAKE_PICTURE);
-	}
+//	private void getThumbailPicture() {
+//		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//		startActivityForResult(intent, TAKE_PICTURE);
+//	}
 	
 	private void dispatchTakePictureIntent() {	
 
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
 		File f = null;
-
 		try {
 			f = setUpPhotoFile();
 			_fullsizePhotoPath = f.getAbsolutePath();
-			String s = _fullsizePhotoPath;
+			Log.d("wishlist", "dispatch" + _fullsizePhotoPath);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			//takePictureIntent.putExtra(getString(R.string.fullSizePhotoLocation), Uri.fromFile(f));
 		} catch (IOException e) {
+			Log.d("wishlist", "IOException" + e.getMessage());
 			e.printStackTrace();
 			f = null;
 			_fullsizePhotoPath = null;
+			return;
 		}
 		startActivityForResult(takePictureIntent, TAKE_PICTURE);
 	}
 		
-	private void handleSmallCameraPhoto(Intent intent) {
-//		Bundle extras = intent.getExtras();
-//		mImageBitmap = (Bitmap) extras.get("data");
-		//mImageView.setImageBitmap(mImageBitmap);
-		//mVideoUri = null;
-//		mImageView.setVisibility(View.VISIBLE);
-//		mVideoView.setVisibility(View.INVISIBLE);
-		
-		thumbnail = intent.getParcelableExtra("data");
-		imageItem.setImageBitmap(thumbnail);
-
-		// store thumbnail in the media content provider 
-		// and get the uri of the thumbnail
-		ContentValues values = new ContentValues();
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(
-				Media.EXTERNAL_CONTENT_URI, values);
-
-		//compress the thumbnail to JPEG and write the JEPG to 
-		//the content provider. Save the uri of the JEPG as a string,
-		//which will be inserted in the column "picture_uri" of
-		//the Item table
-		try {
-			OutputStream outStream = getContentResolver()
-					.openOutputStream(uri);
-			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
-					outStream);
-
-			outStream.close();
-			picture_str = uri.toString();
-		} catch (Exception e) {
-			Log.e(WishList.LOG_TAG,
-					"exception while writing image", e);
-		}
-	}
+//	private void handleSmallCameraPhoto(Intent intent) {
+////		Bundle extras = intent.getExtras();
+////		mImageBitmap = (Bitmap) extras.get("data");
+//		//mImageView.setImageBitmap(mImageBitmap);
+//		//mVideoUri = null;
+////		mImageView.setVisibility(View.VISIBLE);
+////		mVideoView.setVisibility(View.INVISIBLE);
+//		
+//		thumbnail = intent.getParcelableExtra("data");
+//		imageItem.setImageBitmap(thumbnail);
+//
+//		// store thumbnail in the media content provider 
+//		// and get the uri of the thumbnail
+//		ContentValues values = new ContentValues();
+//		values.put(Media.MIME_TYPE, "image/jpeg");
+//		Uri uri = getContentResolver().insert(
+//				Media.EXTERNAL_CONTENT_URI, values);
+//
+//		//compress the thumbnail to JPEG and write the JEPG to 
+//		//the content provider. Save the uri of the JEPG as a string,
+//		//which will be inserted in the column "picture_uri" of
+//		//the Item table
+//		try {
+//			OutputStream outStream = getContentResolver()
+//					.openOutputStream(uri);
+//			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+//					outStream);
+//
+//			outStream.close();
+//			picture_str = uri.toString();
+//		} catch (Exception e) {
+//			Log.e(WishList.LOG_TAG,
+//					"exception while writing image", e);
+//		}
+//	}
 
 	private void handleBigCameraPhoto() {
 
-		//if (mCurrentPhotoPath != null) {
+		if (_fullsizePhotoPath != null) {
 			setPic();
 			//galleryAddPic();
-			//mCurrentPhotoPath = null;
-		//}
+			_fullsizePhotoPath = null;
+		}
+
 	}
 	
 	private boolean navigateBack(){
@@ -538,11 +535,8 @@ public class EditItemInfo extends Activity {
 	
 	private File getAlbumDir() {
 		File storageDir = null;
-
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			
 			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
 			if (storageDir != null) {
 				if (! storageDir.mkdirs()) {
 					if (! storageDir.exists()){
@@ -569,22 +563,38 @@ public class EditItemInfo extends Activity {
 	}
 
 	private File setUpPhotoFile() throws IOException {
-		
 		File f = createImageFile();
 		_fullsizePhotoPath = f.getAbsolutePath();
-		String s = _fullsizePhotoPath;
-		
+		Log.d("wishlist", _fullsizePhotoPath);
 		return f;
 	}
 
 	private void setPic() {
-		
 		//MediaStore.Images.Thumbnails.getThumbnail();
 		int width =128;
 		int height=128;
-		Bitmap bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath,null);
-		Bitmap thumbnail=android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
-		imageItem.setImageBitmap(thumbnail);
+		Bitmap bitmap;
+		Bitmap thumbnail;
+		
+		Log.d(WishList.LOG_TAG, _fullsizePhotoPath);		
+		
+		bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath, null);
+		
+		if (bitmap == null) {
+			Log.d(WishList.LOG_TAG, "bitmap null");
+			return;
+		}
+		
+		else {
+			thumbnail = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
+			if (thumbnail == null) {
+				Log.d(WishList.LOG_TAG, "thumbnail null");
+				return;
+			}
+			else {
+				imageItem.setImageBitmap(thumbnail);
+			}
+		}
 		
 		ContentValues values = new ContentValues();
 		values.put(Media.MIME_TYPE, "image/jpeg");

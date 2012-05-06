@@ -12,7 +12,7 @@ public final class FroyoAlbumDirFactory extends AlbumStorageDirFactory {
 		return new File(
 		  Environment.getExternalStoragePublicDirectory(
 		    Environment.DIRECTORY_PICTURES
-		  ), 
+		  ),
 		  albumName
 		);
 	}

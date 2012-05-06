@@ -85,7 +85,7 @@ public class WishItemDetail extends Activity {
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
 	
-	private long mItem_id;
+	private long mItem_id = -1;
 	private int mPosition;
 	private int mPrevPosition;
 	private int mNextPosition;
@@ -139,10 +139,41 @@ public class WishItemDetail extends Activity {
 		// Remember the id of the item user clicked
 		// in the previous activity (WishList.java)
 		Intent i = getIntent();
-		mItem_id = i.getLongExtra("item_id", 1);
+		mItem_id = i.getLongExtra("item_id", -1);
 		mPosition = i.getIntExtra("position", 0);
 
 		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
+		fullsize_picture_str = item.getFullsizePicPath();
+		
+		if (fullsize_picture_str != null) {
+			Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
+			mPhotoView.setImageBitmap(bitmap);
+		}
+		
+		//check if pic_str is null, which user added this item without taking a pic.
+		if (fullsize_picture_str == null) {
+			picture_str = item.getPicStr();
+			if (picture_str != null){
+				Bitmap bitmap = null;
+				Uri photoUri = Uri.parse(picture_str);
+
+				// check if pic_str is a resId
+				try {
+					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+					int picResId = Integer.valueOf(picture_str, 16).intValue();
+					bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
+							.getResources(), picResId);
+					// it is resource id.
+					mPhotoView.setImageBitmap(bitmap);
+
+				} catch (NumberFormatException e) {
+					// Not a resId, so it must be a content provider uri
+					photoUri = Uri.parse(picture_str);
+					mPhotoView.setImageURI(photoUri);
+
+				}
+			}
+		}
 		
 		// format the date time
 		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -170,29 +201,6 @@ public class WishItemDetail extends Activity {
 		mStoreView = (TextView) findViewById(R.id.itemStoreDetail);
 		mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
 		// mPriorityView = (TextView) findViewById(R.id.itemDateDetail);
-
-		Bitmap bitmap = null;
-		
-		//check if pic_str is null, which user added this item without taking a pic.
-		if (picture_str != null){
-			Uri photoUri = Uri.parse(picture_str);
-			
-			// check if pic_str is a resId
-			try {
-				// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-				int picResId = Integer.valueOf(picture_str, 16).intValue();
-				bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
-						.getResources(), picResId);
-				// it is resource id.
-				mPhotoView.setImageBitmap(bitmap);
-
-			} catch (NumberFormatException e) {
-				// Not a resId, so it must be a content provider uri
-				photoUri = Uri.parse(picture_str);
-				mPhotoView.setImageURI(photoUri);
-
-			}
-		}
 
 		//display the item info. in the views
 		mNameView.setText(item.getName());
