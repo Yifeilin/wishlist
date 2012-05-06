@@ -472,7 +472,7 @@ public class EditItemInfo extends Activity {
 		if (_fullsizePhotoPath != null) {
 			setPic();
 			//galleryAddPic();
-			_fullsizePhotoPath = null;
+			//_fullsizePhotoPath = null;
 		}
 
 	}

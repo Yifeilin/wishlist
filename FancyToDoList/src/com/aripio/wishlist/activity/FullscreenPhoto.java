@@ -20,7 +20,7 @@ public class FullscreenPhoto extends Activity {
 		   ImageView imageItem = (ImageView) findViewById(R.id.fullscreen_photo);
 		   
 		   if (fullsize_pic_str != null){
-			   Bitmap bitmap = BitmapFactory.decodeFile(fullsize_pic_str,null);
+			   Bitmap bitmap = BitmapFactory.decodeFile(fullsize_pic_str, null);
 			   imageItem.setImageBitmap(bitmap);
 		   }
 		   //Bitmap bitmap = null;
