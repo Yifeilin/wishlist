@@ -116,7 +116,7 @@ public class EditItemInfo extends Activity {
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
 		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
-		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
+		//galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
 		//btnCancel = (Button) findViewById(R.id.button_cancel);
 		//btnPhoto = (Button) findViewById(R.id.button_photo);
 
@@ -220,13 +220,13 @@ public class EditItemInfo extends Activity {
  
 		});
 
-		galleryImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
-			public void onClick(View view) {
- 				//open gallery;
- 			}
- 
-		});
+//		galleryImageButton.setOnClickListener(new OnClickListener() {
+// 			@Override
+//			public void onClick(View view) {
+// 				//open gallery;
+// 			}
+// 
+//		});
 
 		//set the keyListener for the Item Name EditText
 		myItemName.setOnKeyListener(new OnKeyListener() {

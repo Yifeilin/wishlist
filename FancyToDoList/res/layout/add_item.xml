@@ -75,13 +75,14 @@
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_camera"
 			android:contentDescription="@string/description_camera" android:src="@drawable/ic_camera_default_72by72"
-			android:onClick="onClickCamera" android:layout_gravity="left"
+			android:onClick="onClickCamera" android:layout_gravity="right"
 			android:layout_weight="1"/>
-		<ImageButton style="@style/TitleBarAction"
+	<!-- 	<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_gallery"
 			android:contentDescription="@string/description_gallery" android:src="@drawable/ic_menu_gallery"
 			android:onClick="onClickGallery" android:layout_gravity="right"
 			android:layout_weight="1" />
+			andorid:visibility="invisible"/>  -->"
 	</LinearLayout>
 
 </RelativeLayout>
