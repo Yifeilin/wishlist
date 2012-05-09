@@ -51,9 +51,9 @@
 				<ImageView android:id="@+id/imgPhotoDetail"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:scaleType="fitCenter" android:adjustViewBounds="true"
-					android:maxHeight="480dip" android:layout_alignParentTop="true"
-					android:paddingTop="15dip"
-					android:layout_centerHorizontal="true" />
+					android:maxHeight="300dip" 
+					android:paddingTop="30dip"
+					android:gravity="center_horizontal"/>
 				
 				<TextView style="@style/ItemNameText"
 					android:id="@+id/itemNameDetail"
