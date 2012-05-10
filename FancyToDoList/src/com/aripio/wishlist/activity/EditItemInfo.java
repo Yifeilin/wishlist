@@ -93,6 +93,7 @@ public class EditItemInfo extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_item);
+		Log.d(WishList.LOG_TAG, "");
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
 			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
@@ -292,6 +293,28 @@ public class EditItemInfo extends Activity {
 //			}
 //
 //		});
+		
+		if (savedInstanceState != null) {
+			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
+			// restore the current selected item in the list
+			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
+			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+			thumbnail = savedInstanceState.getParcelable("bitmap");
+			imageItem.setImageBitmap(thumbnail);
+			
+			Log.d(WishList.LOG_TAG, "_newfullsizePhotoPath " + _newfullsizePhotoPath);			
+			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath " + _fullsizePhotoPath);
+			
+			if (thumbnail == null) {
+				Log.d(WishList.LOG_TAG, "thumbnail null");
+			}
+			else {
+				Log.d(WishList.LOG_TAG, "thumbnail not null");
+			}
+		}
+		else{
+			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
+		}
 	}
 
 	/***
@@ -400,9 +423,13 @@ public class EditItemInfo extends Activity {
 		switch (requestCode) {
 			case TAKE_PICTURE: {
 				if (resultCode == RESULT_OK) {
+					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: RESULT_OK");
 					_fullsizePhotoPath = String.valueOf(_newfullsizePhotoPath);
 					_newfullsizePhotoPath = null;
 					handleBigCameraPhoto();
+				}
+				else {
+					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: not RESULT_OK");
 				}
 				break;
 			} 
@@ -571,7 +598,7 @@ public class EditItemInfo extends Activity {
 	private File setUpPhotoFile() throws IOException {
 		File f = createImageFile();
 		_newfullsizePhotoPath = f.getAbsolutePath();
-		Log.d("wishlist", _fullsizePhotoPath);
+		Log.d("wishlist", _newfullsizePhotoPath);
 		return f;
 	}
 
@@ -663,10 +690,20 @@ public class EditItemInfo extends Activity {
 ////		mVideoView.setVisibility(View.INVISIBLE);
 	}
 	
+	//this will make the photo taken before to show up if user cancels taking a second photo
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
+		Log.d(WishList.LOG_TAG, "");
 		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
+		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
+		savedInstanceState.putParcelable("bitmap", thumbnail);
+		if (thumbnail == null) {
+			Log.d(WishList.LOG_TAG, "saved thumbnail is null");
+		}
+		else {
+			Log.d(WishList.LOG_TAG, "saved thumbnail is not null");
+		}
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -674,7 +711,14 @@ public class EditItemInfo extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		if (savedInstanceState != null) {
+			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
+			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+			thumbnail = savedInstanceState.getParcelable("bitmap");
+			imageItem.setImageBitmap(thumbnail);			
+		}
+		else {
+			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
 		}
 	}
 

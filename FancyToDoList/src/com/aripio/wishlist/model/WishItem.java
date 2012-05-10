@@ -47,9 +47,10 @@ public class WishItem {
 		_desc = addr;
 	}
 
-	public WishItem(Context ctx, long storeId, String storeName, String name, String desc, 
+	public WishItem(Context ctx, long itemId, long storeId, String storeName, String name, String desc, 
 			String date, String picStr, String fullsizePicPath, float price, 
 			String address, int priority) {
+		_id = itemId;
 		_fullsizePicPath = fullsizePicPath;
 		_price = price;
 		_address = address;
@@ -141,8 +142,14 @@ public class WishItem {
 	}
 	
 	public String getFullsizePicPath() {
-		if (_fullsizePicPath.equals(" "))
+		if (_fullsizePicPath == null) {
 			return null;
+		}
+		
+		else if (_fullsizePicPath.equals(" ")) {
+			return null;
+		}
+		
 		else return _fullsizePicPath;
 	}
 

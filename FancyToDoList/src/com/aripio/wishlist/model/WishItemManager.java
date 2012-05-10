@@ -85,7 +85,7 @@ public class WishItemManager {
 		int itemPriority = wishItemCursor.getInt(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
 		
-		WishItem item = new WishItem(_ctx, storeID, storeName, itemName, itemDesc, 
+		WishItem item = new WishItem(_ctx, itemId, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, fullsize_pic_path, itemPrice,
 				itemLocation, itemPriority);
 
