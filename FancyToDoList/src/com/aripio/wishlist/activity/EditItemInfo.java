@@ -69,6 +69,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private String _fullsizePhotoPath = null;
+	private String _newfullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
@@ -399,7 +400,8 @@ public class EditItemInfo extends Activity {
 		switch (requestCode) {
 			case TAKE_PICTURE: {
 				if (resultCode == RESULT_OK) {
-					//_fullsizePhotoPath = data.getStringExtra("fullsizePhotoPath");
+					_fullsizePhotoPath = String.valueOf(_newfullsizePhotoPath);
+					_newfullsizePhotoPath = null;
 					handleBigCameraPhoto();
 				}
 				break;
@@ -424,7 +426,7 @@ public class EditItemInfo extends Activity {
 			Log.d("wishlist", "IOException" + e.getMessage());
 			e.printStackTrace();
 			f = null;
-			_fullsizePhotoPath = null;
+			_newfullsizePhotoPath = null;
 			return;
 		}
 		startActivityForResult(takePictureIntent, TAKE_PICTURE);
@@ -568,7 +570,7 @@ public class EditItemInfo extends Activity {
 
 	private File setUpPhotoFile() throws IOException {
 		File f = createImageFile();
-		_fullsizePhotoPath = f.getAbsolutePath();
+		_newfullsizePhotoPath = f.getAbsolutePath();
 		Log.d("wishlist", _fullsizePhotoPath);
 		return f;
 	}
@@ -664,7 +666,7 @@ public class EditItemInfo extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
+		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
 	}
 
 	@Override
@@ -672,7 +674,7 @@ public class EditItemInfo extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		if (savedInstanceState != null) {
-			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 		}
 	}
 
