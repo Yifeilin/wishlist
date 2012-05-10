@@ -68,7 +68,7 @@ public class EditItemInfo extends Activity {
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
 	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
-	private String _fullsizePhotoPath = "stupid";
+	private String _fullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
 	private int mYear = -1;
@@ -399,6 +399,7 @@ public class EditItemInfo extends Activity {
 		switch (requestCode) {
 			case TAKE_PICTURE: {
 				if (resultCode == RESULT_OK) {
+					//_fullsizePhotoPath = data.getStringExtra("fullsizePhotoPath");
 					handleBigCameraPhoto();
 				}
 				break;
@@ -417,8 +418,6 @@ public class EditItemInfo extends Activity {
 		File f = null;
 		try {
 			f = setUpPhotoFile();
-			_fullsizePhotoPath = f.getAbsolutePath();
-			Log.d("wishlist", "dispatch" + _fullsizePhotoPath);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			//takePictureIntent.putExtra(getString(R.string.fullSizePhotoLocation), Uri.fromFile(f));
 		} catch (IOException e) {
@@ -470,10 +469,15 @@ public class EditItemInfo extends Activity {
 	private void handleBigCameraPhoto() {
 
 		if (_fullsizePhotoPath != null) {
+			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == " + _fullsizePhotoPath);
 			setPic();
 			//galleryAddPic();
 			//_fullsizePhotoPath = null;
 		}
+		else {
+			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == null");
+		}
+	
 
 	}
 	
@@ -576,8 +580,6 @@ public class EditItemInfo extends Activity {
 		Bitmap bitmap;
 		Bitmap thumbnail;
 		
-		Log.d(WishList.LOG_TAG, _fullsizePhotoPath);		
-		
 		bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath, null);
 		
 		if (bitmap == null) {
@@ -586,12 +588,14 @@ public class EditItemInfo extends Activity {
 		}
 		
 		else {
+			Log.d(WishList.LOG_TAG, "bitmap is not null");
 			thumbnail = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
 			if (thumbnail == null) {
 				Log.d(WishList.LOG_TAG, "thumbnail null");
 				return;
 			}
 			else {
+				Log.d(WishList.LOG_TAG, "thumbnail is not null");
 				imageItem.setImageBitmap(thumbnail);
 			}
 		}
@@ -656,4 +660,20 @@ public class EditItemInfo extends Activity {
 //		imageItem.setVisibility(View.VISIBLE);
 ////		mVideoView.setVisibility(View.INVISIBLE);
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// restore the current selected item in the list
+		if (savedInstanceState != null) {
+			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+		}
+	}
+
 }

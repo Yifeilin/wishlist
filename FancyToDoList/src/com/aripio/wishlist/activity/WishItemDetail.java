@@ -147,14 +147,24 @@ public class WishItemDetail extends Activity {
 		
 		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
 		if (fullsize_picture_str != null) {
+			Log.d("wishlist", "fullsize_picture_str == " + fullsize_picture_str);
 			Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
-			mPhotoView.setImageBitmap(bitmap);
+			if (bitmap == null) {
+				Log.d("wishlist", "bitmap == null");
+			}
+			else {
+				mPhotoView.setImageBitmap(bitmap);
+			}
 		}
 		
 		//check if pic_str is null, which user added this item without taking a pic.
 		if (fullsize_picture_str == null) {
+			Log.d("wishlist", "fullsize_picture_str == null");
 			picture_str = item.getPicStr();
-			if (picture_str != null){
+			if (picture_str == null){
+				Log.d("wishlist", "picture_str == null");
+			}
+			else{
 				Bitmap bitmap = null;
 				Uri photoUri = Uri.parse(picture_str);
 
@@ -171,7 +181,6 @@ public class WishItemDetail extends Activity {
 					// Not a resId, so it must be a content provider uri
 					photoUri = Uri.parse(picture_str);
 					mPhotoView.setImageURI(photoUri);
-
 				}
 			}
 		}
