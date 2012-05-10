@@ -125,6 +125,10 @@ public class WishList extends Activity {
 				// find which item in the list view has been clicked
 				// and get its _id in database
 				long item_id = getDBItemID(position, LIST_MODE);
+				if (item_id == -1) {
+					Log.d(LOG_TAG, "item id == -1");
+					return;
+				}
 
 				// Create an intent to show the item detail.
 				// Pass the item_id along so the next activity can use it to
@@ -308,7 +312,7 @@ public class WishList extends Activity {
 					.findViewById(R.id.txtItemID_Grid);
 			break;
 		default:
-			Log.e(LOG_TAG, "View mode not specified correctly.");
+			Log.d(LOG_TAG, "View mode not specified correctly.");
 			return -1;
 		}
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
@@ -593,19 +597,31 @@ public class WishList extends Activity {
 
 		//get the position of the item in the list
 		int pos = menuInfo.position;
-		View selected_view=null;
-		TextView itemIdTextView=null;
+		View selected_view = null;
+		TextView itemIdTextView = null;
 		if(viewOption.equals("list")){
 			selected_view = myListView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+			if (selected_view != null) {
+				itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+			}
+			else {
+				Log.d(WishList.LOG_TAG, "selected_view is null");
+				return false;
+			}
+			
 		}
 		else if(viewOption.equals("grid")){
 			selected_view = myGridView.getChildAt(pos);
-			itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
+			if (selected_view != null) {
+				itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
+			}
+			else {
+				Log.d(WishList.LOG_TAG, "selected_view is null");
+				return false;
+			}
 		}
-		
-		if(selected_view==null){
-			Log.e(WishList.LOG_TAG, "selected view is null");
+		else if(selected_view == null){
+			Log.d(WishList.LOG_TAG, "selected view is null");
 			return false;
 		}
 		
@@ -618,7 +634,7 @@ public class WishList extends Activity {
 			item_id = Long.parseLong(itemIdTextView.getText().toString());
 		}
 		else{
-			Log.e(WishList.LOG_TAG, "selectedIdTextView is null");
+			Log.d(WishList.LOG_TAG, "selectedIdTextView is null");
 			return false;
 		}
 		
