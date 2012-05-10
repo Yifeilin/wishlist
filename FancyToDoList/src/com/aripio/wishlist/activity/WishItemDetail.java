@@ -227,8 +227,10 @@ public class WishItemDetail extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
-				i.putExtra("fullsize_pic_str", fullsize_picture_str);
-				startActivity(i);
+				if (fullsize_picture_str != null) {
+					i.putExtra("fullsize_pic_str", fullsize_picture_str);
+					startActivity(i);
+				}
 			}
 		});
 
@@ -382,13 +384,13 @@ public class WishItemDetail extends Activity {
 		}
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (gestureDetector.onTouchEvent(event))
-			return true;
-		else
-			return false;
-	}
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//		if (gestureDetector.onTouchEvent(event))
+//			return true;
+//		else
+//			return false;
+//	}
 
 	/***
 	 * called when the "return" button is clicked
