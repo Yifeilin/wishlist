@@ -71,23 +71,23 @@ public class WishItem {
 	}
 
 	public void setThumbnail(Bitmap thumnail) {
-		this._thumbnail = thumnail;
+		_thumbnail = thumnail;
 	}
 	
 	public void setStoreName(String storeName){
-		this._storeName = storeName;
+		_storeName = storeName;
 	}
 	
 	public String getStoreName(){
-		return this._storeName;
+		return _storeName;
 	}
 	
 	public void setPrice(float p){
-		this._price = p;
+		_price = p;
 	}
 	
 	public double getPrice(){
-		return this._price;
+		return _price;
 	}
 	
 	public String getPriceAsString() {
@@ -97,11 +97,11 @@ public class WishItem {
 	}
 	
 	public void setAddress(String add){
-		this._address = add;
+		_address = add;
 	}
 	
 	public String getAddress(){
-		return this._address;
+		return _address;
 	}
 
 	public String getPriorityStr() {
@@ -129,7 +129,7 @@ public class WishItem {
 	}
 
 	public void setDate(String date) {
-		this._date = date;
+		_date = date;
 	}
 
 	public String getDesc() {
@@ -137,7 +137,7 @@ public class WishItem {
 	}
 
 	public void setDesc(String desc) {
-		this._desc = desc;
+		_desc = desc;
 	}
 	
 	public String getComments() {
@@ -145,7 +145,7 @@ public class WishItem {
 	}
 
 	public void setComments(String com) {
-		this._comments = com;
+		_comments = com;
 	}
 	
 	public String getFullsizePicPath() {

@@ -347,7 +347,6 @@ public class EditItemInfo extends Activity {
 		String itemName = "N/A";
 		String itemDesc = "N/A";
 		float itemPrice = 0;
-		String itemLocation = "N/A";
 		int itemPriority = 0;
 		
 		String storeName = "N/A";
@@ -357,9 +356,8 @@ public class EditItemInfo extends Activity {
 			// from the EditText
 			itemName = myItemName.getText().toString();
 			itemDesc = myDescription.getText().toString();
+			addStr = myLocation.getText().toString();
 			itemPrice = Float.valueOf(myPrice.getText().toString());
-			itemLocation = myLocation.getText().toString();
-
 		}
 
 		catch (NumberFormatException e) {
@@ -394,7 +392,7 @@ public class EditItemInfo extends Activity {
 
 		WishItem item = new WishItem(this, mItem_id, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, _fullsizePhotoPath, itemPrice,
-				itemLocation, itemPriority);
+				addStr, itemPriority);
 		
 		item.save();
 		//close this activity
