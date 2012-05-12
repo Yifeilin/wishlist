@@ -14,9 +14,10 @@ import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.model.WishItem;
 import com.aripio.wishlist.model.WishItemManager;
 import com.aripio.wishlist.util.PositionManager;
-import com.aripio.wishlist.util.camera.AlbumStorageDirFactory;
-import com.aripio.wishlist.util.camera.BaseAlbumDirFactory;
-import com.aripio.wishlist.util.camera.FroyoAlbumDirFactory;
+//import com.aripio.wishlist.util.camera.AlbumStorageDirFactory;
+//import com.aripio.wishlist.util.camera.BaseAlbumDirFactory;
+//import com.aripio.wishlist.util.camera.FroyoAlbumDirFactory;
+import com.aripio.wishlist.util.camera.PhotoFileCreater;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -83,10 +84,10 @@ public class EditItemInfo extends Activity {
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
-	private static final String JPEG_FILE_PREFIX = "IMG_";
-	private static final String JPEG_FILE_SUFFIX = ".jpg";
+//	private static final String JPEG_FILE_PREFIX = "IMG_";
+//	private static final String JPEG_FILE_SUFFIX = ".jpg";
 
-	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
+//	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
 
 	@Override
@@ -95,11 +96,11 @@ public class EditItemInfo extends Activity {
 		setContentView(R.layout.add_item);
 		Log.d(WishList.LOG_TAG, "");
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
-		} else {
-			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
-		}
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+//			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+//		} else {
+//			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+//		}
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);
 		mStoreDBAdapter.open();
@@ -456,9 +457,9 @@ public class EditItemInfo extends Activity {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		File f = null;
 		try {
-			f = setUpPhotoFile();
+			f = PhotoFileCreater.getInstance().setUpPhotoFile();
+			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-			//takePictureIntent.putExtra(getString(R.string.fullSizePhotoLocation), Uri.fromFile(f));
 		} catch (IOException e) {
 			Log.d("wishlist", "IOException" + e.getMessage());
 			e.printStackTrace();
@@ -576,41 +577,41 @@ public class EditItemInfo extends Activity {
 	}
 
 	
-	private File getAlbumDir() {
-		File storageDir = null;
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-			if (storageDir != null) {
-				if (! storageDir.mkdirs()) {
-					if (! storageDir.exists()){
-						Log.d("wishlist", "failed to create directory");
-						return null;
-					}
-				}
-			}
-			
-		} else {
-			Log.v("wishlist", "External storage is not mounted READ/WRITE.");
-		}
-		
-		return storageDir;
-	}
+//	private File getAlbumDir() {
+//		File storageDir = null;
+//		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+//			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+//			if (storageDir != null) {
+//				if (! storageDir.mkdirs()) {
+//					if (! storageDir.exists()){
+//						Log.d("wishlist", "failed to create directory");
+//						return null;
+//					}
+//				}
+//			}
+//			
+//		} else {
+//			Log.v("wishlist", "External storage is not mounted READ/WRITE.");
+//		}
+//		
+//		return storageDir;
+//	}
 
-	private File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-		File albumF = getAlbumDir();
-		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-		return imageF;
-	}
-
-	private File setUpPhotoFile() throws IOException {
-		File f = createImageFile();
-		_newfullsizePhotoPath = f.getAbsolutePath();
-		Log.d("wishlist", _newfullsizePhotoPath);
-		return f;
-	}
+//	private File createImageFile() throws IOException {
+//		// Create an image file name
+//		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+//		File albumF = getAlbumDir();
+//		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
+//		return imageF;
+//	}
+//
+//	private File setUpPhotoFile() throws IOException {
+//		File f = createImageFile();
+//		_newfullsizePhotoPath = f.getAbsolutePath();
+//		Log.d("wishlist", _newfullsizePhotoPath);
+//		return f;
+//	}
 
 	private void setPic() {
 		//MediaStore.Images.Thumbnails.getThumbnail();
