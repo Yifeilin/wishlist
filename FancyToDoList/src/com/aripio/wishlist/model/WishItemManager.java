@@ -96,5 +96,12 @@ public class WishItemManager {
 		return item;
 
 	}
+	
+	public void deleteItembyId(long itemId) {
+		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
+		mItemDBAdapter.open();
+		mItemDBAdapter.deleteItem(itemId);
+		mItemDBAdapter.close();
+	}
 
 }

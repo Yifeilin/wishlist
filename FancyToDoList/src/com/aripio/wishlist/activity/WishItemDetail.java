@@ -313,7 +313,7 @@ public class WishItemDetail extends Activity {
 				false).setPositiveButton("Yes",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						myItemDBAdapter.deleteItem(mItem_id);
+						WishItemManager.getInstance(WishItemDetail.this).deleteItembyId(mItem_id);
 						WishItemDetail.this.finish();
 						//return super.onKeyDown(keyCode, event);
 					}
