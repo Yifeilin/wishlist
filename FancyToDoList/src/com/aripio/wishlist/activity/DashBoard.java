@@ -1,22 +1,29 @@
 package com.aripio.wishlist.activity;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.aripio.wishlist.R;
-import com.aripio.wishlist.barscanner.IntentIntegrator;
+import com.aripio.wishlist.util.camera.PhotoFileCreater;
 
 
 public class DashBoard extends Activity {
 	static final private int TAKE_PICTURE = 1;
 	private ImageButton prefImageButton;
+	private String _fullsizePhotoPath = null;
+	private String _newfullsizePhotoPath = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +58,10 @@ public class DashBoard extends Activity {
 	           break;
 	      case R.id.home_btn_camera :
 	          // startActivity (new Intent(getApplicationContext(), IntentIntegrator.class));
-	    	   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	  		   startActivityForResult(intent, TAKE_PICTURE);
+//	    	   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//	  		   startActivityForResult(intent, TAKE_PICTURE);
+				dispatchTakePictureIntent();
+	    	  
 	           break;
 //	      case R.id.home_btn_scan :
 ////	           startActivity (new Intent(getApplicationContext(), F4Activity.class));
@@ -136,6 +145,43 @@ public class DashBoard extends Activity {
 	    TextView tv = (TextView) findViewById (textViewId);
 	    if (tv != null) tv.setText (getTitle ());
 	} 
+	
+	private void dispatchTakePictureIntent() {	
 
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		File f = null;
+		try {
+			f = PhotoFileCreater.getInstance().setUpPhotoFile();
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+		} catch (IOException e) {
+			Log.d("wishlist", "IOException" + e.getMessage());
+			e.printStackTrace();
+			f = null;
+			_newfullsizePhotoPath = null;
+			return;
+		}
+		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case TAKE_PICTURE: {
+				if (resultCode == RESULT_OK) {
+					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: RESULT_OK");
+					_fullsizePhotoPath = String.valueOf(_newfullsizePhotoPath);
+					_newfullsizePhotoPath = null;
+					Intent i = new Intent(getApplicationContext(), EditItemInfo.class);
+					i.putExtra("fullsizePhotoPath", _fullsizePhotoPath);
+					startActivity (i);
+					
+				}
+				else {
+					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: not RESULT_OK");
+				}
+				break;
+			} 
+		}//switch
+	}
 
 }

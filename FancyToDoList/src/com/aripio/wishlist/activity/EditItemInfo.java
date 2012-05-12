@@ -14,9 +14,9 @@ import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.model.WishItem;
 import com.aripio.wishlist.model.WishItemManager;
 import com.aripio.wishlist.util.PositionManager;
-import com.aripio.wishlist.util.AlbumStorageDirFactory;
-import com.aripio.wishlist.util.BaseAlbumDirFactory;
-import com.aripio.wishlist.util.FroyoAlbumDirFactory;
+import com.aripio.wishlist.util.camera.AlbumStorageDirFactory;
+import com.aripio.wishlist.util.camera.BaseAlbumDirFactory;
+import com.aripio.wishlist.util.camera.FroyoAlbumDirFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -134,9 +134,18 @@ public class EditItemInfo extends Activity {
 			}
 		});
 		
+		
+		Intent i = getIntent();
+		
+		//get the fullsizephotopatch, if it is not null, EdiItemInfo is launched from
+		//dashboard camera
+		_fullsizePhotoPath = i.getStringExtra("fullsizePhotoPath");
+		if (_fullsizePhotoPath != null) {
+			setPic();
+		}
+		
 		//get item id from previous intent, if there is an item id, we know this EditItemInfo is launched
 		//from ItemDetail, so fill the empty box
-		Intent i = getIntent();
 		mItem_id = i.getLongExtra("item_id", -1);
 		
 		if(mItem_id != -1) {

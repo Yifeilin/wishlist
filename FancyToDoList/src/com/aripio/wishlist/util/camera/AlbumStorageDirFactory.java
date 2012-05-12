@@ -1,4 +1,4 @@
-package com.aripio.wishlist.util;
+package com.aripio.wishlist.util.camera;
 
 import java.io.File;
 

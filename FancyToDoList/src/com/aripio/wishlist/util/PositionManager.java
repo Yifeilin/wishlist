@@ -55,10 +55,6 @@ public class PositionManager {
 		else{
 			return null;
 		}
-		
-
-
-		
 	}
 	
 	public String getCuttentAddStr(){
@@ -80,8 +76,5 @@ public class PositionManager {
 			addressString = "No address found";
 			return addressString;			
 		}
-		
 	}
-	
-
 }
