@@ -88,6 +88,10 @@ public class WishItemManager {
 		WishItem item = new WishItem(_ctx, itemId, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, fullsize_pic_path, itemPrice,
 				itemLocation, itemPriority);
+		
+		mItemDBAdapter.close();
+		mStoreDBAdapter.close();
+		mLocationDBAdapter.close();
 
 		return item;
 
