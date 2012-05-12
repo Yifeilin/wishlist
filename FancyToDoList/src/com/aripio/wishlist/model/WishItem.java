@@ -1,5 +1,6 @@
 package com.aripio.wishlist.model;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -87,6 +88,12 @@ public class WishItem {
 	
 	public double getPrice(){
 		return this._price;
+	}
+	
+	public String getPriceAsString() {
+		DecimalFormat Dec = new DecimalFormat("0.00");
+		String priceStr = (Dec.format(_price));
+		return priceStr;
 	}
 	
 	public void setAddress(String add){

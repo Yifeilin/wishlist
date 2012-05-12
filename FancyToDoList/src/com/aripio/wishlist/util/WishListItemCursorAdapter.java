@@ -1,5 +1,6 @@
 package com.aripio.wishlist.util;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -110,8 +111,10 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			
 			else if (columnIndex == nPriceIndex) {
 				TextView viewPrice = (TextView) view;
-				int price = cursor.getInt(columnIndex);
-				String priceStr = "$ " + Integer.toString(price);
+				double price = cursor.getDouble(columnIndex);
+				DecimalFormat Dec = new DecimalFormat("0.00");
+				String priceStr = (Dec.format(price));
+				priceStr = "$ " + priceStr;
 				viewPrice.setText(priceStr);
 				return true;
 			}
