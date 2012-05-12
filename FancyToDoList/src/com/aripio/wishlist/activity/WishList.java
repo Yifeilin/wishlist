@@ -98,6 +98,10 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (savedInstanceState != null) {
+			viewOption = savedInstanceState.getString("viewOption");
+		}
 
 		// Get the saved UI preferences in onPause, the default option is list
 		// SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -113,7 +117,6 @@ public class WishList extends Activity {
 		myListView = (ListView) findViewById(R.id.myListView);
 		myGridView = (GridView) findViewById(R.id.myGridView);
 		// mySearchText = (EditText) findViewById(R.id.mySearchText);
-//		myViewSpinner = (Spinner) findViewById(R.id.myViewSpinner);
 
 		// Listener for myListView.
 		// When clicked, it starts a new activity to display the clicked item's
@@ -727,6 +730,10 @@ public class WishList extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		saveUIState();
+	}
+	
+	private void saveUIState() {
 		// Get the activity preferences object.
 		SharedPreferences uiState = getPreferences(MODE_PRIVATE);
 		// Get the preferences editor.
@@ -739,7 +746,7 @@ public class WishList extends Activity {
 
 	private void restoreUIState() {
 		// Get the activity preferences object.
-		SharedPreferences settings = getPreferences(MODE_PRIVATE);
+		SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
 		// Read the UI state values, specifying default values.
 		viewOption = settings.getString("viewOption", "list");
 		// Restore the UI to the previous state.
@@ -747,16 +754,23 @@ public class WishList extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
+		
 		// save the position of the currently selected item in the list
+		//savedInstanceState.putString("viewOption", viewOption);
+		saveUIState();
+		
+		if (viewOption.equals("list")) {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
 				myListView.getSelectedItemPosition());
+		}
+		else {
+		savedInstanceState.putInt(SELECTED_INDEX_KEY,
+				myGridView.getSelectedItemPosition());
+		}
 		// save the current sort criterion
 		savedInstanceState.putString(SORT_BY_KEY, SORT_BY.name());
-		//
-		// int c = 0;
-		// int k = 0;
-
+		
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -764,11 +778,24 @@ public class WishList extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		int pos = -1;
-		if (savedInstanceState != null)
-			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY))
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
-		myListView.setSelection(pos);
-
+			}
+			viewOption = savedInstanceState.getString("viewOption");
+		}
+		
+		if (viewOption.equals("list")) {
+			myListView.setSelection(pos);
+		}
+		else {
+			myGridView.setSelection(pos);		
+		}
+		
+		restoreUIState();
+		
+		updateView();
+		
 		// restore the sort order
 		// SORT_BY =
 		// ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
@@ -816,6 +843,7 @@ public class WishList extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		restoreUIState();
 		updateView();
 	}
 }
