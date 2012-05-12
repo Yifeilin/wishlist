@@ -199,7 +199,7 @@ public class WishItemDetail extends Activity {
 		}
 
 		// format the price
-		String priceStrNew = "$" + Double.toString(item.getPrice());
+		String priceStrNew = "$" + item.getPriceAsString();
 
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);

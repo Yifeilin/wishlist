@@ -143,7 +143,7 @@ public class EditItemInfo extends Activity {
 
 			myItemName.setText(item.getName());
 			myDescription.setText(item.getDesc());
-			myPrice.setText(Double.toString(item.getPrice()));
+			myPrice.setText(item.getPriceAsString());
 			myLocation.setText(item.getAddress());
 			picture_str = item.getPicStr();
 			Bitmap bitmap = null;
