@@ -395,7 +395,7 @@ public class EditItemInfo extends Activity {
 		// insert the store to the Store table in database, linked to the location
 		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
 
-		WishItem item = new WishItem(this, -1, storeID, storeName, itemName, itemDesc, 
+		WishItem item = new WishItem(this, mItem_id, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, _fullsizePhotoPath, itemPrice,
 				itemLocation, itemPriority);
 		
