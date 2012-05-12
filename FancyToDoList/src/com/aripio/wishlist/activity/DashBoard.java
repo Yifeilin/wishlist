@@ -30,6 +30,19 @@ public class DashBoard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
 		
+		if (savedInstanceState != null) {
+			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
+			// restore the current selected item in the list
+			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
+			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+			
+			Log.d(WishList.LOG_TAG, "_newfullsizePhotoPath " + _newfullsizePhotoPath);			
+			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath " + _fullsizePhotoPath);
+		}
+		else{
+			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
+		}
+		
 		prefImageButton = (ImageButton) findViewById(R.id.imageButton_pref);
 		prefImageButton.setOnClickListener(new OnClickListener() {
  			@Override
@@ -152,6 +165,7 @@ public class DashBoard extends Activity {
 		File f = null;
 		try {
 			f = PhotoFileCreater.getInstance().setUpPhotoFile();
+			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		} catch (IOException e) {
 			Log.d("wishlist", "IOException" + e.getMessage());
@@ -183,5 +197,30 @@ public class DashBoard extends Activity {
 			} 
 		}//switch
 	}
+	
+	//this will make the photo taken before to show up if user cancels taking a second photo
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		Log.d(WishList.LOG_TAG, "");
+		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
+		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// restore the current selected item in the list
+		if (savedInstanceState != null) {
+			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
+			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
+			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+		}
+		else {
+			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
+		}
+	}
+
+
 
 }

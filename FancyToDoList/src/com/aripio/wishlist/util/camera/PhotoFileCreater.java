@@ -51,7 +51,7 @@ public class PhotoFileCreater {
 		return f;
 	}
 	
-	String getfullsizePhotoPath() {
+	public String getfullsizePhotoPath() {
 		return _fullsizePhotoPath; 
 	}
 	
