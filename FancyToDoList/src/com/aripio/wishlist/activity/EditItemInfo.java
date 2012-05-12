@@ -148,6 +148,7 @@ public class EditItemInfo extends Activity {
 			myDescription.setText(item.getDesc());
 			myPrice.setText(Double.toString(item.getPrice()));
 			myLocation.setText(item.getAddress());
+			picture_str = item.getPicStr();
 			Bitmap bitmap = null;
 			
 			//check if pic_str is null, which user added this item without taking a pic.
