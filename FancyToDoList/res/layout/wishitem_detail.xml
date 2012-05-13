@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemDetail"
-	android:orientation="vertical" android:layout_width="fill_parent"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:background="@color/bodyBackground_light_grey">
 
-	<LinearLayout style="@style/TitleBar" android:id="@+id/itemDetail_top"
-		android:layout_alignParentTop="true">
+	<LinearLayout style="@style/TitleBar" 
+	    android:id="@+id/itemDetail_top">
 
 		<ImageButton style="@style/TitleBarBackLogo"
 		    android:id="@+id/imageButton_back_logo"
@@ -27,29 +28,32 @@
 	</LinearLayout>
 	
 	<ScrollView android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:fillViewport="true">
+		android:layout_height="wrap_content" 
+		android:fillViewport="true">
 
 		<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center" 
-		android:gravity="center_horizontal">
+		android:layout_height="wrap_content">
+		<!-- 		android:layout_gravity="center" 
+		android:gravity="center_horizontal" -->
 		
 			<TextView android:text="   "
 			    android:color="#00000000"
 		        android:gravity="center_horizontal"
           		android:layout_width="wrap_content"
-          		android:layout_height="fill_parent"
+          		android:layout_height="wrap_content"
           		android:layout_weight="1"/>
 
 			<LinearLayout android:orientation="vertical"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
 			android:layout_gravity="center" 
 			android:gravity="center_horizontal"
 			android:layout_weight="12">
 			
 				<ImageView android:id="@+id/imgPhotoDetail"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" 
+					android:layout_height="wrap_content"
 					android:scaleType="fitCenter" android:adjustViewBounds="true"
 					android:paddingTop="20dip"
 					android:gravity="center_horizontal"/>
