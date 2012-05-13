@@ -55,7 +55,7 @@ public class WishItemDetail extends Activity {
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-	private GestureDetector gestureDetector;
+//	private GestureDetector gestureDetector;
 	View.OnTouchListener gestureListener;
 
 	private static final String TAG = "WishItemDetail";
@@ -63,15 +63,7 @@ public class WishItemDetail extends Activity {
 	private ListView myListView;
 	// private WishListDataBase wishListDB;
 	private ItemDBAdapter myItemDBAdapter;
-	private ItemsCursor wishItemCursor;
-	
-	private StoreDBAdapter myStoreDBAdapter;
-	private Cursor mStoreCursor;
-	
-	private LocationDBAdapter myLocationDBAdapter;
-	private Cursor mLocationCursor;
 
-	private Handler mHandler;
 	private ImageView mPhotoView;
 	private TextView mNameView;
 	private TextView mDescrptView;
@@ -81,7 +73,7 @@ public class WishItemDetail extends Activity {
 	private TextView mStoreView;
 	private TextView mLocationView;
 	private ImageButton backImageButton;
-	private ImageButton shareImageButton;
+//	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
 	
@@ -112,13 +104,13 @@ public class WishItemDetail extends Activity {
  			}
 		});	
 
-		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
-		shareImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
-			public void onClick(View view) {
-//				shareItem();
- 			}
-		});
+//		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
+//		shareImageButton.setOnClickListener(new OnClickListener() {
+// 			@Override
+//			public void onClick(View view) {
+////				shareItem();
+// 			}
+//		});
 
 		deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
 		deleteImageButton.setOnClickListener(new OnClickListener() {
