@@ -127,7 +127,7 @@ public class WishList extends Activity {
 					long id) {
 				// find which item in the list view has been clicked
 				// and get its _id in database
-				long item_id = getDBItemID(position, LIST_MODE);
+				long item_id = getDBItemID(v, LIST_MODE);
 				if (item_id == -1) {
 					Log.d(LOG_TAG, "item id == -1");
 					return;
@@ -151,8 +151,7 @@ public class WishList extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
 				// find which item has been clicked and get its _id in database
-				long item_id = getDBItemID(position, GRID_MODE);
-
+				long item_id = getDBItemID(v, GRID_MODE);
 				// Create an intent to show the item detail.
 				// Pass the item_id along so the next activity can use it to
 				// retrieve the info. about the item from database
@@ -298,21 +297,15 @@ public class WishList extends Activity {
 	 *            : the current view mode
 	 * @return the Item ID
 	 */
-	public long getDBItemID(int position, int viewMode) {
-
-		View selectedView = null;
+	public long getDBItemID(View v, int viewMode) {
 		TextView itemIdTextView = null;
 		// Note that txtItemID is not visible in the UI but can be retrieved
 		switch (viewMode) {
 		case LIST_MODE:
-			selectedView = myListView.getChildAt(position);
-			itemIdTextView = (TextView) selectedView
-					.findViewById(R.id.txtItemID);
+			itemIdTextView = (TextView) v.findViewById(R.id.txtItemID);
 			break;
 		case GRID_MODE:
-			selectedView = myGridView.getChildAt(position);
-			itemIdTextView = (TextView) selectedView
-					.findViewById(R.id.txtItemID_Grid);
+			itemIdTextView = (TextView) v.findViewById(R.id.txtItemID_Grid);
 			break;
 		default:
 			Log.d(LOG_TAG, "View mode not specified correctly.");
@@ -341,7 +334,7 @@ public class WishList extends Activity {
 	private void initializeView(ItemsCursor.SortBy sortBy) {
 		wishItemCursor = myItemDBAdapter.getItems(sortBy);
 
-		if (viewOption == "list") {
+		if (viewOption.equals("list")) {
 			updateListView();
 			myViewFlipper.setDisplayedChild(0);
 		}
@@ -398,14 +391,14 @@ public class WishList extends Activity {
 	 */
 	private void updateView() {
 
-		if (viewOption == "list") {
+		if (viewOption.equals("list")) {
 			// Update the list view
 			updateListView();
 			myViewFlipper.setDisplayedChild(0);
 
 		}
 
-		else if (viewOption == "grid") {
+		else if (viewOption.equals("grid")) {
 			// Update the grid view
 			updateGridView();
 			myViewFlipper.setDisplayedChild(1);
@@ -778,21 +771,20 @@ public class WishList extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		int pos = -1;
+		restoreUIState();
 		if (savedInstanceState != null) {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 			}
-			viewOption = savedInstanceState.getString("viewOption");
+		//	viewOption = savedInstanceState.getString("viewOption");
 		}
 		
-		if (viewOption.equals("list")) {
+//		if (viewOption.equals("list")) {
 			myListView.setSelection(pos);
-		}
-		else {
+//		}
+//		else {
 			myGridView.setSelection(pos);		
-		}
-		
-		restoreUIState();
+//		}
 		
 		updateView();
 		
