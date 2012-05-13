@@ -114,8 +114,10 @@ public class EditItemInfo extends Activity {
 			public void onClick(View view) {
 				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
 				//i.putExtra("pic_str", picture_str);
-				i.putExtra("fullsize_pic_str", _fullsizePhotoPath);
-				startActivity(i);
+				if (_fullsizePhotoPath != null) {
+					i.putExtra("fullsize_pic_str", _fullsizePhotoPath);
+					startActivity(i);
+				}
 			}
 		});
 		
