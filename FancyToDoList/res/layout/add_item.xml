@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/addItem"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-	android:background="@color/bodyBackground_light_grey">
-
+    android:background="@color/bodyBackground_light_grey">
+	
 	<LinearLayout style="@style/TitleBar"
-	android:id="@+id/addItem_top"
-	android:layout_alignParentTop="true">
+	android:id="@+id/addItem_top">
 		<ImageButton
 		    android:id="@+id/imageButton_back_logo"
 		    style="@style/TitleBarBackLogo"
@@ -17,87 +14,99 @@
 		    android:src="@drawable/ic_back_logo" />
 			
 		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/make_a_wish" android:text="@string/make_a_wish" />
+			android:contentDescription="@string/make_a_wish" 
+			android:text="@string/make_a_wish" />
 <!-- 	<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />
 -->
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_save"
-			android:contentDescription="@string/description_save" android:src="@drawable/ic_menu_save"
+			android:contentDescription="@string/description_save" 
+			android:src="@drawable/ic_menu_save"
 			android:onClick="onClickSave" />
 	</LinearLayout>
 
-	<ScrollView android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_below="@+id/addItem_top"
-		android:background="@color/bodyBackground_light_grey">
+<!-- we must use a relativelayout here to correctly position the scrollview and the footer.
+	the footer must be defined before the scrollview and the scrollview's aligment 
+	must be set to android:layout_above="@id/footer_bar. This will make sure that
+	the footer does not disappear when the content in the scrollview grows up.
+	This trick takes me hours to figure out! -->
+<RelativeLayout 
+    android:id="@+id/addItem"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+	android:background="@color/bodyBackground_light_grey">
 
-		<LinearLayout android:orientation="vertical"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@color/bodyBackground_light_grey">
-			<EditText android:layout_width="fill_parent" 
-			    android:id="@+id/itemname"
-				android:layout_height="wrap_content" 
-				android:hint="Name"
-				android:layout_weight="1" />
-
-			<EditText android:layout_width="fill_parent" android:id="@+id/description"
-				android:layout_height="wrap_content" 
-				android:hint="Description"
-				android:gravity="top"
-				android:layout_weight="1" />
-
-			<EditText android:layout_width="fill_parent" android:id="@+id/price"
-				android:layout_height="wrap_content" 
-				android:hint="price"
-				android:gravity="top" 
-				android:inputType="numberDecimal"
-				android:layout_weight="1" />
-			
-			<EditText android:layout_width="fill_parent" android:id="@+id/store"
-				android:layout_height="wrap_content"
-				android:hint="store"
-				android:gravity="top"
-				android:layout_weight="1"/>
-
-			<EditText android:layout_width="fill_parent" android:id="@+id/location"
-				android:layout_height="wrap_content"
-				android:hint="location"
-				android:gravity="top"
-				android:inputType="textPostalAddress"
-				android:layout_weight="1"/>
-
-		<!--	<LinearLayout android:layout_height="wrap_content"
-				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
-				android:background="@color/bodyBackground_light_grey">
-				android:padding="10dip"
-		-->
-				<ImageView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:id="@+id/image_photo"
-					android:layout_gravity="center_horizontal"/>
-			<!--		android:src="@drawable/icon"/> -->
-			</LinearLayout>
-		<!-- </LinearLayout>  -->
-	</ScrollView>
-
-	<LinearLayout style="@style/FooterBar">
+    	<LinearLayout style="@style/FooterBar"
+    	    android:id="@+id/footer_bar">
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_map"
-			android:contentDescription="@string/description_location" android:src="@drawable/ic_pin_blue_default_72by72"
-			android:onClick="onClickMap" android:layout_gravity="left"
+			android:contentDescription="@string/description_location" 
+			android:src="@drawable/ic_pin_blue_default_72by72"
+			android:onClick="onClickMap"
+			android:layout_gravity="left"
 			android:layout_weight="1"/>
+		
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_camera"
-			android:contentDescription="@string/description_camera" android:src="@drawable/ic_camera_default_72by72"
-			android:onClick="onClickCamera" android:layout_gravity="right"
+			android:contentDescription="@string/description_camera" 
+			android:src="@drawable/ic_camera_default_72by72"
+			android:onClick="onClickCamera"
+			android:layout_gravity="right"
 			android:layout_weight="1"/>
 	<!-- 	<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_gallery"
 			android:contentDescription="@string/description_gallery" android:src="@drawable/ic_menu_gallery"
 			android:onClick="onClickGallery" android:layout_gravity="right"
 			android:layout_weight="1" />
-			andorid:visibility="invisible"/>  -->"
+			andorid:visibility="invisible"/>  -->
 	</LinearLayout>
+	<ScrollView
+	    android:id="@+id/editItem_ScrollView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_above="@id/footer_bar"
+	    android:background="@color/bodyBackground_light_grey"
+	    android:orientation="vertical" >
 
-</RelativeLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/bodyBackground_light_grey">
+			<EditText android:layout_width="fill_parent" 
+			    android:id="@+id/itemname"
+				android:layout_height="wrap_content" 
+				android:hint="Name" />
+
+			<EditText android:layout_width="fill_parent" android:id="@+id/description"
+				android:layout_height="wrap_content" 
+				android:hint="Description" />
+
+			<EditText android:layout_width="fill_parent" android:id="@+id/price"
+				android:layout_height="wrap_content" 
+				android:hint="price"
+				android:inputType="numberDecimal"/>
+			
+			<EditText android:layout_width="fill_parent" android:id="@+id/store"
+				android:layout_height="wrap_content"
+				android:hint="store"/>
+
+			<EditText android:layout_width="fill_parent" android:id="@+id/location"
+				android:layout_height="wrap_content"
+				android:hint="location"
+				android:inputType="textPostalAddress"
+				/>
+
+				<ImageView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:id="@+id/image_photo"
+					android:layout_gravity="center_horizontal"/>
+			<!--		android:src="@drawable/icon"/> -->
+
+		</LinearLayout>
+	</ScrollView>
+
+ </RelativeLayout> 
+</LinearLayout>
