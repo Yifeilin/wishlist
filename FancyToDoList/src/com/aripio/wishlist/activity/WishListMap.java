@@ -1,46 +1,46 @@
 package com.aripio.wishlist.activity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.io.InputStreamReader;
+//import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.apache.http.HttpEntity;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.json.JSONArray;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
+//import android.database.Cursor;
+//import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import com.aripio.wishlist.R;
-import com.aripio.wishlist.R.drawable;
-import com.aripio.wishlist.R.string;
+//import com.aripio.wishlist.R.drawable;
+//import com.aripio.wishlist.R.string;
 import com.aripio.wishlist.db.ItemDBAdapter;
-import com.aripio.wishlist.db.LocationDBAdapter;
-import com.aripio.wishlist.db.StoreDBAdapter;
+//import com.aripio.wishlist.db.LocationDBAdapter;
+//import com.aripio.wishlist.db.StoreDBAdapter;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -57,27 +57,16 @@ import com.google.android.maps.Projection;
  */
 public class WishListMap extends MapActivity {
 	private MapView mMapView;
-
 	private MyLocationOverlay mMyLocationOverlay;
-
 	private WishListOverlay mWishListOverlay;
-
 	private Location myLocation;
-
 	private double mLatitude;
-
 	private double mLongitude;
-
 	private GeoPoint myCurrentPoint;
-
 	private Drawable mMarker;
-
 	private int mMarkerXOffset;
-
 	private int mMarkerYOffset;
-
 	private List<Overlay> mOverlays;
-
 	private MapController mController;
 
 	@Override
@@ -182,22 +171,22 @@ public class WishListMap extends MapActivity {
 	/**
 	 * mark the current location on the map
 	 */
-	private void markCurrentLocation() {
-		mMyLocationOverlay = new MyLocationOverlay(this, mMapView);
-		boolean locationEnabled = false;
-		boolean compassEnabled = false;
-
-		locationEnabled = mMyLocationOverlay.enableMyLocation();
-		compassEnabled = mMyLocationOverlay.enableCompass();
-
-		// Get the current location
-		myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
-		myCurrentPoint = new GeoPoint(
-				(int) (myLocation.getLatitude() * 1000000), (int) (myLocation
-						.getLongitude() * 1000000));
-
-		mOverlays.add(mMyLocationOverlay);
-	}
+//	private void markCurrentLocation() {
+//		mMyLocationOverlay = new MyLocationOverlay(this, mMapView);
+//		boolean locationEnabled = false;
+//		boolean compassEnabled = false;
+//
+//		locationEnabled = mMyLocationOverlay.enableMyLocation();
+//		compassEnabled = mMyLocationOverlay.enableCompass();
+//
+//		// Get the current location
+//		myLocation = getCurrentLocation((LocationManager) getSystemService(Context.LOCATION_SERVICE));
+//		myCurrentPoint = new GeoPoint(
+//				(int) (myLocation.getLatitude() * 1000000), (int) (myLocation
+//						.getLongitude() * 1000000));
+//
+//		mOverlays.add(mMyLocationOverlay);
+//	}
 
 	/**
 	 * prepare the marker used to mark the item
@@ -238,6 +227,7 @@ public class WishListMap extends MapActivity {
 		mItemDBAdapter.open();
 		ArrayList<double[]> locationList = new ArrayList<double[]>();
 		locationList = mItemDBAdapter.getAllItemLocation();
+		mItemDBAdapter.close();
 		
 		mWishListOverlay = new WishListOverlay(mMarker);
 		int i=0;
@@ -253,6 +243,7 @@ public class WishListMap extends MapActivity {
 				mOverlays.add(mWishListOverlay);	
 			}
 		}
+		
 	}
 
 	/**
@@ -339,82 +330,80 @@ public class WishListMap extends MapActivity {
 	 * This thread does the actual work of downloading and parsing data.
 	 * 
 	 */
-	private class NetworkThread extends Thread {
-
-		private final String query_URL = "//maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=500&types=food&name=store"
-				+ "&sensor=true&key=AIzaSyDFtnjfv8bJ8uCU-02J1x8XQ-jFWzhKICE";
-		private GeoPoint searchPoint;
-		private WishListOverlay mWishListOverlay;
-
-		NetworkThread(GeoPoint point, WishListOverlay wishListOverlay) {
-			searchPoint = point;
-			mWishListOverlay = wishListOverlay;
-		}
-
-		@Override
-		public void run() {
-
-			String url = query_URL;
-			url = String.format(url,
-					(double) searchPoint.getLatitudeE6() / 1000000,
-					(double) searchPoint.getLongitudeE6() / 1000000);
-			try {
-				URI uri = new URI("https", url, null);
-				HttpGet get = new HttpGet(uri);
-
-				HttpClient client = new DefaultHttpClient();
-				HttpResponse response = client.execute(get);
-				HttpEntity entity = response.getEntity();
-				String str = convertStreamToString(entity.getContent());
-				JSONObject json = new JSONObject(str);
-				parse(json);
-			} catch (Exception e) {
-				Log.e(WishList.LOG_TAG, e.toString());
-			}
-		}
-
-		private void parse(JSONObject json) {
-			try {
-				JSONArray array = json.getJSONArray("results");
-				int count = array.length();
-				for (int i = 0; i < 5; i++) {
-					JSONObject obj = array.getJSONObject(i);
-					JSONObject gobj = obj.getJSONObject("geometry");
-					JSONObject lobj = gobj.getJSONObject("location");
-					double latitude = lobj.getDouble("lat");
-					double longitude = lobj.getDouble("lng");
-					GeoPoint point = new GeoPoint((int) (latitude * 1000000),
-							(int) (longitude * 1000000));
-					mWishListOverlay
-							.addOverlay(new OverlayItem(point, "A", "B"));
-				}
-			} catch (JSONException e) {
-				Log.e(WishList.LOG_TAG, e.toString());
-			}
-		}
-
-		private String convertStreamToString(InputStream is) {
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(is), 8 * 1024);
-			StringBuilder sb = new StringBuilder();
-
-			String line = null;
-			try {
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return sb.toString();
-		}
+//	private class NetworkThread extends Thread {
+//
+//		private final String query_URL = "//maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=500&types=food&name=store"
+//				+ "&sensor=true&key=AIzaSyDFtnjfv8bJ8uCU-02J1x8XQ-jFWzhKICE";
+//		private GeoPoint searchPoint;
+//		private WishListOverlay mWishListOverlay;
+//
+//		NetworkThread(GeoPoint point, WishListOverlay wishListOverlay) {
+//			searchPoint = point;
+//			mWishListOverlay = wishListOverlay;
+//		}
+//
+//		@Override
+//		public void run() {
+//
+//			String url = query_URL;
+//			url = String.format(url,
+//					(double) searchPoint.getLatitudeE6() / 1000000,
+//					(double) searchPoint.getLongitudeE6() / 1000000);
+//			try {
+//				URI uri = new URI("https", url, null);
+//				HttpGet get = new HttpGet(uri);
+//
+//				HttpClient client = new DefaultHttpClient();
+//				HttpResponse response = client.execute(get);
+//				HttpEntity entity = response.getEntity();
+//				String str = convertStreamToString(entity.getContent());
+//				JSONObject json = new JSONObject(str);
+//				parse(json);
+//			} catch (Exception e) {
+//				Log.e(WishList.LOG_TAG, e.toString());
+//			}
+//		}
+//
+//		private void parse(JSONObject json) {
+//			try {
+//				JSONArray array = json.getJSONArray("results");
+//				int count = array.length();
+//				for (int i = 0; i < 5; i++) {
+//					JSONObject obj = array.getJSONObject(i);
+//					JSONObject gobj = obj.getJSONObject("geometry");
+//					JSONObject lobj = gobj.getJSONObject("location");
+//					double latitude = lobj.getDouble("lat");
+//					double longitude = lobj.getDouble("lng");
+//					GeoPoint point = new GeoPoint((int) (latitude * 1000000),
+//							(int) (longitude * 1000000));
+//					mWishListOverlay
+//							.addOverlay(new OverlayItem(point, "A", "B"));
+//				}
+//			} catch (JSONException e) {
+//				Log.e(WishList.LOG_TAG, e.toString());
+//			}
+//		}
+//
+//		private String convertStreamToString(InputStream is) {
+//			BufferedReader reader = new BufferedReader(
+//					new InputStreamReader(is), 8 * 1024);
+//			StringBuilder sb = new StringBuilder();
+//
+//			String line = null;
+//			try {
+//				while ((line = reader.readLine()) != null) {
+//					sb.append(line + "\n");
+//				}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			} finally {
+//				try {
+//					is.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//			return sb.toString();
+//		}
 
 	}
-
-}

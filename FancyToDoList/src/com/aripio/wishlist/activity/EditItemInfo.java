@@ -46,6 +46,7 @@ public class EditItemInfo extends Activity {
 	private EditText myItemName;
 	private EditText myDescription;
 	private EditText myPrice;
+	private EditText myStore;
 	private EditText myLocation;
 
 	private ImageButton backImageButton;
@@ -97,7 +98,9 @@ public class EditItemInfo extends Activity {
 		myItemName = (EditText) findViewById(R.id.itemname);
 		myDescription = (EditText) findViewById(R.id.description);
 		myPrice = (EditText) findViewById(R.id.price);
+		myStore = (EditText) findViewById(R.id.store);
 		myLocation = (EditText) findViewById(R.id.location);
+		
 
 		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
@@ -144,6 +147,7 @@ public class EditItemInfo extends Activity {
 			myDescription.setText(item.getDesc());
 			myPrice.setText(item.getPriceAsString());
 			myLocation.setText(item.getAddress());
+			myStore.setText(item.getStoreName());
 			picture_str = item.getPicStr();
 			_fullsizePhotoPath = item.getFullsizePicPath();
 			Bitmap bitmap = null;
@@ -346,16 +350,16 @@ public class EditItemInfo extends Activity {
 		//define variables to hold the item info.
 		String itemName = "N/A";
 		String itemDesc = "N/A";
+		String itemStoreName = "N/A";
 		float itemPrice = 0;
 		int itemPriority = 0;
 		
-		String storeName = "N/A";
-
 		try {
 			// read in the name, description, price and location of the item
 			// from the EditText
 			itemName = myItemName.getText().toString();
 			itemDesc = myDescription.getText().toString();
+			itemStoreName = myStore.getText().toString();
 			addStr = myLocation.getText().toString();
 			itemPrice = Float.valueOf(myPrice.getText().toString());
 		}
@@ -388,9 +392,9 @@ public class EditItemInfo extends Activity {
 		long locationID = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
 
 		// insert the store to the Store table in database, linked to the location
-		long storeID = mStoreDBAdapter.addStore(storeName, locationID);
+		long storeID = mStoreDBAdapter.addStore(itemStoreName, locationID);
 
-		WishItem item = new WishItem(this, mItem_id, storeID, storeName, itemName, itemDesc, 
+		WishItem item = new WishItem(this, mItem_id, storeID, itemStoreName, itemName, itemDesc, 
 				date, picture_str, _fullsizePhotoPath, itemPrice,
 				addStr, itemPriority);
 		
@@ -506,7 +510,8 @@ public class EditItemInfo extends Activity {
 		if(myItemName.getText().toString().length() == 0 &&
 				myDescription.getText().toString().length() == 0 &&
 				myPrice.getText().toString().length() == 0 &&
-				myLocation.getText().toString().length() == 0){
+				myLocation.getText().toString().length() == 0 &&
+				myStore.getText().toString().length() == 0){
 
 			EditItemInfo.this.finish();
 			return false;

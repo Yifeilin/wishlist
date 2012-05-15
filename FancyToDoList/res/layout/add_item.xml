@@ -36,22 +36,36 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:background="@color/bodyBackground_light_grey">
-			<EditText android:layout_width="fill_parent" android:id="@+id/itemname"
-				android:layout_height="wrap_content" android:hint="Item Name"
+			<EditText android:layout_width="fill_parent" 
+			    android:id="@+id/itemname"
+				android:layout_height="wrap_content" 
+				android:hint="Name"
 				android:layout_weight="1" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/description"
-				android:layout_height="wrap_content" android:hint="Description"
-				android:gravity="top" android:layout_weight="1" />
-
-			<EditText android:layout_width="fill_parent" android:id="@+id/price"
-				android:layout_height="wrap_content" android:hint="price"
-				android:gravity="top" android:inputType="numberDecimal"
+				android:layout_height="wrap_content" 
+				android:hint="Description"
+				android:gravity="top"
 				android:layout_weight="1" />
 
+			<EditText android:layout_width="fill_parent" android:id="@+id/price"
+				android:layout_height="wrap_content" 
+				android:hint="price"
+				android:gravity="top" 
+				android:inputType="numberDecimal"
+				android:layout_weight="1" />
+			
+			<EditText android:layout_width="fill_parent" android:id="@+id/store"
+				android:layout_height="wrap_content"
+				android:hint="store"
+				android:gravity="top"
+				android:layout_weight="1"/>
+
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
-				android:layout_height="wrap_content" android:hint="location"
-				android:gravity="top" android:inputType="textPostalAddress"
+				android:layout_height="wrap_content"
+				android:hint="location"
+				android:gravity="top"
+				android:inputType="textPostalAddress"
 				android:layout_weight="1"/>
 
 		<!--	<LinearLayout android:layout_height="wrap_content"

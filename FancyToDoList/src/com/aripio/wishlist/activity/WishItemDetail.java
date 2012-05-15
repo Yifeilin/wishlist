@@ -209,7 +209,6 @@ public class WishItemDetail extends Activity {
 		mDateView.setText(dateTimeStrNew);
 		mPriceView.setText(priceStrNew);
 		mStoreView.setText("At " + item.getStoreName());
-		String add = item.getAddress();
 		mLocationView.setText(item.getAddress());
 
 //		// set the gesture detection
