@@ -24,12 +24,13 @@
    			android:id="@+id/imageButton_pref"
 			android:contentDescription="@string/description_pref" android:src="@drawable/ic_menu_preferences"
 			android:onClick="onClickPref"
-			android:visibility="invisible"  />
+			android:visibility="invisible" />
 		
 	</LinearLayout>
 	
 	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
 		android:background="@color/bodyBackground_light_grey"
 		android:layout_weight="1" android:padding="6dip">
 		<LinearLayout android:orientation="horizontal"
