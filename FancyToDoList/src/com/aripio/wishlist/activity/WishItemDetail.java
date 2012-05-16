@@ -190,9 +190,6 @@ public class WishItemDetail extends Activity {
 			e.printStackTrace();
 		}
 
-		// format the price
-		String priceStrNew = "$" + item.getPriceAsString();
-
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);
 		mNameView = (TextView) findViewById(R.id.itemNameDetail);
@@ -207,7 +204,15 @@ public class WishItemDetail extends Activity {
 		mNameView.setText(item.getName());
 		mDescrptView.setText(item.getDesc());
 		mDateView.setText(dateTimeStrNew);
-		mPriceView.setText(priceStrNew);
+		// format the price
+		String priceStr = item.getPriceAsString();
+		if (priceStr != null) {
+			mPriceView.setText("$" + priceStr);	
+			mPriceView.setVisibility(View.VISIBLE);
+		}
+		else {
+			mPriceView.setVisibility(View.GONE);
+		}
 		mStoreView.setText("At " + item.getStoreName());
 		mLocationView.setText(item.getAddress());
 

@@ -111,11 +111,17 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			
 			else if (columnIndex == nPriceIndex) {
 				TextView viewPrice = (TextView) view;
-				double price = cursor.getDouble(columnIndex);
-				DecimalFormat Dec = new DecimalFormat("0.00");
-				String priceStr = (Dec.format(price));
-				priceStr = "$ " + priceStr;
-				viewPrice.setText(priceStr);
+				float price = cursor.getFloat(columnIndex);
+				if (price != Float.MIN_VALUE) {
+					DecimalFormat Dec = new DecimalFormat("0.00");
+					String priceStr = (Dec.format(price));
+					priceStr = "$ " + priceStr;
+					viewPrice.setText(priceStr);
+					viewPrice.setVisibility(View.VISIBLE);
+				}
+				else {
+					viewPrice.setVisibility(View.GONE);
+				}
 				return true;
 			}
 			

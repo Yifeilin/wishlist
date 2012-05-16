@@ -91,9 +91,14 @@ public class WishItem {
 	}
 	
 	public String getPriceAsString() {
-		DecimalFormat Dec = new DecimalFormat("0.00");
-		String priceStr = (Dec.format(_price));
-		return priceStr;
+		if (_price == Float.MIN_VALUE) {
+			return null;
+		}
+		else {
+			DecimalFormat Dec = new DecimalFormat("0.00");
+			String priceStr = (Dec.format(_price));
+			return priceStr;
+		}
 	}
 	
 	public void setAddress(String add){

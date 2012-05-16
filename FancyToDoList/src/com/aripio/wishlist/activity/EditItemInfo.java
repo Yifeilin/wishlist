@@ -145,7 +145,10 @@ public class EditItemInfo extends Activity {
 
 			myItemName.setText(item.getName());
 			myDescription.setText(item.getDesc());
-			myPrice.setText(item.getPriceAsString());
+			String priceStr = item.getPriceAsString();
+			if (priceStr != null) {
+				myPrice.setText(priceStr);
+			}
 			myLocation.setText(item.getAddress());
 			myStore.setText(item.getStoreName());
 			picture_str = item.getPicStr();
@@ -368,7 +371,7 @@ public class EditItemInfo extends Activity {
 			// need some error message here
 			// price format incorrect
 			e.toString();
-			itemPrice = 0;
+			itemPrice = Float.MIN_VALUE;
 		}
 
 		// user did not specify date_time, use "now" as default date_time
