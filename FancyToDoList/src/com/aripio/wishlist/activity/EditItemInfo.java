@@ -351,9 +351,9 @@ public class EditItemInfo extends Activity {
 		}
 		
 		//define variables to hold the item info.
-		String itemName = "N/A";
-		String itemDesc = "N/A";
-		String itemStoreName = "N/A";
+		String itemName = "";
+		String itemDesc = "";
+		String itemStoreName = "";
 		float itemPrice = 0;
 		int itemPriority = 0;
 		

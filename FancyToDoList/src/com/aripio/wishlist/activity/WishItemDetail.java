@@ -213,8 +213,28 @@ public class WishItemDetail extends Activity {
 		else {
 			mPriceView.setVisibility(View.GONE);
 		}
-		mStoreView.setText("At " + item.getStoreName());
-		mLocationView.setText(item.getAddress());
+		
+		String storeName = item.getStoreName();
+		if (!storeName.equals("")) {
+			mStoreView.setText("At " + storeName);	
+			mStoreView.setVisibility(View.VISIBLE);
+		}
+		else {
+			mStoreView.setVisibility(View.GONE);
+		}
+		
+		String address = item.getAddress();
+		if (!address.equals("unknown") && !address.equals("")) {
+			if (storeName.equals("")) {
+				address = "At " + address;
+			}
+			mLocationView.setText(address);	
+			mLocationView.setVisibility(View.VISIBLE);
+		}
+		else {
+			mLocationView.setVisibility(View.GONE);
+		}
+		
 
 //		// set the gesture detection
 //		gestureDetector = new GestureDetector(new MyGestureDetector());

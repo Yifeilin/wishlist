@@ -34,6 +34,8 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 	 * for display in the view 
 	 */
 	public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
+		
+		boolean _hasStoreName = false;
 
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
@@ -112,6 +114,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			else if (columnIndex == nPriceIndex) {
 				TextView viewPrice = (TextView) view;
 				float price = cursor.getFloat(columnIndex);
+				//we use float.min_value to indicate price is not available
 				if (price != Float.MIN_VALUE) {
 					DecimalFormat Dec = new DecimalFormat("0.00");
 					String priceStr = (Dec.format(price));
@@ -127,15 +130,32 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			
 			else if (columnIndex == nStoreNameIndex){
 				TextView viewStore = (TextView) view;
-				String storeName = "At " + cursor.getString(columnIndex);
-				viewStore.setText(storeName);
+				String storeName = cursor.getString(columnIndex);	
+				if (!storeName.equals("")) {
+					_hasStoreName = true;
+					storeName = "At " + storeName;
+					viewStore.setText(storeName);
+					viewStore.setVisibility(View.VISIBLE);
+				}
+				else {
+					viewStore.setVisibility(View.GONE);
+				}
 				return true;
 			}
 
 			else if (columnIndex == nAddIndex) {
-				TextView viewAdd = (TextView) view;
-				String Add = cursor.getString(columnIndex);
-				viewAdd.setText(Add);
+				TextView viewAddress = (TextView) view;
+				String Address = cursor.getString(columnIndex);
+				if (!Address.equals("unknown") && !Address.equals("")) {
+					if (!_hasStoreName) {
+						Address = "At " + Address;
+					}
+					viewAddress.setText(Address);
+					viewAddress.setVisibility(View.VISIBLE);
+				}
+				else {
+					viewAddress.setVisibility(View.GONE);
+				}
 				return true;
 			}
 		
