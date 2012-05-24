@@ -81,9 +81,9 @@
 				android:layout_height="wrap_content" 
 				android:hint="Name" />
 
-			<EditText android:layout_width="fill_parent" android:id="@+id/description"
+			<EditText android:layout_width="fill_parent" android:id="@+id/note"
 				android:layout_height="wrap_content" 
-				android:hint="Description" />
+				android:hint="Note" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/price"
 				android:layout_height="wrap_content" 

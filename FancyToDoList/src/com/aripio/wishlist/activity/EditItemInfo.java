@@ -44,7 +44,7 @@ import android.widget.Toast;
 public class EditItemInfo extends Activity {
 
 	private EditText myItemName;
-	private EditText myDescription;
+	private EditText myNote;
 	private EditText myPrice;
 	private EditText myStore;
 	private EditText myLocation;
@@ -96,7 +96,7 @@ public class EditItemInfo extends Activity {
 
 		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
-		myDescription = (EditText) findViewById(R.id.description);
+		myNote = (EditText) findViewById(R.id.note);
 		myPrice = (EditText) findViewById(R.id.price);
 		myStore = (EditText) findViewById(R.id.store);
 		myLocation = (EditText) findViewById(R.id.location);
@@ -144,7 +144,7 @@ public class EditItemInfo extends Activity {
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 
 			myItemName.setText(item.getName());
-			myDescription.setText(item.getDesc());
+			myNote.setText(item.getDesc());
 			String priceStr = item.getPriceAsString();
 			if (priceStr != null) {
 				myPrice.setText(priceStr);
@@ -248,12 +248,12 @@ public class EditItemInfo extends Activity {
 		});
 
 		//set the keyListener for the Item Description EditText
-		myDescription.setOnKeyListener(new OnKeyListener() {
+		myNote.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
 					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						myDescription.setSelected(false);
+						myNote.setSelected(false);
 					}
 				return false;
 			}
@@ -361,7 +361,7 @@ public class EditItemInfo extends Activity {
 			// read in the name, description, price and location of the item
 			// from the EditText
 			itemName = myItemName.getText().toString();
-			itemDesc = myDescription.getText().toString();
+			itemDesc = myNote.getText().toString();
 			itemStoreName = myStore.getText().toString();
 			addStr = myLocation.getText().toString();
 			itemPrice = Float.valueOf(myPrice.getText().toString());
@@ -511,7 +511,7 @@ public class EditItemInfo extends Activity {
 	private boolean navigateBack(){
 		//all fields are empty
 		if(myItemName.getText().toString().length() == 0 &&
-				myDescription.getText().toString().length() == 0 &&
+				myNote.getText().toString().length() == 0 &&
 				myPrice.getText().toString().length() == 0 &&
 				myLocation.getText().toString().length() == 0 &&
 				myStore.getText().toString().length() == 0){
