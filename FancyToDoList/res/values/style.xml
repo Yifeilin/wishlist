@@ -113,7 +113,7 @@
     </style> 
     
     <style name="ItemNameText">
- 		<item name="android:textSize">18dip</item>
+ 		<item name="android:textSize">20dip</item>
 	 	<item name="android:singleLine">true</item>
         <item name="android:ellipsize">marquee</item>
 	    <item name="android:textColor">@color/dark_purple</item>
