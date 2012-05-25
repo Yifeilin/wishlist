@@ -39,20 +39,31 @@ public class DateTimeFormatter {
         String dateTimeStrNew = null;
 
 		Date dateTimeNow = new Date(mYear - 1900, mMonth, mDay, mHour, mMin, mSec);
-		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Date dateTimeRecorded;
 		try {
 			dateTimeRecorded = sdfFrom.parse(dateTimeStr);
-			long diffmSec = dateTimeNow.getTime() - dateTimeRecorded.getTime();
-	        long diffHours = diffmSec / (60 * 60 * 1000);
+			long diffmSecs = dateTimeNow.getTime() - dateTimeRecorded.getTime();
+	        long diffHours = diffmSecs / (60 * 60 * 1000);
+	        long diffMins =  diffmSecs / (60 * 1000);
 
-	        if(diffHours > 24.0) {
+	        if (diffHours >= 24) {
 	        	SimpleDateFormat sdfTo = new SimpleDateFormat("MMM dd, yyyy");
 	        	dateTimeStrNew = sdfTo.format(dateTimeRecorded);
 	        }
-	        else {
-	        	dateTimeStrNew = Long.toString(diffHours) + "hours ago";
+	        else if (diffHours > 1) {
+	        	dateTimeStrNew = Long.toString(diffHours) + " hours ago";
 	        }
+	        else if (diffHours == 1) {
+	        	dateTimeStrNew = Long.toString(diffHours) + " hour ago";
+	        }
+	        else if (diffMins > 1) {
+	        	dateTimeStrNew = Long.toString(diffMins) + " minutes ago";
+	        }
+	        else {
+	        	dateTimeStrNew = "1 minute ago";
+	        }
+        
 		} catch (java.text.ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

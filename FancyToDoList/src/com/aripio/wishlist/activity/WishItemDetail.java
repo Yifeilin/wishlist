@@ -13,6 +13,7 @@ import com.aripio.wishlist.db.StoreDBAdapter;
 import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.aripio.wishlist.model.WishItem;
 import com.aripio.wishlist.model.WishItemManager;
+import com.aripio.wishlist.util.DateTimeFormatter;
 import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;
@@ -178,17 +179,20 @@ public class WishItemDetail extends Activity {
 		}
 		
 		// format the date time
-		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		SimpleDateFormat sdfTo = new SimpleDateFormat(
-				"MMMM dd, yyyy, hh:mm aaa");
-
-		String dateTimeStrNew = null;
-		try {
-			dateTimeStrNew = sdfTo.format(sdfFrom.parse(item.getDate()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//		SimpleDateFormat sdfTo = new SimpleDateFormat(
+//				"MMMM dd, yyyy, hh:mm aaa");
+//
+//		String dateTimeStrNew = null;
+//		try {
+//			dateTimeStrNew = sdfTo.format(sdfFrom.parse(item.getDate()));
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	
+		String dateTimeStr = item.getDate();
+		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
 
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);
