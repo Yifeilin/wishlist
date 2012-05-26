@@ -206,8 +206,8 @@ public class WishItemDetail extends Activity {
 
 		//display the item info. in the views
 		mNameView.setText(item.getName());
-		mDescrptView.setText(item.getDesc());
 		mDateView.setText(dateTimeStrNew);
+		
 		// format the price
 		String priceStr = item.getPriceAsString();
 		if (priceStr != null) {
@@ -216,6 +216,16 @@ public class WishItemDetail extends Activity {
 		}
 		else {
 			mPriceView.setVisibility(View.GONE);
+		}
+		
+		//used as a note
+		String descrptStr = item.getDesc();
+		if (!descrptStr.equals("")) {
+			mDescrptView.setText(descrptStr);
+			mDescrptView.setVisibility(View.VISIBLE);
+		}
+		else {
+			mDescrptView.setVisibility(View.GONE);
 		}
 		
 		String storeName = item.getStoreName();
