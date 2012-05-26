@@ -94,8 +94,16 @@
 				<TextView style="@style/ItemInfoText"
 				    android:id="@+id/itemLocationDetail"
 				    android:text="item location"
-					android:paddingTop="8dip" 
+					android:paddingTop="8dip"
 					android:singleLine="false"
+					android:layout_gravity="left" />
+				
+				<!-- white space at the bottom -->
+				<TextView 
+				   	android:layout_width="fill_parent"
+	    			android:layout_height="wrap_content"
+				    android:paddingTop="8dip"
+				    android:visibility="invisible"
 					android:layout_gravity="left" />
 			
 			</LinearLayout>
