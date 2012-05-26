@@ -2,7 +2,7 @@
 <resources>
 	<string name="hello">Hello World, ToDoList!</string>
 	
-	<string name="app_name">WishList</string>
+	<string name="app_name">Wishlist</string>
 	
 	<string name="add_new">Add</string>
 	
