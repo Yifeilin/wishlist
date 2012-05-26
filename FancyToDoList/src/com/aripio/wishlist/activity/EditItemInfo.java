@@ -63,7 +63,8 @@ public class EditItemInfo extends Activity {
 	private String addStr = "unknown";
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
-	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
+	//private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
+	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is W
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
@@ -504,8 +505,6 @@ public class EditItemInfo extends Activity {
 		else {
 			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == null");
 		}
-	
-
 	}
 	
 	private boolean navigateBack(){
