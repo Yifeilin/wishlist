@@ -603,7 +603,7 @@ public class EditItemInfo extends Activity {
 		try {
 			OutputStream outStream = getContentResolver()
 					.openOutputStream(uri);
-			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+			thumbnail.compress(Bitmap.CompressFormat.JPEG, 100,
 					outStream);
 
 			outStream.close();
