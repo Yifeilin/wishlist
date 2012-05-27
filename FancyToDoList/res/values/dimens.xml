@@ -18,7 +18,7 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
     
-    <dimen name="headBar_height">60dip</dimen>
+    <dimen name="headBar_height">50dip</dimen>
     <dimen name="footBar_height">50dip</dimen>
     
 <!--     <dimen name="headBarText_size">48pt</dimen>  -->

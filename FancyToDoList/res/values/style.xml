@@ -68,6 +68,15 @@
         <item name="android:clickable">false</item>
     </style>
     
+    <style name="TitleBarWish">
+        <item name="android:id">@id/title_wish</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleType">fitStart</item>
+    </style>
+    
     <style name="TitleBarBackLogo">
         <item name="android:layout_width">@dimen/title_backLogo_width</item>
         <item name="android:layout_height">fill_parent</item>

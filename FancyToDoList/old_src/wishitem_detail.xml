@@ -4,7 +4,8 @@
 	android:layout_height="fill_parent"
 	android:background="@color/bodyBackground_light_grey">
 
-	<LinearLayout style="@style/TitleBar" android:id="@+id/itemDetail_top"
+	<LinearLayout style="@style/TitleBar" 
+	    android:id="@+id/itemDetail_top"
 		android:layout_alignParentTop="true">
 
 		<ImageButton style="@style/TitleBarBackLogo"
