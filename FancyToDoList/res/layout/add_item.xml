@@ -9,13 +9,14 @@
 	android:id="@+id/addItem_top">
 		<ImageButton
 		    android:id="@+id/imageButton_back_logo"
-		    style="@style/TitleBarBackLogo"
+		    style="@style/TitleBarWishBack"
 		    android:onClick="onClickHome"
-		    android:src="@drawable/ic_back_logo" />
+		    android:src="@drawable/wish_back_medium" />
 			
-		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/make_a_wish" 
-			android:text="@string/make_a_wish" />
+  		<TextView style="@style/TitleBarText"
+			android:contentDescription="@string/make_a_wish"
+		 />
+
 <!-- 	<ImageButton style="@style/TitleBarAction"
 			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
 			android:onClick="onClickSearch" />

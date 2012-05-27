@@ -9,12 +9,12 @@
 	<LinearLayout style="@style/TitleBar" 
 	    android:id="@+id/itemDetail_top">
 
-		<ImageButton style="@style/TitleBarBackLogo"
+		<ImageButton style="@style/TitleBarWishBack"
 		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/ic_back_logo"
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_medium"
 			android:onClick="onClickHome" />
 		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
+			android:contentDescription="@string/my_wishes" />
 <!-- 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
 		    android:visibility = "invisible"
 			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"

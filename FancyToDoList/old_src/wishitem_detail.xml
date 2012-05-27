@@ -8,12 +8,13 @@
 	    android:id="@+id/itemDetail_top"
 		android:layout_alignParentTop="true">
 
-		<ImageButton style="@style/TitleBarBackLogo"
+		<ImageButton style="@style/TitleBarWish"
 		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/ic_back_logo"
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_medium"
 			android:onClick="onClickHome" />
-		<TextView style="@style/TitleBarText"
+	<!--  	<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" android:text="@string/my_wishes" />
+			-->
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
 			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"
 			android:onClick="onClickShare" />
