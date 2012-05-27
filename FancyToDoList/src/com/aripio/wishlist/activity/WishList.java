@@ -654,7 +654,8 @@ public class WishList extends Activity {
 //			return true;
 //		}
 		case (R.id.MARK_TODO): {
-			if (myItemDBAdapter.getItemAddress(item_id).equals("unknown")){
+			String address = myItemDBAdapter.getItemAddress(item_id);
+			if (address.equals("unknown")||address.equals("")){
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
 				toast.show();
 			}
