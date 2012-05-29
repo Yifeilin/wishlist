@@ -13,6 +13,7 @@
 	<dimen name="fav_place_textbox_size">200px</dimen>
 	
 	<dimen name="title_height">45dip</dimen>
+	<dimen name="title_imageButtonHeight">50dip</dimen>
 	<dimen name="title_backLogo_width">70dip</dimen>
 	<dimen name="title_wish_back_width">100dip</dimen>
     <dimen name="text_size_small">14sp</dimen>
