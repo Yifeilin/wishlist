@@ -92,7 +92,7 @@
         <item name="android:layout_height">fill_parent</item>
         <item name="android:gravity">left</item>
         <item name="android:clickable">true</item>
-         <item name="android:scaleType">fitStart</item>
+        <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/title_button</item>
     </style>
     
