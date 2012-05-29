@@ -11,7 +11,7 @@
 		    android:id="@+id/imageButton_back_logo"
 		    style="@style/TitleBarWishBack"
 		    android:onClick="onClickHome"
-		    android:src="@drawable/wish_back_medium" />
+		    android:src="@drawable/wish_back_georgia_medium" />
 			
   		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/make_a_wish"
@@ -24,7 +24,7 @@
 		<ImageButton style="@style/TitleBarWishBack"
 			android:id="@+id/imageButton_save"
 			android:contentDescription="@string/description_save" 
-			android:src="@drawable/save_medium"
+			android:src="@drawable/save_georgia_medium"
 			android:onClick="onClickSave" />
 
 	<!-- 			<Button

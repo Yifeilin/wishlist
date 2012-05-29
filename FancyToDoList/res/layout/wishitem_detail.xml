@@ -11,7 +11,7 @@
 
 		<ImageButton style="@style/TitleBarWishBack"
 		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_medium"
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_georgia_medium"
 			android:onClick="onClickHome" />
 		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes" />
@@ -20,10 +20,10 @@
 			android:contentDescription="@string/description_share" android:src="@drawable/ic_menu_share"
 			android:onClick="onClickShare" />  -->
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
-			android:contentDescription="@string/description_delete" android:src="@drawable/ic_trashbin_default_48by48"
+			android:contentDescription="@string/description_delete" android:src="@drawable/ic_trashbin_grey_default_48by48"
 			android:onClick="onClickDelete" />
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_edit"
-			android:contentDescription="@string/description_edit" android:src="@drawable/ic_menu_edit"
+			android:contentDescription="@string/description_edit" android:src="@drawable/ic_edit_default"
 			android:onClick="onClickEdit" />
 	</LinearLayout>
 	

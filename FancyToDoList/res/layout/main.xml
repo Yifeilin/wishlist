@@ -11,7 +11,7 @@
 		
 		<ImageButton style="@style/TitleBarWishBack"
 		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_medium"
+			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_georgia_medium"
 			android:onClick="onClickHome" />
 			
  		<TextView style="@style/TitleBarText"
@@ -24,7 +24,7 @@
 			android:visibility="gone" />
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_view"
-			android:contentDescription="@string/description_view" android:src="@drawable/ic_menu_view"
+			android:contentDescription="@string/description_view" android:src="@drawable/ic_view_default"
 			android:onClick="onClickView" />
 	</LinearLayout>
 

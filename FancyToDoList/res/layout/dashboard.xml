@@ -11,7 +11,7 @@
 		<ImageView
 		    style="@style/TitleBarWish"
 		    android:contentDescription="@string/description_logo"
-		    android:src="@drawable/wish_medium" />
+		    android:src="@drawable/wish_georgia_medium" />
 		
 	<!--<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/description_logo" android:text="@string/app_name" />
