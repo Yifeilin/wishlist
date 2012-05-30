@@ -60,6 +60,7 @@ public class WishItemDetail extends Activity {
 	View.OnTouchListener gestureListener;
 
 	private static final String TAG = "WishItemDetail";
+	private static final int EDIT_ITEM = 0;
 
 	private ListView myListView;
 	// private WishListDataBase wishListDB;
@@ -136,9 +137,46 @@ public class WishItemDetail extends Activity {
 		mPosition = i.getIntExtra("position", 0);
 
 		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
-		fullsize_picture_str = item.getFullsizePicPath();
-		
+
+		// get the resources by their IDs		
+		mDetailView = findViewById(R.id.itemDetail);
+		mNameView = (TextView) findViewById(R.id.itemNameDetail);
+		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
+		mDateView = (TextView) findViewById(R.id.itemDateDetail);
+		mPriceView = (TextView) findViewById(R.id.itemPriceDetail);
+		mStoreView = (TextView) findViewById(R.id.itemStoreDetail);
+		mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
 		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
+		
+		showItemInfo(item);
+
+//		// set the gesture detection
+//		gestureDetector = new GestureDetector(new MyGestureDetector());
+//
+//		gestureListener = new View.OnTouchListener() {
+//			public boolean onTouch(View v, MotionEvent event) {
+//				if (gestureDetector.onTouchEvent(event)) {
+//					return true;
+//				}
+//				return false;
+//			}
+//		};
+		
+		mPhotoView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
+				if (fullsize_picture_str != null) {
+					i.putExtra("fullsize_pic_str", fullsize_picture_str);
+					startActivity(i);
+				}
+			}
+		});
+
+	}
+	
+	private void showItemInfo(WishItem item) {
+		fullsize_picture_str = item.getFullsizePicPath();
 		if (fullsize_picture_str != null) {
 			Log.d("wishlist", "fullsize_picture_str == " + fullsize_picture_str);
 			Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
@@ -177,34 +215,10 @@ public class WishItemDetail extends Activity {
 				}
 			}
 		}
-		
-		// format the date time
-//		SimpleDateFormat sdfFrom = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//		SimpleDateFormat sdfTo = new SimpleDateFormat(
-//				"MMMM dd, yyyy, hh:mm aaa");
-//
-//		String dateTimeStrNew = null;
-//		try {
-//			dateTimeStrNew = sdfTo.format(sdfFrom.parse(item.getDate()));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	
+
 		String dateTimeStr = item.getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
-
-		// get the resources by their IDs		
-		mDetailView = findViewById(R.id.itemDetail);
-		mNameView = (TextView) findViewById(R.id.itemNameDetail);
-		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
-		mDateView = (TextView) findViewById(R.id.itemDateDetail);
-		mPriceView = (TextView) findViewById(R.id.itemPriceDetail);
-		mStoreView = (TextView) findViewById(R.id.itemStoreDetail);
-		mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
-		// mPriorityView = (TextView) findViewById(R.id.itemDateDetail);
-
-		//display the item info. in the views
+		
 		mNameView.setText(item.getName());
 		mDateView.setText(dateTimeStrNew);
 		
@@ -248,32 +262,6 @@ public class WishItemDetail extends Activity {
 		else {
 			mLocationView.setVisibility(View.GONE);
 		}
-		
-
-//		// set the gesture detection
-//		gestureDetector = new GestureDetector(new MyGestureDetector());
-//
-//		gestureListener = new View.OnTouchListener() {
-//			public boolean onTouch(View v, MotionEvent event) {
-//				if (gestureDetector.onTouchEvent(event)) {
-//					return true;
-//				}
-//				return false;
-//			}
-//		};
-		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
-
-		mPhotoView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
-				if (fullsize_picture_str != null) {
-					i.putExtra("fullsize_pic_str", fullsize_picture_str);
-					startActivity(i);
-				}
-			}
-		});
-
 	}
 
 	/***
@@ -362,7 +350,29 @@ public class WishItemDetail extends Activity {
 		Intent i = new Intent(WishItemDetail.this, EditItemInfo.class);
 		i.putExtra("item_id", mItem_id);
 		//i.putExtra("position", position);
-		startActivity(i);
+		startActivityForResult(i, EDIT_ITEM);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case EDIT_ITEM: {
+			if (resultCode == Activity.RESULT_OK) {
+				if (data != null) {
+					long id = data.getLongExtra("itemID", -1);
+					if (id != -1) {
+						WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
+						showItemInfo(item);	
+					}
+					
+				}
+				
+			}
+			else {
+
+			}
+			break;
+		}
+	}
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener {

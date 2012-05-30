@@ -404,7 +404,9 @@ public class EditItemInfo extends Activity {
 		
 		item.save();
 		//close this activity
-		setResult(RESULT_OK, null);
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra("itemID", mItem_id);
+		setResult(RESULT_OK, resultIntent);
 		finish();
 		
 //		//start the WishList activity and move the focus to the newly added item

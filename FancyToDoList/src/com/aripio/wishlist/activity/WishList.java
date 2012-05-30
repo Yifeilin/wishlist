@@ -538,7 +538,6 @@ public class WishList extends Activity {
 //		}
 		case (R.id.menu_add): {
 			// let user generate a wish item
-//			finish();
 			Intent editItem = new Intent(this, EditItemInfo.class);
 			startActivityForResult(editItem, ADD_ITEM);
 			return true;
@@ -634,10 +633,9 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.EDIT_TODO): {
-			finish();
-			Intent i = new Intent(this, EditItemInfo.class);
-			i.putExtra("item_id", item_id);
-			startActivity(i);
+			Intent editItem = new Intent(this, EditItemInfo.class);
+			editItem.putExtra("item_id", item_id);
+			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
 //		case (R.id.POST_TODO): {
@@ -818,7 +816,7 @@ public class WishList extends Activity {
 
 		switch (requestCode) {
 		case EDIT_ITEM: {
-			if (requestCode == Activity.RESULT_OK) {
+			if (resultCode == Activity.RESULT_OK) {
 
 			}
 			else {
@@ -827,7 +825,7 @@ public class WishList extends Activity {
 			break;
 		}
 		case ADD_ITEM: {
-			if (requestCode == Activity.RESULT_OK) {
+			if (resultCode == Activity.RESULT_OK) {
 
 			}
 			else {
@@ -837,15 +835,15 @@ public class WishList extends Activity {
 
 		}
 		}
-		if (requestCode == Activity.RESULT_OK) {
-			switch (requestCode) {
-
-			case DETAIL_INFO_ACT:
-				// should retrieve the info from data and construct a wish item
-				// object
-				break;			
-			}
-		}
+//		if (requestCode == Activity.RESULT_OK) {
+//			switch (requestCode) {
+//
+//			case DETAIL_INFO_ACT:
+//				// should retrieve the info from data and construct a wish item
+//				// object
+//				break;			
+//			}
+//		}
 	}
 	
 	@Override
