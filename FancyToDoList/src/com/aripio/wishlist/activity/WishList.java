@@ -73,6 +73,8 @@ public class WishList extends Activity {
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private String nameQuery = null;
 	static final String LOG_TAG = "WishList";
+	private static final int EDIT_ITEM = 0;
+	private static final int ADD_ITEM = 1;
 	private String viewOption = "list";
 
 	private ViewFlipper myViewFlipper;
@@ -536,9 +538,9 @@ public class WishList extends Activity {
 //		}
 		case (R.id.menu_add): {
 			// let user generate a wish item
-			finish();
-			Intent detailInfo = new Intent(this, EditItemInfo.class);
-			startActivity(detailInfo);
+//			finish();
+			Intent editItem = new Intent(this, EditItemInfo.class);
+			startActivityForResult(editItem, ADD_ITEM);
 			return true;
 		}
 		case (R.id.menu_map): {
@@ -632,6 +634,7 @@ public class WishList extends Activity {
 			return true;
 		}
 		case (R.id.EDIT_TODO): {
+			finish();
 			Intent i = new Intent(this, EditItemInfo.class);
 			i.putExtra("item_id", item_id);
 			startActivity(i);
@@ -804,15 +807,36 @@ public class WishList extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-		if (scanResult != null) {
-			Context context = getApplicationContext();
-			CharSequence text = scanResult.getContents();
-			int duration = Toast.LENGTH_SHORT;
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
+//		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+//		if (scanResult != null) {
+//			Context context = getApplicationContext();
+//			CharSequence text = scanResult.getContents();
+//			int duration = Toast.LENGTH_SHORT;
+//			Toast toast = Toast.makeText(context, text, duration);
+//			toast.show();
+//		}
+
+		switch (requestCode) {
+		case EDIT_ITEM: {
+			if (requestCode == Activity.RESULT_OK) {
+
+			}
+			else {
+
+			}
+			break;
 		}
-		
+		case ADD_ITEM: {
+			if (requestCode == Activity.RESULT_OK) {
+
+			}
+			else {
+
+			}
+			break;
+
+		}
+		}
 		if (requestCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 
@@ -823,7 +847,7 @@ public class WishList extends Activity {
 			}
 		}
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

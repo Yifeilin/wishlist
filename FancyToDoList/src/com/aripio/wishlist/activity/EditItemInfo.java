@@ -404,11 +404,12 @@ public class EditItemInfo extends Activity {
 		
 		item.save();
 		//close this activity
+		setResult(RESULT_OK, null);
 		finish();
 		
-		//start the WishList activity and move the focus to the newly added item
-		Intent wishList = new Intent(this, WishList.class);
-		startActivity(wishList);
+//		//start the WishList activity and move the focus to the newly added item
+//		Intent wishList = new Intent(this, WishList.class);
+//		startActivity(wishList);
 
 	}
 
@@ -515,7 +516,8 @@ public class EditItemInfo extends Activity {
 				myLocation.getText().toString().length() == 0 &&
 				myStore.getText().toString().length() == 0){
 
-			EditItemInfo.this.finish();
+			setResult(RESULT_CANCELED, null);
+			finish();
 			return false;
 		}
 		
@@ -526,6 +528,7 @@ public class EditItemInfo extends Activity {
 					false).setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
+							setResult(RESULT_CANCELED, null);
 							EditItemInfo.this.finish();
 							//return super.onKeyDown(keyCode, event);
 						}
@@ -540,7 +543,8 @@ public class EditItemInfo extends Activity {
 			alert.show();
 		}
 		else{
-			EditItemInfo.this.finish();
+			setResult(RESULT_CANCELED, null);
+			finish();
 		}
 	return false;
 		
