@@ -536,6 +536,7 @@ public class WishList extends Activity {
 //		}
 		case (R.id.menu_add): {
 			// let user generate a wish item
+			finish();
 			Intent detailInfo = new Intent(this, EditItemInfo.class);
 			startActivity(detailInfo);
 			return true;
