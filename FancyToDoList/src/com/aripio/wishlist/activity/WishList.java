@@ -592,24 +592,27 @@ public class WishList extends Activity {
 		menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
 		//get the position of the item in the list
+		//this is the position of the items among all items including the invisible ones
 		int pos = menuInfo.position;
 		View selected_view = null;
-		TextView itemIdTextView = null;
+		long item_id = -1;
 		if(viewOption.equals("list")){
+			//get the position of the items among the visible items
+			pos = pos - myListView.getFirstVisiblePosition();
 			selected_view = myListView.getChildAt(pos);
 			if (selected_view != null) {
-				itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID);
+				item_id = getDBItemID(selected_view, LIST_MODE);
 			}
 			else {
 				Log.d(WishList.LOG_TAG, "selected_view is null");
 				return false;
 			}
-			
 		}
 		else if(viewOption.equals("grid")){
+			pos = pos - myGridView.getFirstVisiblePosition();
 			selected_view = myGridView.getChildAt(pos);
 			if (selected_view != null) {
-				itemIdTextView = (TextView) selected_view.findViewById(R.id.txtItemID_Grid);
+				item_id = getDBItemID(selected_view, GRID_MODE);
 			}
 			else {
 				Log.d(WishList.LOG_TAG, "selected_view is null");
@@ -618,19 +621,6 @@ public class WishList extends Activity {
 		}
 		else if(selected_view == null){
 			Log.d(WishList.LOG_TAG, "selected view is null");
-			return false;
-		}
-		
-//		TextView dateTextView = (TextView) selected_view
-//				.findViewById(R.id.txtDate);
-		
-		//get the item_id from the selected item
-		long item_id;
-		if(itemIdTextView !=null){
-			item_id = Long.parseLong(itemIdTextView.getText().toString());
-		}
-		else{
-			Log.d(WishList.LOG_TAG, "selectedIdTextView is null");
 			return false;
 		}
 		
