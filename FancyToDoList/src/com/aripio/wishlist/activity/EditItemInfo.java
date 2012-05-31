@@ -378,7 +378,7 @@ public class EditItemInfo extends Activity {
 			itemPrice = Float.MIN_VALUE;
 		}
 
-		// user did not specify date_time, use "now" as default date_time
+		// user did not specify date_time, use dddd"now" as default date_time
 		if (mYear == -1) {
 			// get the current date_time
 			final Calendar c = Calendar.getInstance();
