@@ -365,6 +365,9 @@ public class EditItemInfo extends Activity {
 			itemDesc = myNote.getText().toString();
 			itemStoreName = myStore.getText().toString();
 			addStr = myLocation.getText().toString();
+			if (addStr.contains("No address found")) {
+				addStr = "unknown";
+			}
 			itemPrice = Float.valueOf(myPrice.getText().toString());
 		}
 
