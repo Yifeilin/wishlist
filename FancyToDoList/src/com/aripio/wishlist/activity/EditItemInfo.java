@@ -402,7 +402,7 @@ public class EditItemInfo extends Activity {
 				date, picture_str, _fullsizePhotoPath, itemPrice,
 				addStr, itemPriority);
 		
-		item.save();
+		mItem_id = item.save();
 		//close this activity
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra("itemID", mItem_id);

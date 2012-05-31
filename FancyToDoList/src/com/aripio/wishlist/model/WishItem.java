@@ -177,17 +177,17 @@ public class WishItem implements Serializable{
 		return "(" + dateString + ") " + _name + " " + _desc;
 	}
 	
-	public boolean save() {
+	public long save() {
 		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
 		mItemDBAdapter.open();
 		if(_id == -1) {
-			mItemDBAdapter.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
+			_id = mItemDBAdapter.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
 					_price, _address, _priority);
 		}
 		else {
 			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
 					_price, _address, _priority);
 		}
-		return true;
+		return _id;
 	}
 }

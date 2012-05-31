@@ -360,8 +360,8 @@ public class WishItemDetail extends Activity {
 				if (data != null) {
 					long id = data.getLongExtra("itemID", -1);
 					if (id != -1) {
-						WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
-						showItemInfo(item);	
+						WishItem item = WishItemManager.getInstance(this).retrieveItembyId(id);
+						showItemInfo(item);
 					}
 					
 				}

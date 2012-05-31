@@ -16,11 +16,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.aripio.wishlist.R;
+import com.aripio.wishlist.model.WishItem;
+import com.aripio.wishlist.model.WishItemManager;
 import com.aripio.wishlist.util.camera.PhotoFileCreater;
 
 
 public class DashBoard extends Activity {
 	static final private int TAKE_PICTURE = 1;
+	private static final int EDIT_ITEM = 2;
 	private ImageButton prefImageButton;
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
@@ -64,7 +67,7 @@ public class DashBoard extends Activity {
 	    int id = v.getId ();
 	    switch (id) {
 	      case R.id.home_btn_new_item :
-	           startActivity (new Intent(getApplicationContext(), EditItemInfo.class));
+	           startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
 	           break;
 	      case R.id.home_btn_wishlist :
 	           startActivity (new Intent(getApplicationContext(), WishList.class));
@@ -194,7 +197,28 @@ public class DashBoard extends Activity {
 					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: not RESULT_OK");
 				}
 				break;
-			} 
+			}
+			case EDIT_ITEM: {
+				if (resultCode == RESULT_OK) {
+					// Create an intent to show the item detail.
+					// Pass the item_id along so the next activity can use it to
+					// retrieve the info. about the item from database
+					long id = -1;
+					if (data != null) {
+						id = data.getLongExtra("itemID", -1);
+					}
+					
+					if (id != -1) {
+//						finish();
+						Intent i = new Intent(DashBoard.this, WishItemDetail.class);
+						i.putExtra("item_id", id);
+						startActivity(i);
+					}
+				}
+				else {
+					
+				}
+			}
 		}//switch
 	}
 	
