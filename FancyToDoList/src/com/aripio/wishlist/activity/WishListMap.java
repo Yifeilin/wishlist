@@ -211,8 +211,8 @@ public class WishListMap extends MapActivity {
 		// Read the item we are displaying from the intent, along with the
 		// parameters used to set up the map
 		Intent i = getIntent();
-		mLatitude = i.getDoubleExtra("latitude", 0);
-		mLongitude = i.getDoubleExtra("longitude", 0);
+		mLatitude = i.getDoubleExtra("latitude", Double.MIN_VALUE);
+		mLongitude = i.getDoubleExtra("longitude", Double.MIN_VALUE);
 
 		mWishListOverlay = new WishListOverlay(mMarker);
 		GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
@@ -235,12 +235,13 @@ public class WishListMap extends MapActivity {
 			while(i<locationList.size()){
 				mLatitude=locationList.get(i)[0];
 				mLongitude=locationList.get(i++)[1];
-//				mWishListOverlay = new WishListOverlay(mMarker);
-				GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
-						(int) (mLongitude * 1000000));
-				mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
-//				mWishListOverlay.addOverlay(overlay)
-				mOverlays.add(mWishListOverlay);	
+				if (mLatitude != Double.MIN_VALUE && mLongitude != Double.MIN_VALUE ) {
+					GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+							(int) (mLongitude * 1000000));
+					mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
+					mOverlays.add(mWishListOverlay);
+				}
+					
 			}
 		}
 		

@@ -58,8 +58,8 @@ public class EditItemInfo extends Activity {
 //	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
-	private double lat = 0;
-	private double lng = 0;
+	private double lat = Double.MIN_VALUE;
+	private double lng = Double.MIN_VALUE;
 	private String addStr = "unknown";
 	private Bitmap thumbnail;
 	private Bitmap mImageBitmap;
@@ -204,6 +204,10 @@ public class EditItemInfo extends Activity {
  				if (location == null){
  					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
  					myLocation.setText("unknown");
+ 					
+ 					//need better value to indicate it's not valid lat and lng
+ 					lat = Double.MIN_VALUE;
+ 					lng = Double.MIN_VALUE;
  				}
  				else{
  					//get current latitude and longitude

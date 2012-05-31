@@ -657,11 +657,16 @@ public class WishList extends Activity {
 				// get the latitude and longitude of the clicked item
 				double[] dLocation = new double[2];
 				dLocation = myItemDBAdapter.getItemLocation(item_id);
-
-				mapIntent.putExtra("latitude", dLocation[0]);
-				mapIntent.putExtra("longitude", dLocation[1]);
-
-				startActivity(mapIntent);
+				
+				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
+					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else {
+					mapIntent.putExtra("latitude", dLocation[0]);
+					mapIntent.putExtra("longitude", dLocation[1]);
+					startActivity(mapIntent);
+				}
 			}
 			return true;
 
