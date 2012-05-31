@@ -18,7 +18,7 @@ public class PositionManager {
 	private Location currentLocation;
 	private double longitude;
 	private double latitude;
-	private String addressString = "No address found";
+	private String addressString = "unknown";
 	private Criteria criteria;
 	
 	//constructor
@@ -73,7 +73,7 @@ public class PositionManager {
 			addressString = sb.toString();
 			return addressString;
 		} catch (IOException e) {
-			addressString = "No address found";
+			addressString = "unknown";
 			return addressString;			
 		}
 	}
