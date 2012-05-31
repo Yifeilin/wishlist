@@ -577,11 +577,11 @@ public class WishList extends Activity {
 			return true;
 		}
 
-		case (R.id.menu_sortByPriority): {
-			SORT_BY = ItemsCursor.SortBy.priority;
-			onSort(SORT_BY);
-			return true;
-		}
+//		case (R.id.menu_sortByPriority): {
+//			SORT_BY = ItemsCursor.SortBy.priority;
+//			onSort(SORT_BY);
+//			return true;
+//		}
 
 		}
 		return false;
