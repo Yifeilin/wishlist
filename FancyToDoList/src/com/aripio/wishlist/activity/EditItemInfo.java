@@ -69,6 +69,7 @@ public class EditItemInfo extends Activity {
 	private String _newfullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
+	PositionManager pManager;
 	private int mYear = -1;
 	private int mMonth = -1;
 	private int mDay = -1;
@@ -94,6 +95,9 @@ public class EditItemInfo extends Activity {
 		// Open the Location table in the database
 		mLocationDBAdapter = new LocationDBAdapter(this);
 		mLocationDBAdapter.open();
+		
+		pManager = new PositionManager(EditItemInfo.this);
+		pManager.startLocationUpdates();
 
 		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
