@@ -140,11 +140,13 @@ public class EditItemInfo extends Activity {
 		}
 		
 		//get item id from previous intent, if there is an item id, we know this EditItemInfo is launched
-		//from ItemDetail, so fill the empty box
+		//by editing an existing item, so fill the empty box
 		mItem_id = i.getLongExtra("item_id", -1);
 		
 		if(mItem_id != -1) {
 			mEditNew = false;
+			
+			mapImageButton.setVisibility(View.GONE);
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 
