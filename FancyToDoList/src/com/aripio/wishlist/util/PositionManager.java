@@ -17,79 +17,114 @@ import android.os.Bundle;
 public class PositionManager {
 	private Context context;
 	private LocationManager locationManager;
-	private Location _currentBestLocation;
-	private double longitude;
-	private double latitude;
+	private Location _currentBestLocation = null;
 	private String addressString = "unknown";
-	private Criteria criteria;
-	private LocationListener _locationListener;
+	private LocationListener _locationListenerGPS;
+	private LocationListener _locationListenerNetwork;
 	private static final int LISTEN_INTERVAL = 1000 * 60;//1min
+	boolean _gps_enabled=false;
+	boolean _network_enabled=false;
 	
-	//constructor
 	public PositionManager(Context Ct){
 		context = Ct;
 		locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
+//		startLocationUpdates();
 		
-		criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
+//		criteria = new Criteria();
+//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//        criteria.setAltitudeRequired(false);
+//        criteria.setBearingRequired(false);
+//        criteria.setCostAllowed(true);
+//        criteria.setPowerRequirement(Criteria.POWER_LOW);
 		
 	}
 	
 	public void startLocationUpdates(){
-		// Define a listener that responds to location updates
-		_locationListener = new LocationListener() {
-			public void onLocationChanged(Location location) {
-				// Called when a new location is found by the network location provider.
-				//				      makeUseOfNewLocation(location);
-			}
+		//exceptions will be thrown if provider is not permitted.
+        try{_gps_enabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}catch(Exception ex){}
+        try{_network_enabled=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);}catch(Exception ex){}
 
-			public void onStatusChanged(String provider, int status, Bundle extras) {}
+        //don't start listeners if no provider is enabled
+        if(!_gps_enabled && !_network_enabled) {
+            return;
+        }
+        
+        // Define a listener that responds to location updates
+        _locationListenerGPS = new LocationListener() {
+        	public void onLocationChanged(Location location) {
+        		// Called when a new location is found by the gps location provider.
+        		gotNewLocation(location);
+        	}
 
-			public void onProviderEnabled(String provider) {}
+        	public void onStatusChanged(String provider, int status, Bundle extras) {}
+        	public void onProviderEnabled(String provider) {}
+        	public void onProviderDisabled(String provider) {}
+        };
 
-			public void onProviderDisabled(String provider) {}
-		};
+        _locationListenerNetwork = new LocationListener() {
+        	public void onLocationChanged(Location location) {
+        		// Called when a new location is found by the network location provider.
+        		gotNewLocation(location);
+        	}
 
-		// Register the listener with the Location Manager to receive location updates
-		String provider = locationManager.getBestProvider(criteria, true);
-		locationManager.requestLocationUpdates(provider, 0, 0, _locationListener);
-		_currentBestLocation = locationManager.getLastKnownLocation(provider);
+        	public void onStatusChanged(String provider, int status, Bundle extras) {}
+        	public void onProviderEnabled(String provider) {}
+        	public void onProviderDisabled(String provider) {}
+        };
+
+        if(_gps_enabled)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, _locationListenerGPS);
+        if(_network_enabled)
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListenerNetwork);
 	}
 	
 	public void stopLocationUpdates(){
 		// Remove the listener you previously added
-		locationManager.removeUpdates(_locationListener);
+		locationManager.removeUpdates(_locationListenerGPS);
+		locationManager.removeUpdates(_locationListenerNetwork);
 	}
 	
 	public Location getCurrentLocation() {
-		String provider = locationManager.getBestProvider(criteria, true);
-		Location currentLocation = null;
-		try {
-			currentLocation = locationManager.getLastKnownLocation(provider);
-		}
-		
-		catch(SecurityException e) {
-			Toast.makeText(context, "no suitable permission is present for the provider.", Toast.LENGTH_LONG);
-//			return null;
-			currentLocation = null;
-		}
-		
-		if (isBetterLocation(currentLocation, _currentBestLocation)) {
-			_currentBestLocation = currentLocation;
-		}
-		
-		if (_currentBestLocation != null){
-			latitude = _currentBestLocation.getLatitude();
-			longitude = _currentBestLocation.getLongitude();
+		if (_currentBestLocation != null) {
 			return _currentBestLocation;
 		}
 		
-		else {
-			return null;
+		// both gps and network location listener has not got a location yet, so use the
+		// the lastknown location
+		Location net_loc=null;
+		Location gps_loc=null;
+        if(_gps_enabled) {
+            gps_loc=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (gps_loc != null) {
+            	gotNewLocation(gps_loc);
+            }
+        }
+        if(_network_enabled) {
+            net_loc=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (net_loc != null) {
+            	gotNewLocation(net_loc);
+            }
+        }
+        
+        return _currentBestLocation;
+        
+      //
+		
+//		try {
+//			currentLocation = locationManager.getLastKnownLocation(provider);
+//		}
+//		
+//		catch(SecurityException e) {
+//			Toast.makeText(context, "no suitable permission is present for the provider.", Toast.LENGTH_LONG);
+////			return null;
+//			currentLocation = null;
+//		}
+		
+	}
+	
+	private void gotNewLocation(Location newlocation) {
+		if (isBetterLocation(newlocation, _currentBestLocation)) {
+			_currentBestLocation = newlocation;
 		}
 	}
 
@@ -147,9 +182,11 @@ public class PositionManager {
 	    return provider1.equals(provider2);
 	}
 	
-	public String getCuttentAddStr(){
+	public String getCuttentAddStr(){ //this needs network to be on
 		Geocoder gc = new Geocoder(context, Locale.getDefault());
 		try {
+			double latitude = _currentBestLocation.getLatitude();
+			double longitude = _currentBestLocation.getLongitude();
 			List<Address> addresses = gc.getFromLocation(latitude, longitude, 1);
 			StringBuilder sb = new StringBuilder();
 			if (addresses.size() > 0) {
@@ -164,7 +201,7 @@ public class PositionManager {
 			return addressString;
 		} catch (IOException e) {
 			addressString = "unknown";
-			return addressString;			
+			return addressString;
 		}
 	}
 }

@@ -204,7 +204,6 @@ public class EditItemInfo extends Activity {
  			@Override
 			public void onClick(View view) {
  				//get the location
- 				PositionManager pManager = new PositionManager(EditItemInfo.this);
  				Location location = pManager.getCurrentLocation();
  				
  				if (location == null){
