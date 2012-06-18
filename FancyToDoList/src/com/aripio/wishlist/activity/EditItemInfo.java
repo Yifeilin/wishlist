@@ -337,23 +337,6 @@ public class EditItemInfo extends Activity {
 	 */
 	private void saveWishItem() {
 
-//		//get the location
-//		PositionManager pManager = new PositionManager(this);
-//		Location location = pManager.getCurrentLocation();
-//		
-//		if (location == null){
-//			Toast.makeText(this, "location not available", Toast.LENGTH_LONG);
-//
-//		}
-//		else{
-//			//get current latitude and longitude
-//			lat = location.getLatitude();
-//			lng = location.getLongitude();
-//			
-//			//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
-//			addStr = pManager.getCuttentAddStr();
-//		}
-		
 		if(myItemName.getText().toString().length() == 0){
 			Toast toast = Toast.makeText(this, "Please give a name to your wish", Toast.LENGTH_SHORT);
 			toast.show();

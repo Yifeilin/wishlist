@@ -107,19 +107,7 @@ public class PositionManager {
         }
         
         return _currentBestLocation;
-        
-      //
-		
-//		try {
-//			currentLocation = locationManager.getLastKnownLocation(provider);
-//		}
-//		
-//		catch(SecurityException e) {
-//			Toast.makeText(context, "no suitable permission is present for the provider.", Toast.LENGTH_LONG);
-////			return null;
-//			currentLocation = null;
-//		}
-		
+  
 	}
 	
 	private void gotNewLocation(Location newlocation) {
