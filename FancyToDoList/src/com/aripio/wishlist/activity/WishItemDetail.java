@@ -1,7 +1,10 @@
 package com.aripio.wishlist.activity;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 
 import com.aripio.wishlist.R;
 import com.aripio.wishlist.R.anim;
@@ -14,6 +17,7 @@ import com.aripio.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.aripio.wishlist.model.WishItem;
 import com.aripio.wishlist.model.WishItemManager;
 import com.aripio.wishlist.util.DateTimeFormatter;
+import com.aripio.wishlist.util.PositionManager;
 import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;
@@ -25,6 +29,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -137,6 +143,28 @@ public class WishItemDetail extends Activity {
 		mPosition = i.getIntExtra("position", 0);
 
 		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
+		double lat = item.getLatitude();
+		double lng = item.getLongitude();
+		String address = item.getAddress();
+		
+		if (lat != Double.MIN_VALUE && lng != Double.MIN_VALUE && (address.equals("unknown") || address.equals(""))) {
+			//we have a location by gps, but don't have an address
+			Geocoder gc = new Geocoder(this, Locale.getDefault());
+			try {
+				List<Address> addresses = gc.getFromLocation(lat, lng, 1);
+				StringBuilder sb = new StringBuilder();
+				if (addresses.size() > 0) {
+					Address add = addresses.get(0);
+					for (int k = 0; k < add.getMaxAddressLineIndex()+1; k++)
+						sb.append(add.getAddressLine(k)).append("\n");
+				}
+				address = sb.toString();
+			} catch (IOException e) {
+				address = "unknown";
+			}
+			item.setAddress(address);
+			item.save();
+		}
 
 		// get the resources by their IDs		
 		mDetailView = findViewById(R.id.itemDetail);

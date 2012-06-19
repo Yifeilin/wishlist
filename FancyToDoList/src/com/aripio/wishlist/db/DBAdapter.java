@@ -122,7 +122,8 @@ public class DBAdapter {
 									picUrl,
 									" ",
 									25000f,
-									"BMW, Shanghai, China",
+//									"BMW, Shanghai, China",
+									"",
 									0);
 			
 			picUrl = Integer.toHexString(R.drawable.book);
@@ -134,7 +135,8 @@ public class DBAdapter {
 									picUrl,
 									" ",
 									9.9f,
-									"#33 Dudas, Toronto, ON Canada",
+//									"#33 Dudas, Toronto, ON Canada",
+									"unknown",
 									3);
 			picUrl = Integer.toHexString(R.drawable.chocolate);
 			mItemDBAdapter.addItem(	3,
@@ -181,11 +183,13 @@ public class DBAdapter {
 			mLocationDBAdapter.open(db);
 			mLocationDBAdapter.addLocation(43.698643,
 										   -79.390368, 
-										   "187 Balliol St\nToronto, ON M4S 1C8\nCanada",
+//										   "187 Balliol St\nToronto, ON M4S 1C8\nCanada",
+										   "",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.650997,
 										   -79.476740, 
-										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
+//										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
+										   "unknown",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.707563,
 										   -79.398328, 

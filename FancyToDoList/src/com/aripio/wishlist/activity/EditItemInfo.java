@@ -391,7 +391,7 @@ public class EditItemInfo extends Activity {
 		long storeID = mStoreDBAdapter.addStore(itemStoreName, locationID);
 
 		WishItem item = new WishItem(this, mItem_id, storeID, itemStoreName, itemName, itemDesc, 
-				date, picture_str, _fullsizePhotoPath, itemPrice,
+				date, picture_str, _fullsizePhotoPath, itemPrice, lat, lng, 
 				addStr, itemPriority);
 		
 		mItem_id = item.save();

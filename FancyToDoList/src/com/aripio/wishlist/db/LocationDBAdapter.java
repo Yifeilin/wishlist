@@ -124,6 +124,24 @@ public class LocationDBAdapter {
 		return this.mDb.insert(DB_TABLE, null, initialValues);
 	}
 
+	public long updateLocation(long id, double lat, double lng, String addStr, int streetNO, String street, String city,
+			String state, String country, String postcode) {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_LATITUDE, lat);
+		initialValues.put(KEY_LONGITUDE, lng);
+		initialValues.put(KEY_ADDSTR, addStr);
+//		initialValues.put(KEY_ADDLINE2, addLine2);
+//		initialValues.put(KEY_ADDLINE3, addLine3);
+		initialValues.put(KEY_STREET_NO, streetNO);
+		initialValues.put(KEY_STREET, street);
+		initialValues.put(KEY_CITY, city);
+		initialValues.put(KEY_STATE, state);
+		initialValues.put(KEY_COUNTRY, country);
+		initialValues.put(KEY_POSTCODE, postcode);
+
+		String where = String.format("_id = '%d'", id);
+		return this.mDb.update(DB_TABLE, initialValues, where, null);
+	}
 	/**
 	 * Delete the location with the given rowId
 	 * 
@@ -164,6 +182,37 @@ public class LocationDBAdapter {
 		}
 		return mCursor;
 	}
+	
+	public double getLatitude(long rowId) throws SQLException {
+
+		Cursor mCursor =
+
+		this.mDb.query(true, DB_TABLE, null, KEY_ID + "=" + rowId, null, null,
+				null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		double lat = 3;
+		lat = mCursor.getDouble(mCursor.
+				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+		return lat;
+	}
+	
+	public double getLongitude(long rowId) throws SQLException {
+
+		Cursor mCursor =
+
+		this.mDb.query(true, DB_TABLE, null, KEY_ID + "=" + rowId, null, null,
+				null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		double lng = 2;
+		lng = mCursor.getDouble(mCursor.
+				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+		return lng;
+	}
+
 	
 	/**
 	 * Return the address positioned at the location that matches the given rowId

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.location.Location;
 
 import com.aripio.wishlist.db.ItemDBAdapter;
 
@@ -26,7 +27,10 @@ public class WishItem implements Serializable{
 	//private Bitmap _fullsizePhoto;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private float _price;
+	private double _latitude;
+	private double _longitude;
 	private String _address;
+	
 
 	public WishItem(Context ctx ,String name) {
 		this(ctx, name, null, null);
@@ -50,11 +54,13 @@ public class WishItem implements Serializable{
 	}
 
 	public WishItem(Context ctx, long itemId, long storeId, String storeName, String name, String desc, 
-			String date, String picStr, String fullsizePicPath, float price, 
+			String date, String picStr, String fullsizePicPath, float price, double latitude, double longitude, 
 			String address, int priority) {
 		_id = itemId;
 		_fullsizePicPath = fullsizePicPath;
 		_price = price;
+		_latitude = latitude;
+		_longitude = longitude;
 		_address = address;
 		_picStr = picStr;
 		_storeId = storeId;
@@ -100,6 +106,14 @@ public class WishItem implements Serializable{
 			String priceStr = (Dec.format(_price));
 			return priceStr;
 		}
+	}
+	
+	public double getLatitude() {
+		return _latitude;
+	}
+	
+	public double getLongitude() {
+		return _longitude;
 	}
 	
 	public void setAddress(String add){
