@@ -524,8 +524,8 @@ public class ItemDBAdapter {
 			while(!c.isAfterLast()){
 				id = c.getLong(c.getColumnIndexOrThrow(KEY_ID));
 				//skip the items having unknown locations
-				if(!getItemAddress(id).equals("unknown")){
-					double[] location = getItemLocation(id);
+				double[] location = getItemLocation(id);
+				if (location[0] != Double.MIN_VALUE && location[1] != Double.MAX_VALUE) {
 					locationList.add(location);
 				}
 				c.moveToNext();
