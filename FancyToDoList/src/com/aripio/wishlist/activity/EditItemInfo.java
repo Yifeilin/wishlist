@@ -77,6 +77,8 @@ public class EditItemInfo extends Activity {
 	private int mMin = 0;
 	private int mSec = 0;
 	private long mItem_id = -1;
+	private long mLocation_id = -1;
+	private long mStore_id = -1;
 	private boolean mEditNew = true;
 	
 	private AlertDialog alert;
@@ -149,6 +151,8 @@ public class EditItemInfo extends Activity {
 			mapImageButton.setVisibility(View.GONE);
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
+			mLocation_id = item.getLocatonId();
+			mStore_id = item.getStoreId();
 
 			myItemName.setText(item.getName());
 			myNote.setText(item.getDesc());
@@ -384,13 +388,15 @@ public class EditItemInfo extends Activity {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = sdf.format(mDate);
 
-		// insert the location to the Location table in database
-		long locationID = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
+		if (mEditNew) {
+			// insert the location to the Location table in database
+			mLocation_id = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
 
-		// insert the store to the Store table in database, linked to the location
-		long storeID = mStoreDBAdapter.addStore(itemStoreName, locationID);
+			// insert the store to the Store table in database, linked to the location
+			mStore_id = mStoreDBAdapter.addStore(itemStoreName, mLocation_id);
+		}
 
-		WishItem item = new WishItem(this, mItem_id, storeID, itemStoreName, itemName, itemDesc, 
+		WishItem item = new WishItem(this, mItem_id, mStore_id, itemStoreName, itemName, itemDesc, 
 				date, picture_str, _fullsizePhotoPath, itemPrice, lat, lng, 
 				addStr, itemPriority);
 		

@@ -7,6 +7,7 @@ import java.util.Date;
 import android.location.Location;
 
 import com.aripio.wishlist.db.ItemDBAdapter;
+import com.aripio.wishlist.db.LocationDBAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ public class WishItem implements Serializable{
 	//private Bitmap _fullsizePhoto;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private float _price;
+//	private long _locationId;
 	private double _latitude;
 	private double _longitude;
 	private String _address;
@@ -59,6 +61,7 @@ public class WishItem implements Serializable{
 		_id = itemId;
 		_fullsizePicPath = fullsizePicPath;
 		_price = price;
+//		_locationId = locationId;
 		_latitude = latitude;
 		_longitude = longitude;
 		_address = address;
@@ -89,6 +92,10 @@ public class WishItem implements Serializable{
 		return _storeName;
 	}
 	
+	public long getStoreId(){
+		return _storeId;
+	}
+	
 	public void setPrice(float p){
 		_price = p;
 	}
@@ -106,6 +113,14 @@ public class WishItem implements Serializable{
 			String priceStr = (Dec.format(_price));
 			return priceStr;
 		}
+	}
+	
+	public long getLocatonId() {
+		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
+		mItemDBAdapter.open();
+		long locationId = mItemDBAdapter.getlocationIdbyItemId(_id);
+		mItemDBAdapter.close();
+		return locationId;
 	}
 	
 	public double getLatitude() {
@@ -202,6 +217,7 @@ public class WishItem implements Serializable{
 			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
 					_price, _address, _priority);
 		}
+		mItemDBAdapter.close();
 		return _id;
 	}
 }

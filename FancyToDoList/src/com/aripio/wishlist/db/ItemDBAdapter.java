@@ -511,6 +511,15 @@ public class ItemDBAdapter {
 		return location;
 	}
 	
+	public long getlocationIdbyItemId(long _itemId){
+		Cursor locationC = getItemLocationCursor(_itemId);
+		if(locationC != null){
+			return locationC.getLong(locationC.
+					getColumnIndexOrThrow(LocationDBAdapter.KEY_ID));
+		}
+		else return -1;
+	}
+	
 	public ArrayList<double[]> getAllItemLocation(){
 		String sql = String.format("SELECT _id FROM Item");
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
