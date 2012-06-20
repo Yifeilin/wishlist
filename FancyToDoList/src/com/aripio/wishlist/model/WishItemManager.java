@@ -59,7 +59,9 @@ public class WishItemManager {
 		
 		long locationID = mStoreCursor.getLong(mStoreCursor
 				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
-		String itemLocation = mLocationDBAdapter.getAddress(locationID);
+//		String itemLocation = mLocationDBAdapter.getAddress(locationID);
+		String itemLocation = wishItemCursor.getString(wishItemCursor
+				.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS));
 		double latitude = mLocationDBAdapter.getLatitude(locationID);
 		double longitude =  mLocationDBAdapter.getLongitude(locationID);
 		
