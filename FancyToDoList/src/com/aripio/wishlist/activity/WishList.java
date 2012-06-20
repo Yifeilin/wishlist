@@ -646,14 +646,13 @@ public class WishList extends Activity {
 //			return true;
 //		}
 		case (R.id.MARK_TODO): {
-			String address = myItemDBAdapter.getItemAddress(item_id);
-			if (address.equals("unknown")||address.equals("")){
-				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
-				toast.show();
-			}
-			else{
-				Intent mapIntent = new Intent(this, WishListMap.class);
-				mapIntent.putExtra("type", "markOne");
+//			String address = myItemDBAdapter.getItemAddress(item_id);
+//			if (address.equals("unknown")||address.equals("")){
+//				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
+//				toast.show();
+//			}
+//			else{
+				
 				// get the latitude and longitude of the clicked item
 				double[] dLocation = new double[2];
 				dLocation = myItemDBAdapter.getItemLocation(item_id);
@@ -663,11 +662,13 @@ public class WishList extends Activity {
 					toast.show();
 				}
 				else {
+					Intent mapIntent = new Intent(this, WishListMap.class);
+					mapIntent.putExtra("type", "markOne");
 					mapIntent.putExtra("latitude", dLocation[0]);
 					mapIntent.putExtra("longitude", dLocation[1]);
 					startActivity(mapIntent);
 				}
-			}
+//			}
 			return true;
 
 		}
