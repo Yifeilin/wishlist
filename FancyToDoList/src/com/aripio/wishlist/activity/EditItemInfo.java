@@ -388,12 +388,15 @@ public class EditItemInfo extends Activity {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = sdf.format(mDate);
 
-		if (mEditNew) {
+		if (mEditNew) {//we are creating a new item
 			// insert the location to the Location table in database
 			mLocation_id = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
 
 			// insert the store to the Store table in database, linked to the location
 			mStore_id = mStoreDBAdapter.addStore(itemStoreName, mLocation_id);
+		}
+		else {//we are editing an existing item
+			mStoreDBAdapter.updateStore(mStore_id, itemStoreName, mLocation_id);
 		}
 
 		WishItem item = new WishItem(this, mItem_id, mStore_id, itemStoreName, itemName, itemDesc, 
