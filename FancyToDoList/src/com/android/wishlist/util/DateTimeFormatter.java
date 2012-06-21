@@ -3,10 +3,6 @@ package com.android.wishlist.util;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.io.IOException;
-import java.util.Date;
-
-import android.net.ParseException;
 
 public class DateTimeFormatter {
 	

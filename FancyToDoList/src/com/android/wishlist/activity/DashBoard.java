@@ -16,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.wishlist.R;
-import com.android.wishlist.model.WishItem;
-import com.android.wishlist.model.WishItemManager;
 import com.android.wishlist.util.camera.PhotoFileCreater;
 
 

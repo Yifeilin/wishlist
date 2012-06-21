@@ -3,7 +3,6 @@ package com.android.wishlist.db;
 //import com.android.wishlist.WishListDataBase.ItemsCursor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQuery;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 public class ItemDBAdapter {

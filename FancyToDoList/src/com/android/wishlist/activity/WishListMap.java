@@ -18,7 +18,6 @@ import java.lang.Math;
 //import org.json.JSONException;
 //import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 //import android.database.Cursor;
 //import android.graphics.Bitmap;

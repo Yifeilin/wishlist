@@ -1,54 +1,35 @@
 package com.android.wishlist.activity;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 import com.android.wishlist.R;
-import com.android.wishlist.R.anim;
-import com.android.wishlist.R.id;
-import com.android.wishlist.R.layout;
 import com.android.wishlist.db.ItemDBAdapter;
-import com.android.wishlist.db.LocationDBAdapter;
-import com.android.wishlist.db.StoreDBAdapter;
 import com.android.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.android.wishlist.model.WishItem;
 import com.android.wishlist.model.WishItemManager;
 import com.android.wishlist.util.DateTimeFormatter;
-import com.android.wishlist.util.PositionManager;
-import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /***
  * WishItemDetail is responsible for displaying the detailed info. of an item. 

@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import android.location.Location;
 
 import com.android.wishlist.db.ItemDBAdapter;
-import com.android.wishlist.db.LocationDBAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

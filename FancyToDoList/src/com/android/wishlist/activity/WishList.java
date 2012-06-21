@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
@@ -31,11 +30,8 @@ import android.widget.ViewFlipper;
 
 //import com.android.wishlist.activity;
 import com.android.wishlist.R;
-import com.android.wishlist.barscanner.IntentIntegrator;
-import com.android.wishlist.barscanner.IntentResult;
 import com.android.wishlist.db.DBAdapter;
 import com.android.wishlist.db.ItemDBAdapter;
-import com.android.wishlist.db.LocationDBAdapter;
 import com.android.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.android.wishlist.util.WishListItemCursorAdapter;
 

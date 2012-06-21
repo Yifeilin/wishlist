@@ -1,8 +1,6 @@
 package com.android.wishlist.util;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import com.android.wishlist.db.ItemDBAdapter;
 

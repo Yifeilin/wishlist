@@ -4,12 +4,9 @@ import com.android.wishlist.R;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class FullscreenPhoto extends Activity {
