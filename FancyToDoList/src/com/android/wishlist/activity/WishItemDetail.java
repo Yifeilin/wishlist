@@ -28,7 +28,6 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /***
@@ -46,10 +45,8 @@ public class WishItemDetail extends Activity {
 //	private GestureDetector gestureDetector;
 	View.OnTouchListener gestureListener;
 
-	private static final String TAG = "WishItemDetail";
 	private static final int EDIT_ITEM = 0;
 
-	private ListView myListView;
 	// private WishListDataBase wishListDB;
 	private ItemDBAdapter myItemDBAdapter;
 

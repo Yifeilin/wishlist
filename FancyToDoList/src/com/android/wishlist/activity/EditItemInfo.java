@@ -53,7 +53,7 @@ public class EditItemInfo extends Activity {
 	private ImageButton saveImageButton;
 	private ImageButton mapImageButton;
 	private ImageButton cameraImageButton;
-	private ImageButton galleryImageButton;
+//	private ImageButton galleryImageButton;
 //	private Button btnCancel;
 //	private Button btnPhoto;
 	private ImageView imageItem;
@@ -62,7 +62,7 @@ public class EditItemInfo extends Activity {
 	private double lng = Double.MIN_VALUE;
 	private String addStr = "unknown";
 	private Bitmap thumbnail;
-	private Bitmap mImageBitmap;
+//	private Bitmap mImageBitmap;
 	//private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is W
 	private String _fullsizePhotoPath = null;
@@ -564,12 +564,6 @@ public class EditItemInfo extends Activity {
 		}
 		return false;
 	}
-	
-	private String getAlbumName() {
-		//return getString(R.string.album_name);
-		return "WishListPhoto";
-	}
-
 	
 	private void setPic() {
 		//MediaStore.Images.Thumbnails.getThumbnail();

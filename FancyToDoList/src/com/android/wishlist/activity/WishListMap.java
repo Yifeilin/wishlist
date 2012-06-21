@@ -56,9 +56,9 @@ import com.google.android.maps.Projection;
  */
 public class WishListMap extends MapActivity {
 	private MapView mMapView;
-	private MyLocationOverlay mMyLocationOverlay;
+//	private MyLocationOverlay mMyLocationOverlay;
 	private WishListOverlay mWishListOverlay;
-	private Location myLocation;
+//	private Location myLocation;
 	private double mLatitude;
 	private double mLongitude;
 	private GeoPoint myCurrentPoint;

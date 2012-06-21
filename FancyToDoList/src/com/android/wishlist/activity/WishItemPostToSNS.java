@@ -21,10 +21,10 @@ public class WishItemPostToSNS extends Activity {
 	// log tag for any log.x statements
 	public static final String TAG = "FACEBOOK CONNECT";
 	// permissions array
-	private static final String[] PERMS = new String[] { "user_events" };
+//	private static final String[] PERMS = new String[] { "user_events" };
 	// facebook vars
 	private Facebook mFacebook;
-	private AsyncFacebookRunner mAsyncRunner;;
+	private AsyncFacebookRunner mAsyncRunner;
 
 	public static final int LOGIN = Menu.FIRST;
 	public static final int GET_EVENTS = Menu.FIRST + 1;

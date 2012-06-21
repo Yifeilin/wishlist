@@ -1,6 +1,5 @@
 package com.android.wishlist.model;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +9,7 @@ import com.android.wishlist.db.ItemDBAdapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-public class WishItem implements Serializable{
+public class WishItem {
 	private final Context _ctx;
 	private long _id = -1;
 	private long _storeId;
