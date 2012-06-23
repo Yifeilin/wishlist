@@ -113,52 +113,74 @@ public class DBAdapter {
 			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
 			mItemDBAdapter.open(db);
 			String picUrl;
-			picUrl = Integer.toHexString(R.drawable.car);
+			picUrl = Integer.toHexString(R.drawable.ipad) + "sample";
 			mItemDBAdapter.addItem(	1,
-									"BMW Store",
-									"Car", 
-									"It is a very nice car", 
-									"1983-07-06 11:30:00", 
+									"Apple Store",
+									"ipad",
+									"It is the new ipad with retina display",
+									"2012-03-11 11:30:00",
 									picUrl,
 									" ",
-									25000f,
-//									"BMW, Shanghai, China",
-									"",
+									529f,
+									"220 Yonge Street, Toronto, ON, M5B 2H1",
 									0);
 			
-			picUrl = Integer.toHexString(R.drawable.book);
+			picUrl = Integer.toHexString(R.drawable.cake) + "sample";
 			mItemDBAdapter.addItem(	2, 
-									"Chapter",
-									"Book", 
-									"It is a great book", 
-									"1984-03-17 18:22:35", 
+									"dessert store",
+									"chocolate cake", 
+									"It looks delicisous", 
+									"2012-03-17 18:22:35", 
 									picUrl,
 									" ",
-									9.9f,
-//									"#33 Dudas, Toronto, ON Canada",
-									"unknown",
+									2.99f,
+									"2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
 									3);
-			picUrl = Integer.toHexString(R.drawable.chocolate);
+			picUrl = Integer.toHexString(R.drawable.tiffany) + "sample";
 			mItemDBAdapter.addItem(	3,
-									"Yuan Zu Food",
-									"Cake", 
-									"It is a delicious cake", 
-									"2011-05-03 03:40:50", 
+									"tiffany",
+									"tiffany necklace", 
+									"beautiful", 
+									"2012-06-03 03:40:50", 
 									picUrl,
 									" ",
-									6.99f,
-									"Jiaxing, Zhejiang, China",
+									389f,
+									"85 Bloor Street West, Toronto, Ontario M5S 1M1 Canada",
 									2);
-			picUrl = Integer.toHexString(R.drawable.heart);
+			picUrl = Integer.toHexString(R.drawable.d3) + "sample";
 			mItemDBAdapter.addItem(	4, 
-									"Sunnybrook Hospital",
-									"Heart",
-									"It is a warm beating heart", 
-									"2000-11-23 08:17:38", 
+									"Best buy",
+									"diablo 3",
+									"waiting for this game for years", 
+									"2012-05-15 08:17:38", 
 									picUrl,
 									" ",
-									324.49f,
-									"Beijing, China",
+									59.0f,
+									"65 Dundas Street West\nToronto, ON, M5G 2C3",
+									1);
+			
+			picUrl = Integer.toHexString(R.drawable.mini_cooper) + "sample";
+			mItemDBAdapter.addItem(	5, 
+									"BMW store",
+									"mini cooper",
+									"i like its color", 
+									"2012-06-20 13:05:22", 
+									picUrl,
+									" ",
+									20000.0f,
+									"Toronto",
+									1);
+			
+			picUrl = Integer.toHexString(R.drawable.sjobs_bio) + "sample";
+			mItemDBAdapter.addItem(	6, 
+									"Indigo",
+									"steve jobs biograhpy",
+									"a must-read book", 
+									"2012-06-22 19:08:20", 
+									picUrl,
+									" ",
+									30.0f,
+									"259 Richmond Street West Toronto ON M5V 3M6",
 									1);
 
 			mItemDBAdapter.close();
@@ -171,10 +193,12 @@ public class DBAdapter {
 			db.execSQL(CREATE_TABLE_STORE);
 			StoreDBAdapter mStoreDBAdapter = new StoreDBAdapter(context);
 			mStoreDBAdapter.open(db);
-			mStoreDBAdapter.addStore("BMW Store", 		1);
-			mStoreDBAdapter.addStore("Chapter",   		2);
-			mStoreDBAdapter.addStore("Yuan Zu Food",	3);
-			mStoreDBAdapter.addStore("Sunnybrook Hospital",		4);
+			mStoreDBAdapter.addStore("Apple Store", 		1);
+			mStoreDBAdapter.addStore("dessert store",   		2);
+			mStoreDBAdapter.addStore("tiffany",	3);
+			mStoreDBAdapter.addStore("Best buy",		4);
+			mStoreDBAdapter.addStore("BMW store",		5);
+			mStoreDBAdapter.addStore("Indigo",		6);
 			mStoreDBAdapter.close();
 			
 			//create table "location" and insert 4 default locations
@@ -183,22 +207,30 @@ public class DBAdapter {
 			mLocationDBAdapter.open(db);
 			mLocationDBAdapter.addLocation(43.698643,
 										   -79.390368, 
-//										   "187 Balliol St\nToronto, ON M4S 1C8\nCanada",
-										   "",
+										   "220 Yonge Street, Toronto, ON, M5B 2H1",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.650997,
 										   -79.476740, 
-//										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
-										   "unknown",
+										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.707563,
 										   -79.398328, 
-										   "2315 Yonge ST\nToronto, ON M4P 2C7\nCanada",
+										   "85 Bloor Street West, Toronto, Ontario M5S 1M1 Canadas",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.652243,
 										   -79.371197, 
-										   "252 Adelaide ST E\nToronto, ON M5A 2N4\nCanada",
+										   "65 Dundas Street West\nToronto, ON, M5G 2C3",
 										   0, null, null, null, null, null);
+			
+			mLocationDBAdapter.addLocation(43.652243,
+					   -79.371197, 
+					   "Toronto",
+					   0, null, null, null, null, null);
+			
+			mLocationDBAdapter.addLocation(43.652243,
+					   -79.371197, 
+					   "259 Richmond Street West Toronto ON M5V 3M6 ",
+					   0, null, null, null, null, null);
 
 			mLocationDBAdapter.close();
 		

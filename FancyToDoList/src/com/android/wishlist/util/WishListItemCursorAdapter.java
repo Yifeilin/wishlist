@@ -1,7 +1,11 @@
 package com.android.wishlist.util;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
+import com.android.wishlist.R;
 import com.android.wishlist.db.ItemDBAdapter;
 
 import android.content.Context;
@@ -62,20 +66,40 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 					//do nothing
 					return true;
 				}
+				
+				boolean isSample = false;
+				if (pic_str.endsWith("sample")) {
+					pic_str = pic_str.substring(0, pic_str.length() - 6);
+					isSample = true;
+				}
 
 				// check if pic_str is a resId or a uri
 				try {
 					//if it's a resID, the following decodeResource will not 
 					//throw exception (this need to be changed for performance)
 					int picResId = Integer.valueOf(pic_str, 16).intValue();
-					bitmap = BitmapFactory.decodeResource(view.getContext()
-							.getResources(), picResId);
+					if (isSample) {
+						bitmap = BitmapFactory.decodeResource(view.getContext()
+								.getResources(), picResId);
+						int width =128;
+						int height=128;
+						bitmap = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
+					}
+					else {
+						bitmap = BitmapFactory.decodeResource(view.getContext()
+								.getResources(), picResId);
+					}
 				} catch (NumberFormatException e) {
 					// Not a resId, so it must be a content provider uri
-					// thus set image from uri
+					// thus set image from uri (not a photo taken by cameara, but
+					// a photo we manually added to the drawable folder
 					Uri pic_uri = Uri.parse(pic_str);
 					photoView.setImageURI(pic_uri);
 					return true;
+//					
+//					picUrl = Integer.toHexString(R.drawable.mini_cooper);
+//					bitmap = BitmapFactory.decodeResource(view.getContext()
+//							.getResources(), R.drawable.mini_cooper);
 				}
 
 				// exception is not thrown, so it is resID.
