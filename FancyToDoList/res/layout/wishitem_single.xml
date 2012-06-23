@@ -61,7 +61,7 @@
 			<TextView android:id="@+id/txtAddress"
 		 	android:layout_width="fill_parent"
  			android:layout_height="wrap_content"
- 			android:maxLines="2" 
+ 			android:maxLines="1" 
  			android:textSize="15dip"
  			android:textColor="@color/bodyText_dark_grey"/>
 <!-- 		<TextView android:id="@+id/txtDesc" android:layout_width="fill_parent" -->
