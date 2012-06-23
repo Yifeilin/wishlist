@@ -127,7 +127,7 @@ public class WishList extends Activity {
 				// and get its _id in database
 				long item_id = getDBItemID(v, LIST_MODE);
 				if (item_id == -1) {
-					Log.d(LOG_TAG, "item id == -1");
+//					Log.d(LOG_TAG, "item id == -1");
 					return;
 				}
 
@@ -306,7 +306,7 @@ public class WishList extends Activity {
 			itemIdTextView = (TextView) v.findViewById(R.id.txtItemID_Grid);
 			break;
 		default:
-			Log.d(LOG_TAG, "View mode not specified correctly.");
+//			Log.d(LOG_TAG, "View mode not specified correctly.");
 			return -1;
 		}
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
@@ -602,7 +602,7 @@ public class WishList extends Activity {
 				item_id = getDBItemID(selected_view, LIST_MODE);
 			}
 			else {
-				Log.d(WishList.LOG_TAG, "selected_view is null");
+//				Log.d(WishList.LOG_TAG, "selected_view is null");
 				return false;
 			}
 		}
@@ -613,12 +613,12 @@ public class WishList extends Activity {
 				item_id = getDBItemID(selected_view, GRID_MODE);
 			}
 			else {
-				Log.d(WishList.LOG_TAG, "selected_view is null");
+//				Log.d(WishList.LOG_TAG, "selected_view is null");
 				return false;
 			}
 		}
 		else if(selected_view == null){
-			Log.d(WishList.LOG_TAG, "selected view is null");
+//			Log.d(WishList.LOG_TAG, "selected view is null");
 			return false;
 		}
 		
