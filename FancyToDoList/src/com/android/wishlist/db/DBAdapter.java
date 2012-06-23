@@ -113,7 +113,7 @@ public class DBAdapter {
 			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
 			mItemDBAdapter.open(db);
 			String picUrl;
-			picUrl = Integer.toHexString(R.drawable.ipad) + "sample";
+			picUrl = Integer.toHexString(R.drawable.new_ipad) + "sample";
 			mItemDBAdapter.addItem(	1,
 									"Apple Store",
 									"ipad",
@@ -145,7 +145,7 @@ public class DBAdapter {
 									picUrl,
 									" ",
 									389f,
-									"85 Bloor Street West, Toronto, Ontario M5S 1M1 Canada",
+									"85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canada",
 									2);
 			picUrl = Integer.toHexString(R.drawable.d3) + "sample";
 			mItemDBAdapter.addItem(	4, 
@@ -215,7 +215,7 @@ public class DBAdapter {
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.707563,
 										   -79.398328, 
-										   "85 Bloor Street West, Toronto, Ontario M5S 1M1 Canadas",
+										   "85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canadas",
 										   0, null, null, null, null, null);
 			mLocationDBAdapter.addLocation(43.652243,
 										   -79.371197, 
