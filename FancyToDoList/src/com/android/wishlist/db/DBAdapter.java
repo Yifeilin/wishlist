@@ -168,7 +168,7 @@ public class DBAdapter {
 									picUrl,
 									" ",
 									20000.0f,
-									"Toronto",
+									"11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
 									1);
 			
 			picUrl = Integer.toHexString(R.drawable.sjobs_bio) + "sample";
@@ -205,32 +205,32 @@ public class DBAdapter {
 			db.execSQL(CREATE_TABLE_LOCATION);
 			LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(context);
 			mLocationDBAdapter.open(db);
-			mLocationDBAdapter.addLocation(43.698643,
-										   -79.390368, 
+			mLocationDBAdapter.addLocation(43.653929,
+					 						-79.3802132, 
 										   "220 Yonge Street, Toronto, ON, M5B 2H1",
 										   0, null, null, null, null, null);
-			mLocationDBAdapter.addLocation(43.650997,
-										   -79.476740, 
+			mLocationDBAdapter.addLocation(43.6509499,
+											-79.477205, 
 										   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
 										   0, null, null, null, null, null);
-			mLocationDBAdapter.addLocation(43.707563,
-										   -79.398328, 
+			mLocationDBAdapter.addLocation(43.6694098,
+					 						-79.3904, 
 										   "85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canadas",
 										   0, null, null, null, null, null);
-			mLocationDBAdapter.addLocation(43.652243,
-										   -79.371197, 
+			mLocationDBAdapter.addLocation(43.6555876,
+											-79.3835228, 
 										   "65 Dundas Street West\nToronto, ON, M5G 2C3",
 										   0, null, null, null, null, null);
 			
-			mLocationDBAdapter.addLocation(43.652243,
-					   -79.371197, 
-					   "Toronto",
-					   0, null, null, null, null, null);
+			mLocationDBAdapter.addLocation(43.6561902,
+					 						-79.3489359, 
+										   "11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
+										   0, null, null, null, null, null);
 			
-			mLocationDBAdapter.addLocation(43.652243,
-					   -79.371197, 
-					   "259 Richmond Street West Toronto ON M5V 3M6 ",
-					   0, null, null, null, null, null);
+			mLocationDBAdapter.addLocation(43.6489324,
+					 						-79.3913844, 
+										   "259 Richmond Street West Toronto ON M5V 3M6 ",
+										   0, null, null, null, null, null);
 
 			mLocationDBAdapter.close();
 		
