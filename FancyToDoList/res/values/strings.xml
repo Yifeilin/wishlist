@@ -187,7 +187,12 @@
         <item>List View</item>
         <item>Grid View</item>
     </string-array>
+    <!-- debug map key -->
+    <!--  
     <string name="googleMapKey">0f2l_-BqB8u171fs9a6z5Iv8Uk83-H8-OwGQ9ow</string>
+    -->
+    <!-- release map key  -->
+    <string name="googleMapKey">0f2l_-BqB8u34VeaR4SLtfXhLtMjE9WkI25fJug</string>
     <string name="make_a_wish">Make a Wish</string>
 	<string name="my_wishes">My wishes</string>
 	<string name="album_name">WishListPhoto</string>
