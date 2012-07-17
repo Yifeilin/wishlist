@@ -357,11 +357,11 @@ public class EditItemInfo extends Activity {
 		try {
 			// read in the name, description, price and location of the item
 			// from the EditText
-			itemName = myItemName.getText().toString();
-			itemDesc = myNote.getText().toString();
-			itemStoreName = myStore.getText().toString();
-			addStr = myLocation.getText().toString();
-			itemPrice = Float.valueOf(myPrice.getText().toString());
+			itemName = myItemName.getText().toString().trim();
+			itemDesc = myNote.getText().toString().trim();
+			itemStoreName = myStore.getText().toString().trim();
+			addStr = myLocation.getText().toString().trim();
+			itemPrice = Float.valueOf(myPrice.getText().toString().trim());
 		}
 
 		catch (NumberFormatException e) {
