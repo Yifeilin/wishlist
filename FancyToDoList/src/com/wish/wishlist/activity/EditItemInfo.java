@@ -341,7 +341,7 @@ public class EditItemInfo extends Activity {
 	 */
 	private void saveWishItem() {
 
-		if(myItemName.getText().toString().length() == 0){
+		if(myItemName.getText().toString().trim().length() == 0){
 			Toast toast = Toast.makeText(this, "Please give a name to your wish", Toast.LENGTH_SHORT);
 			toast.show();
 			return;
