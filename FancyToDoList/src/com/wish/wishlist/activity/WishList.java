@@ -168,20 +168,9 @@ public class WishList extends Activity {
 
 		restoreUIState();
 
-		// Open or create the database
-		// wishListDB = WishListDataBase.getDBInstance(this);
-
-		// myDBAdapter is effective only when the database is first created
-		myDBAdapter = new DBAdapter(this);
-		myDBAdapter.open();
-
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-		
-		// open the db for operations of location table
-//		myLocationDBAdapter = new LocationDBAdapter(this);
-//		myLocationDBAdapter.open();
 
 		// check if the activity is started from search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -801,7 +790,7 @@ public class WishList extends Activity {
 		super.onDestroy();
 		// Close the database
 		// wishListDB.close();
-		myDBAdapter.close();
+//		myDBAdapter.close();
 		myItemDBAdapter.close();
 	}
 

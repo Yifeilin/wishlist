@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wish.wishlist.R;
+import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.util.camera.PhotoFileCreater;
 
 
@@ -30,6 +31,9 @@ public class DashBoard extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
+		
+		// myDBAdapter is effective only when the database is first created
+		DBAdapter.getInstance(this).createDB();
 		
 		if (savedInstanceState != null) {
 			Log.d(WishList.LOG_TAG, "savedInstanceState != null");

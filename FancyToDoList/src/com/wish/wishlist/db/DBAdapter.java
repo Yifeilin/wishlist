@@ -14,6 +14,15 @@ import android.database.sqlite.SQLiteOpenHelper;
  * is done through the individual "adapter" class.
  */
 public class DBAdapter {
+	
+	private static DBAdapter instance = null;
+	
+	public static DBAdapter getInstance(Context contenxt) {
+		if (instance == null) {
+			instance = new DBAdapter(contenxt);
+		}
+		return instance;
+	}
 	//Database name
 	public static final String DB_NAME = "WishList";
 
@@ -80,7 +89,7 @@ public class DBAdapter {
 			+ LocationDBAdapter.KEY_COUNTRY + " TEXT,"
 			+ LocationDBAdapter.KEY_POSTCODE + " TEXT" + ");";
 
-	private final Context context;
+	private static Context context;
 	private DatabaseHelper DBHelper;
 	private SQLiteDatabase db;
 
@@ -89,9 +98,17 @@ public class DBAdapter {
 	 * 
 	 * @param contenxt
 	 */
-	public DBAdapter(Context contenxt) {
-		this.context = contenxt;
-		this.DBHelper = new DatabaseHelper(this.context);
+	private DBAdapter(Context contenxt) {
+		context = contenxt;
+	}
+	
+	public void createDB() {
+		this.DBHelper = new DatabaseHelper(context);
+		
+		//according android sdk document, 
+		//we must call open() getWritableDatabase() or getReadableDatabase() to actually create the tables;
+		open();
+		close();
 	}
 
 	//private static class DatabaseHelper extends SQLiteOpenHelper {
