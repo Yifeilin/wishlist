@@ -17,15 +17,16 @@
  		<TextView style="@style/TitleBarText"
 			android:contentDescription="@string/my_wishes"/>
 			 -->
-		<ImageButton style="@style/TitleBarAction"
-			android:id="@+id/imageButton_search"
-			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
-			android:onClick="onClickSearch" 
-			android:visibility="gone" />
+
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_view"
 			android:contentDescription="@string/description_view" android:src="@drawable/ic_view_default"
 			android:onClick="onClickView" />
+		<ImageButton style="@style/TitleBarAction"
+			android:id="@+id/imageButton_search"
+			android:contentDescription="@string/description_search" android:src="@drawable/search_grey_default"
+			android:onClick="onClickSearch" 
+			android:visibility="visible" />
 	</LinearLayout>
 
 	<EditText
@@ -33,15 +34,6 @@
 		android:layout_height="wrap_content" android:text="" android:visibility="gone"
 		android:hint="@string/search_hint"
 	/>
-	
-	<Spinner 
-        android:id="@+id/myViewSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:prompt="@string/change_view_prompt"
-        android:layout_gravity="right"
-        android:visibility="gone"
-    />
 	
 	<ViewFlipper
     	android:id="@+id/myFlipper"
