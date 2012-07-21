@@ -184,7 +184,7 @@ public class ItemDBAdapter {
 	 *            The name description
 	 */
 	public long addItem(long store_id, String store_name, String name, String description, String date_time,
-			String picture_uri, String fullsize_picture_path, float price, String location,
+			String picture_uri, String fullsize_picture_path, double price, String location,
 			int priority) {
 		// String sql = String.format(
 		// "INSERT INTO ITEM (_id, name, description, create_date, store_id,  picture, price, location, priority) "
@@ -221,7 +221,7 @@ public class ItemDBAdapter {
 	 *            The item description
 	 */
 	public void updateItem(long _id, long store_id, String store_name, String name, String description, String date_time,
-			String picture_uri, String fullsize_picture_path, float price, String address,
+			String picture_uri, String fullsize_picture_path, double price, String address,
 			int priority) {
 
 //		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
@@ -260,7 +260,7 @@ public class ItemDBAdapter {
 	  */ 
 
 	public void updateOrReplaceItem(long _id, long store_id, String name, String description, String date_time,
-			String picture_uri, String fullsize_picture_path, float price, String address,
+			String picture_uri, String fullsize_picture_path, double price, String address,
 			int priority) {
 		ContentValues initialValues = new ContentValues();
 

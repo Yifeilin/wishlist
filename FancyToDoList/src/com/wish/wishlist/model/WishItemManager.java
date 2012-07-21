@@ -83,7 +83,7 @@ public class WishItemManager {
 		String date = wishItemCursor.getString(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
 
-		float itemPrice = wishItemCursor.getFloat(wishItemCursor
+		double itemPrice = wishItemCursor.getDouble(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
 
 		int itemPriority = wishItemCursor.getInt(wishItemCursor

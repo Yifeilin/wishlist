@@ -24,7 +24,7 @@ public class WishItem {
 	private Bitmap _thumbnail;
 	//private Bitmap _fullsizePhoto;
 	//public static final String KEY_PHOTO_URL = "picture";
-	private float _price;
+	private double _price;
 //	private long _locationId;
 	private double _latitude;
 	private double _longitude;
@@ -53,7 +53,7 @@ public class WishItem {
 	}
 
 	public WishItem(Context ctx, long itemId, long storeId, String storeName, String name, String desc, 
-			String date, String picStr, String fullsizePicPath, float price, double latitude, double longitude, 
+			String date, String picStr, String fullsizePicPath, double price, double latitude, double longitude, 
 			String address, int priority) {
 		_id = itemId;
 		_fullsizePicPath = fullsizePicPath;
@@ -93,7 +93,7 @@ public class WishItem {
 		return _storeId;
 	}
 	
-	public void setPrice(float p){
+	public void setPrice(double p){
 		_price = p;
 	}
 	
@@ -102,12 +102,14 @@ public class WishItem {
 	}
 	
 	public String getPriceAsString() {
-		if (_price == Float.MIN_VALUE) {
+		if (_price == Double.MIN_VALUE) {
 			return null;
 		}
 		else {
-			DecimalFormat Dec = new DecimalFormat("0.00");
+//			String priceStr = String.format("%20.2f", _price);
+			DecimalFormat Dec = new DecimalFormat("#.##");
 			String priceStr = (Dec.format(_price));
+
 			return priceStr;
 		}
 	}

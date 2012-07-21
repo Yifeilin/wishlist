@@ -351,7 +351,7 @@ public class EditItemInfo extends Activity {
 		String itemName = "";
 		String itemDesc = "";
 		String itemStoreName = "";
-		float itemPrice = 0;
+		double itemPrice = 0;
 		int itemPriority = 0;
 		
 		try {
@@ -361,14 +361,14 @@ public class EditItemInfo extends Activity {
 			itemDesc = myNote.getText().toString().trim();
 			itemStoreName = myStore.getText().toString().trim();
 			addStr = myLocation.getText().toString().trim();
-			itemPrice = Float.valueOf(myPrice.getText().toString().trim());
+			itemPrice = Double.valueOf(myPrice.getText().toString().trim());
 		}
 
 		catch (NumberFormatException e) {
 			// need some error message here
 			// price format incorrect
 			e.toString();
-			itemPrice = Float.MIN_VALUE;
+			itemPrice = Double.MIN_VALUE;
 		}
 
 		// user did not specify date_time, use dddd"now" as default date_time
