@@ -7,18 +7,26 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 public class FullscreenPhoto extends Activity {
-	 protected void onCreate(Bundle savedInstanceState) {
+	String _fullsizePhotoPath;
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		   setContentView(R.layout.fullscreen_photo);
 		   Intent intent = getIntent();
-		   String fullsize_pic_str = intent.getStringExtra("fullsize_pic_str");
+		   _fullsizePhotoPath = intent.getStringExtra("fullsize_pic_str");
+		   
+		   if (savedInstanceState != null) {
+			   //we are restoring on switching screen orientation
+				_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
+		   }
+		   
 		   ImageView imageItem = (ImageView) findViewById(R.id.fullscreen_photo);
 		   
-		   if (fullsize_pic_str != null){
-			   Bitmap bitmap = BitmapFactory.decodeFile(fullsize_pic_str, null);
+		   if (_fullsizePhotoPath != null){
+			   Bitmap bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath, null);
 			   imageItem.setImageBitmap(bitmap);
 		   }
 		   //Bitmap bitmap = null;
@@ -88,5 +96,12 @@ public class FullscreenPhoto extends Activity {
 //			mImageView.setVisibility(View.VISIBLE);
 //			mVideoView.setVisibility(View.INVISIBLE);
 		   }
+	 
+	 //this will also save the photo on switching screen orientation
+	 @Override
+	 protected void onSaveInstanceState(Bundle savedInstanceState) {
+		 savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
+		 super.onSaveInstanceState(savedInstanceState);
+	 }
 
 }

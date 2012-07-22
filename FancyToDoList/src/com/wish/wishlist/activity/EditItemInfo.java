@@ -655,6 +655,7 @@ public class EditItemInfo extends Activity {
 	}
 	
 	//this will make the photo taken before to show up if user cancels taking a second photo
+	//this will also save the thumbnail on switching screen orientation
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
 //		Log.d(WishList.LOG_TAG, "");
