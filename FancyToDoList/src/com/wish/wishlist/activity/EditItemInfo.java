@@ -61,7 +61,7 @@ public class EditItemInfo extends Activity {
 	private double lat = Double.MIN_VALUE;
 	private double lng = Double.MIN_VALUE;
 	private String addStr = "unknown";
-	private Bitmap thumbnail;
+	private Bitmap _thumbnail;
 //	private Bitmap mImageBitmap;
 	//private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
 	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is W
@@ -87,6 +87,7 @@ public class EditItemInfo extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.add_item);
 //		Log.d(WishList.LOG_TAG, "");
 		
@@ -318,17 +319,17 @@ public class EditItemInfo extends Activity {
 			// restore the current selected item in the list
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
-			thumbnail = savedInstanceState.getParcelable("bitmap");
-			imageItem.setImageBitmap(thumbnail);
+			_thumbnail = savedInstanceState.getParcelable("bitmap");
+			imageItem.setImageBitmap(_thumbnail);
 			
 //			Log.d(WishList.LOG_TAG, "_newfullsizePhotoPath " + _newfullsizePhotoPath);			
 //			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath " + _fullsizePhotoPath);
 			
-//			if (thumbnail == null) {
-//				Log.d(WishList.LOG_TAG, "thumbnail null");
+//			if (_thumbnail == null) {
+//				Log.d(WishList.LOG_TAG, "_thumbnail null");
 //			}
 //			else {
-//				Log.d(WishList.LOG_TAG, "thumbnail not null");
+//				Log.d(WishList.LOG_TAG, "_thumbnail not null");
 //			}
 		}
 //		else{
@@ -470,24 +471,24 @@ public class EditItemInfo extends Activity {
 ////		mImageView.setVisibility(View.VISIBLE);
 ////		mVideoView.setVisibility(View.INVISIBLE);
 //		
-//		thumbnail = intent.getParcelableExtra("data");
-//		imageItem.setImageBitmap(thumbnail);
+//		_thumbnail = intent.getParcelableExtra("data");
+//		imageItem.setImageBitmap(_thumbnail);
 //
-//		// store thumbnail in the media content provider 
-//		// and get the uri of the thumbnail
+//		// store _thumbnail in the media content provider 
+//		// and get the uri of the _thumbnail
 //		ContentValues values = new ContentValues();
 //		values.put(Media.MIME_TYPE, "image/jpeg");
 //		Uri uri = getContentResolver().insert(
 //				Media.EXTERNAL_CONTENT_URI, values);
 //
-//		//compress the thumbnail to JPEG and write the JEPG to 
+//		//compress the _thumbnail to JPEG and write the JEPG to 
 //		//the content provider. Save the uri of the JEPG as a string,
 //		//which will be inserted in the column "picture_uri" of
 //		//the Item table
 //		try {
 //			OutputStream outStream = getContentResolver()
 //					.openOutputStream(uri);
-//			thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
+//			_thumbnail.compress(Bitmap.CompressFormat.JPEG, 50,
 //					outStream);
 //
 //			outStream.close();
@@ -566,11 +567,11 @@ public class EditItemInfo extends Activity {
 	}
 	
 	private void setPic() {
-		//MediaStore.Images.Thumbnails.getThumbnail();
+		//MediaStore.Images.thumbnails.getThumbnail();
 		int width =128;
 		int height=128;
 		Bitmap bitmap;
-		Bitmap thumbnail;
+//		Bitmap thumbnail;
 		
 		bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath, null);
 		
@@ -581,14 +582,14 @@ public class EditItemInfo extends Activity {
 		
 		else {
 			Log.d(WishList.LOG_TAG, "bitmap is not null");
-			thumbnail = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
-			if (thumbnail == null) {
-//				Log.d(WishList.LOG_TAG, "thumbnail null");
+			_thumbnail = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
+			if (_thumbnail == null) {
+//				Log.d(WishList.LOG_TAG, "_thumbnail null");
 				return;
 			}
 			else {
-//				Log.d(WishList.LOG_TAG, "thumbnail is not null");
-				imageItem.setImageBitmap(thumbnail);
+//				Log.d(WishList.LOG_TAG, "_thumbnail is not null");
+				imageItem.setImageBitmap(_thumbnail);
 			}
 		}
 		
@@ -597,14 +598,14 @@ public class EditItemInfo extends Activity {
 		Uri uri = getContentResolver().insert(
 				Media.EXTERNAL_CONTENT_URI, values);
 
-		//compress the thumbnail to JPEG and write the JEPG to 
+		//compress the _thumbnail to JPEG and write the JEPG to 
 		//the content provider. Save the uri of the JEPG as a string,
 		//which will be inserted in the column "picture_uri" of
 		//the Item table
 		try {
 			OutputStream outStream = getContentResolver()
 					.openOutputStream(uri);
-			thumbnail.compress(Bitmap.CompressFormat.JPEG, 100,
+			_thumbnail.compress(Bitmap.CompressFormat.JPEG, 100,
 					outStream);
 
 			outStream.close();
@@ -659,12 +660,12 @@ public class EditItemInfo extends Activity {
 //		Log.d(WishList.LOG_TAG, "");
 		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
 		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
-		savedInstanceState.putParcelable("bitmap", thumbnail);
-		if (thumbnail == null) {
-			Log.d(WishList.LOG_TAG, "saved thumbnail is null");
+		savedInstanceState.putParcelable("bitmap", _thumbnail);
+		if (_thumbnail == null) {
+			Log.d(WishList.LOG_TAG, "saved _thumbnail is null");
 		}
 		else {
-			Log.d(WishList.LOG_TAG, "saved thumbnail is not null");
+			Log.d(WishList.LOG_TAG, "saved _thumbnail is not null");
 		}
 		super.onSaveInstanceState(savedInstanceState);
 	}
@@ -677,8 +678,8 @@ public class EditItemInfo extends Activity {
 //			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
-			thumbnail = savedInstanceState.getParcelable("bitmap");
-			imageItem.setImageBitmap(thumbnail);			
+			_thumbnail = savedInstanceState.getParcelable("bitmap");
+			imageItem.setImageBitmap(_thumbnail);			
 		}
 //		else {
 //			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
