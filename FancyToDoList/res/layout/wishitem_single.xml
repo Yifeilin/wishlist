@@ -4,7 +4,9 @@
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent"
 	android:orientation="horizontal"
-	android:background="@color/bodyBackground_light_grey">
+	
+	android:background="@xml/list_item_selector">
+	<!--  android:background="@color/bodyBackground_light_grey"> -->
 	   <!--   android:paddingTop="3dip"
     android:paddingBottom="3dip"
     -->
@@ -22,6 +24,7 @@
 		android:layout_marginRight="6dip"
 		android:layout_height="wrap_content" 
 		android:orientation="vertical">
+<!--		android:background="@xml/selector"  -->
 <!-- 		android:background="@color/notepad_paper"> -->
 			
 <!-- 		<TextView android:id="@+id/txtName" android:layout_width="fill_parent" -->
@@ -35,9 +38,10 @@
 	 		android:textSize="18dip"
 	 		android:singleLine="true"
             android:ellipsize="marquee"
-		    android:textColor="@color/dark_purple"
 		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"/>
+		    android:layout_height="wrap_content"
+		    android:textColor="@color/dark_purple"/>
+		    <!--android:textColor="@xml/selector"/>      -->
 				<!--    android:maxLines="1"  --> 
 		
 		 	<TextView android:id="@+id/txtPrice"

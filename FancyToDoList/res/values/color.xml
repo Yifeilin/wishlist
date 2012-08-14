@@ -38,9 +38,10 @@
     <color name="footerBarBackground_dark_grey">#222222</color>
     
     <color name="bodyBackground_light_grey">#F1F1F1</color>
+    <color name="semitransparent_white">#77ffffff</color>
 	<color name="bodyText_dark_grey">#424242</color>
     
     <color name="dark_purple">#790980</color>
-    
+  
     
 </resources>
