@@ -817,8 +817,21 @@ public class WishList extends Activity {
 		}
 		case ADD_ITEM: {
 			if (resultCode == Activity.RESULT_OK) {
-
-			}
+					// Create an intent to show the item detail.
+					// Pass the item_id along so the next activity can use it to
+					// retrieve the info. about the item from database
+					long id = -1;
+					if (data != null) {
+						id = data.getLongExtra("itemID", -1);
+					}
+					
+					if (id != -1) {
+//						finish();
+						Intent i = new Intent(WishList.this, WishItemDetail.class);
+						i.putExtra("item_id", id);
+						startActivity(i);
+					}
+				}
 			else {
 
 			}
