@@ -192,7 +192,8 @@ public class DashBoard extends Activity {
 					_newfullsizePhotoPath = null;
 					Intent i = new Intent(getApplicationContext(), EditItemInfo.class);
 					i.putExtra("fullsizePhotoPath", _fullsizePhotoPath);
-					startActivity (i);
+					startActivityForResult (i, EDIT_ITEM);
+	           		//	startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
 					
 				}
 				else {
