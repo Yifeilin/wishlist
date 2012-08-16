@@ -26,9 +26,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /***
  * WishItemDetail is responsible for displaying the detailed info. of an item. 
@@ -469,5 +473,52 @@ public class WishItemDetail extends Activity {
 //
 //		return super.onKeyDown(keyCode, event);
 //	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_item_detail, menu);
+		return true;
+	}
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+
+		switch (item.getItemId()) {
+		case (R.id.menu_item_detail_edit): {
+			editItem();
+			return true;
+		}
+		case (R.id.menu_item_detail_map): {
+				double[] dLocation = new double[2];
+				dLocation = myItemDBAdapter.getItemLocation(mItem_id);
+				
+				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
+					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else {
+					Intent mapIntent = new Intent(this, WishListMap.class);
+					mapIntent.putExtra("type", "markOne");
+					mapIntent.putExtra("latitude", dLocation[0]);
+					mapIntent.putExtra("longitude", dLocation[1]);
+					startActivity(mapIntent);
+				}
+			return true;
+		}
+		case (R.id.menu_item_detail_delete): {
+			deleteItem();
+			return true;
+		}
+		}
+		return false;
+	}
 
 }
