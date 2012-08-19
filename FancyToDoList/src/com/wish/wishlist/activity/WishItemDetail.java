@@ -290,7 +290,11 @@ public class WishItemDetail extends Activity {
 		// Get all of the rows from the database in sorted order as in the
 		long[] next_pos_id = new long[2];
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
+		// open the database for operations of Item table
+		myItemDBAdapter = new ItemDBAdapter(this);
+		myItemDBAdapter.open();
 		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name);
+		myItemDBAdapter.close();
 		long nextItemID;
 		if (mPosition < c.getCount())
 			mNextPosition = mPosition + 1;
@@ -322,7 +326,11 @@ public class WishItemDetail extends Activity {
 		long[] prev_pos_id = new long[2];
 
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
+		// open the database for operations of Item table
+		myItemDBAdapter = new ItemDBAdapter(this);
+		myItemDBAdapter.open();
 		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name);
+		myItemDBAdapter.close();
 		long prevItemID;
 		if (mPosition > 0)
 			mPrevPosition = mPosition - 1;
@@ -497,20 +505,24 @@ public class WishItemDetail extends Activity {
 			return true;
 		}
 		case (R.id.menu_item_detail_map): {
-				double[] dLocation = new double[2];
-				dLocation = myItemDBAdapter.getItemLocation(mItem_id);
-				
-				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
-					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
-					toast.show();
-				}
-				else {
-					Intent mapIntent = new Intent(this, WishListMap.class);
-					mapIntent.putExtra("type", "markOne");
-					mapIntent.putExtra("latitude", dLocation[0]);
-					mapIntent.putExtra("longitude", dLocation[1]);
-					startActivity(mapIntent);
-				}
+			double[] dLocation = new double[2];
+			// open the database for operations of Item table
+			myItemDBAdapter = new ItemDBAdapter(this);
+			myItemDBAdapter.open();
+			dLocation = myItemDBAdapter.getItemLocation(mItem_id);
+			myItemDBAdapter.close();
+			
+			if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
+				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			else {
+				Intent mapIntent = new Intent(this, WishListMap.class);
+				mapIntent.putExtra("type", "markOne");
+				mapIntent.putExtra("latitude", dLocation[0]);
+				mapIntent.putExtra("longitude", dLocation[1]);
+				startActivity(mapIntent);
+			}
 			return true;
 		}
 		case (R.id.menu_item_detail_delete): {
