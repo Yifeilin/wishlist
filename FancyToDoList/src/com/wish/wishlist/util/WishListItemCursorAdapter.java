@@ -7,8 +7,10 @@ import java.text.DecimalFormat;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBAdapter;
+import com.wish.wishlist.util.ImageManager;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,8 +19,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.util.Log;
 
 public class WishListItemCursorAdapter extends SimpleCursorAdapter {
+	static final String LOG_TAG = "WishList";
 	public WishListItemCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
@@ -78,11 +82,13 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 					//if it's a resID, the following decodeResource will not 
 					//throw exception (this need to be changed for performance)
 					int picResId = Integer.valueOf(pic_str, 16).intValue();
+					Log.d(LOG_TAG, pic_str);
 					if (isSample) {
-						bitmap = BitmapFactory.decodeResource(view.getContext()
-								.getResources(), picResId);
+						//bitmap = BitmapFactory.decodeResource(view.getContext()
+					//			.getResources(), picResId);
 						int width =128;
 						int height=128;
+						bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(view.getContext().getResources(), picResId , width, height);
 						bitmap = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
 					}
 					else {
@@ -186,7 +192,6 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 		}
 
 	}
-
 
 }
 

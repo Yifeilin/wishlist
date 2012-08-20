@@ -10,6 +10,7 @@ import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.DateTimeFormatter;
+import com.wish.wishlist.util.ImageManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Display;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -217,8 +219,13 @@ public class WishItemDetail extends Activity {
 				try {
 					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
 					int picResId = Integer.valueOf(picture_str, 16).intValue();
-					bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
-							.getResources(), picResId);
+					Display display = getWindowManager().getDefaultDisplay(); 
+					int width = display.getWidth();  // deprecated
+					int height = display.getHeight();  // deprecated
+					Log.d("wishlist", "width is " + String.valueOf(width));
+					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height);
+					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
+					//		.getResources(), picResId);
 					// it is resource id.
 					mPhotoView.setImageBitmap(bitmap);
 
