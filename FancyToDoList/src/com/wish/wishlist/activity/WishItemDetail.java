@@ -189,9 +189,13 @@ public class WishItemDetail extends Activity {
 	
 	private void showItemInfo(WishItem item) {
 		fullsize_picture_str = item.getFullsizePicPath();
+		Display display = getWindowManager().getDefaultDisplay(); 
+		int width = display.getWidth();  // deprecated
+		int height = display.getHeight();  // deprecated
 		if (fullsize_picture_str != null) {
 //			Log.d("wishlist", "fullsize_picture_str == " + fullsize_picture_str);
-			Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
+			Bitmap bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(fullsize_picture_str, width, height);
+			//Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
 			if (bitmap == null) {
 //				Log.d("wishlist", "bitmap == null");
 			}
@@ -219,9 +223,6 @@ public class WishItemDetail extends Activity {
 				try {
 					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
 					int picResId = Integer.valueOf(picture_str, 16).intValue();
-					Display display = getWindowManager().getDefaultDisplay(); 
-					int width = display.getWidth();  // deprecated
-					int height = display.getHeight();  // deprecated
 					Log.d("wishlist", "width is " + String.valueOf(width));
 					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height);
 					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()

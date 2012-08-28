@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+//import android.content.pm.ActivityInfo;
 
 /*** EditItemInfo.java is responsible for reading in the info. of a newly added item 
  * including its name, description, time, price, location and photo, and saving them
@@ -452,6 +453,7 @@ public class EditItemInfo extends Activity {
 		try {
 			f = PhotoFileCreater.getInstance().setUpPhotoFile();
 			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
+			//takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		} catch (IOException e) {
 //			Log.d("wishlist", "IOException" + e.getMessage());

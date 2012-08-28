@@ -51,5 +51,19 @@ public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
     return BitmapFactory.decodeResource(res, resId, options);
 }
 
+public static Bitmap decodeSampledBitmapFromFile(String file, int reqWidth, int reqHeight) {
+
+    // First decode with inJustDecodeBounds=true to check dimensions
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeFile(file, options);
+
+    // Calculate inSampleSize
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+    // Decode bitmap with inSampleSize set
+    options.inJustDecodeBounds = false;
+    return BitmapFactory.decodeFile(file, options);
+}
 }
 
