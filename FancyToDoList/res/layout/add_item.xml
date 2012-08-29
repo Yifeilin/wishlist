@@ -102,16 +102,16 @@
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/price"
 				android:layout_height="wrap_content" 
-				android:hint="price"
+				android:hint="Price"
 				android:inputType="numberDecimal"/>
 			
 			<EditText android:layout_width="fill_parent" android:id="@+id/store"
 				android:layout_height="wrap_content"
-				android:hint="store"/>
+				android:hint="Store"/>
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
 				android:layout_height="wrap_content"
-				android:hint="location"
+				android:hint="Location"
 				android:inputType="textPostalAddress"
 				/>
 
