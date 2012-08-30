@@ -94,11 +94,13 @@
 			<EditText android:layout_width="fill_parent" 
 			    android:id="@+id/itemname"
 				android:layout_height="wrap_content" 
-				android:hint="Name" />
+				android:hint="Name"
+				android:inputType="textMultiLine|textCapSentences" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/note"
 				android:layout_height="wrap_content" 
-				android:hint="Note" />
+				android:hint="Note" 
+				android:inputType="textMultiLine|textCapSentences" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/price"
 				android:layout_height="wrap_content" 
@@ -107,13 +109,15 @@
 			
 			<EditText android:layout_width="fill_parent" android:id="@+id/store"
 				android:layout_height="wrap_content"
-				android:hint="Store"/>
+				android:hint="Store"
+				android:inputType="textMultiLine|textCapSentences" />
 
 			<EditText android:layout_width="fill_parent" android:id="@+id/location"
 				android:layout_height="wrap_content"
 				android:hint="Location"
-				android:inputType="textPostalAddress"
+				android:inputType="textMultiLine|textPostalAddress|textCapWords"
 				/>
+				<!--android:scrollHorizontally="false" -->
 
 				<ImageView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:id="@+id/image_photo"
