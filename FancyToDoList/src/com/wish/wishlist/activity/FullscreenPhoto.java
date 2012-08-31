@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import com.wish.wishlist.view.ZoomPanImageView;
 
 public class FullscreenPhoto extends Activity {
 	String _fullsizePhotoPath;
@@ -23,7 +24,7 @@ public class FullscreenPhoto extends Activity {
 				_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
 		   }
 		   
-		   ImageView imageItem = (ImageView) findViewById(R.id.fullscreen_photo);
+		   ZoomPanImageView imageItem = (ZoomPanImageView) findViewById(R.id.fullscreen_photo);
 		   
 		   if (_fullsizePhotoPath != null){
 			   Bitmap bitmap = BitmapFactory.decodeFile(_fullsizePhotoPath, null);
