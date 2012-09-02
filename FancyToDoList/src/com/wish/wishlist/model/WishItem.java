@@ -3,12 +3,16 @@ package com.wish.wishlist.model;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.File;
 
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.content.ContentValues;
 
 public class WishItem {
 	private final Context _ctx;
@@ -195,6 +199,17 @@ public class WishItem {
 		else return _fullsizePicPath;
 	}
 
+	public Uri getFullsizePicUri() {
+		//google+ bug, cannot share image/video with Uri starts with file://
+		//workaround is to save the image to mediastore
+		ContentValues values = new ContentValues(2);
+		values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+		values.put(MediaStore.Images.Media.DATA, getFullsizePicPath());
+		Uri uri = _ctx.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+		return uri;
+		//return Uri.fromFile(new File(getFullsizePicPath()));
+	}
+
 	public String getPicStr() {
 		return _picStr;
 	}
@@ -238,6 +253,8 @@ public class WishItem {
 			}
 			message += (address + "\n");
 		}
+		
+		message += "\n" + "Shared via Beans Wishlist";
 		return message;
 	}
 	

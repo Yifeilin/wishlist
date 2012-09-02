@@ -666,8 +666,10 @@ public class WishList extends Activity {
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
 			sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-			sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-			sendIntent.setType("text/plain");
+			sendIntent.putExtra(Intent.EXTRA_STREAM, wish_item.getFullsizePicUri());
+			//sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+			//sendIntent.setType("text/plain");
+			sendIntent.setType("*/*");
 			//startActivity(sendIntent);
 			startActivity(Intent.createChooser(sendIntent, "Share using"));
 			return true;
