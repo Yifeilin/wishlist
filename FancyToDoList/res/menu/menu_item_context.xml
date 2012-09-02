@@ -9,6 +9,8 @@
    	 	   --> 
    	<item android1:id="@+id/MARK_TODO" 
     	  android1:title="@string/mark"/>
+   	<item android1:id="@+id/SHARE_TODO" 
+    	  android1:title="@string/share"/>
 </menu>  
     
     

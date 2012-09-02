@@ -34,6 +34,8 @@ import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
+import com.wish.wishlist.model.WishItem;
+import com.wish.wishlist.model.WishItemManager;
 
 /***
  * WishList.java is responsible for displaying wish items in either list or grid
@@ -658,9 +660,20 @@ public class WishList extends Activity {
 
 		}
 
+		case (R.id.SHARE_TODO): {
+			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(item_id);
+			String message = wish_item.getShareMessage();
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+			sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+			sendIntent.setType("text/plain");
+			//startActivity(sendIntent);
+			startActivity(Intent.createChooser(sendIntent, "Share using"));
+			return true;
 		}
-		return false;
-	}
+		}
+		return false; }
 
 	@Override
 	protected Dialog onCreateDialog(int id) {

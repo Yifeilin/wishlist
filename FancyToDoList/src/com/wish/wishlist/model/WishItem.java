@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.wish.wishlist.db.ItemDBAdapter;
+import com.wish.wishlist.util.DateTimeFormatter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -203,6 +204,41 @@ public class WishItem {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String dateString = sdf.format(_date);
 		return "(" + dateString + ") " + _name + " " + _desc;
+	}
+
+	public String getShareMessage() {
+		String message;
+		String dateTimeStr = getDate();
+		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
+		
+		message = getName() + "\n" + 
+			dateTimeStrNew + "\n";
+		
+		// format the price
+		String priceStr = getPriceAsString();
+		if (priceStr != null) {
+			message += ("$" + priceStr + "\n");
+		}
+		
+		//used as a note
+		String descrptStr = getDesc();
+		if (!descrptStr.equals("")) {
+			message += (descrptStr + "\n");
+		}
+		
+		String storeName = getStoreName();
+		if (!storeName.equals("")) {
+			message += ("At " + getStoreName() + "\n");
+		}
+		
+		String address = getAddress();
+		if (!address.equals("unknown") && !address.equals("")) {
+			if (storeName.equals("")) {
+				address = "At " + address;
+			}
+			message += (address + "\n");
+		}
+		return message;
 	}
 	
 	public long save() {

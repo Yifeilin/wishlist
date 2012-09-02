@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, ToDoList!</string>
-	
 	<string name="app_name">Wishlist</string>
-	
 	<string name="add_new">Add</string>
-	
 	<string name="remove">Delete</string>
-	
 	<string name="search">Search</string>
-	
 	<string name="post">Post</string>
-	
 	<string name="mark">Mark on map</string>
-	
+	<string name="share">Share</string>
 	<string name="help">Help</string>
 	
 	<string name="description_logo">Logo</string>
