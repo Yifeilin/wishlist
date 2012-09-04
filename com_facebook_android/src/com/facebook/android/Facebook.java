@@ -23,17 +23,30 @@ import java.net.MalformedURLException;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.CookieSyncManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Main Facebook object for interacting with the Facebook developer API.
@@ -54,6 +67,18 @@ public class Facebook {
     public static final String EXPIRES = "expires_in";
     public static final String SINGLE_SIGN_ON_DISABLED = "service_disabled";
 
+    public static final Uri ATTRIBUTION_ID_CONTENT_URI =
+        Uri.parse("content://com.facebook.katana.provider.AttributionIdProvider");
+    public static final String ATTRIBUTION_ID_COLUMN_NAME = "aid";
+
+    private static final String ATTRIBUTION_PREFERENCES = "com.facebook.sdk.attributionTracking";
+    private static final String PUBLISH_ACTIVITY_PATH = "%s/activities";
+    private static final String MOBILE_INSTALL_EVENT = "MOBILE_APP_INSTALL";
+    private static final String SUPPORTS_ATTRIBUTION = "supports_attribution";
+    private static final String APPLICATION_FIELDS = "fields";
+    private static final String ANALYTICS_EVENT = "event";
+    private static final String ATTRIBUTION_KEY = "attribution";
+
     public static final int FORCE_DIALOG_AUTH = -1;
 
     private static final String LOGIN = "oauth";
@@ -70,6 +95,7 @@ public class Facebook {
         "https://api.facebook.com/restserver.php";
 
     private String mAccessToken = null;
+    private long mLastAccessUpdate = 0;
     private long mAccessExpires = 0;
     private String mAppId;
 
@@ -77,6 +103,13 @@ public class Facebook {
     private String[] mAuthPermissions;
     private int mAuthActivityCode;
     private DialogListener mAuthDialogListener;
+    
+    // If the last time we extended the access token was more than 24 hours ago
+    // we try to refresh the access token again.
+    final private long REFRESH_TOKEN_BARRIER = 24L * 60L * 60L * 1000L;
+
+    private boolean shouldAutoPublishInstall = true;
+    private AutoPublishAsyncTask mAutoPublishAsyncTask = null;
 
     /**
      * Constructor for Facebook object.
@@ -185,6 +218,9 @@ public class Facebook {
 
         mAuthDialogListener = listener;
 
+        // fire off an auto-attribution publish if appropriate.
+        autoPublishAsync(activity.getApplicationContext());
+
         // Prefer single sign-on, where available.
         if (activityCode >= 0) {
             singleSignOnStarted = startSingleSignOn(activity, mAppId,
@@ -225,7 +261,7 @@ public class Facebook {
         // Verify that the application whose package name is
         // com.facebook.katana.ProxyAuth
         // has the expected FB app signature.
-        if (!validateAppSignatureForIntent(activity, intent)) {
+        if (!validateActivityIntent(activity, intent)) {
             return false;
         }
 
@@ -242,27 +278,62 @@ public class Facebook {
     }
 
     /**
-     * Query the signature for the application that would be invoked by the
-     * given intent and verify that it matches the FB application's signature.
+     * Helper to validate an activity intent by resolving and checking the
+     * provider's package signature.
      *
-     * @param activity
+     * @param context
      * @param intent
-     * @param validSignature
-     * @return true if the app's signature matches the expected signature.
+     * @return true if the service intent resolution happens successfully and the
+     * 	signatures match.
      */
-    private boolean validateAppSignatureForIntent(Activity activity,
-            Intent intent) {
-
+    private boolean validateActivityIntent(Context context, Intent intent) {
         ResolveInfo resolveInfo =
-            activity.getPackageManager().resolveActivity(intent, 0);
+            context.getPackageManager().resolveActivity(intent, 0);
         if (resolveInfo == null) {
             return false;
         }
 
-        String packageName = resolveInfo.activityInfo.packageName;
+        return validateAppSignatureForPackage(
+            context,
+            resolveInfo.activityInfo.packageName);
+    }
+
+
+    /**
+     * Helper to validate a service intent by resolving and checking the
+     * provider's package signature.
+     *
+     * @param context
+     * @param intent
+     * @return true if the service intent resolution happens successfully and the
+     * 	signatures match.
+     */
+    private boolean validateServiceIntent(Context context, Intent intent) {
+        ResolveInfo resolveInfo =
+            context.getPackageManager().resolveService(intent, 0);
+        if (resolveInfo == null) {
+            return false;
+        }
+
+        return validateAppSignatureForPackage(
+            context,
+            resolveInfo.serviceInfo.packageName);
+    }
+
+    /**
+     * Query the signature for the application that would be invoked by the
+     * given intent and verify that it matches the FB application's signature.
+     *
+     * @param context
+     * @param packageName
+     * @return true if the app's signature matches the expected signature.
+     */
+    private boolean validateAppSignatureForPackage(Context context,
+        String packageName) {
+
         PackageInfo packageInfo;
         try {
-            packageInfo = activity.getPackageManager().getPackageInfo(
+            packageInfo = context.getPackageManager().getPackageInfo(
                     packageName, PackageManager.GET_SIGNATURES);
         } catch (NameNotFoundException e) {
             return false;
@@ -302,7 +373,7 @@ public class Facebook {
                 setAccessToken(values.getString(TOKEN));
                 setAccessExpiresIn(values.getString(EXPIRES));
                 if (isSessionValid()) {
-                    Log.d("Facebook-authorize", "Login Success! access_token="
+                    Util.logd("Facebook-authorize", "Login Success! access_token="
                             + getAccessToken() + " expires="
                             + getAccessExpires());
                     mAuthDialogListener.onComplete(values);
@@ -313,17 +384,17 @@ public class Facebook {
             }
 
             public void onError(DialogError error) {
-                Log.d("Facebook-authorize", "Login failed: " + error);
+                Util.logd("Facebook-authorize", "Login failed: " + error);
                 mAuthDialogListener.onError(error);
             }
 
             public void onFacebookError(FacebookError error) {
-                Log.d("Facebook-authorize", "Login failed: " + error);
+                Util.logd("Facebook-authorize", "Login failed: " + error);
                 mAuthDialogListener.onFacebookError(error);
             }
 
             public void onCancel() {
-                Log.d("Facebook-authorize", "Login canceled");
+                Util.logd("Facebook-authorize", "Login canceled");
                 mAuthDialogListener.onCancel();
             }
         });
@@ -358,17 +429,21 @@ public class Facebook {
                 if (error != null) {
                     if (error.equals(SINGLE_SIGN_ON_DISABLED)
                             || error.equals("AndroidAuthKillSwitchException")) {
-                        Log.d("Facebook-authorize", "Hosted auth currently "
+                        Util.logd("Facebook-authorize", "Hosted auth currently "
                             + "disabled. Retrying dialog auth...");
                         startDialogAuth(mAuthActivity, mAuthPermissions);
                     } else if (error.equals("access_denied")
                             || error.equals("OAuthAccessDeniedException")) {
-                        Log.d("Facebook-authorize", "Login canceled by user.");
+                        Util.logd("Facebook-authorize", "Login canceled by user.");
                         mAuthDialogListener.onCancel();
                     } else {
-                        Log.d("Facebook-authorize", "Login failed: " + error);
+                        String description = data.getStringExtra("error_description");
+                        if (description != null) {
+                            error = error + ":" + description;
+                        }
+                        Util.logd("Facebook-authorize", "Login failed: " + error);
                         mAuthDialogListener.onFacebookError(
-                                new FacebookError(error));
+                          new FacebookError(error));
                     }
 
                 // No errors.
@@ -376,7 +451,7 @@ public class Facebook {
                     setAccessToken(data.getStringExtra(TOKEN));
                     setAccessExpiresIn(data.getStringExtra(EXPIRES));
                     if (isSessionValid()) {
-                        Log.d("Facebook-authorize",
+                        Util.logd("Facebook-authorize",
                                 "Login Success! access_token="
                                         + getAccessToken() + " expires="
                                         + getAccessExpires());
@@ -392,7 +467,7 @@ public class Facebook {
 
                 // An Android error occured.
                 if (data != null) {
-                    Log.d("Facebook-authorize",
+                    Util.logd("Facebook-authorize",
                             "Login failed: " + data.getStringExtra("error"));
                     mAuthDialogListener.onError(
                             new DialogError(
@@ -402,13 +477,155 @@ public class Facebook {
 
                 // User pressed the 'back' button.
                 } else {
-                    Log.d("Facebook-authorize", "Login canceled by user.");
+                    Util.logd("Facebook-authorize", "Login canceled by user.");
                     mAuthDialogListener.onCancel();
                 }
             }
         }
     }
 
+    /**
+     * Refresh OAuth access token method. Binds to Facebook for Android
+     * stand-alone application application to refresh the access token. This
+     * method tries to connect to the Facebook App which will handle the
+     * authentication flow, and return a new OAuth access token. This method
+     * will automatically replace the old token with a new one. Note that this
+     * method is asynchronous and the callback will be invoked in the original
+     * calling thread (not in a background thread).
+     * 
+     * @param context
+     *            The Android Context that will be used to bind to the Facebook
+     *            RefreshToken Service
+     * @param serviceListener
+     *            Callback interface for notifying the calling application when
+     *            the refresh request has completed or failed (can be null). In
+     *            case of a success a new token can be found inside the result
+     *            Bundle under Facebook.ACCESS_TOKEN key.
+     * @return true if the binding to the RefreshToken Service was created
+     */
+    public boolean extendAccessToken(Context context, ServiceListener serviceListener) {
+        Intent intent = new Intent();
+
+        intent.setClassName("com.facebook.katana",
+                "com.facebook.katana.platform.TokenRefreshService");
+
+        // Verify that the application whose package name is
+        // com.facebook.katana
+        // has the expected FB app signature.
+        if (!validateServiceIntent(context, intent)) {
+            return false;
+        }
+
+        return context.bindService(intent,
+                new TokenRefreshServiceConnection(context, serviceListener),
+                Context.BIND_AUTO_CREATE);
+    }
+    
+    /**
+    * Calls extendAccessToken if shouldExtendAccessToken returns true.
+    * 
+    * @return the same value as extendAccessToken if the the token requires
+    *           refreshing, true otherwise
+    */
+    public boolean extendAccessTokenIfNeeded(Context context, ServiceListener serviceListener) {
+        if (shouldExtendAccessToken()) {
+            return extendAccessToken(context, serviceListener);
+        }
+        return true;
+    }
+    
+    /**
+     * Check if the access token requires refreshing. 
+     * 
+     * @return true if the last time a new token was obtained was over 24 hours ago.
+     */
+    public boolean shouldExtendAccessToken() {
+        return isSessionValid() &&
+                (System.currentTimeMillis() - mLastAccessUpdate >= REFRESH_TOKEN_BARRIER);
+    }
+    
+    /**
+     * Handles connection to the token refresh service (this service is a part
+     * of Facebook App).
+     */
+    private class TokenRefreshServiceConnection implements ServiceConnection {
+
+        final Messenger messageReceiver = new Messenger(new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                String token = msg.getData().getString(TOKEN);
+                long expiresAt = msg.getData().getLong(EXPIRES) * 1000L;
+
+                // To avoid confusion we should return the expiration time in
+                // the same format as the getAccessExpires() function - that
+                // is in milliseconds.
+                Bundle resultBundle = (Bundle) msg.getData().clone();
+                resultBundle.putLong(EXPIRES, expiresAt);
+
+                if (token != null) {
+                    setAccessToken(token);
+                    setAccessExpires(expiresAt);
+                    if (serviceListener != null) {
+                        serviceListener.onComplete(resultBundle);
+                    }
+                } else if (serviceListener != null) { // extract errors only if client wants them
+                    String error = msg.getData().getString("error");
+                    if (msg.getData().containsKey("error_code")) {
+                        int errorCode = msg.getData().getInt("error_code");
+                        serviceListener.onFacebookError(new FacebookError(error, null, errorCode));
+                    } else {
+                        serviceListener.onError(new Error(error != null ? error
+                                : "Unknown service error"));
+                    }
+                }
+
+                // The refreshToken function should be called rarely,
+                // so there is no point in keeping the binding open.
+                applicationsContext.unbindService(TokenRefreshServiceConnection.this);
+            }
+        });
+
+        final ServiceListener serviceListener;
+        final Context applicationsContext;
+
+        Messenger messageSender = null;
+
+        public TokenRefreshServiceConnection(Context applicationsContext,
+                ServiceListener serviceListener) {
+            this.applicationsContext = applicationsContext;
+            this.serviceListener = serviceListener;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            messageSender = new Messenger(service);
+            refreshToken();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg) {
+            serviceListener.onError(new Error("Service disconnected"));
+            // We returned an error so there's no point in
+            // keeping the binding open.
+            applicationsContext.unbindService(TokenRefreshServiceConnection.this);
+        }
+
+        private void refreshToken() {
+            Bundle requestData = new Bundle();
+            requestData.putString(TOKEN, mAccessToken);
+
+            Message request = Message.obtain();
+            request.setData(requestData);
+            request.replyTo = messageReceiver;
+
+            try {
+                messageSender.send(request);
+            } catch (RemoteException e) {
+                serviceListener.onError(new Error("Service connection error"));
+            }
+        }
+    };    
+    
     /**
      * Invalidate the current user session by removing the access token in
      * memory, clearing the browser cookie, and calling auth.expireSession
@@ -653,36 +870,63 @@ public class Facebook {
     }
 
     /**
+     * Retrieve the last time the token was updated (in milliseconds since
+     * the Unix epoch), or 0 if the token has not been set.
+     *
+     * @return long - timestamp of the last token update.
+     */
+    public long getLastAccessUpdate() {
+        return mLastAccessUpdate;
+    }
+
+    /**
+     * Restore the token, expiration time, and last update time from cached values.
+     * These should be values obtained from getAccessToken(), getAccessExpires, and
+     * getLastAccessUpdate() respectively.
+     *
+     * @param accessToken - access token
+     * @param accessExpires - access token expiration time
+     * @param lastAccessUpdate - timestamp of the last token update
+     */
+    public void setTokenFromCache(String accessToken, long accessExpires, long lastAccessUpdate) {
+        mAccessToken = accessToken;
+        mAccessExpires = accessExpires;
+        mLastAccessUpdate = lastAccessUpdate;
+    }
+
+    /**
      * Set the OAuth 2.0 access token for API access.
      *
-     * @param token
-     *            - access token
+     * @param token - access token
      */
     public void setAccessToken(String token) {
         mAccessToken = token;
+        mLastAccessUpdate = System.currentTimeMillis();
     }
 
     /**
      * Set the current session's expiration time (in milliseconds since Unix
      * epoch), or 0 if the session doesn't expire.
      *
-     * @param time
-     *            - timestamp in milliseconds
+     * @param time - timestamp in milliseconds
      */
     public void setAccessExpires(long time) {
         mAccessExpires = time;
     }
 
     /**
-     * Set the current session's duration (in seconds since Unix epoch).
+     * Set the current session's duration (in seconds since Unix epoch), or "0"
+     * if session doesn't expire.
      *
      * @param expiresIn
-     *            - duration in seconds
+     *            - duration in seconds (or 0 if the session doesn't expire)
      */
     public void setAccessExpiresIn(String expiresIn) {
-        if (expiresIn != null && !expiresIn.equals("0")) {
-            setAccessExpires(System.currentTimeMillis()
-                    + Integer.parseInt(expiresIn) * 1000);
+        if (expiresIn != null) {
+            long expires = expiresIn.equals("0")
+                    ? 0
+                    : System.currentTimeMillis() + Long.parseLong(expiresIn) * 1000L;
+            setAccessExpires(expires);
         }
     }
 
@@ -692,6 +936,155 @@ public class Facebook {
 
     public void setAppId(String appId) {
         mAppId = appId;
+    }
+
+    /**
+     * Get Attribution ID for app install conversion tracking.
+     * @param contentResolver
+     * @return Attribution ID that will be used for conversion tracking. It will be null only if
+     *         the user has not installed or logged in to the Facebook app.
+     */
+    public static String getAttributionId(ContentResolver contentResolver) {
+        String [] projection = {ATTRIBUTION_ID_COLUMN_NAME};
+        Cursor c = contentResolver.query(ATTRIBUTION_ID_CONTENT_URI, projection, null, null, null);
+        if (c == null || !c.moveToFirst()) {
+            return null;
+        }
+        String attributionId = c.getString(c.getColumnIndex(ATTRIBUTION_ID_COLUMN_NAME));
+
+        return attributionId;
+    }
+
+    /**
+     * Get the auto install publish setting.  If true, an install event will be published during authorize(), unless
+     * it has occurred previously or the app does not have install attribution enabled on the application's developer
+     * config page.
+     * @return
+     */
+    public boolean getShouldAutoPublishInstall() {
+        return shouldAutoPublishInstall;
+    }
+
+    /**
+     * Sets whether auto publishing of installs will occur.
+     * @param value
+     */
+    public void setShouldAutoPublishInstall(boolean value) {
+        shouldAutoPublishInstall = value;
+    }
+
+    /**
+     * Manually publish install attribution to the facebook graph.  Internally handles tracking repeat calls to prevent
+     * multiple installs being published to the graph.
+     * @param context
+     * @return returns false on error.  Applications should retry until true is returned.  Safe to call again after
+     * true is returned.
+     */
+    public boolean publishInstall(final Context context) {
+        try {
+            // copy the application id to guarantee thread safety..
+            String applicationId = mAppId;
+            if (applicationId != null) {
+                publishInstall(this, applicationId, context);
+                return true;
+            }
+        } catch (Exception e) {
+            // if there was an error, fall through to the failure case.
+            Util.logd("Facebook-publish", e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * This function does the heavy lifting of publishing an install.
+     * @param fb
+     * @param applicationId
+     * @param context
+     * @throws Exception
+     */
+    private static void publishInstall(final Facebook fb, final String applicationId, final Context context)
+            throws JSONException, FacebookError, MalformedURLException, IOException {
+
+        String attributionId = Facebook.getAttributionId(context.getContentResolver());
+        SharedPreferences preferences = context.getSharedPreferences(ATTRIBUTION_PREFERENCES, Context.MODE_PRIVATE);
+        String pingKey = applicationId+"ping";
+        long lastPing = preferences.getLong(pingKey, 0);
+        if (lastPing == 0 && attributionId != null) {
+            Bundle supportsAttributionParams = new Bundle();
+            supportsAttributionParams.putString(APPLICATION_FIELDS, SUPPORTS_ATTRIBUTION);
+            JSONObject supportResponse = Util.parseJson(fb.request(applicationId, supportsAttributionParams));
+            Object doesSupportAttribution = (Boolean)supportResponse.get(SUPPORTS_ATTRIBUTION);
+
+            if (!(doesSupportAttribution instanceof Boolean)) {
+                throw new JSONException(String.format(
+                    "%s contains %s instead of a Boolean", SUPPORTS_ATTRIBUTION, doesSupportAttribution));
+            }
+
+            if ((Boolean)doesSupportAttribution) {
+                Bundle publishParams = new Bundle();
+                publishParams.putString(ANALYTICS_EVENT, MOBILE_INSTALL_EVENT);
+                publishParams.putString(ATTRIBUTION_KEY, attributionId);
+
+                String publishUrl = String.format(PUBLISH_ACTIVITY_PATH, applicationId);
+
+                fb.request(publishUrl, publishParams, "POST");
+
+                // denote success since no error threw from the post.
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(pingKey, System.currentTimeMillis());
+                editor.commit();
+            }
+        }
+    }
+
+    void autoPublishAsync(final Context context) {
+        AutoPublishAsyncTask asyncTask = null;
+        synchronized (this) {
+            if (mAutoPublishAsyncTask == null) {
+                // copy the application id to guarantee thread safety against our container.
+                String applicationId = Facebook.this.mAppId;
+
+                // skip publish if we don't have an application id.
+                if (applicationId != null) {
+                    asyncTask = mAutoPublishAsyncTask = new AutoPublishAsyncTask(applicationId, context);
+                }
+            }
+        }
+
+        if (asyncTask != null) {
+            asyncTask.execute();
+        }
+    }
+
+    /**
+     * Async implementation to allow auto publishing to not block the ui thread.
+     */
+    private class AutoPublishAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final String mApplicationId;
+        private final Context mApplicationContext;
+
+        public AutoPublishAsyncTask(String applicationId, Context context) {
+            mApplicationId = applicationId;
+            mApplicationContext = context.getApplicationContext();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Facebook.publishInstall(Facebook.this, mApplicationId, mApplicationContext);
+            } catch (Exception e) {
+                Util.logd("Facebook-publish", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // always clear out the publisher to allow other invocations.
+            synchronized (Facebook.this) {
+                mAutoPublishAsyncTask = null;
+            }
+        }
     }
 
     /**
@@ -733,6 +1126,31 @@ public class Facebook {
          *
          */
         public void onCancel();
+
+    }
+    
+    /**
+     * Callback interface for service requests.
+     */
+    public static interface ServiceListener {
+
+        /**
+         * Called when a service request completes.
+         * 
+         * @param values
+         *            Key-value string pairs extracted from the response.
+         */
+        public void onComplete(Bundle values);
+
+        /**
+         * Called when a Facebook server responds to the request with an error.
+         */
+        public void onFacebookError(FacebookError e);
+
+        /**
+         * Called when a Facebook Service responds to the request with an error.
+         */
+        public void onError(Error e);
 
     }
 
