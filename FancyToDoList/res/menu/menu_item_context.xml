@@ -4,9 +4,9 @@
           android:title="@string/remove" android1:menuCategory="container"/>
     <item android:id="@+id/EDIT_TODO"
           android:title="@string/edit"/>  
-<!--   	<item android1:id="@+id/POST_TODO" 
-   	 	  android1:title="@string/post"/>
-   	 	   --> 
+   <item android1:id="@+id/POST_TODO" 
+   	  android1:title="@string/post"/>
+
    	<item android1:id="@+id/MARK_TODO" 
     	  android1:title="@string/mark"/>
    	<item android1:id="@+id/SHARE_TODO" 

@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,6 +8,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -34,6 +36,7 @@ import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
+import com.wish.wishlist.util.social.ShareHelper;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 
@@ -57,7 +60,7 @@ public class WishList extends Activity {
 
 //	static final private int DETAIL_INFO_ACT = 2;
 	// static final private int TAKE_PICTURE = 1;
-//	static final private int POST_ITEM = 3;
+	static final private int POST_ITEM = 3;
 
 	// private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
 	// private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
@@ -535,11 +538,11 @@ public class WishList extends Activity {
 			startActivity(mapIntent);
 			return true;
 		}
-//		case (R.id.menu_post): {
-//			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
-//			startActivityForResult(snsIntent, POST_ITEM);
-//			return true;
-//		}
+		//case (R.id.menu_post): {
+		//	Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+		//	startActivityForResult(snsIntent, POST_ITEM);
+		//	return true;
+		//}
 
 //		case (R.id.menu_scan): {
 //			IntentIntegrator.initiateScan(this);
@@ -625,13 +628,12 @@ public class WishList extends Activity {
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
-//		case (R.id.POST_TODO): {
-//			String date = dateTextView.getText().toString();
-//			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
-//			snsIntent.putExtra("wishItem", date);
-//			startActivityForResult(snsIntent, POST_ITEM);
-//			return true;
-//		}
+		case (R.id.POST_TODO): {
+			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+			snsIntent.putExtra("wishItem", "test");
+			startActivityForResult(snsIntent, POST_ITEM);
+			return true;
+		}
 		case (R.id.MARK_TODO): {
 //			String address = myItemDBAdapter.getItemAddress(item_id);
 //			if (address.equals("unknown")||address.equals("")){
@@ -663,15 +665,24 @@ public class WishList extends Activity {
 		case (R.id.SHARE_TODO): {
 			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(item_id);
 			String message = wish_item.getShareMessage();
-			Intent sendIntent = new Intent();
-			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, message);
-			sendIntent.putExtra(Intent.EXTRA_STREAM, wish_item.getFullsizePicUri());
+			ShareHelper share = new ShareHelper(this, "subject", "body");
+			share.share();
+			//Intent sendIntent = new Intent();
+			//sendIntent.setAction(Intent.ACTION_SEND);
+			//sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+			//sendIntent.putExtra(Intent.EXTRA_STREAM, wish_item.getFullsizePicUri());
 			//sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
 			//sendIntent.setType("text/plain");
-			sendIntent.setType("*/*");
+			//sendIntent.setType("*/*");
+			//List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(sendIntent, 0);
 			//startActivity(sendIntent);
-			startActivity(Intent.createChooser(sendIntent, "Share using"));
+			//Intent chooserIntent = Intent.createChooser(sendIntent, "Share using");
+			//List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(chooserIntent, 0);
+			//for (ResolveInfo info : resInfo) {
+				//Log.d(LOG_TAG, "packageName " + info.activityInfo.packageName.toLowerCase());
+				//Log.d(LOG_TAG, "name        " + info.activityInfo.name.toLowerCase());
+			//}
+			//startActivity(Intent.createChooser(sendIntent, "Share using"));
 			return true;
 		}
 		}

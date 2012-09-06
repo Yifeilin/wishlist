@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.util.Log;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.DialogError;
@@ -17,7 +18,8 @@ import com.facebook.android.FacebookError;
 public class WishItemPostToSNS extends Activity {
 
 	// application id from facebook.com/developers
-	public static final String APP_ID = "198870636822464";
+	//public static final String APP_ID = "198870636822464"; //old app id from bao man
+	public static final String APP_ID = "221345307993103";
 	// log tag for any log.x statements
 	public static final String TAG = "FACEBOOK CONNECT";
 	// permissions array
@@ -35,48 +37,56 @@ public class WishItemPostToSNS extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// this.setContentView(R.layout.facebook);//my layout xml
 		Bundle extras = getIntent().getExtras();
-
 		wishItem = new StringBuilder();
-
 		String wish = extras.getString("wishItem");
-
 		wishItem.append(wish);
-
 		mFacebook = new Facebook(APP_ID);
-		// replace APP_API_ID with your own
-		mFacebook.authorize(this, new String[] { "publish_stream",
-				"read_stream", "offline_access" }, new DialogListener() {
+		//mFacebook.authorize(this, new String[] {"publish_stream"}, Facebook.FORCE_DIALOG_AUTH, new DialogListener() {
+		//mFacebook.authorize(this, new String[] {"publish_stream"}, new DialogListener() {
+		mFacebook.authorize(this, new String[] {"publish_stream", "read_stream", "offline_access"}, new DialogListener() {
 			@Override
 			public void onComplete(Bundle values) {
-
-				Bundle parameters = new Bundle();
-				parameters.putString("method", "status.set");
-				parameters.putString("status", wishItem.toString());
-				try {
-					String response = mFacebook.request(parameters);
-					System.out.println(response);
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Log.d("FACEBOOK authorize on complete", "");
+				updateStatus("");
 			}
 
 			@Override
-			public void onFacebookError(FacebookError error) {
+			public void onFacebookError(FacebookError e) {
+			     Log.d("FACEBOOK ERROR","FB ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
 			}
 
 			@Override
 			public void onError(DialogError e) {
+			     Log.e("ERROR","AUTH ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
 			}
 
 			@Override
 			public void onCancel() {
+			     Log.d("CANCELLED","AUTH CANCELLED");
 			}
 		});
 		mAsyncRunner = new AsyncFacebookRunner(mFacebook);
+	}
+
+	public void updateStatus(String accessToken) {
+		new Thread() {
+			public void run() {
+				try {
+					Bundle bundle = new Bundle();
+					bundle.putString("message", "test update");
+					//bundle.putString(Facebook.TOKEN, accessToken);
+					String response = mFacebook.request("me/feed",bundle,"POST");
+					Log.d("UPDATE RESPONSE",""+response);
+				}
+				catch (MalformedURLException e) {
+					Log.e("MALFORMED URL",""+e.getMessage());
+				}
+				catch (IOException e) {
+					Log.e("IOEX",""+e.getMessage());
+				}
+			}
+		}.start();
 	}
 
 	@Override
@@ -88,3 +98,30 @@ public class WishItemPostToSNS extends Activity {
 	}
 
 }
+//			new Thread() {
+//				public void run() {
+//	try {
+//		Bundle bundle = new Bundle();
+//		bundle.putString("message", "test update");
+////		bundle.putString(Facebook.TOKEN, accessToken);
+//		String response = mFacebook.request("me/feed",bundle,"POST");
+//		Log.d("UPDATE RESPONSE",""+response);
+//	}
+//	catch (MalformedURLException e) {
+//		Log.e("MALFORMED URL",""+e.getMessage());
+//	}
+//	catch (IOException e) {
+//		Log.e("IOEX",""+e.getMessage());
+//	}
+
+				//Bundle parameters = new Bundle();
+				//parameters.putString("method", "status.set");
+				//parameters.putString("status", wishItem.toString());
+				//try {
+				//	String response = mFacebook.request(parameters);
+				//	System.out.println(response);
+				//} catch (MalformedURLException e) {
+				//	e.printStackTrace();
+				//} catch (IOException e) {
+				//	e.printStackTrace();
+				//}
