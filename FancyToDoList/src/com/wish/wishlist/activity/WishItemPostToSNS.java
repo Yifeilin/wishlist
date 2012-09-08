@@ -31,7 +31,6 @@ import com.wish.wishlist.util.ImageManager;
 public class WishItemPostToSNS extends Activity {
 
 	// application id from facebook.com/developers
-	//public static final String APP_ID = "198870636822464"; //old app id from bao man
 	public static final String APP_ID = "221345307993103";
 	// log tag for any log.x statements
 	public static final String TAG = "FACEBOOK CONNECT";
@@ -52,7 +51,6 @@ public class WishItemPostToSNS extends Activity {
 		super.onCreate(savedInstanceState);
 		_ctx = this;
 		Bundle extras = getIntent().getExtras();
-		//String wish = extras.getString("wishItem");
 		_itemId = extras.getLong("itemId");
 		mFacebook = new Facebook(APP_ID);
 		//mFacebook.authorize(this, new String[] {"publish_stream"}, Facebook.FORCE_DIALOG_AUTH, new DialogListener() {
@@ -61,7 +59,7 @@ public class WishItemPostToSNS extends Activity {
 			@Override
 			public void onComplete(Bundle values) {
 				Log.d("FACEBOOK authorize on complete", "");
-				updateStatus("");
+				postWishToWall("");
 			}
 
 			@Override
@@ -82,26 +80,14 @@ public class WishItemPostToSNS extends Activity {
 		mAsyncRunner = new AsyncFacebookRunner(mFacebook);
 	}
 
-	public void updateStatus(String accessToken) {
+	public void postWishToWall(String accessToken) {
+		//we need to put this outside the ui thread, otherwise, a runtime execption will occur.
 		new Thread() {
 			public void run() {
 				try {
 					WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 					String message = wish_item.getShareMessage();
-					String fullsize_picture_str = wish_item.getFullsizePicPath();
-					//Display display = getWindowManager().getDefaultDisplay(); 
-					//int width = display.getWidth();  // deprecated
-					//int height = display.getHeight();  // deprecated
-					int width = 250;  // deprecated
-					int height = 250;  // deprecated
-					Bitmap bitmap = null;
-					byte[] data = null;
-					if (fullsize_picture_str != null) {
-						bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(fullsize_picture_str, width, height);
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-						data = baos.toByteArray();
-					}
+					byte[] photoData = wish_item.getPhotoData();
 					
 					//it appears that there is not easy way to post a message with photo on wall using facebook's
 					//existing api
@@ -135,7 +121,7 @@ public class WishItemPostToSNS extends Activity {
 						if (wallAlbumID != null) {
 							Bundle params = new Bundle();
 							params.putString("message", message);
-							params.putByteArray("source", data);
+							params.putByteArray("source", photoData);
 							//asyncRunner.request(wallAlbumID + "/photos", params, "POST", new PostPhotoRequestListener(), null);
 							response = mFacebook.request(wallAlbumID + "/photos", params, "POST");
 						}

@@ -4,15 +4,19 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.File;
-
-import com.wish.wishlist.db.ItemDBAdapter;
-import com.wish.wishlist.util.DateTimeFormatter;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.content.ContentValues;
+
+import com.wish.wishlist.db.ItemDBAdapter;
+import com.wish.wishlist.util.DateTimeFormatter;
+import com.wish.wishlist.util.ImageManager;
+
 
 public class WishItem {
 	private final Context _ctx;
@@ -262,6 +266,20 @@ public class WishItem {
 		return message;
 	}
 	
+	public byte[] getPhotoData() {
+		int width = 250;  
+		int height = 250; 
+		Bitmap bitmap = null;
+		byte[] data = null;
+		if (_fullsizePicPath!= null) {
+			bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(_fullsizePicPath, width, height);
+			ByteArrayOutputStream photoStream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
+			data = photoStream.toByteArray();
+		}
+		return data;
+	}
+
 	public long save() {
 		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
 		mItemDBAdapter.open();
