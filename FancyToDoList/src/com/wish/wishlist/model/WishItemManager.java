@@ -47,7 +47,7 @@ public class WishItemManager {
 		mLocationDBAdapter = new LocationDBAdapter(_ctx);
 		mLocationDBAdapter.open();
 		
-		ItemsCursor wishItemCursor;		
+		ItemsCursor wishItemCursor;
 		Cursor mStoreCursor;
 		
 		wishItemCursor = mItemDBAdapter.getItem(itemId);

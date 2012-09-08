@@ -84,7 +84,6 @@ public class WishItemPostToSNS extends Activity {
 		//we need to put this outside the ui thread, otherwise, a runtime execption will occur.
 		new Thread() {
 			public void run() {
-				try {
 					Log.d("JSON", "run try {");
 					WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 					String message = wish_item.getShareMessage();
@@ -102,14 +101,23 @@ public class WishItemPostToSNS extends Activity {
 					//it assumes user already has posted some photos to his/her wall sometime in the past.
 					//It will fail if there are no wall photos.
 					String wallAlbumID = null;
-					String response = mFacebook.request("me/albums");
-					Log.d("JSON", "facebook.request");
+					String response = null;
+					try {
+						response = mFacebook.request("me/albums");
+						Log.d("JSON", "response me/albums:" + response);
+					}
+					catch (MalformedURLException e) {
+						Log.e("MALFORMED URL",""+e.getMessage());
+					}
+					catch (IOException e) {
+						Log.e("IOEX",""+e.getMessage());
+					}
+
 					try {
 						Log.d("JSON", "JSON run try {");
-						Log.d("JSON", "response:" + response);
 						JSONObject json = Util.parseJson(response);
 						JSONArray albums = json.getJSONArray("data");
-						for (int i =0; i < albums.length(); i++) {
+						for (int i = 0; i < albums.length(); i++) {
 							Log.d("JSON", "i: " + String.valueOf(i));
 							JSONObject album = albums.getJSONObject(i);
 							if (album.getString("type").equalsIgnoreCase("wall")) {
@@ -118,51 +126,50 @@ public class WishItemPostToSNS extends Activity {
 								break;
 							}
 						}
-
-						if (wallAlbumID != null) {
-							Log.d("JSON", "wall album exists");
-							Bundle params = new Bundle();
-							params.putString("message", message);
-							params.putByteArray("source", photoData);
-							//asyncRunner.request(wallAlbumID + "/photos", params, "POST", new PostPhotoRequestListener(), null);
-							response = mFacebook.request(wallAlbumID + "/photos", params, "POST");
-						}
-						else { //there is no wall album for this user, meaning the user has never posted any
-							//photo on his/her wall before (unlikely case), so use "me/photo" request to
-							//upload the photo, this will not automatically create a wall album, instead,
-							//it will create an album named "Beans Wishlist Photos" and upload the photo
-							//to this album. subsequent photos will be uploaded to this album until user 
-							//post their first photo to their wall album from outside this app
-							//note: this very fist wish the user posted will not appear on his/her friends'
-							//feeds, sad!
-							Log.d("me/photos", "no wall album");
-							Bundle params = new Bundle();
-							params.putString("message", message);
-							//bundle.putString("method", "photos.upload");
-							params.putByteArray("picture", photoData);
-							//bundle.putString(Facebook.TOKEN, accessToken);
-					//		String response = mFacebook.request("me/feed",bundle,"POST");
-							response = mFacebook.request("me/photos", params, "POST");
-							Log.d("me/photos",response);
-						}
-						
-
 					}
 					catch (JSONException e) {
-						e.printStackTrace();
+						Log.d("JSONException","ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
+					//	e.printStackTrace();
 					}
-					catch (FacebookError e) {
-						e.printStackTrace();
+
+					String requestFlag;
+					Bundle params = new Bundle();
+					if (wallAlbumID != null) {
+						Log.d("JSON", "wall album exists");
+						params.putString("message", message);
+						params.putByteArray("source", photoData);
+						//asyncRunner.request(wallAlbumID + "/photos", params, "POST", new PostPhotoRequestListener(), null);
+						requestFlag = wallAlbumID + "/photos";
 					}
-						
-			}
-				catch (MalformedURLException e) {
-					Log.e("MALFORMED URL",""+e.getMessage());
-				}
-				catch (IOException e) {
-					Log.e("IOEX",""+e.getMessage());
-				}
-			}
+					else { //there is no wall album for this user, meaning the user has never posted any
+						//photo on his/her wall before (a case unlikely), so use "me/photo" request to
+						//upload the photo, this will not automatically create a wall album, instead,
+						//it will create an album named "Beans Wishlist Photos" and upload the photo
+						//to this album. subsequent wish share will upload photos to this album until user 
+						//post their first photo to their wall album from outside this app
+						//these photos will appear in friends feed as a signle album instead of sepearte 
+						//wish post
+						Log.d("me/photos", "no wall album");
+						params.putString("message", message);
+						//bundle.putString("method", "photos.upload");
+						params.putByteArray("picture", photoData);
+						//bundle.putString(Facebook.TOKEN, accessToken);
+				//		String response = mFacebook.request("me/feed",bundle,"POST");
+						requestFlag = "me/photos";
+						Log.d("me/photos",response);
+					}
+
+					try {
+						response = mFacebook.request(requestFlag, params, "POST");
+					}
+					catch (MalformedURLException e) {
+						Log.e("MALFORMED URL",""+e.getMessage());
+					}
+					catch (IOException e) {
+						Log.e("IOEX",""+e.getMessage());
+					}
+
+			}//end of run
 		}.start();
 	}
 
