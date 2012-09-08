@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import android.graphics.Bitmap;
 
 //import com.android.wishlist.activity;
 import com.wish.wishlist.R;
@@ -663,9 +664,10 @@ public class WishList extends Activity {
 		}
 
 		case (R.id.SHARE_TODO): {
-			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(item_id);
-			String message = wish_item.getShareMessage();
-			ShareHelper share = new ShareHelper(this, "subject", "body");
+			//Display display = getWindowManager().getDefaultDisplay(); 
+			//int width = display.getWidth();  // deprecated
+			//int height = display.getHeight();  // deprecated
+			ShareHelper share = new ShareHelper(this, item_id);
 			share.share();
 			//Intent sendIntent = new Intent();
 			//sendIntent.setAction(Intent.ACTION_SEND);

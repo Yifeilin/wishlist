@@ -78,6 +78,10 @@ public class WishItem {
 		//_thumbnail = thumbnail;
 	}
 
+	public long getId() {
+		return _id;
+	}
+
 	public Bitmap getThumbnail() {
 		return _thumbnail;
 	}
