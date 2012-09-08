@@ -234,8 +234,8 @@ public class WishItem {
 		String dateTimeStr = getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
 		
-		message = getName() + "\n" + 
-			dateTimeStrNew + "\n";
+		//message = getName() + "\n" + dateTimeStrNew + "\n";
+		message = getName() + "\n";
 		
 		// format the price
 		String priceStr = getPriceAsString();
