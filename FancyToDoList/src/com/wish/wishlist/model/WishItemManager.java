@@ -93,6 +93,8 @@ public class WishItemManager {
 				date, picture_str, fullsize_pic_path, itemPrice, latitude, longitude,
 				itemLocation, itemPriority);
 		
+		wishItemCursor.close();
+		mStoreCursor.close();
 		mItemDBAdapter.close();
 		mStoreDBAdapter.close();
 		mLocationDBAdapter.close();

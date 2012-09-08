@@ -86,7 +86,7 @@ public class WishItemPostToSNS extends Activity {
 			public void run() {
 					Log.d("JSON", "run try {");
 					WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
-					String message = wish_item.getShareMessage();
+					String message = wish_item.getShareMessage(true);
 					byte[] photoData = wish_item.getPhotoData();
 					
 					//it appears that there is not easy way to post a message with photo on wall, and make it to

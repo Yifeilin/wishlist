@@ -229,7 +229,7 @@ public class WishItem {
 		return "(" + dateString + ") " + _name + " " + _desc;
 	}
 
-	public String getShareMessage() {
+	public String getShareMessage(Boolean facebook) {
 		String message;
 		String dateTimeStr = getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
@@ -262,7 +262,9 @@ public class WishItem {
 			message += (address + "\n");
 		}
 		
-		message += "\n" + "Shared via Beans Wishlist";
+		if (facebook) {
+			message += "\n" + "Shared via Beans Wishlist";
+		}
 		return message;
 	}
 	
