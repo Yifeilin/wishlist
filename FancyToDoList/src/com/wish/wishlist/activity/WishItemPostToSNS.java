@@ -85,26 +85,27 @@ public class WishItemPostToSNS extends Activity {
 		new Thread() {
 			public void run() {
 				try {
+					Log.d("JSON", "run try {");
 					WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 					String message = wish_item.getShareMessage();
 					byte[] photoData = wish_item.getPhotoData();
 					
-					//it appears that there is not easy way to post a message with photo on wall using facebook's
-					//existing api
+					//it appears that there is not easy way to post a message with photo on wall, and make it to
+					//appear on friends' feed using facebook's existing api
 
 					//"me/photos" -  Not all uploaded images are displayed on my wall. Instead, there is something
-					//like x photos were added to the album xxx. and the post is not visible to your friends
-					//"me/feed" - This will make the post visible to friends, but it requires the photo to be
-					//available on server with an URL link
+					//like x photos were added to the album xxx. and the post does not appear on friends' feed
+					//"me/feed" - This will make the post visible on friends feeds, but it requires the photo to be
+					//available on a server with an URL link
 
 					//the workaround here is to add photos and related comments to user's "Wall photos album".
-					//it assumes user already has posted some photos to her wall sometime in the past.
+					//it assumes user already has posted some photos to his/her wall sometime in the past.
 					//It will fail if there are no wall photos.
 					String wallAlbumID = null;
 					String response = mFacebook.request("me/albums");
 					Log.d("JSON", "facebook.request");
 					try {
-						Log.d("JSON", "try { ");
+						Log.d("JSON", "JSON run try {");
 						Log.d("JSON", "response:" + response);
 						JSONObject json = Util.parseJson(response);
 						JSONArray albums = json.getJSONArray("data");
@@ -119,28 +120,41 @@ public class WishItemPostToSNS extends Activity {
 						}
 
 						if (wallAlbumID != null) {
+							Log.d("JSON", "wall album exists");
 							Bundle params = new Bundle();
 							params.putString("message", message);
 							params.putByteArray("source", photoData);
 							//asyncRunner.request(wallAlbumID + "/photos", params, "POST", new PostPhotoRequestListener(), null);
 							response = mFacebook.request(wallAlbumID + "/photos", params, "POST");
 						}
+						else { //there is no wall album for this user, meaning the user has never posted any
+							//photo on his/her wall before (unlikely case), so use "me/photo" request to
+							//upload the photo, this will not automatically create a wall album, instead,
+							//it will create an album named "Beans Wishlist Photos" and upload the photo
+							//to this album. subsequent photos will be uploaded to this album until user 
+							//post their first photo to their wall album from outside this app
+							//note: this very fist wish the user posted will not appear on his/her friends'
+							//feeds, sad!
+							Log.d("me/photos", "no wall album");
+							Bundle params = new Bundle();
+							params.putString("message", message);
+							//bundle.putString("method", "photos.upload");
+							params.putByteArray("picture", photoData);
+							//bundle.putString(Facebook.TOKEN, accessToken);
+					//		String response = mFacebook.request("me/feed",bundle,"POST");
+							response = mFacebook.request("me/photos", params, "POST");
+							Log.d("me/photos",response);
+						}
+						
+
 					}
-					catch(JSONException e) {
+					catch (JSONException e) {
 						e.printStackTrace();
 					}
-					catch(FacebookError e) {
+					catch (FacebookError e) {
 						e.printStackTrace();
 					}
 						
-				//	Bundle bundle = new Bundle();
-				//	bundle.putString("message", message);
-					//bundle.putString("method", "photos.upload");
-				//	bundle.putByteArray("picture", data);
-					//bundle.putString(Facebook.TOKEN, accessToken);
-			//		String response = mFacebook.request("me/feed",bundle,"POST");
-					//String response = mFacebook.request("me/photos",bundle,"POST");
-			//		Log.d("UPDATE RESPONSE",""+response);
 			}
 				catch (MalformedURLException e) {
 					Log.e("MALFORMED URL",""+e.getMessage());
