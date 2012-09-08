@@ -262,7 +262,7 @@ public class WishItem {
 			message += (address + "\n");
 		}
 		
-		if (facebook) {
+		if (!facebook) {
 			message += "\n" + "Shared via Beans Wishlist";
 		}
 		return message;

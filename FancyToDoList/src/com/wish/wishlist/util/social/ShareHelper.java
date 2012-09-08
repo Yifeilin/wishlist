@@ -54,13 +54,14 @@ public Facebook share() {
 			}
 			else {
 				WishItem item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
-				String message = item.getShareMessage();
+				String message = item.getShareMessage(false);
 				Log.d("share", "others");
 				Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 				intent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
 				intent.setType("*/*");
 				//intent.putExtra(Intent.EXTRA_SUBJECT, _subject);
 				intent.putExtra(Intent.EXTRA_TEXT, message);
+				intent.putExtra(Intent.EXTRA_STREAM, item.getFullsizePicUri());
 				((Activity)_ctx).startActivity(intent);
 			}
 		}
