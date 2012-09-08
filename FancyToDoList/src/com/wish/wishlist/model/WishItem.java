@@ -231,11 +231,18 @@ public class WishItem {
 
 	public String getShareMessage(Boolean facebook) {
 		String message;
+		if (facebook) {
+			//facebook will generate "via Beans Wishlist" automatically
+			message = "Shared a wish\n\n";
+		}
+		else {
+			message = "Shared a wish via Beans Wishlist\n\n";
+		}
 		String dateTimeStr = getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
 		
 		//message = getName() + "\n" + dateTimeStrNew + "\n";
-		message = getName() + "\n";
+		message += getName() + "\n";
 		
 		// format the price
 		String priceStr = getPriceAsString();
@@ -262,9 +269,6 @@ public class WishItem {
 			message += (address + "\n");
 		}
 		
-		if (!facebook) {
-			message += "\n" + "Shared via Beans Wishlist";
-		}
 		return message;
 	}
 	
