@@ -42,6 +42,7 @@ public Facebook share() {
 	sendIntent.setType("*/*");
 	List activities = _ctx.getPackageManager().queryIntentActivities(sendIntent, 0);
 	AlertDialog.Builder builder = new AlertDialog.Builder(_ctx); 
+	builder.setIcon(0); //no icon in the title
 	builder.setTitle("Share to..."); 
 	final ShareIntentListAdapter adapter = new ShareIntentListAdapter((Activity)_ctx, R.layout.share_app_list, R.id.shareAppLabel, activities.toArray()); 
 	builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
