@@ -2,6 +2,7 @@ package com.wish.wishlist.activity;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
 import android.app.Activity;
@@ -11,8 +12,10 @@ import android.view.Menu;
 import android.util.Log;
 import android.graphics.Bitmap;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -32,7 +35,6 @@ public class WishItemPostToSNS extends Activity {
 
 	// application id from facebook.com/developers
 	public static final String APP_ID = "221345307993103";
-	// log tag for any log.x statements
 	public static final String TAG = "FACEBOOK CONNECT";
 	// permissions array
 	private static final String[] PERMS = new String[] {
@@ -43,9 +45,9 @@ public class WishItemPostToSNS extends Activity {
 	//	"offline_access",
 	//	Facebook.FORCE_DIALOG_AUTH, 
 	};
-	// facebook vars
-	private Facebook mFacebook;
-	private AsyncFacebookRunner mAsyncRunner;
+
+	private Facebook _facebook;
+	private AsyncFacebookRunner _asyncRunner;
 	private long _itemId;
 	private Context _ctx;
 
@@ -59,8 +61,9 @@ public class WishItemPostToSNS extends Activity {
 		_ctx = this;
 		Bundle extras = getIntent().getExtras();
 		_itemId = extras.getLong("itemId");
-		mFacebook = new Facebook(APP_ID);
-		mFacebook.authorize(this, PERMS, new DialogListener() {
+		_facebook = new Facebook(APP_ID);
+		_asyncRunner = new AsyncFacebookRunner(_facebook);
+		_facebook.authorize(this, PERMS, new DialogListener() {
 			@Override
 			public void onComplete(Bundle values) {
 				Log.d("FACEBOOK authorize on complete", "");
@@ -82,13 +85,13 @@ public class WishItemPostToSNS extends Activity {
 			     Log.d("CANCELLED","AUTH CANCELLED");
 			}
 		});
-		mAsyncRunner = new AsyncFacebookRunner(mFacebook);
+		//_asyncRunner = new AsyncFacebookRunner(_facebook);
 	}
 
 	public void postWishToWall(String accessToken) {
 		//we need to put this outside the ui thread, otherwise, a runtime execption will occur.
-		new Thread() {
-			public void run() {
+		//new Thread() {
+		//	public void run() {
 					Log.d("JSON", "run try {");
 					WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 					String message = wish_item.getShareMessage(true);
@@ -101,34 +104,44 @@ public class WishItemPostToSNS extends Activity {
 						postTextAndPhotoWish(message, photoData);
 					}
 			}//end of run
-		}.start();
-	}
+		//}.start();
+	//}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		mFacebook.authorizeCallback(requestCode, resultCode, data);
+		_facebook.authorizeCallback(requestCode, resultCode, data);
 		finish();
 	}
 
 	private void postTextWish(String message) {
 		Log.d(TAG, "postTextWish");
-		String response = null;
+		//String response = null;
 		Bundle params = new Bundle();
-		try {
+		//try {
 			//params.putString("message", message);
 			params.putString("method", "status.set");
 			params.putString("status", message);
-			//response = mFacebook.request("me/feed", params, "POST");
-			response = mFacebook.request(params);
-		}
-		catch (MalformedURLException e) {
-			Log.e("MALFORMED URL",""+e.getMessage());
-		}
-		catch (IOException e) {
-			Log.e("IOEX",""+e.getMessage());
-		}
+			//response = _facebook.request("me/feed", params, "POST");
+			_asyncRunner.request(params, new simpleRequestListener());
+		//	if (response.equals("true")) {
+		//		//int duration = Toast.LENGTH_SHORT;
+		//		//Toast toast = Toast.makeText(_ctx, "Wish shared suceeded", Toast.LENGTH_SHORT);
+		//		//toast.show();
+		//	}
+		//	else {
+		//		//Toast toast = Toast.makeText(_ctx, "Wish shared failed", Toast.LENGTH_SHORT);
+		//		//toast.show();
+		//	}
+		//	Log.d(TAG, "response update status:\n" + response);
+		//}
+		//catch (MalformedURLException e) {
+		//	Log.e("MALFORMED URL",""+e.getMessage());
+		//}
+		//catch (IOException e) {
+		//	Log.e("IOEX",""+e.getMessage());
+		//}
 	}
 
 	private void postTextAndPhotoWish(String message, byte[] photoData) {
@@ -147,8 +160,8 @@ public class WishItemPostToSNS extends Activity {
 		String wallAlbumID = null;
 		String response = null;
 		try {
-			response = mFacebook.request("me/albums");
-			Log.d("JSON", "response me/albums:" + response);
+			response = _facebook.request("me/albums");
+			Log.d(TAG, "response me/albums:\n" + response);
 		}
 		catch (MalformedURLException e) {
 			Log.e("MALFORMED URL",""+e.getMessage());
@@ -176,13 +189,12 @@ public class WishItemPostToSNS extends Activity {
 		//	e.printStackTrace();
 		}
 
-		String requestFlag;
+		String requestFlag = "";
 		Bundle params = new Bundle();
 		if (wallAlbumID != null) {
 			Log.d("JSON", "wall album exists");
 			params.putString("message", message);
 			params.putByteArray("source", photoData);
-			//asyncRunner.request(wallAlbumID + "/photos", params, "POST", new PostPhotoRequestListener(), null);
 			requestFlag = wallAlbumID + "/photos";
 		}
 		else { //there is no wall album for this user, meaning the user has never posted any
@@ -198,19 +210,69 @@ public class WishItemPostToSNS extends Activity {
 			//bundle.putString("method", "photos.upload");
 			params.putByteArray("picture", photoData);
 			//bundle.putString(Facebook.TOKEN, accessToken);
-	//		String response = mFacebook.request("me/feed",bundle,"POST");
 			requestFlag = "me/photos";
-			Log.d("me/photos",response);
 		}
 
-		try {
-			response = mFacebook.request(requestFlag, params, "POST");
+		//try {
+			_asyncRunner.request(requestFlag, params, "POST", new simpleRequestListener(), null);
+		//	if (response.equals("true")) {
+		//		//int duration = Toast.LENGTH_SHORT;
+		//		//Toast toast = Toast.makeText(_ctx, "Wish shared suceeded", Toast.LENGTH_SHORT);
+		//		//toast.show();
+		//	}
+		//	else {
+		//		//Toast toast = Toast.makeText(_ctx, "Wish shared failed", Toast.LENGTH_SHORT);
+		//		//toast.show();
+		//	}
+
+		//	Log.d(TAG, "response " + requestFlag + "\n" + response);
+		//}
+	//	catch (MalformedURLException e) {
+	//		Log.e("MALFORMED URL",""+e.getMessage());
+	//	}
+	//	catch (IOException e) {
+	//		Log.e("IOEX",""+e.getMessage());
+	//	}
+	}
+	
+	private class simpleRequestListener implements RequestListener {
+		/**
+		* Called when a request completes with the given response.
+		*
+		* Executed by a background thread: do not update the UI in this method.
+		*/
+		public void onComplete(String response, Object state) {
+			Log.d(TAG, "response "  + "\n" + response);
 		}
-		catch (MalformedURLException e) {
-			Log.e("MALFORMED URL",""+e.getMessage());
+		/**
+		* Called when a request has a network or request error.
+		*
+		* Executed by a background thread: do not update the UI in this method.
+		*/
+		public void onIOException(IOException e, Object state) {
 		}
-		catch (IOException e) {
-			Log.e("IOEX",""+e.getMessage());
+		/**
+		* Called when a request fails because the requested resource is
+		* invalid or does not exist.
+		*
+		* Executed by a background thread: do not update the UI in this method.
+		*/
+		public void onFileNotFoundException(FileNotFoundException e, Object state) {
+		}
+		/**
+		* Called if an invalid graph path is provided (which may result in a
+		* malformed URL).
+		*
+		* Executed by a background thread: do not update the UI in this method.
+		*/
+		public void onMalformedURLException(MalformedURLException e, Object state) {
+		}
+		/**
+		* Called when the server-side Facebook method fails.
+		*
+		* Executed by a background thread: do not update the UI in this method.
+		*/
+		public void onFacebookError(FacebookError e, Object state) {
 		}
 	}
 }
