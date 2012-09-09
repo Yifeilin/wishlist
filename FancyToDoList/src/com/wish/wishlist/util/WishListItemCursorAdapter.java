@@ -4,10 +4,11 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.ImageManager;
+//import com.wish.wishlist.model.WishItem;
+//import com.wish.wishlist.model.WishItemManager;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,10 +23,12 @@ import android.widget.TextView;
 import android.util.Log;
 
 public class WishListItemCursorAdapter extends SimpleCursorAdapter {
-	static final String LOG_TAG = "WishList";
+	static final String TAG = "WishList";
+//	final Context _ctx;
 	public WishListItemCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
+//		_ctx = context;
 		setViewBinder(new WishListItemViewBinder());
 	}
 	
@@ -45,6 +48,9 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			//int nIdIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID);
+			//long id = cursor.getLong(nIdIndex);
+			//WishItem item = WishItemManager.getInstance(_ctx).retrieveItembyId(id);
 
 			int nImageIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
 //			int nDateIndex = cursor
@@ -64,7 +70,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				// read in the picture string from db
 				// the string could be a resource id or a uri from content provider
 				String pic_str = cursor.getString(columnIndex);
-				
+				//String pic_str = item.getPicStr();
 				//check if pic_str is null, which user added this item without taking a pic.
 				if (pic_str == null){
 					//do nothing
@@ -82,7 +88,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 					//if it's a resID, the following decodeResource will not 
 					//throw exception (this need to be changed for performance)
 					int picResId = Integer.valueOf(pic_str, 16).intValue();
-					Log.d(LOG_TAG, pic_str);
+					Log.d(TAG, pic_str);
 					if (isSample) {
 						//bitmap = BitmapFactory.decodeResource(view.getContext()
 					//			.getResources(), picResId);
@@ -141,9 +147,19 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			
 			else if (columnIndex == nPriceIndex) {
 				TextView viewPrice = (TextView) view;
-				float price = cursor.getFloat(columnIndex);
+				// format the price
+			//	String priceStr = item.getPriceAsString();
+			//	if (priceStr != null) {
+			//		viewPrice.setText("$" + priceStr);
+			//		viewPrice.setVisibility(View.VISIBLE);
+			//	}
+			//	else {
+			//		viewPrice.setVisibility(View.GONE);
+			//	}
+
+				double price = cursor.getDouble(columnIndex);
 				//we use float.min_value to indicate price is not available
-				if (price != Float.MIN_VALUE) {
+				if (price != Double.MIN_VALUE) {
 					DecimalFormat Dec = new DecimalFormat("0.00");
 					String priceStr = (Dec.format(price));
 					priceStr = "$ " + priceStr;
@@ -158,7 +174,18 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			
 			else if (columnIndex == nStoreNameIndex){
 				TextView viewStore = (TextView) view;
-				String storeName = cursor.getString(columnIndex);	
+			//	String storeName = item.getStoreName();
+			//	if (!storeName.equals("")) {
+			//		_hasStoreName = true;
+			//		storeName = "At " + storeName;
+			//		viewStore.setText(storeName);
+			//		viewStore.setVisibility(View.VISIBLE);
+			//	}
+			//	else {
+			//		viewStore.setVisibility(View.GONE);
+			//	}
+
+				String storeName = cursor.getString(columnIndex);
 				if (!storeName.equals("")) {
 					_hasStoreName = true;
 					storeName = "At " + storeName;
@@ -173,6 +200,18 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 
 			else if (columnIndex == nAddIndex) {
 				TextView viewAddress = (TextView) view;
+			//	String address = item.getAddress();
+			//	if (!address.equals("unknown") && !address.equals("")) {
+			//		if (!_hasStoreName) {
+			//			address = "At " + address;
+			//		}
+			//		viewAddress.setText(address);
+			//		viewAddress.setVisibility(View.VISIBLE);
+			//	}
+			//	else {
+			//		viewAddress.setVisibility(View.GONE);
+			//	}
+
 				String Address = cursor.getString(columnIndex);
 				if (!Address.equals("unknown") && !Address.equals("")) {
 					if (!_hasStoreName) {
