@@ -41,6 +41,7 @@ public class WishItemPostToSNS extends Activity {
 	//	"publish_stream",
 	//	"read_stream",
 	//	"offline_access",
+	//	Facebook.FORCE_DIALOG_AUTH, 
 	};
 	// facebook vars
 	private Facebook mFacebook;
@@ -59,8 +60,6 @@ public class WishItemPostToSNS extends Activity {
 		Bundle extras = getIntent().getExtras();
 		_itemId = extras.getLong("itemId");
 		mFacebook = new Facebook(APP_ID);
-		//mFacebook.authorize(this, new String[] {"publish_stream"}, Facebook.FORCE_DIALOG_AUTH, new DialogListener() {
-		//mFacebook.authorize(this, new String[] {"publish_stream"}, new DialogListener() {
 		mFacebook.authorize(this, PERMS, new DialogListener() {
 			@Override
 			public void onComplete(Bundle values) {
@@ -98,14 +97,9 @@ public class WishItemPostToSNS extends Activity {
 					if (photoData == null) {
 						postTextWish(message);
 					}
-
 					else {
 						postTextAndPhotoWish(message, photoData);
 					}
-				//		String response = mFacebook.request("me/feed",bundle,"POST");
-
-					
-
 			}//end of run
 		}.start();
 	}
@@ -123,8 +117,11 @@ public class WishItemPostToSNS extends Activity {
 		String response = null;
 		Bundle params = new Bundle();
 		try {
-			params.putString("message", message);
-			response = mFacebook.request("me/feed", params, "POST");
+			//params.putString("message", message);
+			params.putString("method", "status.set");
+			params.putString("status", message);
+			//response = mFacebook.request("me/feed", params, "POST");
+			response = mFacebook.request(params);
 		}
 		catch (MalformedURLException e) {
 			Log.e("MALFORMED URL",""+e.getMessage());
