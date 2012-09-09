@@ -137,7 +137,7 @@ public class WishItemPostToSNS extends Activity {
 
 		//"me/photos" -  Not all uploaded images are displayed on my wall. Instead, there is something
 		//like x photos were added to the album xxx. and the post does not appear on friends' feed
-		//"me/feed" - This will make the post visible on friends feeds, but it requires the photo to be
+		//"status" - This will make the post visible on friends feeds, but it requires the photo to be
 		//available on a server with an URL link
 
 		//the workaround here is to add photos and related comments to user's "Wall photos album".
@@ -214,30 +214,4 @@ public class WishItemPostToSNS extends Activity {
 		}
 	}
 }
-//			new Thread() {
-//				public void run() {
-//	try {
-//		Bundle bundle = new Bundle();
-//		bundle.putString("message", "test update");
-////		bundle.putString(Facebook.TOKEN, accessToken);
-//		String response = mFacebook.request("me/feed",bundle,"POST");
-//		Log.d("UPDATE RESPONSE",""+response);
-//	}
-//	catch (MalformedURLException e) {
-//		Log.e("MALFORMED URL",""+e.getMessage());
-//	}
-//	catch (IOException e) {
-//		Log.e("IOEX",""+e.getMessage());
-//	}
 
-				//Bundle parameters = new Bundle();
-				//parameters.putString("method", "status.set");
-				//parameters.putString("status", wishItem.toString());
-				//try {
-				//	String response = mFacebook.request(parameters);
-				//	System.out.println(response);
-				//} catch (MalformedURLException e) {
-				//	e.printStackTrace();
-				//} catch (IOException e) {
-				//	e.printStackTrace();
-				//}
