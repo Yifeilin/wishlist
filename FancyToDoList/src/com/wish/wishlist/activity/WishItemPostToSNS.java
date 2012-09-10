@@ -213,18 +213,10 @@ public class WishItemPostToSNS extends Activity {
 		public void onComplete(String response, Object state) {
 			Log.d(TAG, "response "  + "\n" + response);
 			if (response.equals("true")) {
-				((Activity)_ctx).runOnUiThread(new Runnable() {
-					public void run() {
-						Toast.makeText(_ctx, "Success", Toast.LENGTH_SHORT).show();
-					}
-				});
+				showSucessToast();
 			}
 			else {
-				((Activity)_ctx).runOnUiThread(new Runnable() {
-					public void run() {
-						Toast.makeText(_ctx, "Fail", Toast.LENGTH_SHORT).show();
-					}
-				});
+				showFailToast();
 			}
 		}
 		/**
@@ -233,6 +225,7 @@ public class WishItemPostToSNS extends Activity {
 		* Executed by a background thread: do not update the UI in this method.
 		*/
 		public void onIOException(IOException e, Object state) {
+			showFailToast();
 		}
 		/**
 		* Called when a request fails because the requested resource is
@@ -241,6 +234,7 @@ public class WishItemPostToSNS extends Activity {
 		* Executed by a background thread: do not update the UI in this method.
 		*/
 		public void onFileNotFoundException(FileNotFoundException e, Object state) {
+			showFailToast();
 		}
 		/**
 		* Called if an invalid graph path is provided (which may result in a
@@ -249,6 +243,7 @@ public class WishItemPostToSNS extends Activity {
 		* Executed by a background thread: do not update the UI in this method.
 		*/
 		public void onMalformedURLException(MalformedURLException e, Object state) {
+			showFailToast();
 		}
 		/**
 		* Called when the server-side Facebook method fails.
@@ -256,6 +251,23 @@ public class WishItemPostToSNS extends Activity {
 		* Executed by a background thread: do not update the UI in this method.
 		*/
 		public void onFacebookError(FacebookError e, Object state) {
+			showFailToast();
+		}
+		
+		private void showSucessToast() {
+			((Activity)_ctx).runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(_ctx, "Success", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+
+		private void showFailToast() {
+			((Activity)_ctx).runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(_ctx, "Fail", Toast.LENGTH_SHORT).show();
+				}
+			});
 		}
 	}
 }
