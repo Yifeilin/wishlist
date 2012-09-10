@@ -243,6 +243,20 @@ public class WishItemPostToSNS extends Activity {
 		*/
 		public void onComplete(String response, Object state) {
 			Log.d(TAG, "response "  + "\n" + response);
+			if (response.equals("true")) {
+				((Activity)_ctx).runOnUiThread(new Runnable() {
+					public void run() {
+						Toast.makeText(_ctx, "Success", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+			else {
+				((Activity)_ctx).runOnUiThread(new Runnable() {
+					public void run() {
+						Toast.makeText(_ctx, "Fail", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
 		}
 		/**
 		* Called when a request has a network or request error.
