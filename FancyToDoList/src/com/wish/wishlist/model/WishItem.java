@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
@@ -19,6 +20,7 @@ import com.wish.wishlist.util.ImageManager;
 
 
 public class WishItem {
+	private final String TAG = "WishItem";
 	private final Context _ctx;
 	private long _id = -1;
 	private long _storeId;
@@ -200,6 +202,7 @@ public class WishItem {
 			return null;
 		}
 		
+		//need a db migration to remove this stupid check
 		else if (_fullsizePicPath.equals(" ")) {
 			return null;
 		}
@@ -277,7 +280,7 @@ public class WishItem {
 		int height = 250; 
 		Bitmap bitmap = null;
 		byte[] data = null;
-		if (_fullsizePicPath!= null) {
+		if (getFullsizePicPath() != null) { 
 			bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(_fullsizePicPath, width, height);
 			ByteArrayOutputStream photoStream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
