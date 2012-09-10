@@ -72,17 +72,17 @@ public class WishItemPostToSNS extends Activity {
 
 			@Override
 			public void onFacebookError(FacebookError e) {
-			     Log.d("FACEBOOK ERROR","FB ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
+				Log.d("FACEBOOK ERROR","FB ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
 			}
 
 			@Override
 			public void onError(DialogError e) {
-			     Log.e("ERROR","AUTH ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
+				Log.e("ERROR","AUTH ERROR. MSG: "+e.getMessage()+", CAUSE: "+e.getCause());
 			}
 
 			@Override
 			public void onCancel() {
-			     Log.d("CANCELLED","AUTH CANCELLED");
+				Log.d("CANCELLED","AUTH CANCELLED");
 			}
 		});
 		//_asyncRunner = new AsyncFacebookRunner(_facebook);
@@ -125,22 +125,7 @@ public class WishItemPostToSNS extends Activity {
 			params.putString("status", message);
 			//response = _facebook.request("me/feed", params, "POST");
 			_asyncRunner.request(params, new simpleRequestListener());
-		//	if (response.equals("true")) {
-		//		//int duration = Toast.LENGTH_SHORT;
-		//		//Toast toast = Toast.makeText(_ctx, "Wish shared suceeded", Toast.LENGTH_SHORT);
-		//		//toast.show();
-		//	}
-		//	else {
-		//		//Toast toast = Toast.makeText(_ctx, "Wish shared failed", Toast.LENGTH_SHORT);
-		//		//toast.show();
-		//	}
 		//	Log.d(TAG, "response update status:\n" + response);
-		//}
-		//catch (MalformedURLException e) {
-		//	Log.e("MALFORMED URL",""+e.getMessage());
-		//}
-		//catch (IOException e) {
-		//	Log.e("IOEX",""+e.getMessage());
 		//}
 	}
 
@@ -215,24 +200,8 @@ public class WishItemPostToSNS extends Activity {
 
 		//try {
 			_asyncRunner.request(requestFlag, params, "POST", new simpleRequestListener(), null);
-		//	if (response.equals("true")) {
-		//		//int duration = Toast.LENGTH_SHORT;
-		//		//Toast toast = Toast.makeText(_ctx, "Wish shared suceeded", Toast.LENGTH_SHORT);
-		//		//toast.show();
-		//	}
-		//	else {
-		//		//Toast toast = Toast.makeText(_ctx, "Wish shared failed", Toast.LENGTH_SHORT);
-		//		//toast.show();
-		//	}
-
 		//	Log.d(TAG, "response " + requestFlag + "\n" + response);
 		//}
-	//	catch (MalformedURLException e) {
-	//		Log.e("MALFORMED URL",""+e.getMessage());
-	//	}
-	//	catch (IOException e) {
-	//		Log.e("IOEX",""+e.getMessage());
-	//	}
 	}
 	
 	private class simpleRequestListener implements RequestListener {
