@@ -705,11 +705,12 @@ public class EditItemInfo extends Activity {
 			return addStr;
 		}
 
-//		@Override
-//		protected void onPreExecute() {
-//			super.onPreExecute();
-//			//Toast.makeText(EditItemInfo.this, "preExecute", Toast.LENGTH_LONG);
-//		}
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			//Toast.makeText(EditItemInfo.this, "preExecute", Toast.LENGTH_LONG);
+			myLocation.setText("Loading location...");
+		}
 
 		@Override
 		protected void onPostExecute(String add) {
