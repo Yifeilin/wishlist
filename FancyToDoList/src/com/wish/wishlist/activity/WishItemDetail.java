@@ -69,6 +69,7 @@ public class WishItemDetail extends Activity {
 //	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
+	private ImageButton shareImageButton;
 	
 	private long mItem_id = -1;
 	private int mPosition;
@@ -118,6 +119,14 @@ public class WishItemDetail extends Activity {
  			@Override
 			public void onClick(View view) {
 				editItem();
+ 			}
+		});
+
+		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
+		shareImageButton.setOnClickListener(new OnClickListener() {
+ 			@Override
+			public void onClick(View view) {
+				shareItem();
  			}
 		});
 		
@@ -384,6 +393,11 @@ public class WishItemDetail extends Activity {
 		startActivityForResult(i, EDIT_ITEM);
 	}
 	
+	private void shareItem(){
+		ShareHelper share = new ShareHelper(this, mItem_id);
+		share.share();
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case EDIT_ITEM: {
@@ -514,8 +528,7 @@ public class WishItemDetail extends Activity {
 			return true;
 		}
 		case (R.id.menu_item_detail_share): {
-			ShareHelper share = new ShareHelper(this, mItem_id);
-			share.share();
+			shareItem();
 			return true;
 		}
 		case (R.id.menu_item_detail_map): {
