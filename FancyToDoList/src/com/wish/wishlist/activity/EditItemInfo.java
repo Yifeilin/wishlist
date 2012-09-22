@@ -353,6 +353,9 @@ public class EditItemInfo extends Activity {
 			itemDesc = myNote.getText().toString().trim();
 			itemStoreName = myStore.getText().toString().trim();
 			addStr = myLocation.getText().toString().trim();
+			if (addStr.equals("Loading location...")) {
+				addStr = "unknown";
+			}
 			itemPrice = Double.valueOf(myPrice.getText().toString().trim());
 		}
 
