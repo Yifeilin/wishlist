@@ -183,7 +183,7 @@ public class PositionManager {
 				//sb.append(address.getPostalCode()).append("\n");
 				//sb.append(address.getCountryName());
 			}
-			addressString = sb.toString();
+			addressString = sb.toString().trim();
 			return addressString;
 		} catch (IOException e) {
 			addressString = "unknown";
