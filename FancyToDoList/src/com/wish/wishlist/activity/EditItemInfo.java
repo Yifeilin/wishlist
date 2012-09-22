@@ -36,6 +36,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.os.AsyncTask;
+
 //import android.content.pm.ActivityInfo;
 
 /*** EditItemInfo.java is responsible for reading in the info. of a newly added item 
@@ -81,9 +83,11 @@ public class EditItemInfo extends Activity {
 	private long mLocation_id = -1;
 	private long mStore_id = -1;
 	private boolean mEditNew = true;
+	private boolean _isGettingLocation = false;
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
+	static final private String TAG = "EditItemInfo";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +151,7 @@ public class EditItemInfo extends Activity {
 		//by editing an existing item, so fill the empty box
 		mItem_id = i.getLongExtra("item_id", -1);
 		
-		if(mItem_id != -1) {
+		if (mItem_id != -1) {
 			mEditNew = false;
 			
 			mapImageButton.setVisibility(View.GONE);
@@ -190,6 +194,10 @@ public class EditItemInfo extends Activity {
 
 		}
 		
+		else { //we are editing a new wish, get the location in background
+			new GetLocationTask().execute("");
+		}
+		
 
 		backImageButton.setOnClickListener(new OnClickListener() {
  			@Override
@@ -210,28 +218,10 @@ public class EditItemInfo extends Activity {
  			@Override
 			public void onClick(View view) {
  				//get the location
- 				Location location = pManager.getCurrentLocation();
- 				
- 				if (location == null){
- 					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
- 					myLocation.setText("unknown");
- 					
- 					//need better value to indicate it's not valid lat and lng
- 					lat = Double.MIN_VALUE;
- 					lng = Double.MIN_VALUE;
- 				}
- 				else{
- 					//get current latitude and longitude
- 					lat = location.getLatitude();
- 					lng = location.getLongitude();
- 					
- 					//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
- 					addStr = pManager.getCuttentAddStr();
- 	 				myLocation.setText(addStr);
- 				}
-			
+				if (!_isGettingLocation) {
+					new GetLocationTask().execute("");
+				}
  			}
- 
 		});
 
 		cameraImageButton.setOnClickListener(new OnClickListener() {
@@ -689,4 +679,47 @@ public class EditItemInfo extends Activity {
 //		}
 	}
 
+	private class GetLocationTask extends AsyncTask<String, Void, String> {//<param, progress, result>
+		@Override
+		protected String doInBackground(String... arg) {
+			_isGettingLocation = true;
+			//get the location
+			Location location = pManager.getCurrentLocation();
+			if (location == null){
+				addStr = "unknown";
+				//need better value to indicate it's not valid lat and lng
+				lat = Double.MIN_VALUE;
+				lng = Double.MIN_VALUE;
+			}
+			else {
+				//get current latitude and longitude
+				lat = location.getLatitude();
+				lng = location.getLongitude();
+				
+				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
+				addStr = pManager.getCuttentAddStr();
+			}
+			// Escape early if cancel() is called
+			//if (isCancelled()) break;
+			Log.d(TAG, "finish doInBackground");
+			return addStr;
+		}
+
+//		@Override
+//		protected void onPreExecute() {
+//			super.onPreExecute();
+//			//Toast.makeText(EditItemInfo.this, "preExecute", Toast.LENGTH_LONG);
+//		}
+
+		@Override
+		protected void onPostExecute(String add) {
+			_isGettingLocation = false;
+			Log.d(TAG, "onPostExe");
+			if (addStr.equals("unknown")) {
+				Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+			}
+			myLocation.setText(addStr);
+		}
+	}
 }
+
