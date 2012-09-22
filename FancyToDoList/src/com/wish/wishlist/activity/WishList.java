@@ -629,12 +629,12 @@ public class WishList extends Activity {
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
-		case (R.id.POST_TODO): {
-			Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
-			snsIntent.putExtra("wishItem", "test");
-			startActivityForResult(snsIntent, POST_ITEM);
-			return true;
-		}
+	//	case (R.id.POST_TODO): {
+	//		Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
+	//		snsIntent.putExtra("wishItem", "test");
+	//		startActivityForResult(snsIntent, POST_ITEM);
+	//		return true;
+	//	}
 		case (R.id.MARK_TODO): {
 //			String address = myItemDBAdapter.getItemAddress(item_id);
 //			if (address.equals("unknown")||address.equals("")){
