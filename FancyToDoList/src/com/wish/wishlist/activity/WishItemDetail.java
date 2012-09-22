@@ -11,6 +11,7 @@ import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
+import com.wish.wishlist.util.social.ShareHelper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -510,6 +511,11 @@ public class WishItemDetail extends Activity {
 		switch (item.getItemId()) {
 		case (R.id.menu_item_detail_edit): {
 			editItem();
+			return true;
+		}
+		case (R.id.menu_item_detail_share): {
+			ShareHelper share = new ShareHelper(this, mItem_id);
+			share.share();
 			return true;
 		}
 		case (R.id.menu_item_detail_map): {
