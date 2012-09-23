@@ -3,6 +3,7 @@ package com.wish.wishlist.db;
 import com.wish.wishlist.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -27,7 +28,35 @@ public class DBAdapter {
 	public static final String DB_NAME = "WishList";
 
 	//Database version
-	public static final int DB_VERSION = 1;
+	public static final int DB_VERSION = 2;
+	private static final String TAG="DBAdapter";
+
+	public static final Patch[] PATCHES = new Patch[] {
+		new Patch() {//db version 1 already done in onCreate
+			public void apply(SQLiteDatabase db) {
+				//db.execSQL("create table ...");
+			}
+			public void revert(SQLiteDatabase db) {
+				//db.execSQL("drop table ...");
+			}
+		}
+		, new Patch() {//db version 2
+			public void apply(SQLiteDatabase db) {
+				//delete sample items
+				//String sql = "DELETE FROM Item " + "WHERE _id = '%d' ");
+				String sql = "DELETE FROM "
+				+ ItemDBAdapter.DB_TABLE
+				+ " WHERE "
+				+ ItemDBAdapter.KEY_PHOTO_URL
+				+ " LIKE '%sample'";
+				
+				Log.d(TAG, "sql:" + sql);
+				db.execSQL(sql);
+				//add user table
+			}
+			public void revert(SQLiteDatabase db) {  }
+		}
+	};
 	
 	//Query string to create table "Item"
 	private static final String CREATE_TABLE_ITEM = "create table "
@@ -115,7 +144,9 @@ public class DBAdapter {
 	// not sure why DatabaseHelper needs to be static
 	private class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {
-			super(context, DB_NAME, null, DB_VERSION);
+			//super(context, DB_NAME, null, DB_VERSION);
+			super(context, DB_NAME, null, PATCHES.length); //
+			Log.d(TAG, "PATCHES.length" + String.valueOf(PATCHES.length));
 		}
 
 		/***onCreate is called when the database is first created
@@ -125,7 +156,6 @@ public class DBAdapter {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			// create table "item" and insert into the table
-			// 4 default items
 			db.execSQL(CREATE_TABLE_ITEM);
 //			ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
 //			mItemDBAdapter.open(db);
@@ -260,8 +290,23 @@ public class DBAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// Adding any table mods to this guy here
-			
+			for (int i=oldVersion; i<newVersion; i++) {
+				PATCHES[i].apply(db);
+			}
 		}
+
+		//API LEVEL 11 starts to support onDowngrade
+	//	@Override
+	//	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	//		for (int i=oldVersion; i>newVersion; i++) {
+	//			PATCHES[i-1].revert(db);
+	//		}
+	//	}
+	}
+
+	private static class Patch {
+		public void apply(SQLiteDatabase db) {}
+		public void revert(SQLiteDatabase db) {}
 	}
 
 	/**
