@@ -72,35 +72,18 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				String pic_str = cursor.getString(columnIndex);
 				//String pic_str = item.getPicStr();
 				//check if pic_str is null, which user added this item without taking a pic.
-				if (pic_str == null){
+				if (pic_str == null) {
 					//do nothing
 					return true;
 				}
 				
-				boolean isSample = false;
-				if (pic_str.endsWith("sample")) {
-					pic_str = pic_str.substring(0, pic_str.length() - 6);
-					isSample = true;
-				}
-
 				// check if pic_str is a resId or a uri
 				try {
 					//if it's a resID, the following decodeResource will not 
 					//throw exception (this need to be changed for performance)
 					int picResId = Integer.valueOf(pic_str, 16).intValue();
 					Log.d(TAG, pic_str);
-					if (isSample) {
-						//bitmap = BitmapFactory.decodeResource(view.getContext()
-					//			.getResources(), picResId);
-						int width =128;
-						int height=128;
-						bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(view.getContext().getResources(), picResId , width, height);
-						bitmap = android.media.ThumbnailUtils.extractThumbnail(bitmap, width, height);
-					}
-					else {
-						bitmap = BitmapFactory.decodeResource(view.getContext()
-								.getResources(), picResId);
-					}
+					bitmap = BitmapFactory.decodeResource(view.getContext().getResources(), picResId);
 				} catch (NumberFormatException e) {
 					// Not a resId, so it must be a content provider uri
 					// thus set image from uri (not a photo taken by cameara, but
