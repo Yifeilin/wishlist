@@ -326,6 +326,7 @@ public class DBAdapter {
 	 */
 	public void close() {
 		this.DBHelper.close();
+		this.db.close();
 	}
 
 }
