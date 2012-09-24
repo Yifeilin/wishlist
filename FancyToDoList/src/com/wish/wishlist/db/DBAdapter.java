@@ -43,16 +43,17 @@ public class DBAdapter {
 		, new Patch() {//db version 2
 			public void apply(SQLiteDatabase db) {
 				//delete sample items
-				//String sql = "DELETE FROM Item " + "WHERE _id = '%d' ");
 				String sql = "DELETE FROM "
 				+ ItemDBAdapter.DB_TABLE
 				+ " WHERE "
 				+ ItemDBAdapter.KEY_PHOTO_URL
 				+ " LIKE '%sample'";
 				
-				Log.d(TAG, "sql:" + sql);
+				//Log.d(TAG, "sql:" + sql);
 				db.execSQL(sql);
+
 				//add user table
+				db.execSQL(CREATE_TABLE_USER);
 			}
 			public void revert(SQLiteDatabase db) {  }
 		}
@@ -118,12 +119,22 @@ public class DBAdapter {
 			+ LocationDBAdapter.KEY_COUNTRY + " TEXT,"
 			+ LocationDBAdapter.KEY_POSTCODE + " TEXT" + ");";
 
+	//Query string to create table "user"
+	private static final String CREATE_TABLE_USER = "create table "
+			+ UserDBAdapter.DB_TABLE 
+			+ " (" 
+			+ UserDBAdapter.KEY_ID			+ " integer primary key autoincrement, " 
+			+ UserDBAdapter.USER_ID	+ " TEXT, "
+			+ UserDBAdapter.USER_KEY	+ " TEXT, "
+			+ UserDBAdapter.USER_DISPLAY_NAME	+ " TEXT, " 
+			+ UserDBAdapter.USER_EMAIL + " TEXT" 
+			+ ");";
+
 	private static Context context;
 	private DatabaseHelper DBHelper;
 	private SQLiteDatabase db;
 
-	/**
-	 * Constructor
+	/** * Constructor
 	 * 
 	 * @param contenxt
 	 */
@@ -159,10 +170,12 @@ public class DBAdapter {
 			db.execSQL(CREATE_TABLE_ITEM);
 			// create table "itemCategory"
 			db.execSQL(CREATE_TABLE_ITEMCATEGORY);
-			//create table "store" and insert 4 default stores
+			//create table "store"
 			db.execSQL(CREATE_TABLE_STORE);
-			//create table "location" and insert 4 default locations
+			//create table "location"
 			db.execSQL(CREATE_TABLE_LOCATION);
+			//create table "user"
+			db.execSQL(CREATE_TABLE_USER);
 		}
 
 		/***
