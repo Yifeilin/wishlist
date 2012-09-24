@@ -35,11 +35,14 @@ public class ItemDBAdapter {
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
+	private static final String TAG="ItemDBAdapter";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		DatabaseHelper(Context context) {
 			super(context, DBAdapter.DB_NAME, null, DBAdapter.DB_VERSION);
+			Log.d(TAG, "DBAdapter.DB_VERSION" + String.valueOf(DBAdapter.DB_VERSION));
+			//super(context, DBAdapter.DB_NAME, null, 2);
 		}
 
 		@Override

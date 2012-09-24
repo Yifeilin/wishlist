@@ -2,6 +2,7 @@ package com.wish.wishlist.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,11 +32,13 @@ public class LocationDBAdapter {
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
+	private static final String TAG="LocationDBAdapter";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		DatabaseHelper(Context context) {
 			super(context, DBAdapter.DB_NAME, null, DBAdapter.DB_VERSION);
+			Log.d(TAG, "DBAdapter.DB_VERSION" + String.valueOf(DBAdapter.DB_VERSION));
 		}
 
 		@Override
