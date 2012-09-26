@@ -276,8 +276,8 @@ public class WishItem {
 	}
 	
 	public byte[] getPhotoData() {
-		int width = 250;  
-		int height = 250; 
+		int width = 1024;  
+		int height = 1024; 
 		Bitmap bitmap = null;
 		byte[] data = null;
 		if (getFullsizePicPath() != null) { 
