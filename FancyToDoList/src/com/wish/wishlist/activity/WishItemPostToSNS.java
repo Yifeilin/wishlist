@@ -216,6 +216,7 @@ public class WishItemPostToSNS extends Activity {
 		public void onComplete(String response, Object state) {
 			super.onComplete(response, state);
 			if (response.equals("true")) {
+				Log.d(TAG, "response" + response);
 				showSucessToast();
 			}
 			else {
@@ -227,6 +228,7 @@ public class WishItemPostToSNS extends Activity {
 	private class postTextAndPhotoRequestListener extends simpleRequestListener {
 		public void onComplete(String response, Object state) {
 			super.onComplete(response, state);
+			Log.d(TAG, "response" + response);
 			showSucessToast();
 		}
 	}
