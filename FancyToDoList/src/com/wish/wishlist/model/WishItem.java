@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.content.ContentValues;
 import android.util.Log;
+import android.database.Cursor;
 
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
@@ -216,7 +217,43 @@ public class WishItem {
 		ContentValues values = new ContentValues(2);
 		values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
 		values.put(MediaStore.Images.Media.DATA, getFullsizePicPath());
+		Log.d("fullsizepicpath", getFullsizePicPath());
 		Uri uri = _ctx.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+		if (uri != null) {
+			return uri;
+		}
+
+		//we have already inserted the image to the image content provider before, so retrive the uri
+		//the uri is constructed by MediaStore.Images.Media.EXTERNAL_CONTENT_URI + rowId
+		//the image uri should be saved in the db in future so we don't need to retrive it here
+		String[] projection =
+		{
+			MediaStore.Images.ImageColumns._ID,
+//			MediaStore.Images.Media.DATA 
+		};
+		String selectionClause = MediaStore.Images.Media.DATA + " = ?";
+		String[] selectionArgs = {getFullsizePicPath()};
+		Cursor c = _ctx.getContentResolver().query (
+			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+			projection,
+			selectionClause,
+			selectionArgs,
+			null
+		);
+
+		if (c != null) {
+			//Log.d("count", String.valueOf(c.getCount()));
+			c.moveToFirst();
+			String id = c.getString(0);
+			Log.d("id", id);
+			//construct the uri of the photo
+			uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+		}
+		else {
+			Log.d("cursor", "cursor is null");
+		}
+
 		return uri;
 		//return Uri.fromFile(new File(getFullsizePicPath()));
 	}
