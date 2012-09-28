@@ -95,7 +95,6 @@ public class EditItemInfo extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.add_item);
-//		Log.d(WishList.LOG_TAG, "");
 		
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);
@@ -198,7 +197,6 @@ public class EditItemInfo extends Activity {
 			new GetLocationTask().execute("");
 		}
 		
-
 		backImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
@@ -211,7 +209,6 @@ public class EditItemInfo extends Activity {
 			public void onClick(View view) {
 				saveWishItem();
  			}
- 
 		});
 		
 		mapImageButton.setOnClickListener(new OnClickListener() {
@@ -230,7 +227,6 @@ public class EditItemInfo extends Activity {
  				dispatchTakePictureIntent();
  				//getThumbailPicture();
  			}
- 
 		});
 
 //		galleryImageButton.setOnClickListener(new OnClickListener() {
@@ -238,7 +234,6 @@ public class EditItemInfo extends Activity {
 //			public void onClick(View view) {
 // 				//open gallery;
 // 			}
-// 
 //		});
 
 		//set the keyListener for the Item Name EditText
