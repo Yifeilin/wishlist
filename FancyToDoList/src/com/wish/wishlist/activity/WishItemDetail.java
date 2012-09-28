@@ -204,7 +204,7 @@ public class WishItemDetail extends Activity {
 		int height = display.getHeight();  // deprecated
 		if (fullsize_picture_str != null) {
 //			Log.d("wishlist", "fullsize_picture_str == " + fullsize_picture_str);
-			Bitmap bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(fullsize_picture_str, width, height);
+			Bitmap bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(fullsize_picture_str, width, height, true);
 			//Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
 			if (bitmap == null) {
 //				Log.d("wishlist", "bitmap == null");
@@ -234,7 +234,7 @@ public class WishItemDetail extends Activity {
 					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
 					int picResId = Integer.valueOf(picture_str, 16).intValue();
 					Log.d("wishlist", "width is " + String.valueOf(width));
-					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height);
+					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height, true);
 					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
 					//		.getResources(), picResId);
 					// it is resource id.

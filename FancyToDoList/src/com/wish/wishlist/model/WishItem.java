@@ -318,7 +318,7 @@ public class WishItem {
 		Bitmap bitmap = null;
 		byte[] data = null;
 		if (getFullsizePicPath() != null) { 
-			bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(_fullsizePicPath, width, height);
+			bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(_fullsizePicPath, width, height, true);
 			ByteArrayOutputStream photoStream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
 			data = photoStream.toByteArray();
