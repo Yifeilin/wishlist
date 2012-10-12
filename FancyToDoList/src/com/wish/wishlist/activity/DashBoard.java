@@ -4,13 +4,20 @@ import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +33,7 @@ public class DashBoard extends Activity {
 	private ImageButton prefImageButton;
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
+	private static final String VERSION_KEY = "version_number";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +62,23 @@ public class DashBoard extends Activity {
 			public void onClick(View view) {
  				//navigateBack();
  			}
-		});	
+		});
+
+		//show the what's new dialog if necessary
+		SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+		int currentVersionNumber = 0;
+		int savedVersionNumber = sharedPref.getInt(VERSION_KEY, 0);
+		try {
+			PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+			currentVersionNumber = pi.versionCode;
+		} catch (Exception e) {}
+
+		if (currentVersionNumber > savedVersionNumber) {
+			showWhatsNewDialog();
+			Editor editor = sharedPref.edit();
+			editor.putInt(VERSION_KEY, currentVersionNumber);
+			editor.commit();
+		}
 	}
 	
 	/**
@@ -164,8 +188,7 @@ public class DashBoard extends Activity {
 	    if (tv != null) tv.setText (getTitle ());
 	} 
 	
-	private void dispatchTakePictureIntent() {	
-
+	private void dispatchTakePictureIntent() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		File f = null;
 		try {
@@ -180,6 +203,35 @@ public class DashBoard extends Activity {
 			return;
 		}
 		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+	}
+
+	 private void showWhatsNewDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("What's new");
+		builder.setMessage("Version 1.0.4\n" + 
+					"1. Social network support\n" +
+					"   -Share wishes to friendes via various social network including facebook, google+, twitter and more.\n" + 
+					"   -Send wishes through e-mail or to other applications such as Evernote.\n\n" + 
+					"2. Automatically detect and record location when a new wish is added.").setCancelable(
+			false).setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+					}
+				});
+		builder.create().show();
+
+	//	LayoutInflater inflater = LayoutInflater.from(this);
+	//	View view = inflater.inflate(R.layout.dialog_whatsnew, null);
+	//	Builder builder = new AlertDialog.Builder(this);
+	//	builder.setView(view).setTitle("What's New")
+	//	.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	//		@Override
+	//		public void onClick(DialogInterface dialog, int which) {
+	//		dialog.dismiss();
+	//		}
+	//	});
+	//	builder.create().show();
 	}
 
 	@Override
