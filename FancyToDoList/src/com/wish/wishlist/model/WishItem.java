@@ -217,7 +217,9 @@ public class WishItem {
 		ContentValues values = new ContentValues(2);
 		values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
 		values.put(MediaStore.Images.Media.DATA, getFullsizePicPath());
-		Log.d("fullsizepicpath", getFullsizePicPath());
+		if (getFullsizePicPath() != null) {
+			Log.d("fullsizepicpath", getFullsizePicPath());
+		}
 		Uri uri = _ctx.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
 		if (uri != null) {
