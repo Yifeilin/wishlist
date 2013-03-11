@@ -38,6 +38,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.database.Cursor;
 
 //import android.content.pm.ActivityInfo;
 
@@ -88,6 +90,8 @@ public class EditItemInfo extends Activity {
 	
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
+	private static final int SELECT_PICTURE = 2;
+	private String _selectedImagePath;
 	static final private String TAG = "EditItemInfo";
 
 	@Override
@@ -233,6 +237,10 @@ public class EditItemInfo extends Activity {
 		    	@Override
 			public void onClick(View view) {
  				//open gallery;
+				Intent intent = new Intent();
+				intent.setType("image/*");
+				intent.setAction(Intent.ACTION_GET_CONTENT);
+				startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
  			}
 		});
 
@@ -431,6 +439,16 @@ public class EditItemInfo extends Activity {
 //				}
 				break;
 			} 
+			case SELECT_PICTURE: {
+				if (resultCode == RESULT_OK) {
+					Uri selectedImageUri = data.getData();
+					_selectedImagePath = getPath(selectedImageUri);
+					Log.d(WishList.LOG_TAG, "Image Path : " + _selectedImagePath);
+					//System.out.println("Image Path : " + _selectedImagePath);
+					//img.setImageURI(selectedImageUri);
+					imageItem.setImageURI(selectedImageUri);
+				}
+			}
 		}//switch
 	}
 	
@@ -490,7 +508,6 @@ public class EditItemInfo extends Activity {
 //	}
 
 	private void handleBigCameraPhoto() {
-
 		if (_fullsizePhotoPath != null) {
 //			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == " + _fullsizePhotoPath);
 			setPic();
@@ -500,6 +517,14 @@ public class EditItemInfo extends Activity {
 //		else {
 //			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == null");
 //		}
+	}
+
+	public String getPath(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
 	
 	private boolean navigateBack(){
