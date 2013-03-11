@@ -3,6 +3,7 @@ package com.wish.wishlist.activity;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -442,11 +443,10 @@ public class EditItemInfo extends Activity {
 			case SELECT_PICTURE: {
 				if (resultCode == RESULT_OK) {
 					Uri selectedImageUri = data.getData();
-					_selectedImagePath = getPath(selectedImageUri);
-					Log.d(WishList.LOG_TAG, "Image Path : " + _selectedImagePath);
-					//System.out.println("Image Path : " + _selectedImagePath);
-					//img.setImageURI(selectedImageUri);
-					imageItem.setImageURI(selectedImageUri);
+					//Log.d(WishList.LOG_TAG, "Image URL : " + selectedImageUri.toString());
+					_fullsizePhotoPath = getPath(selectedImageUri);
+					//Log.d(WishList.LOG_TAG, "Image Path : " + _fullsizePhotoPath);
+					setPic();
 				}
 			}
 		}//switch
@@ -520,11 +520,26 @@ public class EditItemInfo extends Activity {
 	}
 
 	public String getPath(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
-		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		final String[] columns = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
+		final Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
 		cursor.moveToFirst();
-		return cursor.getString(column_index);
+		int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+
+		if (columnIndex != -1) {
+			//regular processing for gallery files, works for android 2.x
+			return cursor.getString(columnIndex);
+		}
+		else {
+			// this is not gallery provider, the pic is from picasa ( android 3.x and 4.x) 
+			// this is a workaround. this api is fucked up!
+			columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+			if (columnIndex != -1) {
+				//final InputStream is = getContentResolver().openInputStream(uri);
+				//what do I do here?
+			}
+			return null;
+			
+		 }
 	}
 	
 	private boolean navigateBack(){
@@ -590,11 +605,11 @@ public class EditItemInfo extends Activity {
 		//this will cut the pic to be exact width*height
 		_thumbnail = android.media.ThumbnailUtils.extractThumbnail(_thumbnail, width, height);
 		if (_thumbnail == null) {
-//			Log.d(WishList.LOG_TAG, "_thumbnail null");
+			Log.d(WishList.LOG_TAG, "_thumbnail null");
 			return;
 		}
 		else {
-//			Log.d(WishList.LOG_TAG, "_thumbnail is not null");
+			Log.d(WishList.LOG_TAG, "_thumbnail is not null");
 			imageItem.setImageBitmap(_thumbnail);
 		}
 		
