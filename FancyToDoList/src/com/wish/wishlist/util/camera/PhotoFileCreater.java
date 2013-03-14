@@ -36,17 +36,17 @@ public class PhotoFileCreater {
 		}
 	}
 	
-	private File createImageFile() throws IOException {
+	private File createImageFile(boolean thumnail) throws IOException {
 		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-		File albumF = getAlbumDir();
+		File albumF = getAlbumDir(thumnail);
 		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
 		return imageF;
 	}
 
-	public File setUpPhotoFile() throws IOException {
-		File f = createImageFile();
+	public File setUpPhotoFile(boolean thumnail) throws IOException {
+		File f = createImageFile(thumnail);
 		_fullsizePhotoPath = f.getAbsolutePath();
 		Log.d("wishlist", _fullsizePhotoPath);
 		return f;
@@ -56,15 +56,20 @@ public class PhotoFileCreater {
 		return _fullsizePhotoPath; 
 	}
 	
-	private String getAlbumName() {
+	private String getAlbumName(boolean thumnail) {
 		//return getString(R.string.album_name);
-		return "WishListPhoto";
+		if (thumnail) {
+			return "WishListThumnail";
+		}
+		else {
+			return "WishListPhoto";
+		}
 	}
 	
-	private File getAlbumDir() {
+	private File getAlbumDir(boolean thumnail) {
 		File storageDir = null;
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
+			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName(thumnail));
 			if (storageDir != null) {
 				if (! storageDir.mkdirs()) {
 					if (! storageDir.exists()){

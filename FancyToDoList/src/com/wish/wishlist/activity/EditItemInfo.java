@@ -457,7 +457,7 @@ public class EditItemInfo extends Activity {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		File f = null;
 		try {
-			f = PhotoFileCreater.getInstance().setUpPhotoFile();
+			f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
 			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
 			//takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
@@ -613,16 +613,18 @@ public class EditItemInfo extends Activity {
 			imageItem.setImageBitmap(_thumbnail);
 		}
 		
-		ContentValues values = new ContentValues();
-		values.put(Media.MIME_TYPE, "image/jpeg");
-		Uri uri = getContentResolver().insert(
-				Media.EXTERNAL_CONTENT_URI, values);
-
 		//compress the _thumbnail to JPEG and write the JEPG to 
-		//the content provider. Save the uri of the JEPG as a string,
+		//the file. Save the uri of the JEPG as a string,
 		//which will be inserted in the column "picture_uri" of
 		//the Item table
 		try {
+			File f = null;
+			f = PhotoFileCreater.getInstance().setUpPhotoFile(true);
+			String thumnailPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
+			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			Log.d(WishList.LOG_TAG, "_thumbnail" + thumnailPath);
+			Uri uri = Uri.fromFile(f);
+			
 			OutputStream outStream = getContentResolver()
 					.openOutputStream(uri);
 			_thumbnail.compress(Bitmap.CompressFormat.JPEG, 100,
