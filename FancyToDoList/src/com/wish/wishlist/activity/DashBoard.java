@@ -192,7 +192,7 @@ public class DashBoard extends Activity {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		File f = null;
 		try {
-			f = PhotoFileCreater.getInstance().setUpPhotoFile();
+			f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
 			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		} catch (IOException e) {
