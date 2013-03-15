@@ -253,10 +253,7 @@ public class EditItemInfo extends Activity {
 		    	@Override
 			public void onClick(View view) {
  				//open gallery;
-				Intent intent = new Intent();
-				intent.setType("image/*");
-				intent.setAction(Intent.ACTION_GET_CONTENT);
-				startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
+				dispatchImportPictureIntent();
  			}
 		});
 
