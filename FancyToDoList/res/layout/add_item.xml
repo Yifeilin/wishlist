@@ -79,7 +79,8 @@
 			android:src="@drawable/ic_camera_default_72by72"
 			android:onClick="onClickCamera"
 			android:layout_gravity="right"
-			android:layout_weight="1"/>
+			android:layout_weight="1"
+			android:visibility="gone"/>
 	</LinearLayout>
 	<ScrollView
 	    android:id="@+id/editItem_ScrollView"
