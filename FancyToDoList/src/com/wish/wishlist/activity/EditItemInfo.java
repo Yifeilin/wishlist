@@ -229,9 +229,24 @@ public class EditItemInfo extends Activity {
 		cameraImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {
- 				dispatchTakePictureIntent();
- 				//getThumbailPicture();
- 			}
+				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
+				//builder.setTitle(R.string.pick_color);
+				final CharSequence[] items = {"Take a photo", "From gallary"};
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					// The 'which' argument contains the index position
+					// of the selected item
+						if (which == 0) {
+	 						dispatchTakePictureIntent();
+						}
+						else if (which == 1) {
+							dispatchImportPictureIntent();
+						}
+					}
+				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
+			};
 		});
 
 		galleryImageButton.setOnClickListener(new OnClickListener() {
@@ -469,6 +484,13 @@ public class EditItemInfo extends Activity {
 			return;
 		}
 		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+	}
+
+	private void dispatchImportPictureIntent() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
 	}
 		
 //	private void handleSmallCameraPhoto(Intent intent) {
