@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.util.camera.PhotoFileCreater;
+import com.wish.wishlist.util.camera.CameraManager;
 
 
 public class DashBoard extends Activity {
@@ -189,20 +190,9 @@ public class DashBoard extends Activity {
 	} 
 	
 	private void dispatchTakePictureIntent() {
-		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		File f = null;
-		try {
-			f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
-			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-		} catch (IOException e) {
-			Log.d("wishlist", "IOException" + e.getMessage());
-			e.printStackTrace();
-			f = null;
-			_newfullsizePhotoPath = null;
-			return;
-		}
-		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+		CameraManager c = new CameraManager();
+		_newfullsizePhotoPath = c.getPhotoPath();
+		startActivityForResult(c.getCameraIntent(), TAKE_PICTURE);
 	}
 
 	 private void showWhatsNewDialog() {
