@@ -23,7 +23,7 @@ public class PositionManager {
 	boolean _gps_enabled=false;
 	boolean _network_enabled=false;
 	
-	public PositionManager(Context Ct){
+	public PositionManager(Context Ct) {
 		context = Ct;
 		locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
 //		startLocationUpdates();

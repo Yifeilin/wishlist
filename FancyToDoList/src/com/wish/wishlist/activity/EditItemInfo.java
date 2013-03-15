@@ -15,6 +15,7 @@ import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.PositionManager;
 import com.wish.wishlist.util.camera.PhotoFileCreater;
+import com.wish.wishlist.util.camera.CameraManager;
 import com.wish.wishlist.util.ImageManager;
 
 import android.app.Activity;
@@ -39,7 +40,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.database.Cursor;
 
 //import android.content.pm.ActivityInfo;
@@ -465,22 +465,9 @@ public class EditItemInfo extends Activity {
 	}
 	
 	private void dispatchTakePictureIntent() {	
-
-		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		File f = null;
-		try {
-			f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-			_newfullsizePhotoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
-			//takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
-			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-		} catch (IOException e) {
-//			Log.d("wishlist", "IOException" + e.getMessage());
-//			e.printStackTrace();
-			f = null;
-			_newfullsizePhotoPath = null;
-			return;
-		}
-		startActivityForResult(takePictureIntent, TAKE_PICTURE);
+		CameraManager c = new CameraManager();
+		_newfullsizePhotoPath = c.getPhotoPath();
+		startActivityForResult(c.getCameraIntent(), TAKE_PICTURE);
 	}
 
 	private void dispatchImportPictureIntent() {
