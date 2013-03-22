@@ -7,12 +7,14 @@ import android.view.View;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.widget.ImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 public class ZoomPanImageView extends ImageView {
 
-Matrix matrix = new Matrix();
+Matrix _matrix = new Matrix();
 
 // We can be in one of these 3 states
 static final int NONE = 0;
@@ -25,13 +27,13 @@ PointF last = new PointF();
 PointF start = new PointF();
 float minScale = 1f;
 float maxScale = 3f;
-float[] m;
+float[] mArray;
 
 float redundantXSpace, redundantYSpace;
 
 float width, height;
 static final int CLICK = 3;
-float saveScale = 1f;
+float _saveScale = 1f;
 float right, bottom, origWidth, origHeight, bmWidth, bmHeight;
 
 ScaleGestureDetector mScaleDetector;
@@ -44,9 +46,9 @@ public ZoomPanImageView(Context context, AttributeSet attr) {
     super.setClickable(true);
     this.context = context;
     mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-    matrix.setTranslate(1f, 1f);
-    m = new float[9];
-    setImageMatrix(matrix);
+    _matrix.setTranslate(1f, 1f);
+    mArray = new float[9];
+    setImageMatrix(_matrix);
     setScaleType(ScaleType.MATRIX);
 
     setOnTouchListener(new OnTouchListener() {
@@ -55,9 +57,9 @@ public ZoomPanImageView(Context context, AttributeSet attr) {
         public boolean onTouch(View v, MotionEvent event) {
             mScaleDetector.onTouchEvent(event);
 
-            matrix.getValues(m);
-            float x = m[Matrix.MTRANS_X];
-            float y = m[Matrix.MTRANS_Y];
+            _matrix.getValues(mArray);
+            float x = mArray[Matrix.MTRANS_X];
+            float y = mArray[Matrix.MTRANS_Y];
             PointF curr = new PointF(event.getX(), event.getY());
 
             switch (event.getAction()) {
@@ -70,8 +72,8 @@ public ZoomPanImageView(Context context, AttributeSet attr) {
                     if (mode == DRAG) {
                         float deltaX = curr.x - last.x;
                         float deltaY = curr.y - last.y;
-                        float scaleWidth = Math.round(origWidth * saveScale);
-                        float scaleHeight = Math.round(origHeight * saveScale);
+                        float scaleWidth = Math.round(origWidth * _saveScale);
+                        float scaleHeight = Math.round(origHeight * _saveScale);
                         if (scaleWidth < width) {
                             deltaX = 0;
                             if (y + deltaY > 0)
@@ -95,7 +97,7 @@ public ZoomPanImageView(Context context, AttributeSet attr) {
                             else if (y + deltaY < -bottom)
                                 deltaY = -(y + bottom);
                         }
-                        matrix.postTranslate(deltaX, deltaY);
+                        _matrix.postTranslate(deltaX, deltaY);
                         last.set(curr.x, curr.y);
                     }
                     break;
@@ -112,12 +114,12 @@ public ZoomPanImageView(Context context, AttributeSet attr) {
                     mode = NONE;
                     break;
             }
-            setImageMatrix(matrix);
+            setImageMatrix(_matrix);
             invalidate();
             return true; // indicate event was handled
         }
 
-    });
+    });//end of setOnTouchListener;
 }
 
 @Override
@@ -142,51 +144,51 @@ private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureLis
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         float mScaleFactor = (float)Math.min(Math.max(.95f, detector.getScaleFactor()), 1.05);
-        float origScale = saveScale;
-        saveScale *= mScaleFactor;
-        if (saveScale > maxScale) {
-            saveScale = maxScale;
+        float origScale = _saveScale;
+        _saveScale *= mScaleFactor;
+        if (_saveScale > maxScale) {
+            _saveScale = maxScale;
             mScaleFactor = maxScale / origScale;
-        } else if (saveScale < minScale) {
-            saveScale = minScale;
+        } else if (_saveScale < minScale) {
+            _saveScale = minScale;
             mScaleFactor = minScale / origScale;
         }
-        right = width * saveScale - width - (2 * redundantXSpace * saveScale);
-        bottom = height * saveScale - height - (2 * redundantYSpace * saveScale);
-        if (origWidth * saveScale <= width || origHeight * saveScale <= height) {
-            matrix.postScale(mScaleFactor, mScaleFactor, width / 2, height / 2);
+        right = width * _saveScale - width - (2 * redundantXSpace * _saveScale);
+        bottom = height * _saveScale - height - (2 * redundantYSpace * _saveScale);
+        if (origWidth * _saveScale <= width || origHeight * _saveScale <= height) {
+            _matrix.postScale(mScaleFactor, mScaleFactor, width / 2, height / 2);
             if (mScaleFactor < 1) {
-                matrix.getValues(m);
-                float x = m[Matrix.MTRANS_X];
-                float y = m[Matrix.MTRANS_Y];
+                _matrix.getValues(mArray);
+                float x = mArray[Matrix.MTRANS_X];
+                float y = mArray[Matrix.MTRANS_Y];
                 if (mScaleFactor < 1) {
-                    if (Math.round(origWidth * saveScale) < width) {
+                    if (Math.round(origWidth * _saveScale) < width) {
                         if (y < -bottom)
-                            matrix.postTranslate(0, -(y + bottom));
+                            _matrix.postTranslate(0, -(y + bottom));
                         else if (y > 0)
-                            matrix.postTranslate(0, -y);
+                            _matrix.postTranslate(0, -y);
                     } else {
                         if (x < -right) 
-                            matrix.postTranslate(-(x + right), 0);
+                            _matrix.postTranslate(-(x + right), 0);
                         else if (x > 0) 
-                            matrix.postTranslate(-x, 0);
+                            _matrix.postTranslate(-x, 0);
                     }
                 }
             }
         } else {
-            matrix.postScale(mScaleFactor, mScaleFactor, detector.getFocusX(), detector.getFocusY());
-            matrix.getValues(m);
-            float x = m[Matrix.MTRANS_X];
-            float y = m[Matrix.MTRANS_Y];
+            _matrix.postScale(mScaleFactor, mScaleFactor, detector.getFocusX(), detector.getFocusY());
+            _matrix.getValues(mArray);
+            float x = mArray[Matrix.MTRANS_X];
+            float y = mArray[Matrix.MTRANS_Y];
             if (mScaleFactor < 1) {
                 if (x < -right) 
-                    matrix.postTranslate(-(x + right), 0);
+                    _matrix.postTranslate(-(x + right), 0);
                 else if (x > 0) 
-                    matrix.postTranslate(-x, 0);
+                    _matrix.postTranslate(-x, 0);
                 if (y < -bottom)
-                    matrix.postTranslate(0, -(y + bottom));
+                    _matrix.postTranslate(0, -(y + bottom));
                 else if (y > 0)
-                    matrix.postTranslate(0, -y);
+                    _matrix.postTranslate(0, -y);
             }
         }
         return true;
@@ -205,9 +207,19 @@ protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     float scaleX =  (float)width / (float)bmWidth;
     float scaleY = (float)height / (float)bmHeight;
     scale = Math.min(scaleX, scaleY);
-    matrix.setScale(scale, scale);
-    setImageMatrix(matrix);
-    saveScale = 1f;
+
+	//Log.d("wish", "width" + String.valueOf(width));
+	//Log.d("wish", "bmWidth" + String.valueOf(bmWidth));
+	//Log.d("wish", "scaleX" + String.valueOf(scaleX));
+
+	//Log.d("wish", "height" + String.valueOf(height));
+	//Log.d("wish", "bmHeight" + String.valueOf(bmHeight));
+	//Log.d("wish", "scaleY" + String.valueOf(scaleY));
+
+    _matrix.setScale(scale, scale);
+
+    setImageMatrix(_matrix);
+    _saveScale = 1f;
 
     // Center the image
     redundantYSpace = (float)height - (scale * (float)bmHeight) ;
@@ -215,13 +227,13 @@ protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
     redundantYSpace /= (float)2;
     redundantXSpace /= (float)2;
 
-    matrix.postTranslate(redundantXSpace, redundantYSpace);
+    _matrix.postTranslate(redundantXSpace, redundantYSpace);
 
     origWidth = width - 2 * redundantXSpace;
     origHeight = height - 2 * redundantYSpace;
-    right = width * saveScale - width - (2 * redundantXSpace * saveScale);
-    bottom = height * saveScale - height - (2 * redundantYSpace * saveScale);
-    setImageMatrix(matrix);
+    right = width * _saveScale - width - (2 * redundantXSpace * _saveScale);
+    bottom = height * _saveScale - height - (2 * redundantYSpace * _saveScale);
+    setImageMatrix(_matrix);
 }
 
 }
