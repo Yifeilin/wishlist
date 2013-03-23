@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -24,11 +25,9 @@ import android.util.Log;
 
 public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 	static final String TAG = "WishList";
-//	final Context _ctx;
 	public WishListItemCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
-//		_ctx = context;
 		setViewBinder(new WishListItemViewBinder());
 	}
 	
@@ -45,6 +44,15 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 	public class WishListItemViewBinder implements SimpleCursorAdapter.ViewBinder {
 		
 		boolean _hasStoreName = false;
+		int _photoWidth;
+
+		public WishListItemViewBinder() {
+			//we show 3 columes of photo in gridview, so photo width should be 1/3 of screen width
+			Resources r = Resources.getSystem();
+			_photoWidth = r.getDisplayMetrics().widthPixels / 3;
+			//Log.d(TAG, "screen width" + String.valueOf(r.getDisplayMetrics().widthPixels));
+			//Log.d(TAG, "photo width" + String.valueOf(_photoWidth));
+		}
 
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
@@ -66,6 +74,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				
 				//get the ImageView in which the photo should be displayed
 				ImageView photoView = (ImageView) view;
+				photoView.setLayoutParams(new LinearLayout.LayoutParams(_photoWidth, _photoWidth));
 
 				// read in the picture string from db
 				// the string could be a resource id or a uri from content provider

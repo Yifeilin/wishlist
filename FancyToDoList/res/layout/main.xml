@@ -53,7 +53,7 @@
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content"
 		    android:columnWidth="90dp"
-		    android:numColumns="auto_fit"
+		    android:numColumns="3"
 		    android:stretchMode="columnWidth"
 		    android:gravity="center"
 		    android:verticalSpacing="5dp"
