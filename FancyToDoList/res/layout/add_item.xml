@@ -122,10 +122,11 @@
 				/>
 				<!--android:scrollHorizontally="false" -->
 
-				<ImageView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:id="@+id/image_photo"
-					android:layout_gravity="center_horizontal"/>
-			<!--		android:src="@drawable/icon"/> -->
+			<ImageView android:id="@+id/image_photo"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:layout_gravity="center_horizontal"/>
+		<!--		android:src="@drawable/icon"/> -->
 
 		</LinearLayout>
 	</ScrollView>
