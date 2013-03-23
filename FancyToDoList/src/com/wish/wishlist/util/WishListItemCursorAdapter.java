@@ -45,13 +45,16 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 		
 		boolean _hasStoreName = false;
 		int _photoWidth;
+		int _columnSpace;
 
 		public WishListItemViewBinder() {
 			//we show 3 columes of photo in gridview, so photo width should be 1/3 of screen width
-			Resources r = Resources.getSystem();
-			_photoWidth = r.getDisplayMetrics().widthPixels / 3;
-			//Log.d(TAG, "screen width" + String.valueOf(r.getDisplayMetrics().widthPixels));
-			//Log.d(TAG, "photo width" + String.valueOf(_photoWidth));
+			int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+			int columnSpace = screenWidth / 100;
+			int columnCount = 3;
+			_photoWidth = (screenWidth - columnCount * columnSpace) / 3;
+			Log.d(TAG, "screen width" + String.valueOf(screenWidth));
+			Log.d(TAG, "photo width" + String.valueOf(_photoWidth));
 		}
 
 		@Override
@@ -75,6 +78,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				//get the ImageView in which the photo should be displayed
 				ImageView photoView = (ImageView) view;
 				photoView.setLayoutParams(new LinearLayout.LayoutParams(_photoWidth, _photoWidth));
+				photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 				// read in the picture string from db
 				// the string could be a resource id or a uri from content provider
