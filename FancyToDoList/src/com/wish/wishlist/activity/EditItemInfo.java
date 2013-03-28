@@ -462,7 +462,7 @@ public class EditItemInfo extends Activity {
 					//Log.d(WishList.LOG_TAG, "SELECT_PICTURE: RESULT_OK");
 					Uri selectedImageUri = data.getData();
 					Log.d(WishList.LOG_TAG, "Image URL : " + selectedImageUri.toString());
-					_fullsizePhotoPath = getPath(selectedImageUri);
+					_fullsizePhotoPath = getPathFromUri(selectedImageUri);
 					Log.d(WishList.LOG_TAG, "Image Path : " + _fullsizePhotoPath);
 					setPic();
 				}
@@ -493,66 +493,59 @@ public class EditItemInfo extends Activity {
 //		}
 	}
 
-	public String getPath(Uri uri) {
+	private String getPathFromUri(Uri uri) {
 		final String[] columns = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
 		final Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-		String path;
 		cursor.moveToFirst();
 		int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
 
-		if (columnIndex != -1) {
-			path = cursor.getString(columnIndex);
-			if (path != null) {
-				//regular processing for gallery files, works for android 2.x
-				Log.d(WishList.LOG_TAG, "regular photo path" + cursor.getString(columnIndex));
-				return cursor.getString(columnIndex);
-			}
-			else {
-				// this is not gallery provider, the pic is from picasa ( android 3.x and 4.x) 
-				// this is a workaround. this api is fucked up!
-				columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-				if (columnIndex != -1) {
-					Log.d(WishList.LOG_TAG, "picasa photo uri" + uri.toString());
-					try {
-						final InputStream is = getContentResolver().openInputStream(uri);
-
-						File f = null;
-						String photoPath;
-						try {
-							f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-							photoPath = f.getAbsolutePath();
-						} catch (IOException e) {
-							//			Log.d("wishlist", "IOException" + e.getMessage());
-							//			e.printStackTrace();
-							f = null;
-							photoPath= null;
-						}
-						OutputStream stream = new BufferedOutputStream(new FileOutputStream(photoPath)); 
-						int bufferSize = 1024;
-						byte[] buffer = new byte[bufferSize];
-						int len = 0;
-						while ((len = is.read(buffer)) != -1) {
-							    stream.write(buffer, 0, len);
-						}
-						is.close();
-						if (stream!=null) {
-							    stream.close();
-						}
-							
-						return photoPath;
-
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-		 	}
+		if (columnIndex == -1) {
+			return null;
 		}
+
+		String path;
+		path = cursor.getString(columnIndex);
+		if (path != null) {
+			//regular processing for gallery files, works for android 2.x
+			//Log.d(WishList.LOG_TAG, "regular photo path" + cursor.getString(columnIndex));
+			return path;
+		}
+
+		// this is not gallery provider, the pic is from picasa ( android 3.x and 4.x) 
+		// this is a workaround. this api is fucked up!
+		columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+		if (columnIndex == -1) {
+			return null;
+		}
+		Log.d(WishList.LOG_TAG, "picasa photo uri" + uri.toString());
+		try {
+			//save the photo to a file we created in wishlist album
+			final InputStream is = getContentResolver().openInputStream(uri);
+			File f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
+			path = f.getAbsolutePath();
+			OutputStream stream = new BufferedOutputStream(new FileOutputStream(path)); 
+			int bufferSize = 1024;
+			byte[] buffer = new byte[bufferSize];
+			int len = 0;
+			while ((len = is.read(buffer)) != -1) {
+				stream.write(buffer, 0, len);
+			}
+			is.close();
+			if (stream != null) {
+				stream.close();
+			}
+			return path;
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
-	
+
 	private boolean navigateBack(){
 		//all fields are empty
 		if(myItemName.getText().toString().length() == 0 &&
