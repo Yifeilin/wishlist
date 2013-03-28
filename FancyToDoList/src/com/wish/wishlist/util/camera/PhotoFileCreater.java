@@ -52,10 +52,10 @@ public class PhotoFileCreater {
 	private String getAlbumName(boolean thumnail) {
 		//return getString(R.string.album_name);
 		if (thumnail) {
-			return "WishListThumnail";
+			return ".WishListThumnail";
 		}
 		else {
-			return "WishListPhoto";
+			return ".WishListPhoto";
 		}
 	}
 	
