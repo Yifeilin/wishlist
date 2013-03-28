@@ -520,7 +520,7 @@ public class EditItemInfo extends Activity {
 						String photoPath;
 						try {
 							f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-							photoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
+							photoPath = f.getAbsolutePath();
 						} catch (IOException e) {
 							//			Log.d("wishlist", "IOException" + e.getMessage());
 							//			e.printStackTrace();
@@ -631,8 +631,7 @@ public class EditItemInfo extends Activity {
 		try {
 			File f = null;
 			f = PhotoFileCreater.getInstance().setUpPhotoFile(true);
-			String thumnailPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
-			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			String thumnailPath = f.getAbsolutePath();
 			Log.d(WishList.LOG_TAG, "_thumbnail" + thumnailPath);
 			Uri uri = Uri.fromFile(f);
 			

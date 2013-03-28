@@ -18,13 +18,11 @@ public class CameraManager
 		File f = null;
 		try {
 			f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-			_photoPath = PhotoFileCreater.getInstance().getfullsizePhotoPath();
+			_photoPath = f.getAbsolutePath();
 			_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		} catch (IOException e) {
 //			Log.d("wishlist", "IOException" + e.getMessage());
-//			e.printStackTrace();
-			f = null;
-			_photoPath= null;
+			e.printStackTrace();
 		}
 	}
 

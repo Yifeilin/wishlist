@@ -17,7 +17,6 @@ public class PhotoFileCreater {
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
-	String _fullsizePhotoPath;
 	
 	private static PhotoFileCreater instance = null;
 
@@ -47,13 +46,7 @@ public class PhotoFileCreater {
 
 	public File setUpPhotoFile(boolean thumnail) throws IOException {
 		File f = createImageFile(thumnail);
-		_fullsizePhotoPath = f.getAbsolutePath();
-		Log.d("wishlist", _fullsizePhotoPath);
 		return f;
-	}
-	
-	public String getfullsizePhotoPath() {
-		return _fullsizePhotoPath; 
 	}
 	
 	private String getAlbumName(boolean thumnail) {
@@ -85,7 +78,4 @@ public class PhotoFileCreater {
 		
 		return storageDir;
 	}
-
 }
-
-
