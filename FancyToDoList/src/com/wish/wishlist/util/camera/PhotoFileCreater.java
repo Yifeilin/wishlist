@@ -45,6 +45,7 @@ public class PhotoFileCreater {
 	}
 
 	public File setUpPhotoFile(boolean thumnail) throws IOException {
+		hideAlbumFromGallary(); //should not be called here, it shold be less frequent
 		File f = createImageFile(thumnail);
 		return f;
 	}
@@ -77,5 +78,33 @@ public class PhotoFileCreater {
 		}
 		
 		return storageDir;
+	}
+
+	private void hideAlbumFromGallary() {
+		File thumnailDir = getAlbumDir(true);
+		String thumnailPath = thumnailDir.getAbsolutePath() + "/.nomedia";
+		//Log.d("wishlist", thumnailPath);
+		File f = new File(thumnailPath);
+		if (!f.exists()) {
+			try {
+				f.createNewFile();
+			}
+			catch (IOException e) 
+			{
+			}
+		}
+
+		File photoDir = getAlbumDir(false);
+		String photoPath = photoDir.getAbsolutePath() + "/.nomedia";
+		Log.d("wishlist", photoPath);
+		f = new File(photoPath);
+		if (!f.exists()) {
+			try {
+				f.createNewFile();
+			}
+			catch (IOException e) 
+			{
+			}
+		}
 	}
 }
