@@ -462,7 +462,7 @@ public class EditItemInfo extends Activity {
 					//Log.d(WishList.LOG_TAG, "SELECT_PICTURE: RESULT_OK");
 					Uri selectedImageUri = data.getData();
 					Log.d(WishList.LOG_TAG, "Image URL : " + selectedImageUri.toString());
-					_fullsizePhotoPath = getPathFromUri(selectedImageUri);
+					_fullsizePhotoPath = copyPhotoToAlbum(selectedImageUri);
 					Log.d(WishList.LOG_TAG, "Image Path : " + _fullsizePhotoPath);
 					setPic();
 				}
@@ -493,44 +493,21 @@ public class EditItemInfo extends Activity {
 //		}
 	}
 
-	private String getPathFromUri(Uri uri) {
-		final String[] columns = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
-		final Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-		cursor.moveToFirst();
-		int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
 
-		if (columnIndex == -1) {
-			return null;
-		}
-
-		String path;
-		path = cursor.getString(columnIndex);
-		if (path != null) {
-			//regular processing for gallery files, works for android 2.x
-			//Log.d(WishList.LOG_TAG, "regular photo path" + cursor.getString(columnIndex));
-			return path;
-		}
-
-		// this is not gallery provider, the pic is from picasa ( android 3.x and 4.x) 
-		// this is a workaround. this api is fucked up!
-		columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-		if (columnIndex == -1) {
-			return null;
-		}
-		Log.d(WishList.LOG_TAG, "picasa photo uri" + uri.toString());
+	private String copyPhotoToAlbum(Uri uri) {
 		try {
 			//save the photo to a file we created in wishlist album
-			final InputStream is = getContentResolver().openInputStream(uri);
+			final InputStream in = getContentResolver().openInputStream(uri);
 			File f = PhotoFileCreater.getInstance().setUpPhotoFile(false);
-			path = f.getAbsolutePath();
-			OutputStream stream = new BufferedOutputStream(new FileOutputStream(path)); 
+			String path = f.getAbsolutePath();
+			OutputStream stream = new BufferedOutputStream(new FileOutputStream(f)); 
 			int bufferSize = 1024;
 			byte[] buffer = new byte[bufferSize];
 			int len = 0;
-			while ((len = is.read(buffer)) != -1) {
+			while ((len = in.read(buffer)) != -1) {
 				stream.write(buffer, 0, len);
 			}
-			is.close();
+			in.close();
 			if (stream != null) {
 				stream.close();
 			}
@@ -542,7 +519,6 @@ public class EditItemInfo extends Activity {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
