@@ -89,6 +89,7 @@
 				    android:id="@+id/itemStoreDetail"
 				    android:text="item store name"
 					android:paddingTop="8dip" 
+					android:singleLine="false"
 					android:layout_gravity="left" />
 				
 				<TextView style="@style/ItemInfoText"
