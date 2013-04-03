@@ -31,11 +31,11 @@
 <!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
 <!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
 <!-- 			android:layout_weight="1" -->
-<!-- 			android:textSize="10dip" -->
+<!-- 			android:textSize="10sp" -->
 <!-- 			android:textColor="@color/notepad_text"/> -->
 
 		<TextView android:id="@+id/txtName"	
-	 		android:textSize="18dip"
+	 		android:textSize="18sp"
 	 		android:singleLine="true"
             android:ellipsize="marquee"
 		    android:layout_width="fill_parent"
@@ -51,7 +51,7 @@
  			android:layout_height="wrap_content" 
 			android:paddingLeft="5dip"
 			android:paddingRight="5dip"
- 			android:textSize="15dip"
+ 			android:textSize="15sp"
 		    android:singleLine="true"
 		    android:textColor="@color/bodyText_dark_grey"/>
  			 <!--  		android:layout_weight="1"-->
@@ -63,7 +63,7 @@
  			android:layout_height="wrap_content" 
 			android:paddingLeft="5dip"
 			android:paddingRight="5dip"
- 			android:textSize="15dip"
+ 			android:textSize="15sp"
  		    android:singleLine="true"
             android:ellipsize="marquee"
  			android:textColor="@color/bodyText_dark_grey"/>
@@ -74,26 +74,26 @@
 			android:paddingLeft="5dip"
 			android:paddingRight="5dip"
  			android:maxLines="1" 
- 			android:textSize="15dip"
+ 			android:textSize="15sp"
  			android:textColor="@color/bodyText_dark_grey"/>
 <!-- 		<TextView android:id="@+id/txtDesc" android:layout_width="fill_parent" -->
 <!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
 <!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
 <!-- 			android:layout_weight="1" -->
-<!-- 			android:textSize="10dip" -->
+<!-- 			android:textSize="10sp" -->
 <!-- 			android:textColor="@color/notepad_text"/> -->
 			
 <!-- 		<TextView android:id="@+id/txtDate" android:layout_width="fill_parent" -->
 <!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
 <!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
 <!-- 			android:layout_weight="1" -->
-<!-- 			android:textSize="10dip" -->
+<!-- 			android:textSize="10sp" -->
 <!-- 			android:textColor="@color/notepad_text"/> -->
 <!--		<TextView
 	    	android:id="@+id/txtDate"
 	 		android:layout_width="fill_parent"
 		    android:layout_height="wrap_content" 
-		    android:textSize="16dip"
+		    android:textSize="16sp"
 		    android:maxLines="1"/>
 		    -->
 <!-- 		    android:textColor="@color/notepad_text"/> -->
@@ -101,7 +101,7 @@
  		<TextView android:id="@+id/txtItemID" android:visibility="invisible"
 				  android:layout_width="fill_parent"
 			      android:layout_height="wrap_content"
-			      android:textSize="16dip" />
+			      android:textSize="16sp" />
 	
 	</LinearLayout>
 </LinearLayout>

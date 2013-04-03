@@ -198,7 +198,7 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.4\n" + 
+		builder.setMessage("Version 1.0.5\n" + 
 					"1. Social network support\n" +
 					"   -Share wishes to friendes via various social network including facebook, google+, twitter and more.\n" + 
 					"   -Send wishes through e-mail or to other applications such as Evernote.\n\n" + 
