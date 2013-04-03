@@ -7,7 +7,9 @@
 	<!--     android:paddingTop="3dip"
     android:paddingBottom="3dip" -->
 
-	<ImageView android:id="@+id/imgPhotoGrid" />
+	<ImageView android:id="@+id/imgPhotoGrid"
+		android:layout_width="100dip"
+		android:layout_height="100dip"/>
 	    
    	<TextView android:id="@+id/txtItemID_Grid" android:visibility="invisible"
 	    android:layout_width="fill_parent"
