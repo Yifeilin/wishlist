@@ -40,6 +40,8 @@
             android:ellipsize="marquee"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
 		    android:textColor="@color/dark_purple"/>
 		    <!--android:textColor="@xml/selector"/>      -->
 				<!--    android:maxLines="1"  --> 
@@ -47,6 +49,8 @@
 		 	<TextView android:id="@+id/txtPrice"
 		 	android:layout_width="fill_parent"
  			android:layout_height="wrap_content" 
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
  			android:textSize="15dip"
 		    android:singleLine="true"
 		    android:textColor="@color/bodyText_dark_grey"/>
@@ -57,6 +61,8 @@
 			<TextView android:id="@+id/txtStore" android:visibility="visible"
 		 	android:layout_width="fill_parent"
  			android:layout_height="wrap_content" 
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
  			android:textSize="15dip"
  		    android:singleLine="true"
             android:ellipsize="marquee"
@@ -65,6 +71,8 @@
 			<TextView android:id="@+id/txtAddress"
 		 	android:layout_width="fill_parent"
  			android:layout_height="wrap_content"
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
  			android:maxLines="1" 
  			android:textSize="15dip"
  			android:textColor="@color/bodyText_dark_grey"/>
