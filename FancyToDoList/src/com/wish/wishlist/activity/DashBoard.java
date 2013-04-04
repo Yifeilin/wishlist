@@ -199,10 +199,9 @@ public class DashBoard extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
 		builder.setMessage("Version 1.0.5\n" + 
-					"1. Social network support\n" +
-					"   -Share wishes to friendes via various social network including facebook, google+, twitter and more.\n" + 
-					"   -Send wishes through e-mail or to other applications such as Evernote.\n\n" + 
-					"2. Automatically detect and record location when a new wish is added.").setCancelable(
+			"1. Users can import existing photos on the phone when creating and editing wishes.\n\n" +
+			"2. Improved the list and grid view. The views now adjust layout according to different screen size."
+					).setCancelable(
 			false).setPositiveButton("OK",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
