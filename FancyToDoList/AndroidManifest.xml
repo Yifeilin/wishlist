@@ -28,7 +28,6 @@
     			  android:icon="@drawable/ic_launcher_96"
 				  android:theme="@style/Theme.D1">
 				  
-   
     
     <uses-library android:name="com.google.android.maps" />    
          
@@ -41,6 +40,10 @@
         </activity>
         
         <activity android:name=".activity.DashBoard"
+        		  android:label="@string/app_name" 
+                 >
+        </activity> 
+        <activity android:name=".activity.Login"
         		  android:label="@string/app_name" 
                  >
         </activity> 
@@ -125,10 +128,9 @@
 <!-- 		<provider android:name="com.google.provider.NotePad" -->
 <!--           android:authorities="com.google.provider.NotePad"> -->
 <!-- 		</provider> -->
-       
-        
-
-             
+		<activity android:name="com.facebook.LoginActivity"
+			android:label="@string/app_name" />
+		<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/applicationId" />
     </application>
  
 </manifest>

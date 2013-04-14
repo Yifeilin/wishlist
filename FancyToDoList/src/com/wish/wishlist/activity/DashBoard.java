@@ -288,7 +288,4 @@ public class DashBoard extends Activity {
 			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
 		}
 	}
-
-
-
 }
