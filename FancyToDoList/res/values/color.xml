@@ -11,6 +11,8 @@
 	<color name="yellow">#FFFFFF00</color>
 	<color name="green">#FF00FF00</color>
 	<color name="black">#FF000000</color>
+	<color name="grey">#545454</color>
+	<color name="dark_grey">#4F4F4F</color>
 	<color name="white">#FFFFFFFF</color>
 	<color name="logo_color">#FFFF0F</color>
 	<color name="version_color">#f0f0f0</color>

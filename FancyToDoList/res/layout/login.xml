@@ -25,4 +25,21 @@
 		facebook:logout_text="Logout"
 		/>
 
+	<Button
+		android:id="@+id/skip_button"
+		android:layout_width="205dp"
+		android:layout_height="44dp"
+		android:gravity="center"
+		android:layout_margin="25dp"
+		android:bottomRightRadius="10dp"
+		android:bottomLeftRadius="10dp"
+		android:topLeftRadius="10dp"
+		android:topRightRadius="10dp"
+		android:text="Skip"
+		android:textSize="16.0sp"
+		android:clickable="true"
+		android:textColor="@color/white"
+		android:background="@xml/button_selector"
+		/>
+
 </LinearLayout>
