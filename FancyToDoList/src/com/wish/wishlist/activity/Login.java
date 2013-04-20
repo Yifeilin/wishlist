@@ -64,6 +64,15 @@ public class Login extends Activity {
 			}
 		});
 
+		Button skipButton = (Button) findViewById(R.id.skip_button);
+		skipButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(Login.this, DashBoard.class));
+				Login.this.finish();
+			}
+		});
+
 //        buttonLoginLogout = (Button)findViewById(R.id.buttonLoginLogout);
 //       textInstructionsOrLink = (TextView)findViewById(R.id.instructionsOrLink);
 
