@@ -19,6 +19,8 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
 import com.facebook.FacebookException;
+import com.facebook.*;
+import com.facebook.model.*;
 
 import com.wish.wishlist.R;
 
@@ -28,16 +30,27 @@ public class Login extends Activity {
     //private TextView textInstructionsOrLink;
     //private Button buttonLoginLogout;
     //private Session.StatusCallback statusCallback = new SessionStatusCallback();
+	private String TAG="Login";
+	private UiLifecycleHelper uiHelper;
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+		@Override
+			public void call(Session session, SessionState state, Exception exception) {
+				onSessionStateChange(session, state, exception);
+			}
+	};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		uiHelper = new UiLifecycleHelper(this, callback);
+		uiHelper.onCreate(savedInstanceState);
+
         setContentView(R.layout.login);
 		LoginButton authButton = (LoginButton) findViewById(R.id.facebook_login_button);
 		authButton.setOnErrorListener(new OnErrorListener() {
 			@Override
 			public void onError(FacebookException error) {
-				//Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
+				Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
 			}
 		});
 		// set permission list, Don't foeget to add email
@@ -47,20 +60,24 @@ public class Login extends Activity {
 		authButton.setSessionStatusCallback(new Session.StatusCallback() {
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
+				Log.i(WishList.LOG_TAG, "call ");
 				if (session.isOpened()) {
+					Log.i(WishList.LOG_TAG,"session is opened");
 					Log.i(WishList.LOG_TAG,"Access Token"+ session.getAccessToken());
-					Request.executeMeRequestAsync(session,
-						new Request.GraphUserCallback() {
-							@Override
+					Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+						@Override
 						public void onCompleted(GraphUser user,Response response) {
 							if (user != null) {
 								Log.i(WishList.LOG_TAG,"User ID "+ user.getId());
 								Log.i(WishList.LOG_TAG,"Email "+ user.asMap().get("email"));
-								//lblEmail.setText(user.asMap().get("email").toString());
 							}
 						}
 						});
 				}
+				else {
+					Log.i(WishList.LOG_TAG,"session is not opened");
+				}
+
 			}
 		});
 
@@ -95,30 +112,44 @@ public class Login extends Activity {
  //       updateView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        //Session.getActiveSession().addCallback(statusCallback);
-    }
+	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+		Log.i(TAG, "onSessionStateChange");
+		if (state.isOpened()) {
+			Log.i(TAG, "Logged in...");
+		} else if (state.isClosed()) {
+			Log.i(TAG, "Logged out...");
+		}
+	}
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        //Session.getActiveSession().removeCallback(statusCallback);
-    }
+	@Override
+		public void onResume() {
+			super.onResume();
+			uiHelper.onResume();
+		}
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-    }
+	@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent data) {
+			super.onActivityResult(requestCode, resultCode, data);
+			uiHelper.onActivityResult(requestCode, resultCode, data);
+		}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //Session session = Session.getActiveSession();
-        //Session.saveSession(session, outState);
-    }
+	@Override
+		public void onPause() {
+			super.onPause();
+			uiHelper.onPause();
+		}
+
+	@Override
+		public void onDestroy() {
+			super.onDestroy();
+			uiHelper.onDestroy();
+		}
+
+	@Override
+		public void onSaveInstanceState(Bundle outState) {
+			super.onSaveInstanceState(outState);
+			uiHelper.onSaveInstanceState(outState);
+		}
 
  //   private void updateView() {
  //       Session session = Session.getActiveSession();
