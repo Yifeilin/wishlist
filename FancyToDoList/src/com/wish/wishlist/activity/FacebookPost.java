@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.*;
+import com.facebook.widget.LoginButton;
+import com.facebook.widget.LoginButton.OnErrorListener;
 import com.facebook.widget.ProfilePictureView;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,33 +82,48 @@ public class FacebookPost extends Activity {
 	private boolean pendingAnnounce;
 
 	//private UiLifecycleHelper uiHelper;
+    private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(final Session session, final SessionState state, final Exception exception) {
-			onSessionStateChange(session, state, exception);
-		}
+			public void call(Session session, SessionState state, Exception exception) {
+				onSessionStateChange(session, state, exception);
+			}
 	};
 
     /**
      * Notifies that the session token has been updated.
      */
 	private void tokenUpdated() {
+		Log.d(TAG, "tokenUpdated");
+		Log.d(TAG, "pendingAnnounce is " + Boolean.valueOf(pendingAnnounce));
 		if (pendingAnnounce) {
 			handleAnnounce();
 		}
 	}
 
-	private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-		if (session != null && session.isOpened()) {
-			if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
-				tokenUpdated();
-			} else {
-				makeMeRequest(session);
-			}
+	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+		Log.d(TAG, "onSessionStateChange");
+		if (state.isOpened()) {
+			Log.i(TAG, "onSessionStateChange: Logged in...");
 		}
+		else if (state.isClosed()) {
+			Log.i(TAG, "onSessionStateChange: Logged out...");
+		}
+
+//		if (session != null && session.isOpened()) {
+//			Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
+//			if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+//				Log.d(TAG, "onSessionStateChange: state equals opened token updated");
+//				tokenUpdated();
+//			} else {
+//				Log.d(TAG, "onSessionStateChange: makeMeRequest");
+//				makeMeRequest(session);
+//			}
+//		}
 	}
 
 	private void makeMeRequest(final Session session) {
+		Log.d(TAG, "makeMeRequest");
 		Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
 			@Override
 			public void onCompleted(GraphUser user, Response response) {
@@ -130,26 +147,35 @@ public class FacebookPost extends Activity {
 	 * Resets the view to the initial defaults.
 	 */
 	private void init(Bundle savedInstanceState) {
+		Log.d(TAG, "init");
 		if (savedInstanceState != null) {
 			pendingAnnounce = savedInstanceState.getBoolean(PENDING_ANNOUNCE_KEY, false);
 		}
 
 		Session session = Session.getActiveSession();
 		if (session != null && session.isOpened()) {
+			Log.d(TAG, "init: session != null &&  session is opened");
 			makeMeRequest(session);
 		}
+		else {
+			Log.d(TAG, "init: session == null ||  session is not opened");
+		}
+
 	}
 
 	private void handleAnnounce() {
+		Log.d(TAG, "handleAnnounce");
 		pendingAnnounce = false;
 		Session session = Session.getActiveSession();
 
 		if (session == null || !session.isOpened()) {
+			Log.d(TAG, "handleAnnounce: session is null or session is not opened");
 			return;
 		}
 
 		List<String> permissions = session.getPermissions();
 		if (!permissions.containsAll(PERMISSIONS)) {
+			Log.d(TAG, "handleAnnounce: session not contain all permission");
 			pendingAnnounce = true;
 			requestPublishPermissions(session);
 			return;
@@ -184,6 +210,7 @@ public class FacebookPost extends Activity {
 	}
 
 	private void requestPublishPermissions(Session session) {
+		Log.d(TAG, "requestPublishPermissions");
 		if (session != null) {
 			Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, PERMISSIONS)
 				// demonstrate how to set an audience for the publish permissions,
@@ -195,6 +222,7 @@ public class FacebookPost extends Activity {
 	}
 
 	private void onPostActionResponse(Response response) {
+		Log.d(TAG, "onPostActionResponse");
 		if (progressDialog != null) {
 			progressDialog.dismiss();
 			progressDialog = null;
@@ -224,6 +252,7 @@ public class FacebookPost extends Activity {
 	}
 
 	private void handleError(FacebookRequestError error) {
+		Log.d(TAG, "handleError");
 		DialogInterface.OnClickListener listener = null;
 		String dialogBody = null;
 
@@ -302,15 +331,68 @@ public class FacebookPost extends Activity {
 			.show();
 	}
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	@Override
+		public void onCreate(Bundle savedInstanceState) {
+			Log.d(TAG, "onCreate");
+			super.onCreate(savedInstanceState);
+			uiHelper = new UiLifecycleHelper(this, callback);
+			uiHelper.onCreate(savedInstanceState);
 
-	}
+			setContentView(R.layout.login);
+			LoginButton authButton = (LoginButton) findViewById(R.id.facebook_login_button);
+			authButton.setOnErrorListener(new OnErrorListener() {
+				@Override
+				public void onError(FacebookException error) {
+					Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
+				}
+			});
+			//authButton.setSessionStatusCallback(callback);
+			//authButton.setPublishPermissions(PERMISSIONS);
+			//authButton.setReadPermissions(Arrays.asList("basic_info","email"));
+			//init(savedInstanceState);
+			//handleAnnounce();
+		}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-	}
+		public void onResume() {
+			super.onResume();
+			// For scenarios where the main activity is launched and user
+			// session is not null, the session state change notification
+			// may not be triggered. Trigger it if it's open/closed.
+			Session session = Session.getActiveSession();
+			if (session != null &&
+					(session.isOpened() || session.isClosed()) ) {
+				onSessionStateChange(session, session.getState(), null);
+			}
+			uiHelper.onResume();
+		}
+
+	@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent data) {
+			super.onActivityResult(requestCode, resultCode, data);
+			//if (requestCode == REAUTH_ACTIVITY_CODE) {
+				uiHelper.onActivityResult(requestCode, resultCode, data);
+			//}
+		}
+
+	@Override
+		public void onSaveInstanceState(Bundle bundle) {
+			super.onSaveInstanceState(bundle);
+			//bundle.putBoolean(PENDING_ANNOUNCE_KEY, pendingAnnounce);
+			uiHelper.onSaveInstanceState(bundle);
+		}
+
+	@Override
+		public void onPause() {
+			super.onPause();
+			uiHelper.onPause();
+		}
+
+	@Override
+		public void onDestroy() {
+			super.onDestroy();
+			uiHelper.onDestroy();
+		}
 
 	protected void populateOGAction(OpenGraphAction action) {
 		if (wishChoiceUrl != null) {
