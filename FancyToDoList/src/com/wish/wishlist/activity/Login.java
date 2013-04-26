@@ -24,12 +24,12 @@ import com.facebook.model.*;
 
 import com.wish.wishlist.R;
 
+//followed the sample:
+//https://developers.facebook.com/docs/howtos/androidsdk/3.0/fetch-user-data/
+
 public class Login extends Activity {
     private static final String URL_PREFIX_FRIENDS = "https://graph.facebook.com/me/friends?access_token=";
 
-    //private TextView textInstructionsOrLink;
-    //private Button buttonLoginLogout;
-    //private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private String TAG="Login";
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -53,33 +53,6 @@ public class Login extends Activity {
 				Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
 			}
 		});
-		// set permission list, Don't foeget to add email
-		authButton.setReadPermissions(Arrays.asList("basic_info","email"));
-
-		// session state call back event
-		authButton.setSessionStatusCallback(new Session.StatusCallback() {
-			@Override
-			public void call(Session session, SessionState state, Exception exception) {
-				Log.i(WishList.LOG_TAG, "call ");
-				if (session.isOpened()) {
-					Log.i(WishList.LOG_TAG,"session is opened");
-					Log.i(WishList.LOG_TAG,"Access Token"+ session.getAccessToken());
-					Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-						@Override
-						public void onCompleted(GraphUser user,Response response) {
-							if (user != null) {
-								Log.i(WishList.LOG_TAG,"User ID "+ user.getId());
-								Log.i(WishList.LOG_TAG,"Email "+ user.asMap().get("email"));
-							}
-						}
-						});
-				}
-				else {
-					Log.i(WishList.LOG_TAG,"session is not opened");
-				}
-
-			}
-		});
 
 		Button skipButton = (Button) findViewById(R.id.skip_button);
 		skipButton.setOnClickListener(new OnClickListener() {
@@ -89,34 +62,23 @@ public class Login extends Activity {
 				Login.this.finish();
 			}
 		});
-
-//        buttonLoginLogout = (Button)findViewById(R.id.buttonLoginLogout);
-//       textInstructionsOrLink = (TextView)findViewById(R.id.instructionsOrLink);
-
-//        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-
- //       Session session = Session.getActiveSession();
- //       if (session == null) {
- //           if (savedInstanceState != null) {
- //               session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
- //           }
- //           if (session == null) {
- //               session = new Session(this);
- //           }
- //           Session.setActiveSession(session);
- //           if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
- //               session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
- //           }
- //       }
-
- //       updateView();
     }
 
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		Log.i(TAG, "onSessionStateChange");
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
-		} else if (state.isClosed()) {
+			Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+				@Override
+				public void onCompleted(GraphUser user,Response response) {
+					if (user != null) {
+						Log.i(WishList.LOG_TAG,"User ID "+ user.getId());
+						Log.i(WishList.LOG_TAG,"Email "+ user.asMap().get("email"));
+					}
+				}
+			});
+		} 
+		else if (state.isClosed()) {
 			Log.i(TAG, "Logged out...");
 		}
 	}
@@ -124,6 +86,14 @@ public class Login extends Activity {
 	@Override
 		public void onResume() {
 			super.onResume();
+			// For scenarios where the main activity is launched and user
+			// session is not null, the session state change notification
+			// may not be triggered. Trigger it if it's open/closed.
+			Session session = Session.getActiveSession();
+			if (session != null &&
+					(session.isOpened() || session.isClosed()) ) {
+				onSessionStateChange(session, session.getState(), null);
+			}
 			uiHelper.onResume();
 		}
 
@@ -150,44 +120,4 @@ public class Login extends Activity {
 			super.onSaveInstanceState(outState);
 			uiHelper.onSaveInstanceState(outState);
 		}
-
- //   private void updateView() {
- //       Session session = Session.getActiveSession();
- //       if (session.isOpened()) {
- //           textInstructionsOrLink.setText(URL_PREFIX_FRIENDS + session.getAccessToken());
- //           buttonLoginLogout.setText("logout");
- //           buttonLoginLogout.setOnClickListener(new OnClickListener() {
- //               public void onClick(View view) { onClickLogout(); }
- //           });
- //       } else {
- //           textInstructionsOrLink.setText("Login to create a link to fetch account data");
- //           buttonLoginLogout.setText("login");
- //           buttonLoginLogout.setOnClickListener(new OnClickListener() {
- //               public void onClick(View view) { onClickLogin(); }
- //           });
- //       }
- //   }
-
- //   private void onClickLogin() {
- //       Session session = Session.getActiveSession();
- //       if (!session.isOpened() && !session.isClosed()) {
- //           session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
- //       } else {
- //           Session.openActiveSession(this, true, statusCallback);
- //       }
- //   }
-
-  //  private void onClickLogout() {
-  //      Session session = Session.getActiveSession();
-  //      if (!session.isClosed()) {
-  //          session.closeAndClearTokenInformation();
-  //      }
-  //  }
-
-  //  private class SessionStatusCallback implements Session.StatusCallback {
-  //      @Override
-  //      public void call(Session session, SessionState state, Exception exception) {
-  //          updateView();
-  //      }
-  //  }
 }
