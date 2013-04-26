@@ -69,7 +69,7 @@ public class FacebookPost extends Activity {
         String getId();
     }
 
-	private String wishChoiceUrl = "http://samples.ogp.me/320819528045680";
+	private String wishUrl = "http://samples.ogp.me/320819528045680";
 	private static final String TAG = "FacebookPost";
 	private static final String POST_ACTION_PATH = "me/beans_wishlist:make";
 	private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
@@ -110,29 +110,35 @@ public class FacebookPost extends Activity {
 			Log.i(TAG, "onSessionStateChange: Logged out...");
 		}
 
-//		if (session != null && session.isOpened()) {
-//			Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
-//			if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
-//				Log.d(TAG, "onSessionStateChange: state equals opened token updated");
-//				tokenUpdated();
-//			} else {
-//				Log.d(TAG, "onSessionStateChange: makeMeRequest");
-//				makeMeRequest(session);
-//			}
-//		}
+		if (session != null && session.isOpened()) {
+			handleAnnounce();
+	//		Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
+	//		if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+	//			Log.d(TAG, "onSessionStateChange: state equals opened token updated");
+	//			tokenUpdated();
+	//		} else {
+	//			Log.d(TAG, "onSessionStateChange: makeMeRequest");
+	//			makeMeRequest(session);
+	//		}
+		}
 	}
 
 	private void makeMeRequest(final Session session) {
-		Log.d(TAG, "makeMeRequest");
+		Log.d(TAG, "makeMeRequest: start");
 		Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
 			@Override
 			public void onCompleted(GraphUser user, Response response) {
 				if (session == Session.getActiveSession()) {
+					Log.d(TAG, "makeMeRequest: session == Session.getActiveSession");
 					if (user != null) {
+						Log.d(TAG, "makeMeRequest: user != null");
 						Log.d(TAG, "user id:" + user.getId());
 						Log.d(TAG, "user name:" + user.getName());
 						//profilePictureView.setProfileId(user.getId());
 						//userNameView.setText(user.getName());
+					}
+					else {
+						Log.d(TAG, "makeMeRequest: user is null");
 					}
 				}
 				if (response.getError() != null) {
@@ -160,7 +166,6 @@ public class FacebookPost extends Activity {
 		else {
 			Log.d(TAG, "init: session == null ||  session is not opened");
 		}
-
 	}
 
 	private void handleAnnounce() {
@@ -187,25 +192,33 @@ public class FacebookPost extends Activity {
 		// Run this in a background thread since some of the populate methods may take
 		// a non-trivial amount of time.
 		AsyncTask<Void, Void, Response> task = new AsyncTask<Void, Void, Response>() {
-
 			@Override
 				protected Response doInBackground(Void... voids) {
-					MakeAction wishAction = GraphObject.Factory.create(MakeAction.class);
+					Log.d(TAG, "doInBackground");
+					MakeAction makeAction = GraphObject.Factory.create(MakeAction.class);
 					//for (BaseListElement element : listElements) {
 					//   element.populateOGAction(eatAction);
 					//}
-					Request request = new Request(Session.getActiveSession(),
-							POST_ACTION_PATH, null, HttpMethod.POST);
-					request.setGraphObject(wishAction);
+
+					//associate the wish object to make action
+					if (wishUrl != null) {
+						//MakeAction makeAction = action.cast(MakeAction.class);
+						WishGraphObject wish = GraphObject.Factory.create(WishGraphObject.class);
+						wish.setUrl(wishUrl);
+						makeAction.setWish(wish);
+					}
+
+					Request request = new Request(Session.getActiveSession(), POST_ACTION_PATH, null, HttpMethod.POST);
+					request.setGraphObject(makeAction);
 					return request.executeAndWait();
 				}
 
 			@Override
 				protected void onPostExecute(Response response) {
+					Log.d(TAG, "onPostExecute");
 					onPostActionResponse(response);
 				}
 		};
-
 		task.execute();
 	}
 
@@ -252,7 +265,7 @@ public class FacebookPost extends Activity {
 	}
 
 	private void handleError(FacebookRequestError error) {
-		Log.d(TAG, "handleError");
+		Log.d(TAG, "handleError: start");
 		DialogInterface.OnClickListener listener = null;
 		String dialogBody = null;
 
@@ -347,7 +360,7 @@ public class FacebookPost extends Activity {
 				}
 			});
 			//authButton.setSessionStatusCallback(callback);
-			//authButton.setPublishPermissions(PERMISSIONS);
+			authButton.setPublishPermissions(PERMISSIONS);
 			//authButton.setReadPermissions(Arrays.asList("basic_info","email"));
 			//init(savedInstanceState);
 			//handleAnnounce();
@@ -395,10 +408,10 @@ public class FacebookPost extends Activity {
 		}
 
 	protected void populateOGAction(OpenGraphAction action) {
-		if (wishChoiceUrl != null) {
+		if (wishUrl != null) {
 			MakeAction makeAction = action.cast(MakeAction.class);
 			WishGraphObject wish = GraphObject.Factory.create(WishGraphObject.class);
-			wish.setUrl(wishChoiceUrl);
+			wish.setUrl(wishUrl);
 			makeAction.setWish(wish);
 		}
 	}
