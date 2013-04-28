@@ -57,8 +57,8 @@ public class FacebookPost extends Activity {
      * Interface representing the Make action.
      */
 	private interface MakeAction extends OpenGraphAction {
-		// The meal object
-		public WishGraphObject getMeal();
+		// The wish object
+		public WishGraphObject getWish();
 		public void setWish(WishGraphObject wish);
 	}
 
@@ -72,6 +72,7 @@ public class FacebookPost extends Activity {
 	private String wishUrl = "http://samples.ogp.me/320819528045680";
 	private static final String TAG = "FacebookPost";
 	private static final String POST_ACTION_PATH = "me/beans_wishlist:make";
+	private static final String POST_OBJECT_PATH = "me/objects/beans_wishlist:wish";
 	private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
 	private static final Uri M_FACEBOOK_URL = Uri.parse("http://m.facebook.com");
 
@@ -111,7 +112,8 @@ public class FacebookPost extends Activity {
 		}
 
 		if (session != null && session.isOpened()) {
-			handleAnnounce();
+			//handleAnnounce();
+			postWish();
 	//		Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
 	//		if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
 	//			Log.d(TAG, "onSessionStateChange: state equals opened token updated");
@@ -168,6 +170,50 @@ public class FacebookPost extends Activity {
 		}
 	}
 
+	private void postWish() {
+		Log.d(TAG, "postWish");
+		pendingAnnounce = false;
+		Session session = Session.getActiveSession();
+
+		if (session == null || !session.isOpened()) {
+			Log.d(TAG, "handleAnnounce: session is null or session is not opened");
+			return;
+		}
+
+		List<String> permissions = session.getPermissions();
+		if (!permissions.containsAll(PERMISSIONS)) {
+			Log.d(TAG, "handleAnnounce: session not contain all permission");
+			pendingAnnounce = true;
+			requestPublishPermissions(session);
+			return;
+		}
+
+		// Show a progress dialog because sometimes the requests can take a while.
+		progressDialog = ProgressDialog.show(this, "", this.getResources().getString(R.string.progress_dialog_text), true);
+
+		// Run this in a background thread since some of the populate methods may take
+		// a non-trivial amount of time.
+		AsyncTask<Void, Void, Response> task = new AsyncTask<Void, Void, Response>() {
+			@Override
+				protected Response doInBackground(Void... voids) {
+					Log.d(TAG, "doInBackground");
+					Bundle postParams = new Bundle();
+					postParams.putString("object",
+					"{\"title\":\"ipod\"," +  
+					  "\"description\":\"a great map3 pod\"}");
+					Request request = new Request(Session.getActiveSession(), POST_OBJECT_PATH, postParams, HttpMethod.POST);
+					return request.executeAndWait();
+				}
+
+			@Override
+				protected void onPostExecute(Response response) {
+					Log.d(TAG, "onPostExecute");
+					onPostActionResponse(response);
+				}
+		};
+		task.execute();
+	}
+
 	private void handleAnnounce() {
 		Log.d(TAG, "handleAnnounce");
 		pendingAnnounce = false;
@@ -202,13 +248,14 @@ public class FacebookPost extends Activity {
 
 					//associate the wish object to make action
 					if (wishUrl != null) {
-						//MakeAction makeAction = action.cast(MakeAction.class);
+					//	MakeAction makeAction = action.cast(MakeAction.class);
 						WishGraphObject wish = GraphObject.Factory.create(WishGraphObject.class);
 						wish.setUrl(wishUrl);
 						makeAction.setWish(wish);
 					}
 
 					Request request = new Request(Session.getActiveSession(), POST_ACTION_PATH, null, HttpMethod.POST);
+
 					request.setGraphObject(makeAction);
 					return request.executeAndWait();
 				}
