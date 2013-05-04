@@ -34,6 +34,25 @@ import java.net.MalformedURLException;
 import android.view.Menu;
 import android.content.Context;
 
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import java.net.URISyntaxException; 
+import java.net.URI; 
+import java.io.File;
+import java.io.IOException; 
 import com.wish.wishlist.R;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
@@ -73,6 +92,7 @@ public class FacebookPost extends Activity {
 	private static final String TAG = "FacebookPost";
 	private static final String POST_ACTION_PATH = "me/beans_wishlist:make";
 	private static final String POST_OBJECT_PATH = "me/objects/beans_wishlist:wish";
+	private static final String UPLOAD_PICTURE_PATH =  "me/staging_resources";
 	private static final String PENDING_ANNOUNCE_KEY = "pendingAnnounce";
 	private static final Uri M_FACEBOOK_URL = Uri.parse("http://m.facebook.com");
 
@@ -81,6 +101,8 @@ public class FacebookPost extends Activity {
     private ProgressDialog progressDialog;
 
 	private boolean pendingAnnounce;
+	private long _itemId;
+	private Context _ctx;
 
 	//private UiLifecycleHelper uiHelper;
     private UiLifecycleHelper uiHelper;
@@ -113,7 +135,8 @@ public class FacebookPost extends Activity {
 
 		if (session != null && session.isOpened()) {
 			//handleAnnounce();
-			postWish();
+			//postWish();
+			stageImage();
 	//		Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
 	//		if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
 	//			Log.d(TAG, "onSessionStateChange: state equals opened token updated");
@@ -198,6 +221,7 @@ public class FacebookPost extends Activity {
 				protected Response doInBackground(Void... voids) {
 					Log.d(TAG, "doInBackground");
 					Bundle postParams = new Bundle();
+					postParams.putString("privacy", "{'value':'ALL_FRIENDS'}");
 					postParams.putString("object",
 					"{\"title\":\"ipod\"," +  
 					  "\"description\":\"a great map3 pod\"}");
@@ -391,6 +415,70 @@ public class FacebookPost extends Activity {
 			.show();
 	}
 
+	private void stageImage() {
+		AsyncTask<Void, Void, String> stageImageTask = new AsyncTask<Void, Void, String>() {
+			@Override
+				protected String doInBackground(Void... voids) {
+					Log.d("Splash stageImageTask", "doInBackground");
+					try {
+						String uri = "https://graph.facebook.com/100005720562778/staging_resources";
+						//String uri = "https://graph.facebook.com/me/staging_resources";
+						String token = "BAADJTZCh0pA8BAIGX71M0lnVJfdshs4JAx5ra38C9uVfHMTyTWlezd2dTuExBq1BUIEJcoCEtVTH5WcCzNe9LYlRsldge5JmAbhfehePsDUjcLQI6skPLFyth0cfmbGgxIuXbJ2gGZCSRCzooGAW5aEXWZCJqy8NuehNMiuWFg0KCCTDZBEo4rU8dPx95dEkjbXXJCeMaW1qHUlSbMVoDHmUB7SlqZCxa6ahwtxTNzgZDZD";
+						HttpResponse response = null;
+						try {        
+							HttpClient client = new DefaultHttpClient();
+							HttpPost post = new HttpPost(uri);
+							MultipartEntity entity = new MultipartEntity();
+							//WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
+							//String picPath = wish_item.getFullsizePicPath();
+							File file = new File("/data/local/tmp/images.jpg");
+							Log.d("Splash", "UPLOAD: file length = " + file.length());
+							Log.d("Splash", "UPLOAD: file exist = " + file.exists());
+
+							entity.addPart("file", new FileBody(file, "image/jpeg"));
+							entity.addPart("access_token", new StringBody(token));
+							post.setEntity(entity);
+							response = client.execute(post);
+						}
+						catch (ClientProtocolException e) {
+							Log.d("Splash", "exception");
+							e.printStackTrace();
+						}
+						catch (IOException e) {
+							Log.d("Splash", "exception");
+							e.printStackTrace();
+						}   
+
+						HttpEntity entity = response.getEntity();
+						if (entity == null) {
+							Log.d("Splash post", "entity is null");
+							return "";
+						}
+
+						String result = "";
+						try {
+							Log.d("stagine", "UPLOAD: respose code: " + response.getStatusLine().toString());
+							result = EntityUtils.toString(entity);
+							return result;
+						}
+						catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						//return response;
+					} catch (Exception e) {
+						//this.exception = e;
+					}
+					return "";
+				}
+			@Override
+				protected void onPostExecute(String result) {
+					Log.d("Splash stage image", "response is " + result);
+				}
+		};
+		stageImageTask.execute();
+	}
+
 	@Override
 		public void onCreate(Bundle savedInstanceState) {
 			Log.d(TAG, "onCreate");
@@ -399,6 +487,11 @@ public class FacebookPost extends Activity {
 			uiHelper.onCreate(savedInstanceState);
 
 			setContentView(R.layout.login);
+
+			_ctx = this;
+			Bundle extras = getIntent().getExtras();
+			_itemId = extras.getLong("itemId");
+
 			LoginButton authButton = (LoginButton) findViewById(R.id.facebook_login_button);
 			authButton.setOnErrorListener(new OnErrorListener() {
 				@Override
