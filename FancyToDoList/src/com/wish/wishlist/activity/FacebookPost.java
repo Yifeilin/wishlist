@@ -88,8 +88,9 @@ public class FacebookPost extends Activity {
         String getId();
     }
 
-	private String wishUrl = "http://samples.ogp.me/320819528045680";
-	private static final String TAG = "FacebookPost";
+	private static final String TAG = WishList.LOG_TAG;
+
+	private static final String wishUrl = "http://samples.ogp.me/320819528045680";
 	private static final String POST_ACTION_PATH = "me/beans_wishlist:make";
 	private static final String POST_OBJECT_PATH = "me/objects/beans_wishlist:wish";
 	private static final String UPLOAD_PICTURE_PATH =  "me/staging_resources";
@@ -104,7 +105,6 @@ public class FacebookPost extends Activity {
 	private long _itemId;
 	private Context _ctx;
 
-	//private UiLifecycleHelper uiHelper;
     private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -126,17 +126,20 @@ public class FacebookPost extends Activity {
 
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		Log.d(TAG, "onSessionStateChange");
-		if (state.isOpened()) {
+		if (session != null && state.isOpened()) {
 			Log.i(TAG, "onSessionStateChange: Logged in...");
+			String token = session.getAccessToken();
+			Log.i(TAG, "onSessionStateChange: access token:" + token);
+			stageImage(token);
 		}
 		else if (state.isClosed()) {
 			Log.i(TAG, "onSessionStateChange: Logged out...");
 		}
 
-		if (session != null && session.isOpened()) {
+		//if (session != null && session.isOpened()) {
 			//handleAnnounce();
 			//postWish();
-			stageImage();
+			//stageImage();
 	//		Log.d(TAG, "onSessionStateChange: session != null &&  session is opened");
 	//		if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
 	//			Log.d(TAG, "onSessionStateChange: state equals opened token updated");
@@ -145,7 +148,7 @@ public class FacebookPost extends Activity {
 	//			Log.d(TAG, "onSessionStateChange: makeMeRequest");
 	//			makeMeRequest(session);
 	//		}
-		}
+		//}
 	}
 
 	private void makeMeRequest(final Session session) {
@@ -415,15 +418,16 @@ public class FacebookPost extends Activity {
 			.show();
 	}
 
-	private void stageImage() {
-		AsyncTask<Void, Void, String> stageImageTask = new AsyncTask<Void, Void, String>() {
+	private void stageImage(String token) {
+		AsyncTask<String, Void, String> stageImageTask = new AsyncTask<String, Void, String>() {
 			@Override
-				protected String doInBackground(Void... voids) {
-					Log.d("Splash stageImageTask", "doInBackground");
+				protected String doInBackground(String... params) {
+					Log.d(TAG, "doInBackground");
+					Log.d(TAG, "doInBackground passed in token is" + params[0]);
 					try {
-						String uri = "https://graph.facebook.com/100005720562778/staging_resources";
-						//String uri = "https://graph.facebook.com/me/staging_resources";
-						String token = "BAADJTZCh0pA8BAIGX71M0lnVJfdshs4JAx5ra38C9uVfHMTyTWlezd2dTuExBq1BUIEJcoCEtVTH5WcCzNe9LYlRsldge5JmAbhfehePsDUjcLQI6skPLFyth0cfmbGgxIuXbJ2gGZCSRCzooGAW5aEXWZCJqy8NuehNMiuWFg0KCCTDZBEo4rU8dPx95dEkjbXXJCeMaW1qHUlSbMVoDHmUB7SlqZCxa6ahwtxTNzgZDZD";
+						//String uri = "https://graph.facebook.com/100005720562778/staging_resources";
+						String uri = "https://graph.facebook.com/me/staging_resources";
+						//String token = "BAADJTZCh0pA8BAIGX71M0lnVJfdshs4JAx5ra38C9uVfHMTyTWlezd2dTuExBq1BUIEJcoCEtVTH5WcCzNe9LYlRsldge5JmAbhfehePsDUjcLQI6skPLFyth0cfmbGgxIuXbJ2gGZCSRCzooGAW5aEXWZCJqy8NuehNMiuWFg0KCCTDZBEo4rU8dPx95dEkjbXXJCeMaW1qHUlSbMVoDHmUB7SlqZCxa6ahwtxTNzgZDZD";
 						HttpResponse response = null;
 						try {        
 							HttpClient client = new DefaultHttpClient();
@@ -432,32 +436,32 @@ public class FacebookPost extends Activity {
 							//WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 							//String picPath = wish_item.getFullsizePicPath();
 							File file = new File("/data/local/tmp/images.jpg");
-							Log.d("Splash", "UPLOAD: file length = " + file.length());
-							Log.d("Splash", "UPLOAD: file exist = " + file.exists());
+							Log.d(TAG, "UPLOAD: file length = " + file.length());
+							Log.d(TAG, "UPLOAD: file exist = " + file.exists());
 
 							entity.addPart("file", new FileBody(file, "image/jpeg"));
-							entity.addPart("access_token", new StringBody(token));
+							entity.addPart("access_token", new StringBody(params[0]));
 							post.setEntity(entity);
 							response = client.execute(post);
 						}
 						catch (ClientProtocolException e) {
-							Log.d("Splash", "exception");
+							Log.d(TAG, "exception");
 							e.printStackTrace();
 						}
 						catch (IOException e) {
-							Log.d("Splash", "exception");
+							Log.d(TAG, "exception");
 							e.printStackTrace();
 						}   
 
 						HttpEntity entity = response.getEntity();
 						if (entity == null) {
-							Log.d("Splash post", "entity is null");
+							Log.d(TAG, "entity is null");
 							return "";
 						}
 
 						String result = "";
 						try {
-							Log.d("stagine", "UPLOAD: respose code: " + response.getStatusLine().toString());
+							Log.d(TAG, "UPLOAD: respose code: " + response.getStatusLine().toString());
 							result = EntityUtils.toString(entity);
 							return result;
 						}
@@ -473,10 +477,10 @@ public class FacebookPost extends Activity {
 				}
 			@Override
 				protected void onPostExecute(String result) {
-					Log.d("Splash stage image", "response is " + result);
+					Log.d(TAG, "response is " + result);
 				}
 		};
-		stageImageTask.execute();
+		stageImageTask.execute(token);
 	}
 
 	@Override
@@ -486,21 +490,21 @@ public class FacebookPost extends Activity {
 			uiHelper = new UiLifecycleHelper(this, callback);
 			uiHelper.onCreate(savedInstanceState);
 
-			setContentView(R.layout.login);
+			//setContentView(R.layout.login);
 
 			_ctx = this;
 			Bundle extras = getIntent().getExtras();
 			_itemId = extras.getLong("itemId");
 
-			LoginButton authButton = (LoginButton) findViewById(R.id.facebook_login_button);
-			authButton.setOnErrorListener(new OnErrorListener() {
-				@Override
-				public void onError(FacebookException error) {
-					Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
-				}
-			});
+			//LoginButton authButton = (LoginButton) findViewById(R.id.facebook_login_button);
+			//authButton.setOnErrorListener(new OnErrorListener() {
+			//	@Override
+			//	public void onError(FacebookException error) {
+			//		Log.i(WishList.LOG_TAG, "Error " + error.getMessage());
+			//	}
+			//});
 			//authButton.setSessionStatusCallback(callback);
-			authButton.setPublishPermissions(PERMISSIONS);
+			//authButton.setPublishPermissions(PERMISSIONS);
 			//authButton.setReadPermissions(Arrays.asList("basic_info","email"));
 			//init(savedInstanceState);
 			//handleAnnounce();
