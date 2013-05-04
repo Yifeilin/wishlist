@@ -19,6 +19,7 @@ import com.facebook.model.*;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
 import com.facebook.widget.ProfilePictureView;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -196,7 +197,7 @@ public class FacebookPost extends Activity {
 		}
 	}
 
-	private void postWish() {
+	private void postWish(String imageUri) {
 		Log.d(TAG, "postWish");
 		pendingAnnounce = false;
 		Session session = Session.getActiveSession();
@@ -219,15 +220,22 @@ public class FacebookPost extends Activity {
 
 		// Run this in a background thread since some of the populate methods may take
 		// a non-trivial amount of time.
-		AsyncTask<Void, Void, Response> task = new AsyncTask<Void, Void, Response>() {
+		AsyncTask<String, Void, Response> task = new AsyncTask<String, Void, Response>() {
 			@Override
-				protected Response doInBackground(Void... voids) {
-					Log.d(TAG, "doInBackground");
+				protected Response doInBackground(String... params) {
+					Log.d(TAG, "postWish, doInBackground");
 					Bundle postParams = new Bundle();
 					postParams.putString("privacy", "{'value':'ALL_FRIENDS'}");
-					postParams.putString("object",
-					"{\"title\":\"ipod\"," +  
-					  "\"description\":\"a great map3 pod\"}");
+					String objectStr = 
+						   "{\"title\":\"ipod\"," +  
+							   "\"description\":\"a great map3 pod\"," +
+							   "\"image\": {" + 
+							   "\"url\":\"" + params[0] + "\"," + 
+							   "\"user_generated\":false }" + 
+							   "}";
+					Log.d(TAG, "postWish, object String " + objectStr);
+					postParams.putString("object", objectStr);
+
 					Request request = new Request(Session.getActiveSession(), POST_OBJECT_PATH, postParams, HttpMethod.POST);
 					return request.executeAndWait();
 				}
@@ -238,7 +246,7 @@ public class FacebookPost extends Activity {
 					onPostActionResponse(response);
 				}
 		};
-		task.execute();
+		task.execute(imageUri);
 	}
 
 	private void handleAnnounce() {
@@ -418,7 +426,7 @@ public class FacebookPost extends Activity {
 			.show();
 	}
 
-	private void stageImage(String token) {
+	private String stageImage(String token) {
 		AsyncTask<String, Void, String> stageImageTask = new AsyncTask<String, Void, String>() {
 			@Override
 				protected String doInBackground(String... params) {
@@ -427,21 +435,20 @@ public class FacebookPost extends Activity {
 					try {
 						//String uri = "https://graph.facebook.com/100005720562778/staging_resources";
 						String uri = "https://graph.facebook.com/me/staging_resources";
-						//String token = "BAADJTZCh0pA8BAIGX71M0lnVJfdshs4JAx5ra38C9uVfHMTyTWlezd2dTuExBq1BUIEJcoCEtVTH5WcCzNe9LYlRsldge5JmAbhfehePsDUjcLQI6skPLFyth0cfmbGgxIuXbJ2gGZCSRCzooGAW5aEXWZCJqy8NuehNMiuWFg0KCCTDZBEo4rU8dPx95dEkjbXXJCeMaW1qHUlSbMVoDHmUB7SlqZCxa6ahwtxTNzgZDZD";
 						HttpResponse response = null;
 						try {        
 							HttpClient client = new DefaultHttpClient();
 							HttpPost post = new HttpPost(uri);
-							MultipartEntity entity = new MultipartEntity();
+							MultipartEntity postEntity = new MultipartEntity();
 							//WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
 							//String picPath = wish_item.getFullsizePicPath();
 							File file = new File("/data/local/tmp/images.jpg");
 							Log.d(TAG, "UPLOAD: file length = " + file.length());
 							Log.d(TAG, "UPLOAD: file exist = " + file.exists());
 
-							entity.addPart("file", new FileBody(file, "image/jpeg"));
-							entity.addPart("access_token", new StringBody(params[0]));
-							post.setEntity(entity);
+							postEntity.addPart("file", new FileBody(file, "image/jpeg"));
+							postEntity.addPart("access_token", new StringBody(params[0]));
+							post.setEntity(postEntity);
 							response = client.execute(post);
 						}
 						catch (ClientProtocolException e) {
@@ -453,17 +460,21 @@ public class FacebookPost extends Activity {
 							e.printStackTrace();
 						}   
 
-						HttpEntity entity = response.getEntity();
-						if (entity == null) {
-							Log.d(TAG, "entity is null");
+						HttpEntity responseEntity = response.getEntity();
+						if (responseEntity== null) {
+							Log.d(TAG, "responseEntity is null");
 							return "";
 						}
 
 						String result = "";
 						try {
-							Log.d(TAG, "UPLOAD: respose code: " + response.getStatusLine().toString());
-							result = EntityUtils.toString(entity);
-							return result;
+							//Log.d(TAG, "UPLOAD: respose code: " + response.getStatusLine().toString());
+							// parsing JSON
+							result = EntityUtils.toString(responseEntity);
+							JSONObject jo = new JSONObject(result); //Convert String to JSON Object
+							//Log.d(TAG, "json " + jo.toString());
+							String imageUri = jo.getString("uri"); 
+							return imageUri;
 						}
 						catch (IOException e) {
 							e.printStackTrace();
@@ -476,11 +487,13 @@ public class FacebookPost extends Activity {
 					return "";
 				}
 			@Override
-				protected void onPostExecute(String result) {
-					Log.d(TAG, "response is " + result);
+				protected void onPostExecute(String imageUri) {
+					Log.d(TAG, "response is " + imageUri);
+					postWish(imageUri);
 				}
 		};
 		stageImageTask.execute(token);
+		return "";
 	}
 
 	@Override
