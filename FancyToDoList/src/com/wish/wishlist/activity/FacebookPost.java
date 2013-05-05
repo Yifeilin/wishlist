@@ -107,6 +107,7 @@ public class FacebookPost extends Activity {
 
 	private boolean pendingAnnounce;
 	private long _itemId;
+	private WishItem _wishItem;
 	private Context _ctx;
 
     private UiLifecycleHelper uiHelper;
@@ -236,8 +237,8 @@ public class FacebookPost extends Activity {
 						imageJson.put("url", params[0]);
 						imageJson.put("user_generated", "false");
 
-						objectJson.put("title", "ipod");
-						objectJson.put("description", "a great mp3 pod");
+						objectJson.put("title", _wishItem.getName());
+						objectJson.put("description", _wishItem.getDesc());
 						objectJson.put("image", imageJson);
 					}
 					catch (JSONException e) {
@@ -454,19 +455,17 @@ public class FacebookPost extends Activity {
 					Log.d(TAG, "doInBackground");
 					Log.d(TAG, "doInBackground passed in token is" + params[0]);
 					try {
-						//String uri = "https://graph.facebook.com/100005720562778/staging_resources";
 						String uri = "https://graph.facebook.com/me/staging_resources";
 						HttpResponse response = null;
 						try {        
 							HttpClient client = new DefaultHttpClient();
 							HttpPost post = new HttpPost(uri);
 							MultipartEntity postEntity = new MultipartEntity();
-							WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
-							String picUriStr = wish_item.getPicStr();
+							_wishItem = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
+							String picUriStr = _wishItem.getPicStr();
 							Log.d(TAG, "doInBackground pic uri" + picUriStr);
 							String picPath = (Uri.parse(picUriStr)).getPath();
 							Log.d(TAG, "doInBackground pic file path: " + picPath);
-							//String picPath = wish_item.getFullsizePicPath();
 							//File file = new File("/data/local/tmp/images.jpg");
 							File file = new File(picPath);
 							Log.d(TAG, "UPLOAD: file length = " + file.length());
