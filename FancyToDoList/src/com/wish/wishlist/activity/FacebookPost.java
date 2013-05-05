@@ -226,18 +226,36 @@ public class FacebookPost extends Activity {
 					Log.d(TAG, "postWish, doInBackground");
 					Bundle postParams = new Bundle();
 					postParams.putString("privacy", "{'value':'ALL_FRIENDS'}");
-					String objectStr = 
-						   "{\"title\":\"ipod\"," +  
-							   "\"description\":\"a great map3 pod\"," +
-							   "\"image\": {" + 
-							   "\"url\":\"" + params[0] + "\"," + 
-							   "\"user_generated\":false }" + 
-							   "}";
-					Log.d(TAG, "postWish, object String " + objectStr);
-					postParams.putString("object", objectStr);
+
+					JSONObject objectJson = new JSONObject();
+					JSONObject imageJson = new JSONObject();
+					try {
+						imageJson.put("url", params[0]);
+						imageJson.put("user_generated", "false");
+
+						objectJson.put("title", "ipod");
+						objectJson.put("description", "a great mp3 pod");
+						objectJson.put("image", imageJson);
+					}
+					catch (JSONException e) {
+						e.printStackTrace();
+					}
+					Log.d(TAG, "postWish, objectJson" + objectJson.toString());
+					postParams.putString("object", objectJson.toString());
+
+//					String objectStr = 
+//						   "{\"title\":\"ipod\"," +  
+//							   "\"description\":\"a great map3 pod\"," +
+//							   "\"image\": {" + 
+//							   "\"url\":\"" + params[0] + "\"," + 
+//							   "\"user_generated\":false }" + 
+//							   "}";
+//					Log.d(TAG, "postWish, object String " + objectStr);
+					//postParams.putString("object", objectStr);
 
 					Request request = new Request(Session.getActiveSession(), POST_OBJECT_PATH, postParams, HttpMethod.POST);
 					return request.executeAndWait();
+					//return null;
 				}
 
 			@Override
