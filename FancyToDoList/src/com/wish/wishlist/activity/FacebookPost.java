@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.MediaStore;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +56,7 @@ import java.net.URISyntaxException;
 import java.net.URI; 
 import java.io.File;
 import java.io.IOException; 
+
 import com.wish.wishlist.R;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
@@ -458,9 +461,14 @@ public class FacebookPost extends Activity {
 							HttpClient client = new DefaultHttpClient();
 							HttpPost post = new HttpPost(uri);
 							MultipartEntity postEntity = new MultipartEntity();
-							//WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
+							WishItem wish_item = WishItemManager.getInstance(_ctx).retrieveItembyId(_itemId);
+							String picUriStr = wish_item.getPicStr();
+							Log.d(TAG, "doInBackground pic uri" + picUriStr);
+							String picPath = (Uri.parse(picUriStr)).getPath();
+							Log.d(TAG, "doInBackground pic file path: " + picPath);
 							//String picPath = wish_item.getFullsizePicPath();
-							File file = new File("/data/local/tmp/images.jpg");
+							//File file = new File("/data/local/tmp/images.jpg");
+							File file = new File(picPath);
 							Log.d(TAG, "UPLOAD: file length = " + file.length());
 							Log.d(TAG, "UPLOAD: file exist = " + file.exists());
 
@@ -590,4 +598,5 @@ public class FacebookPost extends Activity {
 			makeAction.setWish(wish);
 		}
 	}
+
 } 

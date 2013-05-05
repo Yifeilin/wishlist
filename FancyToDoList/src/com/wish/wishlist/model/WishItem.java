@@ -19,9 +19,11 @@ import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
 
+import com.wish.wishlist.R;
+
 
 public class WishItem {
-	private final String TAG = "WishItem";
+	private static final String TAG = "WishList";
 	private final Context _ctx;
 	private long _id = -1;
 	private long _storeId;
@@ -30,10 +32,9 @@ public class WishItem {
 	private String _comments;
 	private String _desc;
 	private String _date;
-	private String _picStr;
+	private String _picStr; //this is a uri
 	private String _fullsizePicPath;
 	private int _priority;
-	private Bitmap _thumbnail;
 	//private Bitmap _fullsizePhoto;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private double _price;
@@ -82,21 +83,12 @@ public class WishItem {
 		_desc = desc;
 		_date = date;
 		_priority = priority;
-		//_thumbnail = thumbnail;
 	}
 
 	public long getId() {
 		return _id;
 	}
 
-	public Bitmap getThumbnail() {
-		return _thumbnail;
-	}
-
-	public void setThumbnail(Bitmap thumnail) {
-		_thumbnail = thumnail;
-	}
-	
 	public void setStoreName(String storeName){
 		_storeName = storeName;
 	}
@@ -253,7 +245,7 @@ public class WishItem {
 			uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 		}
 		else {
-			Log.d("cursor", "cursor is null");
+			Log.d(TAG, "cursor is null");
 		}
 
 		return uri;
