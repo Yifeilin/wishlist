@@ -61,29 +61,11 @@ import com.wish.wishlist.R;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.ImageManager;
+import com.wish.wishlist.facebook.model.WishGraphObject;
+import com.wish.wishlist.facebook.model.MakeAction;
 
 
 public class FacebookPost extends Activity {
-    /**
-     * Interface representing the Wish Open Graph object.
-     */
-	private interface WishGraphObject extends GraphObject {
-		// A URL
-		public String getUrl();
-		public void setUrl(String url);
-		// An ID
-		public String getId();
-		public void setId(String id);
-	}
-
-    /**
-     * Interface representing the Make action.
-     */
-	private interface MakeAction extends OpenGraphAction {
-		// The wish object
-		public WishGraphObject getWish();
-		public void setWish(WishGraphObject wish);
-	}
 
     /**
      * Used to inspect the response from posting an action
