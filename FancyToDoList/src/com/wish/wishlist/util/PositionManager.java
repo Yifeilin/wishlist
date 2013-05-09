@@ -14,7 +14,7 @@ import android.os.Bundle;
 
 public class PositionManager {
 	private Context context;
-	private LocationManager locationManager;
+	private LocationManager _locationManager;
 	private Location _currentBestLocation = null;
 	private String addressString = "unknown";
 	private LocationListener _locationListenerGPS;
@@ -25,7 +25,7 @@ public class PositionManager {
 	
 	public PositionManager(Context Ct) {
 		context = Ct;
-		locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
+		_locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
 //		startLocationUpdates();
 		
 //		criteria = new Criteria();
@@ -39,8 +39,15 @@ public class PositionManager {
 	
 	public void startLocationUpdates(){
 		//exceptions will be thrown if provider is not permitted.
-        try{_gps_enabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);}catch(Exception ex){}
-        try{_network_enabled=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);}catch(Exception ex){}
+        try {
+			_gps_enabled=_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		}
+		catch (Exception ex){}
+
+        try {
+			_network_enabled=_locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		}
+		catch(Exception ex){}
 
         //don't start listeners if no provider is enabled
         if(!_gps_enabled && !_network_enabled) {
@@ -71,15 +78,15 @@ public class PositionManager {
         };
 
         if(_gps_enabled)
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, _locationListenerGPS);
+            _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, _locationListenerGPS);
         if(_network_enabled)
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListenerNetwork);
+            _locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListenerNetwork);
 	}
 	
 	public void stopLocationUpdates(){
 		// Remove the listener you previously added
-		locationManager.removeUpdates(_locationListenerGPS);
-		locationManager.removeUpdates(_locationListenerNetwork);
+		_locationManager.removeUpdates(_locationListenerGPS);
+		_locationManager.removeUpdates(_locationListenerNetwork);
 	}
 	
 	public Location getCurrentLocation() {
@@ -89,18 +96,18 @@ public class PositionManager {
 		
 		// both gps and network location listener has not got a location yet, so use the
 		// the lastknown location
-		Location net_loc=null;
-		Location gps_loc=null;
         if(_gps_enabled) {
-            gps_loc=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (gps_loc != null) {
-            	gotNewLocation(gps_loc);
+			Location gpsLastKnownLoc=null;
+            gpsLastKnownLoc=_locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (gpsLastKnownLoc!= null) {
+            	gotNewLocation(gpsLastKnownLoc);
             }
         }
         if(_network_enabled) {
-            net_loc=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (net_loc != null) {
-            	gotNewLocation(net_loc);
+			Location netLastKnownloc=null;
+            netLastKnownloc=_locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (netLastKnownloc != null) {
+            	gotNewLocation(netLastKnownloc);
             }
         }
         
@@ -112,6 +119,7 @@ public class PositionManager {
 		if (isBetterLocation(newlocation, _currentBestLocation)) {
 			_currentBestLocation = newlocation;
 		}
+		stopLocationUpdates();
 	}
 
 	/** Determines whether one Location reading is better than the current Location fix

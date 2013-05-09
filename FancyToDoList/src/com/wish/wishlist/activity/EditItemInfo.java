@@ -79,7 +79,7 @@ public class EditItemInfo extends Activity {
 	private String _newfullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
 	private LocationDBAdapter mLocationDBAdapter;
-	PositionManager pManager;
+	PositionManager _pManager;
 	private int mYear = -1;
 	private int mMonth = -1;
 	private int mDay = -1;
@@ -112,8 +112,7 @@ public class EditItemInfo extends Activity {
 		mLocationDBAdapter = new LocationDBAdapter(this);
 		mLocationDBAdapter.open();
 		
-		pManager = new PositionManager(EditItemInfo.this);
-		pManager.startLocationUpdates();
+		_pManager = new PositionManager(EditItemInfo.this);
 
 		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
@@ -202,6 +201,7 @@ public class EditItemInfo extends Activity {
 		}
 		
 		else { //we are editing a new wish, get the location in background
+			_pManager.startLocationUpdates();
 			new GetLocationTask().execute("");
 		}
 		
@@ -597,6 +597,9 @@ public class EditItemInfo extends Activity {
 		//the file. Save the uri of the JEPG as a string,
 		//which will be inserted in the column "picture_uri" of
 		//the Item table
+
+		//we should really insert the file path to the table instead of the uri
+		//to make it consistent with fullphotopath
 		try {
 			File f = null;
 			f = PhotoFileCreater.getInstance().setUpPhotoFile(true);
@@ -655,7 +658,7 @@ public class EditItemInfo extends Activity {
 		protected String doInBackground(String... arg) {
 			_isGettingLocation = true;
 			//get the location
-			Location location = pManager.getCurrentLocation();
+			Location location = _pManager.getCurrentLocation();
 			if (location == null){
 				addStr = "unknown";
 				//need better value to indicate it's not valid lat and lng
@@ -668,7 +671,7 @@ public class EditItemInfo extends Activity {
 				lng = location.getLongitude();
 				
 				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
-				addStr = pManager.getCuttentAddStr();
+				addStr = _pManager.getCuttentAddStr();
 			}
 			// Escape early if cancel() is called
 			//if (isCancelled()) break;
