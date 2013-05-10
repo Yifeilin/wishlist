@@ -3,8 +3,6 @@ package com.wish.wishlist.model;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.File;
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
 import android.content.Context;
@@ -18,8 +16,6 @@ import android.database.Cursor;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
-
-import com.wish.wishlist.R;
 
 
 public class WishItem {

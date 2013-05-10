@@ -23,7 +23,6 @@ import com.wish.wishlist.util.ImageManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,8 +30,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,7 +40,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
-import android.database.Cursor;
 
 //import android.content.pm.ActivityInfo;
 
@@ -95,7 +91,6 @@ public class EditItemInfo extends Activity {
 	private AlertDialog alert;
 	static final private int TAKE_PICTURE = 1;
 	private static final int SELECT_PICTURE = 2;
-	private String _selectedImagePath;
 	static final private String TAG = "EditItemInfo";
 
 	@Override
@@ -458,7 +453,6 @@ public class EditItemInfo extends Activity {
 			} 
 			case SELECT_PICTURE: {
 				if (resultCode == RESULT_OK) {
-					Uri imageUri = data.getData();
 					//Log.d(WishList.LOG_TAG, "SELECT_PICTURE: RESULT_OK");
 					Uri selectedImageUri = data.getData();
 					Log.d(WishList.LOG_TAG, "Image URL : " + selectedImageUri.toString());

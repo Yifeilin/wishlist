@@ -18,7 +18,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -60,7 +59,6 @@ public class WishItemDetail extends Activity {
 	private ImageView mPhotoView;
 	private TextView mNameView;
 	private TextView mDescrptView;
-	private View mDetailView;
 	private TextView mDateView;
 	private TextView mPriceView;
 	private TextView mStoreView;
@@ -160,8 +158,6 @@ public class WishItemDetail extends Activity {
 			item.save();
 		}
 
-		// get the resources by their IDs		
-		mDetailView = findViewById(R.id.itemDetail);
 		mNameView = (TextView) findViewById(R.id.itemNameDetail);
 		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
 		mDateView = (TextView) findViewById(R.id.itemDateDetail);

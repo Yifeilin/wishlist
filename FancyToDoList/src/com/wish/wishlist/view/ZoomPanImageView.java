@@ -7,7 +7,6 @@ import android.view.View;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.widget.ImageView;
 import android.util.AttributeSet;
 import android.util.Log;

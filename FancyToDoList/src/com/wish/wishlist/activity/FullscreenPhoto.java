@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
 import com.wish.wishlist.view.ZoomPanImageView;
 
 public class FullscreenPhoto extends Activity {

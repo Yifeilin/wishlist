@@ -1,6 +1,5 @@
 package com.wish.wishlist.activity;
 
-import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,7 +7,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -38,8 +36,6 @@ import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
 import com.wish.wishlist.util.social.ShareHelper;
-import com.wish.wishlist.model.WishItem;
-import com.wish.wishlist.model.WishItemManager;
 
 /***
  * WishList.java is responsible for displaying wish items in either list or grid
