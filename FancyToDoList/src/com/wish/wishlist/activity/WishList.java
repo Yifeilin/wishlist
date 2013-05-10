@@ -521,60 +521,58 @@ public class WishList extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
 
-		switch (item.getItemId()) {
+		long itemId = item.getItemId();
 //		case (R.id.menu_search): {
 //			// should provide search service
 //			onSearchRequested();
 //			return true;
 //		}
-		case (R.id.menu_add): {
+		if (itemId == R.id.menu_add) {
 			// let user generate a wish item
 			Intent editItem = new Intent(this, EditItemInfo.class);
 			startActivityForResult(editItem, ADD_ITEM);
 			return true;
 		}
-		case (R.id.menu_map): {
+		else if (itemId == R.id.menu_map) {
 			Intent mapIntent = new Intent(this, WishListMap.class);
 			mapIntent.putExtra("type", "markAll");			
 			startActivity(mapIntent);
 			return true;
 		}
-		//case (R.id.menu_post): {
+		//else if (itemId == R.id.menu_post) {
 		//	Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
 		//	startActivityForResult(snsIntent, POST_ITEM);
 		//	return true;
 		//}
 
-//		case (R.id.menu_scan): {
+//		else if (itemId == R.id.menu_scan) {
 //			IntentIntegrator.initiateScan(this);
 //			return true;
 //		}
 
-		case (R.id.menu_sortByTime): {
+		else if (itemId == R.id.menu_sortByTime) {
 			SORT_BY = ItemsCursor.SortBy.date_time;
 			onSort(SORT_BY);
 			return true;
 		}
 
-		case (R.id.menu_sortByName): {
+		else if (itemId == R.id.menu_sortByName) {
 			SORT_BY = ItemsCursor.SortBy.item_name;
 			onSort(SORT_BY);
 			return true;
 		}
 
-		case (R.id.menu_sortByPrice): {
+		else if (itemId == R.id.menu_sortByPrice) {
 			SORT_BY = ItemsCursor.SortBy.price;
 			onSort(SORT_BY);
 			return true;
 		}
 
-//		case (R.id.menu_sortByPriority): {
+//		else if (itemId == R.id.menu_sortByPriority) {
 //			SORT_BY = ItemsCursor.SortBy.priority;
 //			onSort(SORT_BY);
 //			return true;
 //		}
-
-		}
 		return false;
 	}
 
@@ -617,25 +615,25 @@ public class WishList extends Activity {
 			return false;
 		}
 		
-		switch (item.getItemId()) {
-		case (R.id.REMOVE_TODO): {
+		long itemId = item.getItemId();
+		if (itemId == R.id.REMOVE_TODO) {
 			// wishListDB.deleteItem(item_id);
 			deleteItem(item_id);
 			return true;
 		}
-		case (R.id.EDIT_TODO): {
+		else if (itemId == R.id.EDIT_TODO) {
 			Intent editItem = new Intent(this, EditItemInfo.class);
 			editItem.putExtra("item_id", item_id);
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
-	//	case (R.id.POST_TODO): {
+	//	else if (itemId == R.id.POST_TODO): {
 	//		Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
 	//		snsIntent.putExtra("wishItem", "test");
 	//		startActivityForResult(snsIntent, POST_ITEM);
 	//		return true;
 	//	}
-		case (R.id.MARK_TODO): {
+		else if (itemId == R.id.MARK_TODO) {
 //			String address = myItemDBAdapter.getItemAddress(item_id);
 //			if (address.equals("unknown")||address.equals("")){
 //				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -663,7 +661,7 @@ public class WishList extends Activity {
 
 		}
 
-		case (R.id.SHARE_TODO): {
+		else if (itemId == R.id.SHARE_TODO) {
 			//Display display = getWindowManager().getDefaultDisplay(); 
 			//int width = display.getWidth();  // deprecated
 			//int height = display.getHeight();  // deprecated
@@ -686,7 +684,6 @@ public class WishList extends Activity {
 			//}
 			//startActivity(Intent.createChooser(sendIntent, "Share using"));
 			return true;
-		}
 		}
 		return false; }
 

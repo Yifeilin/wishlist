@@ -92,32 +92,28 @@ public class DashBoard extends Activity {
 	public void onClickFeature (View v)
 	{
 	    int id = v.getId ();
-	    switch (id) {
-	      case R.id.home_btn_new_item :
+	    if (id == R.id.home_btn_new_item) {
 	           startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
-	           break;
-	      case R.id.home_btn_wishlist :
+		}
+	    else if(id ==  R.id.home_btn_wishlist) {
 	           startActivity (new Intent(getApplicationContext(), WishList.class));
-	           break;
-	      case R.id.home_btn_camera :
+		}
+	    else if(id == R.id.home_btn_camera) {
 	          // startActivity (new Intent(getApplicationContext(), IntentIntegrator.class));
 //	    	   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //	  		   startActivityForResult(intent, TAKE_PICTURE);
 				dispatchTakePictureIntent();
-	           break;
+		}
 //	      case R.id.home_btn_scan :
 ////	           startActivity (new Intent(getApplicationContext(), F4Activity.class));
 //	    	   IntentIntegrator.initiateScan(this);
 //	           break;
-	      case R.id.home_btn_settings :
+	    else if(id == R.id.home_btn_settings) {
 //	           startActivity (new Intent(getApplicationContext(), F5Activity.class));
-	           break;
+		}
 //	      case R.id.home_btn_help :
 ////	           startActivity (new Intent(getApplicationContext(), F6Activity.class));
 //	           break;
-	      default: 
-	    	   break;
-	    }
 	}
 	
 	/**

@@ -522,16 +522,16 @@ public class WishItemDetail extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
 
-		switch (item.getItemId()) {
-		case (R.id.menu_item_detail_edit): {
+		long itemId = item.getItemId();
+		if (itemId == R.id.menu_item_detail_edit) {
 			editItem();
 			return true;
 		}
-		case (R.id.menu_item_detail_share): {
+		else if (itemId == R.id.menu_item_detail_share) {
 			shareItem();
 			return true;
 		}
-		case (R.id.menu_item_detail_map): {
+		else if (itemId == R.id.menu_item_detail_map) {
 			double[] dLocation = new double[2];
 			// open the database for operations of Item table
 			myItemDBAdapter = new ItemDBAdapter(this);
@@ -552,12 +552,10 @@ public class WishItemDetail extends Activity {
 			}
 			return true;
 		}
-		case (R.id.menu_item_detail_delete): {
+		else if (itemId == R.id.menu_item_detail_delete) {
 			deleteItem();
 			return true;
 		}
-		}
 		return false;
 	}
-
 }
