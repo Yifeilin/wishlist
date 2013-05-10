@@ -104,15 +104,14 @@ public class DashBoard extends Activity {
 //	    	   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //	  		   startActivityForResult(intent, TAKE_PICTURE);
 				dispatchTakePictureIntent();
-	    	  
 	           break;
 //	      case R.id.home_btn_scan :
 ////	           startActivity (new Intent(getApplicationContext(), F4Activity.class));
 //	    	   IntentIntegrator.initiateScan(this);
 //	           break;
-//	      case R.id.home_btn_settings :
+	      case R.id.home_btn_settings :
 //	           startActivity (new Intent(getApplicationContext(), F5Activity.class));
-//	           break;
+	           break;
 //	      case R.id.home_btn_help :
 ////	           startActivity (new Intent(getApplicationContext(), F6Activity.class));
 //	           break;
