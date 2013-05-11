@@ -101,6 +101,8 @@ public class DashBoard extends Activity {
 //	    	   IntentIntegrator.initiateScan(this);
 //	           break;
 	    else if(id == R.id.home_btn_settings) {
+			Intent prefIntent = new Intent(getApplicationContext(), WishListPreference.class);
+			startActivity(prefIntent);
 //	           startActivity (new Intent(getApplicationContext(), F5Activity.class));
 		}
 //	      case R.id.home_btn_help :
