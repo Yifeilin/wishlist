@@ -77,13 +77,14 @@ public class ReleaseNotesView {
 		WebView webView = new WebView(_act);
 		webView.loadData(html, "text/html", "utf-8");
 		AlertDialog.Builder builder = new AlertDialog.Builder(_act)
-			.setTitle("Release notes")
-			.setView(webView)
 			.setPositiveButton("Close", new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
 				}
 			});
-		builder.create().show();
+		AlertDialog dialog = builder.create();
+		dialog.setTitle("Release notes");
+		dialog.setView(webView, 0, 0, 0, 0);
+		dialog.show();
 	}
 }
