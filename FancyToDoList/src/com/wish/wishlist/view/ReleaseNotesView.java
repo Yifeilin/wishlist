@@ -15,6 +15,12 @@ import android.util.Log;
 
 public class ReleaseNotesView {
 	static final private String releaseNotesXml = "release_notes"; 
+	static final private String css =
+				"<style type=\"text/css\">"
+				+ "h1 { font-size: 18pt; }"
+				+ "li { font-size: 15pt;}"
+				+ "ol { padding-left: 30px;}"
+				+ "</style>";
 	private Activity _act;
 	public ReleaseNotesView(Activity ctx) {
 		_act = ctx;
@@ -41,7 +47,7 @@ public class ReleaseNotesView {
 		int resId = res.getIdentifier(releaseNotesXml, "xml", pkgName);
 		XmlResourceParser parser = res.getXml(resId);
 
-		String html = "<html><head></head><body>";
+		String html = "<html><head>" + css + "</head><body>";
 		try
 		{
 			int eventType = parser.getEventType();
