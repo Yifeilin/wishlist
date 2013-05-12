@@ -17,8 +17,8 @@ public class ReleaseNotesView {
 	static final private String releaseNotesXml = "release_notes"; 
 	static final private String css =
 				"<style type=\"text/css\">"
-				+ "h1 { font-size: 18pt; }"
-				+ "li { font-size: 15pt;}"
+				+ "h1 { font-size: 16pt; }"
+				+ "li { font-size: 12pt;}"
 				+ "ol { padding-left: 30px;}"
 				+ "</style>";
 	private Activity _act;
