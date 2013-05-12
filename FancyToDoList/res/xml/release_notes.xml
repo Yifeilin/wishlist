@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <releaseNote>
 	<release versionName="1.0.5" versionCode="8">
-		<note>test</note>
+		<note>Users can import existing photos on the phone when creating and editing wishes.</note>
+		<note>Improved the list and grid view. The views now adjust layout according to different screen size.</note>
 	</release>    
 	<release versionName="1.0.4" versionCode="7">
-		<note>test</note>
+		<note>Share wishes to friendes via various social network including facebook, google+, twitter and more.</note>
+		<note>Send wishes through e-mail or to other applications such as Evernote.</note>
+		<note>Automatically detect and record location when a new wish is added.</note>
 	</release>    
+	<release versionName="1.0.3">
+		<note>Enable searching wishes by name.</note>
+		<note>Support both portrait and landscape mode.</note>
+		<note>Display wishes faster, especially those with photos.</note>
+		<note>Add menu to wish details page.</note>
+		<note>Improve stability.</note>
+	</release>
+	<release versionName="1.0.2">
+		<note>Bug fixes.</note>
+		<note>The issue that some users reported about app crashing on tapping "Wishes" should be fixed in this version.</note>
+	</release>
 </releaseNote>
