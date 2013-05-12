@@ -16,8 +16,4 @@
 		<note>Add menu to wish details page.</note>
 		<note>Improve stability.</note>
 	</release>
-	<release versionName="1.0.2">
-		<note>Bug fixes.</note>
-		<note>The issue that some users reported about app crashing on tapping "Wishes" should be fixed in this version.</note>
-	</release>
 </releaseNote>
