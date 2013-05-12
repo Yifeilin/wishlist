@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<releaseNote>
+	<release versionName="1.0.5" versionCode="8">
+		<note>test</note>
+	</release>    
+	<release versionName="1.0.4" versionCode="7">
+		<note>test</note>
+	</release>    
+</releaseNote>
