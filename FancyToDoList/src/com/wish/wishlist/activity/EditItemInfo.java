@@ -42,6 +42,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 //import android.content.pm.ActivityInfo;
 
@@ -199,39 +200,46 @@ public class EditItemInfo extends Activity implements Observer {
 		}
 		
 		else { //we are editing a new wish, get the location in background
-			_pManager.startLocationUpdates();
-			_isGettingLocation = true;
-			myLocation.setText("Loading location...");
+			boolean tagLocation = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autoLocation", true);
+			if (tagLocation) {
+				Log.d(WishList.LOG_TAG, "tag location true"); 
+				_pManager.startLocationUpdates();
+				_isGettingLocation = true;
+				myLocation.setText("Loading location...");
+			}
+			else {
+				Log.d(WishList.LOG_TAG, "tag location false"); 
+			}
 		}
 		
 		backImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				navigateBack();
- 			}
+				navigateBack();
+			}
 		});	
 
 		saveImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
 				saveWishItem();
- 			}
+			}
 		});
 		
 		mapImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				//get the location
+				//get the location
 				if (!_isGettingLocation) {
 					_pManager.startLocationUpdates();
 					_isGettingLocation = true;
 					myLocation.setText("Loading location...");
 				}
- 			}
+			}
 		});
 
 		cameraImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
 				//builder.setTitle(R.string.pick_color);
@@ -241,7 +249,7 @@ public class EditItemInfo extends Activity implements Observer {
 					// The 'which' argument contains the index position
 					// of the selected item
 						if (which == 0) {
-	 						dispatchTakePictureIntent();
+							dispatchTakePictureIntent();
 						}
 						else if (which == 1) {
 							dispatchImportPictureIntent();
@@ -254,11 +262,11 @@ public class EditItemInfo extends Activity implements Observer {
 		});
 
 		galleryImageButton.setOnClickListener(new OnClickListener() {
-		    	@Override
+				@Override
 			public void onClick(View view) {
- 				//open gallery;
+				//open gallery;
 				dispatchImportPictureIntent();
- 			}
+			}
 		});
 
 		//set the keyListener for the Item Name EditText
