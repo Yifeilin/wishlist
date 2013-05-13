@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 public class PositionManager extends Observable {
@@ -25,10 +26,11 @@ public class PositionManager extends Observable {
 	private static final int LISTEN_INTERVAL = 1000 * 60;//1min
 	boolean _gps_enabled=false;
 	boolean _network_enabled=false;
+	Handler _timeoutHandler = new Handler();
 	
-	public PositionManager(Context Ct) {
-		context = Ct;
-		_locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
+	public PositionManager(Context ctx) {
+		context = ctx;
+		_locationManager = (LocationManager)ctx.getSystemService(Context.LOCATION_SERVICE);
 //		criteria = new Criteria();
 //        criteria.setAccuracy(Criteria.ACCURACY_FINE);
 //        criteria.setAltitudeRequired(false);
@@ -56,32 +58,41 @@ public class PositionManager extends Observable {
         }
         
         // Define a listener that responds to location updates
-        _locationListenerGPS = new LocationListener() {
-        	public void onLocationChanged(Location location) {
-        		// Called when a new location is found by the gps location provider.
-        		gotNewLocation(location);
-        	}
+		_locationListenerGPS = new LocationListener() {
+			public void onLocationChanged(Location location) {
+				// Called when a new location is found by the gps location provider.
+				gotNewLocation(location);
+			}
 
-        	public void onStatusChanged(String provider, int status, Bundle extras) {}
-        	public void onProviderEnabled(String provider) {}
-        	public void onProviderDisabled(String provider) {}
-        };
+			public void onStatusChanged(String provider, int status, Bundle extras) {}
+			public void onProviderEnabled(String provider) {}
+			public void onProviderDisabled(String provider) {}
+		};
 
         _locationListenerNetwork = new LocationListener() {
-        	public void onLocationChanged(Location location) {
-        		// Called when a new location is found by the network location provider.
-        		gotNewLocation(location);
-        	}
+			public void onLocationChanged(Location location) {
+				// Called when a new location is found by the network location provider.
+				gotNewLocation(location);
+			}
 
-        	public void onStatusChanged(String provider, int status, Bundle extras) {}
-        	public void onProviderEnabled(String provider) {}
-        	public void onProviderDisabled(String provider) {}
+			public void onStatusChanged(String provider, int status, Bundle extras) {}
+			public void onProviderEnabled(String provider) {}
+			public void onProviderDisabled(String provider) {}
         };
 
         if(_gps_enabled)
             _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, _locationListenerGPS);
         if(_network_enabled)
             _locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _locationListenerNetwork);
+
+		//start the timer for listenning to location update
+		_timeoutHandler.postDelayed(new Runnable() {
+			public void run() {
+				stopLocationUpdates();
+				setChanged();
+				notifyObservers();
+			}
+		}, 12 * 1000);//timout is 12s
 	}
 	
 	public void stopLocationUpdates(){
@@ -101,14 +112,14 @@ public class PositionManager extends Observable {
 			Location gpsLastKnownLoc=null;
             gpsLastKnownLoc=_locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (gpsLastKnownLoc!= null) {
-            	gotNewLocation(gpsLastKnownLoc);
+				gotNewLocation(gpsLastKnownLoc);
             }
         }
         if(_network_enabled) {
 			Location netLastKnownloc=null;
             netLastKnownloc=_locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (netLastKnownloc != null) {
-            	gotNewLocation(netLastKnownloc);
+				gotNewLocation(netLastKnownloc);
             }
         }
         
@@ -120,6 +131,7 @@ public class PositionManager extends Observable {
 		if (isBetterLocation(newlocation, _currentBestLocation)) {
 			_currentBestLocation = newlocation;
 		}
+		_timeoutHandler.removeCallbacksAndMessages(null);
 		stopLocationUpdates();
 		setChanged();
 		notifyObservers();
@@ -131,53 +143,53 @@ public class PositionManager extends Observable {
 	  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
 	  */
 	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
-	    if (currentBestLocation == null) {
-	        // A new location is always better than no location
-	        return true;
-	    }
+		if (currentBestLocation == null) {
+			// A new location is always better than no location
+			return true;
+		}
 
-	    // Check whether the new location fix is newer or older
-	    long timeDelta = location.getTime() - currentBestLocation.getTime();
-	    boolean isSignificantlyNewer = timeDelta > LISTEN_INTERVAL;
-	    boolean isSignificantlyOlder = timeDelta < -LISTEN_INTERVAL;
-	    boolean isNewer = timeDelta > 0;
+		// Check whether the new location fix is newer or older
+		long timeDelta = location.getTime() - currentBestLocation.getTime();
+		boolean isSignificantlyNewer = timeDelta > LISTEN_INTERVAL;
+		boolean isSignificantlyOlder = timeDelta < -LISTEN_INTERVAL;
+		boolean isNewer = timeDelta > 0;
 
-	    // If it's been more than two minutes since the current location, use the new location
-	    // because the user has likely moved
-	    if (isSignificantlyNewer) {
-	        return true;
-	    // If the new location is more than two minutes older, it must be worse
-	    } else if (isSignificantlyOlder) {
-	        return false;
-	    }
+		// If it's been more than two minutes since the current location, use the new location
+		// because the user has likely moved
+		if (isSignificantlyNewer) {
+			return true;
+		// If the new location is more than two minutes older, it must be worse
+		} else if (isSignificantlyOlder) {
+			return false;
+		}
 
-	    // Check whether the new location fix is more or less accurate
-	    int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
-	    boolean isLessAccurate = accuracyDelta > 0;
-	    boolean isMoreAccurate = accuracyDelta < 0;
-	    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+		// Check whether the new location fix is more or less accurate
+		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+		boolean isLessAccurate = accuracyDelta > 0;
+		boolean isMoreAccurate = accuracyDelta < 0;
+		boolean isSignificantlyLessAccurate = accuracyDelta > 200;
 
-	    // Check if the old and new location are from the same provider
-	    boolean isFromSameProvider = isSameProvider(location.getProvider(),
-	            currentBestLocation.getProvider());
+		// Check if the old and new location are from the same provider
+		boolean isFromSameProvider = isSameProvider(location.getProvider(),
+				currentBestLocation.getProvider());
 
-	    // Determine location quality using a combination of timeliness and accuracy
-	    if (isMoreAccurate) {
-	        return true;
-	    } else if (isNewer && !isLessAccurate) {
-	        return true;
-	    } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-	        return true;
-	    }
-	    return false;
+		// Determine location quality using a combination of timeliness and accuracy
+		if (isMoreAccurate) {
+			return true;
+		} else if (isNewer && !isLessAccurate) {
+			return true;
+		} else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+			return true;
+		}
+		return false;
 	}
 
 	/** Checks whether two providers are the same */
 	private boolean isSameProvider(String provider1, String provider2) {
-	    if (provider1 == null) {
-	      return provider2 == null;
-	    }
-	    return provider1.equals(provider2);
+		if (provider1 == null) {
+		  return provider2 == null;
+		}
+		return provider1.equals(provider2);
 	}
 	
 	public String getCuttentAddStr(){ //this needs network to be on
