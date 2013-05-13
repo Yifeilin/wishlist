@@ -9,6 +9,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 
 import com.wish.wishlist.R;
+import com.wish.wishlist.view.ReleaseNotesView;
  
 public class WishListPreference extends PreferenceActivity {
 	@Override
@@ -19,9 +20,7 @@ public class WishListPreference extends PreferenceActivity {
 			Preference releaseNotes = (Preference) findPreference("releaseNotes");
 			releaseNotes.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
-					Toast.makeText(getBaseContext(),
-						"The release notes has been clicked",
-						Toast.LENGTH_LONG).show();
+					//Toast.makeText(getBaseContext(), "The release notes has been clicked", Toast.LENGTH_LONG).show();
 			//		SharedPreferences customSharedPreference = getSharedPreferences(
 			//			"myCustomSharedPrefs", Activity.MODE_PRIVATE);
 			//		SharedPreferences.Editor editor = customSharedPreference;
@@ -29,6 +28,8 @@ public class WishListPreference extends PreferenceActivity {
 			//editor.putString("myCustomPref",
 			//	"The preference has been clicked");
 			//editor.commit();
+				   ReleaseNotesView view = new ReleaseNotesView(WishListPreference.this); 
+				   view.show();
 					return true;
 				}
 			});
