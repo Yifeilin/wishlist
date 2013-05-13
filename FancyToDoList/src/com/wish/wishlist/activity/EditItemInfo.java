@@ -10,6 +10,8 @@ import java.io.BufferedOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observer;
+import java.util.Observable;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.LocationDBAdapter;
@@ -47,7 +49,7 @@ import android.os.AsyncTask;
  * including its name, description, time, price, location and photo, and saving them
  * as a row in the Item table in the database
  */
-public class EditItemInfo extends Activity {
+public class EditItemInfo extends Activity implements Observer {
 
 	private EditText myItemName;
 	private EditText myNote;
@@ -108,6 +110,7 @@ public class EditItemInfo extends Activity {
 		mLocationDBAdapter.open();
 		
 		_pManager = new PositionManager(EditItemInfo.this);
+		_pManager.addObserver(this);
 
 		//find the resources by their ids
 		myItemName = (EditText) findViewById(R.id.itemname);
@@ -197,7 +200,8 @@ public class EditItemInfo extends Activity {
 		
 		else { //we are editing a new wish, get the location in background
 			_pManager.startLocationUpdates();
-			new GetLocationTask().execute("");
+			_isGettingLocation = true;
+			myLocation.setText("Loading location...");
 		}
 		
 		backImageButton.setOnClickListener(new OnClickListener() {
@@ -219,7 +223,9 @@ public class EditItemInfo extends Activity {
 			public void onClick(View view) {
  				//get the location
 				if (!_isGettingLocation) {
-					new GetLocationTask().execute("");
+					_pManager.startLocationUpdates();
+					_isGettingLocation = true;
+					myLocation.setText("Loading location...");
 				}
  			}
 		});
@@ -647,10 +653,11 @@ public class EditItemInfo extends Activity {
 //		}
 	}
 
-	private class GetLocationTask extends AsyncTask<String, Void, String> {//<param, progress, result>
-		@Override
-		protected String doInBackground(String... arg) {
-			_isGettingLocation = true;
+	@Override
+		public void update(Observable observable, Object data) {
+			// This method is notified after data changes.
+			Log.d(WishList.LOG_TAG, "update");
+			Toast.makeText(this, "I am notified", 0).show();
 			//get the location
 			Location location = _pManager.getCurrentLocation();
 			if (location == null){
@@ -667,28 +674,11 @@ public class EditItemInfo extends Activity {
 				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
 				addStr = _pManager.getCuttentAddStr();
 			}
-			// Escape early if cancel() is called
-			//if (isCancelled()) break;
-			Log.d(TAG, "finish doInBackground");
-			return addStr;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			//Toast.makeText(EditItemInfo.this, "preExecute", Toast.LENGTH_LONG);
-			myLocation.setText("Loading location...");
-		}
-
-		@Override
-		protected void onPostExecute(String add) {
 			_isGettingLocation = false;
-			Log.d(TAG, "onPostExe");
 			if (addStr.equals("unknown")) {
 				Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
 			}
 			myLocation.setText(addStr);
 		}
-	}
 }
 

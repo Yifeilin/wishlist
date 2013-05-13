@@ -3,6 +3,7 @@ package com.wish.wishlist.util;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
 
 import android.content.Context;
 import android.location.Address;
@@ -11,8 +12,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
-public class PositionManager {
+public class PositionManager extends Observable {
+	static final String LOG_TAG = "WishList";
 	private Context context;
 	private LocationManager _locationManager;
 	private Location _currentBestLocation = null;
@@ -26,18 +29,16 @@ public class PositionManager {
 	public PositionManager(Context Ct) {
 		context = Ct;
 		_locationManager = (LocationManager)Ct.getSystemService(Context.LOCATION_SERVICE);
-//		startLocationUpdates();
-		
 //		criteria = new Criteria();
 //        criteria.setAccuracy(Criteria.ACCURACY_FINE);
 //        criteria.setAltitudeRequired(false);
 //        criteria.setBearingRequired(false);
 //        criteria.setCostAllowed(true);
 //        criteria.setPowerRequirement(Criteria.POWER_LOW);
-		
 	}
-	
+
 	public void startLocationUpdates(){
+		Log.d(LOG_TAG, "startLocationUpdates");
 		//exceptions will be thrown if provider is not permitted.
         try {
 			_gps_enabled=_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -120,6 +121,9 @@ public class PositionManager {
 			_currentBestLocation = newlocation;
 		}
 		stopLocationUpdates();
+		setChanged();
+		notifyObservers();
+		Log.d(LOG_TAG, "notifyObservers called");
 	}
 
 	/** Determines whether one Location reading is better than the current Location fix
