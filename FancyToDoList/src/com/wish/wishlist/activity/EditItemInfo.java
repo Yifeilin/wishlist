@@ -657,7 +657,6 @@ public class EditItemInfo extends Activity implements Observer {
 		public void update(Observable observable, Object data) {
 			// This method is notified after data changes.
 			Log.d(WishList.LOG_TAG, "update");
-			Toast.makeText(this, "I am notified", 0).show();
 			//get the location
 			Location location = _pManager.getCurrentLocation();
 			if (location == null){
@@ -670,15 +669,27 @@ public class EditItemInfo extends Activity implements Observer {
 				//get current latitude and longitude
 				lat = location.getLatitude();
 				lng = location.getLongitude();
-				
+				new GetAddressTask().execute("");
+			}
+		}
+
+	private class GetAddressTask extends AsyncTask<String, Void, String> {//<param, progress, result>
+		@Override
+			protected String doInBackground(String... arg) {
 				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
 				addStr = _pManager.getCuttentAddStr();
+				Log.d(TAG, "finish doInBackground");
+				return addStr;
 			}
-			_isGettingLocation = false;
-			if (addStr.equals("unknown")) {
-				Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+		@Override
+			protected void onPostExecute(String add) {
+				Log.d(TAG, "onPostExe");
+				if (addStr.equals("unknown")) {
+					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+				}
+				myLocation.setText(addStr);
+				_isGettingLocation = false;
 			}
-			myLocation.setText(addStr);
-		}
+	}
 }
 
