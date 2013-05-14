@@ -4,9 +4,17 @@
 		android:title="Auto tag location"
 		android:summary="Tag location automatically when creating new wishes"
 		android:defaultValue="true"
-		android:key="autoLocation" />
-	<Preference android:title="Release notes"
-		android:key="releaseNotes" />
-	<Preference android:title="Rate the app"
-		android:key="rateApp" />
+		android:key="autoLocation"
+		android:layout="@xml/checkbox_preference_style"/>
+
+	<Preference
+		android:title="Release notes"
+		android:key="releaseNotes"
+		android:layout="@xml/preference_style"/>
+
+	<Preference
+		android:title="Rate the app"
+		android:key="rateApp"
+		android:layout="@xml/preference_style"/>
+
 </PreferenceScreen>
