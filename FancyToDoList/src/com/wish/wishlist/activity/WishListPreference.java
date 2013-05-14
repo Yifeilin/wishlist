@@ -1,21 +1,36 @@
 package com.wish.wishlist.activity;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.view.ReleaseNotesView;
  
 public class WishListPreference extends PreferenceActivity {
+	private ImageButton _backImageButton;
+
 	@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.layout.wishlist_preference);
+			setContentView(R.layout.preference_parent);
+
+			findViewById(R.id.preference_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			_backImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					setResult(RESULT_CANCELED, null);
+					finish();
+				}
+			});	
+
 			// Get the custom preference
 			Preference releaseNotes = (Preference) findPreference("releaseNotes");
 			releaseNotes.setOnPreferenceClickListener(new OnPreferenceClickListener() {
