@@ -6,25 +6,7 @@
 	android:layout_height="fill_parent"
 	android:background="@color/bodyBackground_light_grey">
 
-	<LinearLayout style="@style/TitleBar" 
-	    android:id="@+id/itemDetail_top">
-
-		<ImageButton style="@style/TitleBarWishBack"
-		    android:id="@+id/imageButton_back_logo"
-			android:contentDescription="@string/description_back_logo" android:src="@drawable/wish_back_georgia_medium"
-			android:onClick="onClickHome" />
-		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/my_wishes" />
--- 		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_share"
-			android:contentDescription="@string/description_share" android:src="@drawable/ic_share_default"
-			android:onClick="onClickShare" />
-		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_edit"
-			android:contentDescription="@string/description_edit" android:src="@drawable/ic_edit_default"
-			android:onClick="onClickEdit" />
-		<ImageButton style="@style/TitleBarAction" android:id="@+id/imageButton_delete"
-			android:contentDescription="@string/description_delete" android:src="@drawable/ic_trashbin_grey_default_48by48"
-			android:onClick="onClickDelete" />
-	</LinearLayout>
+ 	<include android:id="@+id/detailView_header" layout="@layout/header" />
 	
 	<!--android:visibility = "invisible"-->
 	<ScrollView android:layout_width="fill_parent"

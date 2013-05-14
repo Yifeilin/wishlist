@@ -111,6 +111,9 @@ public class WishList extends Activity {
 		Intent intent = getIntent();
 
 		setContentView(R.layout.main);
+		findViewById(R.id.listView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+		findViewById(R.id.listView_header).findViewById(R.id.imageButton_viewType).setVisibility(View.VISIBLE);
+		findViewById(R.id.listView_header).findViewById(R.id.imageButton_search).setVisibility(View.VISIBLE);
 
 		// get the resources by their IDs
 		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
@@ -223,7 +226,7 @@ public class WishList extends Activity {
  
 		});		
 		
-		viewImageButton = (ImageButton) findViewById(R.id.imageButton_view);
+		viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
 		viewImageButton.setOnClickListener(new OnClickListener() {
  			@Override
 			public void onClick(View view) {

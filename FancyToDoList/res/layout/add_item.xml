@@ -5,42 +5,7 @@
     android:orientation="vertical"
     android:background="@color/bodyBackground_light_grey">
 	
-	<LinearLayout style="@style/TitleBar"
-	android:id="@+id/addItem_top">
-		<ImageButton
-		    android:id="@+id/imageButton_back_logo"
-		    style="@style/TitleBarWishBack"
-		    android:onClick="onClickHome"
-		    android:src="@drawable/wish_back_georgia_medium" />
-			
-  		<TextView style="@style/TitleBarText"
-			android:contentDescription="@string/make_a_wish"
-		 />
-
-<!-- 	<ImageButton style="@style/TitleBarAction"
-			android:contentDescription="@string/description_search" android:src="@drawable/title_search"
-			android:onClick="onClickSearch" />
--->
-		<ImageButton style="@style/TitleBarWishBack"
-			android:id="@+id/imageButton_save"
-			android:contentDescription="@string/description_save" 
-			android:src="@drawable/save_georgia_medium"
-			android:onClick="onClickSave" />
-
-	<!-- 			<Button
-		 android:id="@+id/Button_save"
-	     android:layout_height="fill_parent"
-	     android:layout_width="wrap_content"
-	     android:text="SAVE"
-	     android:textSize="24sp"
-	     android:textColor="@color/headBarText_light_grey"
-	     android:paddingTop = "5dip"
-	     android:paddingLeft="10dip"
-	     android:paddingRight="10dip"
-	     android:background="@android:color/transparent"
-	     android:onClick="onClickSave" />
-	     -->
-	</LinearLayout>
+ 	<include android:id="@+id/addItemView_header" layout="@layout/header" />
 
 <!-- we must use a relativelayout here to correctly position the scrollview and the footer.
 	the footer must be defined before the scrollview and the scrollview's aligment 

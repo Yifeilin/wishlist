@@ -101,6 +101,9 @@ public class EditItemInfo extends Activity implements Observer {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.add_item);
+
+		findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+		findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_save).setVisibility(View.VISIBLE);
 		
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);

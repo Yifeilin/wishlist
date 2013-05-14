@@ -11,19 +11,15 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.util.camera.CameraManager;
 
-
 public class DashBoard extends Activity {
 	static final private int TAKE_PICTURE = 1;
 	private static final int EDIT_ITEM = 2;
-	private ImageButton prefImageButton;
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
 	private static final String VERSION_KEY = "version_number";
@@ -32,7 +28,8 @@ public class DashBoard extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
-		
+		findViewById(R.id.dashboard_header).findViewById(R.id.imageView_logo).setVisibility(View.VISIBLE);
+
 		// myDBAdapter is effective only when the database is first created
 		DBAdapter.getInstance(this).createDB();
 		
@@ -48,14 +45,6 @@ public class DashBoard extends Activity {
 		else{
 			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
 		}
-		
-		prefImageButton = (ImageButton) findViewById(R.id.imageButton_pref);
-		prefImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
-			public void onClick(View view) {
- 				//navigateBack();
- 			}
-		});
 
 		//show the what's new dialog if necessary
 		SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
