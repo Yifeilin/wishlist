@@ -1,5 +1,8 @@
 package com.wish.wishlist.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -52,7 +55,13 @@ public class WishListPreference extends PreferenceActivity {
 			Preference rateApp = (Preference) findPreference("rateApp");
 			rateApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				public boolean onPreferenceClick(Preference preference) {
-					Toast.makeText(getBaseContext(), "The rate app has been clicked", Toast.LENGTH_LONG).show();
+					Uri uri = Uri.parse("market://details?id=" + getPackageName());
+					Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+					try {
+						startActivity(goToMarket);
+					} catch (ActivityNotFoundException e) {
+					}
+					//Toast.makeText(getBaseContext(), "The rate app has been clicked", Toast.LENGTH_LONG).show();
 					return true;
 				}
 			});
