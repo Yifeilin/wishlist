@@ -6,61 +6,34 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.provider.MediaStore;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.*;
-import com.facebook.widget.LoginButton;
-import com.facebook.widget.LoginButton.OnErrorListener;
-import com.facebook.widget.ProfilePictureView;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-
-import android.view.Menu;
-import android.content.Context;
 
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import java.net.URISyntaxException; 
-import java.net.URI; 
 import java.io.File;
-import java.io.IOException; 
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
-import com.wish.wishlist.util.ImageManager;
 import com.wish.wishlist.facebook.model.WishGraphObject;
 import com.wish.wishlist.facebook.model.MakeAction;
 
@@ -246,11 +219,65 @@ public class FacebookPost extends Activity {
 
 			@Override
 				protected void onPostExecute(Response response) {
-					Log.d(TAG, "onPostExecute");
-					onPostActionResponse(response);
+					PostResponse postResponse = response.getGraphObjectAs(PostResponse.class);
+					Log.d(TAG, "onPostExecute, returned id is: " + postResponse.getId());
+					makeWish(postResponse.getId());
+					//onPostActionResponse(response);
 				}
 		};
 		task.execute(imageUri);
+	}
+
+	private void makeWish(String objectId) {
+		Log.d(TAG, "makeWish");
+		pendingAnnounce = false;
+		Session session = Session.getActiveSession();
+
+		if (session == null || !session.isOpened()) {
+			Log.d(TAG, "handleAnnounce: session is null or session is not opened");
+			return;
+		}
+
+		List<String> permissions = session.getPermissions();
+		if (!permissions.containsAll(PERMISSIONS)) {
+			Log.d(TAG, "handleAnnounce: session not contain all permission");
+			pendingAnnounce = true;
+			requestPublishPermissions(session);
+			return;
+		}
+
+		// Show a progress dialog because sometimes the requests can take a while.
+		progressDialog = ProgressDialog.show(this, "", this.getResources().getString(R.string.progress_dialog_text), true);
+
+		// Run this in a background thread since some of the populate methods may take
+		// a non-trivial amount of time.
+		AsyncTask<String, Void, Response> task = new AsyncTask<String, Void, Response>() {
+			@Override
+				protected Response doInBackground(String... params) {
+					Log.d(TAG, "doInBackground");
+					MakeAction makeAction = GraphObject.Factory.create(MakeAction.class);
+					//associate the wish object to make action
+					if (wishUrl != null) {
+					//	MakeAction makeAction = action.cast(MakeAction.class);
+						WishGraphObject wish = GraphObject.Factory.create(WishGraphObject.class);
+						//wish.setUrl(wishUrl);
+						wish.setId(params[0]);
+						Log.d(TAG, "makeWish object Id is: " + params[0]);
+						makeAction.setWish(wish);
+						makeAction.setProperty("fb:explicitly_shared", "true");
+					}
+					Request request = new Request(Session.getActiveSession(), POST_ACTION_PATH, null, HttpMethod.POST);
+					request.setGraphObject(makeAction);
+					return request.executeAndWait();
+				}
+
+			@Override
+				protected void onPostExecute(Response response) {
+					Log.d(TAG, "makeWish onPostExecute");
+					onPostActionResponse(response);
+				}
+		};
+		task.execute(objectId);
 	}
 
 	private void handleAnnounce() {
@@ -289,12 +316,11 @@ public class FacebookPost extends Activity {
 					if (wishUrl != null) {
 					//	MakeAction makeAction = action.cast(MakeAction.class);
 						WishGraphObject wish = GraphObject.Factory.create(WishGraphObject.class);
-						wish.setUrl(wishUrl);
+						//wish.setUrl(wishUrl);
 						makeAction.setWish(wish);
 					}
 
 					Request request = new Request(Session.getActiveSession(), POST_ACTION_PATH, null, HttpMethod.POST);
-
 					request.setGraphObject(makeAction);
 					return request.executeAndWait();
 				}
