@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <releaseNote>
+	<release versionName="1.0.6" versionCode="9">
+		<note>Added a Settings section where users can enable/disable auto location tagging, view release notes and rate the app."</note>
+		<note>Improved the experience of location tagging while new wish is being created."</note>
+	</release>
 	<release versionName="1.0.5" versionCode="8">
 		<note>Users can import existing photos on the phone when creating and editing wishes.</note>
 		<note>Improved the list and grid view. The views now adjust layout according to different screen size.</note>

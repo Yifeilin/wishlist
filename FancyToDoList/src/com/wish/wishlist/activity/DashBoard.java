@@ -176,9 +176,9 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.5\n" + 
-			"1. Users can import existing photos on the phone when creating and editing wishes.\n\n" +
-			"2. Improved the list and grid view. The views now adjust layout according to different screen size."
+		builder.setMessage("Version 1.0.6\n" + 
+			"1. Added a Settings section where users can enable/disable auto location tagging, view release notes and rate the app.\n\n" +
+			"2. Improved the experience of location tagging while new wish is being created."
 					).setCancelable(
 			false).setPositiveButton("OK",
 				new DialogInterface.OnClickListener() {
