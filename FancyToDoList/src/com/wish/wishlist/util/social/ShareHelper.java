@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface; 
 import android.content.Intent; 
 import android.content.pm.ResolveInfo; 
-import android.graphics.Bitmap; 
 
 import com.facebook.android.Facebook; 
 
@@ -17,6 +16,7 @@ import com.wish.wishlist.R;
 import com.wish.wishlist.model.WishItem;  
 import com.wish.wishlist.model.WishItemManager;  
 import com.wish.wishlist.activity.WishItemPostToSNS;
+import com.wish.wishlist.activity.FacebookPost;
 import com.wish.wishlist.util.social.ShareIntentListAdapter;  
 
 public class ShareHelper {
@@ -50,6 +50,9 @@ public Facebook share() {
 		public void onClick(DialogInterface dialog, int which) {
 			ResolveInfo info = (ResolveInfo) adapter.getItem(which);
 			if (info.activityInfo.packageName.contains("facebook")) { 
+				//Intent facebookPostIntent = new Intent(_ctx, FacebookPost.class);
+				//facebookPostIntent.putExtra("itemId", _itemId);
+				//((Activity)_ctx).startActivityForResult(facebookPostIntent, 1);
 				Intent snsIntent = new Intent(_ctx, WishItemPostToSNS.class);
 				snsIntent.putExtra("itemId", _itemId);
 				((Activity)_ctx).startActivityForResult(snsIntent, 1);
