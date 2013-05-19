@@ -675,6 +675,8 @@ public class EditItemInfo extends Activity implements Observer {
 				//need better value to indicate it's not valid lat and lng
 				lat = Double.MIN_VALUE;
 				lng = Double.MIN_VALUE;
+				myLocation.setText(addStr);
+				_isGettingLocation = false;
 			}
 			else {
 				//get current latitude and longitude
