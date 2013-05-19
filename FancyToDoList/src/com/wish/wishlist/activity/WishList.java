@@ -70,7 +70,7 @@ public class WishList extends Activity {
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private String nameQuery = null;
-	static final String LOG_TAG = "WishList";
+	public static final String LOG_TAG = "WishList";
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
 	private String viewOption = "list";

@@ -3,6 +3,8 @@ package com.wish.wishlist.view;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.wish.wishlist.activity.WishList;
+
 import java.io.IOException;
 import android.app.Dialog;
 import android.app.Activity;
@@ -11,9 +13,11 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.util.Log;
 
 public class ReleaseNotesView {
+	private static final String TAG = WishList.LOG_TAG;
 	static final private String releaseNotesXml = "release_notes"; 
 	static final private String css =
 				"<style type=\"text/css\">"
@@ -75,16 +79,22 @@ public class ReleaseNotesView {
 	public void show() {
 		String html = getReleaseNotesHtml();
 		WebView webView = new WebView(_act);
-		webView.loadData(html, "text/html", "utf-8");
-		AlertDialog.Builder builder = new AlertDialog.Builder(_act)
+		webView.setWebViewClient(new WebViewClient() {
+		public void onPageFinished(WebView view, String url) {
+			Log.d(TAG, "onPageFinished");
+			AlertDialog.Builder builder = new AlertDialog.Builder(_act)
 			.setPositiveButton("Close", new Dialog.OnClickListener() {
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
 				}
 			});
-		AlertDialog dialog = builder.create();
-		dialog.setTitle("Release notes");
-		dialog.setView(webView, 0, 0, 0, 0);
-		dialog.show();
+			AlertDialog dialog = builder.create();
+			dialog.setTitle("Release notes");
+			dialog.setView(view, 0, 0, 0, 0);
+			dialog.show();
+			Log.d(TAG, "dialog show");
+		}
+		});
+		webView.loadData(html, "text/html", "utf-8");
 	}
 }
