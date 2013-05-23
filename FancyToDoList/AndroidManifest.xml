@@ -6,10 +6,10 @@
 
     <!-- min sdkversion earlier than 4 will implicitly require WRITE_EXTERNAL_STORAGE and READ_PHONE_STATE 
     user permission. set the min version >= 4 to avoid that -->
-	<uses-sdk android:minSdkVersion="4"  
-	    	android:targetSdkVersion="10" /> 
-	    	<!-- 4 is android 1.6 -->
-	    	<!-- 10 is android 2.3.3 and 2.3.4-->
+	<uses-sdk android:minSdkVersion="8"  
+	    	android:targetSdkVersion="17" /> 
+	    	<!-- 8 is android 2.2.x FROYO -->
+	    	<!-- 17 is android 4.2.x  JELLY BEAN-->
 	
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
