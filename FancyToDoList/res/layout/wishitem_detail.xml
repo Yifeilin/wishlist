@@ -19,13 +19,6 @@
 		<!-- 		android:layout_gravity="center" 
 		android:gravity="center_horizontal" -->
 		
-			<TextView android:text="   "
-			    android:color="#00000000"
-		        android:gravity="center_horizontal"
-          		android:layout_width="wrap_content"
-          		android:layout_height="wrap_content"
-          		android:layout_weight="1"/>
-
 			<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
@@ -33,31 +26,35 @@
 			android:gravity="center_horizontal"
 			android:layout_weight="12">
 			
+
 				<ImageView android:id="@+id/imgPhotoDetail"
-					android:layout_width="wrap_content" 
-					android:layout_height="wrap_content"
-					android:scaleType="fitCenter" android:adjustViewBounds="true"
-					android:paddingTop="20dip"
+					android:layout_width="match_parent" 
+					android:layout_height="match_parent"
+					android:scaleType="fitCenter"
+					android:adjustViewBounds="true"
 					android:gravity="center_horizontal"/>
 						<!-- android:maxHeight="300dip"  -->
-				
+
 				<TextView style="@style/ItemNameText"
 					android:id="@+id/itemNameDetail"
 					android:text="item name"
 					android:singleLine="false"
 					android:paddingTop="15dip"
+					android:paddingLeft="15dip"
 					android:gravity="center_horizontal"/>
 				
 				<TextView style="@style/ItemInfoText"
 				    android:id="@+id/itemDateDetail"
 				    android:text="item Date"
 					android:paddingTop="8dip"
+					android:paddingLeft="15dip"
 					android:layout_gravity="left" />
 				
 				<TextView style="@style/ItemInfoText"
 				    android:id="@+id/itemPriceDetail"
 				    android:text="$ XX.X"
 				   	android:paddingTop="8dip" 
+					android:paddingLeft="15dip"
 					android:layout_gravity="left" />
 				
 				<TextView style="@style/ItemInfoText"
@@ -65,6 +62,7 @@
 				    android:text="item description"
 					android:singleLine="false"
 					android:paddingTop="8dip" 
+					android:paddingLeft="15dip"
 					android:layout_gravity="left" />
 	
 				<TextView style="@style/ItemInfoText"
@@ -72,12 +70,14 @@
 				    android:text="item store name"
 					android:paddingTop="8dip" 
 					android:singleLine="false"
+					android:paddingLeft="15dip"
 					android:layout_gravity="left" />
 				
 				<TextView style="@style/ItemInfoText"
 				    android:id="@+id/itemLocationDetail"
 				    android:text="item location"
 					android:paddingTop="8dip"
+					android:paddingLeft="15dip"
 					android:singleLine="false"
 					android:layout_gravity="left" />
 				
@@ -86,18 +86,11 @@
 				   	android:layout_width="fill_parent"
 	    			android:layout_height="wrap_content"
 				    android:paddingTop="8dip"
+					android:paddingLeft="15dip"
 				    android:visibility="invisible"
 					android:layout_gravity="left" />
 			
 			</LinearLayout>
-
-			<TextView android:text="   "
-			    android:color="#00000000"
-		        android:gravity="center_horizontal"
-	       		android:layout_width="wrap_content"
-	       		android:layout_height="fill_parent"
-	       		android:layout_weight="1"/>
-						
 		</LinearLayout>
 
 	</ScrollView>
