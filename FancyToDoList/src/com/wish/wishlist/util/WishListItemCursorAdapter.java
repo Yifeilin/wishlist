@@ -50,7 +50,8 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
 			int columnSpace = screenWidth / 100;
 			int columnCount = 3;
-			_photoWidth = (screenWidth - columnCount * columnSpace) / 3;
+			//_photoWidth = (screenWidth - columnCount * columnSpace) / 3;
+			_photoWidth = screenWidth / 3;
 			Log.d(TAG, "screen width" + String.valueOf(screenWidth));
 			Log.d(TAG, "photo width" + String.valueOf(_photoWidth));
 		}
