@@ -35,7 +35,7 @@
 		    android:horizontalSpacing="5dp"
 		    android:verticalSpacing="5dp"
 		    android:gravity="center"
-		    android:background="@color/bodyBackground_light_grey"
+			android:background="@color/bodyBackground_light_grey"
 		/>
 	
 	</ViewFlipper>
