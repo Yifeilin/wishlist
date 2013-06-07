@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -82,55 +83,52 @@ public class WishItemDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wishitem_detail);
 
-		findViewById(R.id.detailView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
-		findViewById(R.id.detailView_header).findViewById(R.id.imageButton_delete).setVisibility(View.VISIBLE);
-		findViewById(R.id.detailView_header).findViewById(R.id.imageButton_edit).setVisibility(View.VISIBLE);
-		findViewById(R.id.detailView_header).findViewById(R.id.imageButton_share).setVisibility(View.VISIBLE);
-		
+		setUpActionBar();
+
 		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 		backImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				//close this activity
- 				finish();
- 				//start the WishList activity and move the focus to the newly added item
-// 				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
-// 				startActivity(home);
- 				//onSearchRequested();
- 				
- 			}
+				//close this activity
+				finish();
+				//start the WishList activity and move the focus to the newly added item
+//				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
+//				startActivity(home);
+				//onSearchRequested();
+				
+			}
 		});	
 
 //		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
 //		shareImageButton.setOnClickListener(new OnClickListener() {
-// 			@Override
+//			@Override
 //			public void onClick(View view) {
 ////				shareItem();
-// 			}
+//			}
 //		});
 
 		deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
 		deleteImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
 				deleteItem();
- 			}
+			}
 		});
 		
 		editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
 		editImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
 				editItem();
- 			}
+			}
 		});
 
 		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
 		shareImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
 				shareItem();
- 			}
+			}
 		});
 		
 		// Remember the id of the item user clicked
@@ -558,5 +556,19 @@ public class WishItemDetail extends Activity {
 			return true;
 		}
 		return false;
+	}
+
+	private void setUpActionBar() {
+		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			findViewById(R.id.detailView_header).setVisibility(View.GONE);
+		}
+		else {
+			// we use the header instead of action bar for GingerBread and lower
+			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_delete).setVisibility(View.VISIBLE);
+			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_edit).setVisibility(View.VISIBLE);
+			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_share).setVisibility(View.VISIBLE);
+		}
 	}
 }

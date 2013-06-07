@@ -3,6 +3,7 @@ package com.wish.wishlist.activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -24,7 +25,8 @@ public class WishListPreference extends PreferenceActivity {
 			addPreferencesFromResource(R.layout.wishlist_preference);
 			setContentView(R.layout.preference_parent);
 
-			findViewById(R.id.preference_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+			setUpActionBar();
+
 			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 			_backImageButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -66,4 +68,15 @@ public class WishListPreference extends PreferenceActivity {
 				}
 			});
 		}
+
+	private void setUpActionBar() {
+		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			findViewById(R.id.preference_header).setVisibility(View.GONE);
+		}
+		else {
+			// we use the header instead of action bar for GingerBread and lower
+			findViewById(R.id.preference_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+		}
+	}
 }

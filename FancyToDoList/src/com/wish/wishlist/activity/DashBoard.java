@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,9 +9,12 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TextView;
 
 import com.wish.wishlist.R;
@@ -28,8 +32,8 @@ public class DashBoard extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard);
-		findViewById(R.id.dashboard_header).findViewById(R.id.imageView_logo).setVisibility(View.VISIBLE);
 
+		setUpActionBar();
 		// myDBAdapter is effective only when the database is first created
 		DBAdapter.getInstance(this).createDB();
 		
@@ -62,6 +66,13 @@ public class DashBoard extends Activity {
 			editor.commit();
 		}
 	}
+
+		@Override
+			public boolean onCreateOptionsMenu(Menu menu) {
+				MenuInflater inflater = getMenuInflater();
+				inflater.inflate(R.menu.menu_actionbar_dashboard, menu);
+				return true;
+		}
 	
 	/**
 	 * Handle the click of a Feature button.
@@ -69,34 +80,35 @@ public class DashBoard extends Activity {
 	 * @param v View
 	 * @return void
 	 */
+	
 
 	public void onClickFeature (View v)
 	{
-	    int id = v.getId ();
-	    if (id == R.id.home_btn_new_item) {
-	           startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
+		int id = v.getId ();
+		if (id == R.id.home_btn_new_item) {
+			   startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
 		}
-	    else if(id ==  R.id.home_btn_wishlist) {
-	           startActivity (new Intent(getApplicationContext(), WishList.class));
+		else if(id ==  R.id.home_btn_wishlist) {
+			   startActivity (new Intent(getApplicationContext(), WishList.class));
 		}
-	    else if(id == R.id.home_btn_camera) {
-	          // startActivity (new Intent(getApplicationContext(), IntentIntegrator.class));
-//	    	   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//	  		   startActivityForResult(intent, TAKE_PICTURE);
+		else if(id == R.id.home_btn_camera) {
+			  // startActivity (new Intent(getApplicationContext(), IntentIntegrator.class));
+//			   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//			   startActivityForResult(intent, TAKE_PICTURE);
 				dispatchTakePictureIntent();
 		}
-//	      case R.id.home_btn_scan :
-////	           startActivity (new Intent(getApplicationContext(), F4Activity.class));
-//	    	   IntentIntegrator.initiateScan(this);
-//	           break;
-	    else if(id == R.id.home_btn_settings) {
+//		  case R.id.home_btn_scan :
+////			   startActivity (new Intent(getApplicationContext(), F4Activity.class));
+//			   IntentIntegrator.initiateScan(this);
+//			   break;
+		else if(id == R.id.home_btn_settings) {
 			Intent prefIntent = new Intent(getApplicationContext(), WishListPreference.class);
 			startActivity(prefIntent);
-//	           startActivity (new Intent(getApplicationContext(), F5Activity.class));
+//			   startActivity (new Intent(getApplicationContext(), F5Activity.class));
 		}
-//	      case R.id.home_btn_help :
-////	           startActivity (new Intent(getApplicationContext(), F6Activity.class));
-//	           break;
+//		  case R.id.home_btn_help :
+////			   startActivity (new Intent(getApplicationContext(), F6Activity.class));
+//			   break;
 	}
 	
 	/**
@@ -108,7 +120,7 @@ public class DashBoard extends Activity {
 
 	public void onClickHome (View v)
 	{
-	    goHome (this);
+		goHome (this);
 	}
 	
 	/**
@@ -120,9 +132,9 @@ public class DashBoard extends Activity {
 
 	public void goHome(Context context) 
 	{
-//	    final Intent intent = new Intent(context, HomeActivity.class);
-//	    intent.setFlags (Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//	    context.startActivity (intent);
+//		final Intent intent = new Intent(context, HomeActivity.class);
+//		intent.setFlags (Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//		context.startActivity (intent);
 	}
 
 	/**
@@ -134,7 +146,7 @@ public class DashBoard extends Activity {
 
 	public void onClickSearch (View v)
 	{
-	    //startActivity (new Intent(getApplicationContext(), SearchActivity.class));
+		//startActivity (new Intent(getApplicationContext(), SearchActivity.class));
 	}
 
 	/**
@@ -146,7 +158,7 @@ public class DashBoard extends Activity {
 
 	public void onClickAbout (View v)
 	{
-	    //startActivity (new Intent(getApplicationContext(), AboutActivity.class));
+		//startActivity (new Intent(getApplicationContext(), AboutActivity.class));
 	}
 	
 	/**
@@ -163,8 +175,8 @@ public class DashBoard extends Activity {
 	
 	public void setTitleFromActivityLabel (int textViewId)
 	{
-	    TextView tv = (TextView) findViewById (textViewId);
-	    if (tv != null) tv.setText (getTitle ());
+		TextView tv = (TextView) findViewById (textViewId);
+		if (tv != null) tv.setText (getTitle ());
 	} 
 	
 	private void dispatchTakePictureIntent() {
@@ -212,7 +224,7 @@ public class DashBoard extends Activity {
 					Intent i = new Intent(getApplicationContext(), EditItemInfo.class);
 					i.putExtra("fullsizePhotoPath", _fullsizePhotoPath);
 					startActivityForResult (i, EDIT_ITEM);
-	           		//	startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
+					//	startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
 					
 				}
 				else {
@@ -264,6 +276,17 @@ public class DashBoard extends Activity {
 		}
 		else {
 			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
+		}
+	}
+
+	private void setUpActionBar() {
+		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			findViewById(R.id.dashboard_header).setVisibility(View.GONE);
+		}
+		else {
+			// we use the header instead of action bar for GingerBread and lower
+			findViewById(R.id.dashboard_header).findViewById(R.id.imageView_logo).setVisibility(View.VISIBLE);
 		}
 	}
 }

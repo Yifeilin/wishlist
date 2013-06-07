@@ -31,6 +31,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -99,11 +100,10 @@ public class EditItemInfo extends Activity implements Observer {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.add_item);
 
-		findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
-		findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_save).setVisibility(View.VISIBLE);
+		setUpActionBar();
+
 		
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);
@@ -703,6 +703,18 @@ public class EditItemInfo extends Activity implements Observer {
 				myLocation.setText(addStr);
 				_isGettingLocation = false;
 			}
+	}
+
+	private void setUpActionBar() {
+		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			findViewById(R.id.addItemView_header).setVisibility(View.GONE);
+		}
+		else {
+			// we use the header instead of action bar for GingerBread and lower
+			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_save).setVisibility(View.VISIBLE);
+		}
 	}
 }
 

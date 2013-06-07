@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -111,9 +112,8 @@ public class WishList extends Activity {
 		Intent intent = getIntent();
 
 		setContentView(R.layout.main);
-		findViewById(R.id.listView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
-		findViewById(R.id.listView_header).findViewById(R.id.imageButton_viewType).setVisibility(View.VISIBLE);
-		findViewById(R.id.listView_header).findViewById(R.id.imageButton_search).setVisibility(View.VISIBLE);
+
+		setUpActionBar();
 
 		// get the resources by their IDs
 		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
@@ -203,35 +203,35 @@ public class WishList extends Activity {
 
 		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 		backImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				//close this activity
- 				finish();
- 				
- 				//start the WishList activity and move the focus to the newly added item
-// 				Intent home = new Intent(WishList.this, DashBoard.class);
-// 				startActivity(home);
- 				//onSearchRequested();
- 				
- 			}
+				//close this activity
+				finish();
+				
+				//start the WishList activity and move the focus to the newly added item
+//				Intent home = new Intent(WishList.this, DashBoard.class);
+//				startActivity(home);
+				//onSearchRequested();
+				
+			}
  
 		});		
 
 		searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
 		searchImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				onSearchRequested();
- 			}
+				onSearchRequested();
+			}
  
 		});		
 		
 		viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
 		viewImageButton.setOnClickListener(new OnClickListener() {
- 			@Override
+			@Override
 			public void onClick(View view) {
- 				showDialog(DIALOG_VIEW);
- 			}
+				showDialog(DIALOG_VIEW);
+			}
  
 		});
 //		// set the default spinner option
@@ -879,5 +879,18 @@ public class WishList extends Activity {
 		super.onResume();
 		restoreUIState();
 		updateView();
+	}
+
+	private void setUpActionBar() {
+		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			findViewById(R.id.listView_header).setVisibility(View.GONE);
+		}
+		else {
+			// we use the header instead of action bar for GingerBread and lower
+			findViewById(R.id.listView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+			findViewById(R.id.listView_header).findViewById(R.id.imageButton_viewType).setVisibility(View.VISIBLE);
+			findViewById(R.id.listView_header).findViewById(R.id.imageButton_search).setVisibility(View.VISIBLE);
+		}
 	}
 }
