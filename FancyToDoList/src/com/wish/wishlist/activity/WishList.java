@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 //import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -449,6 +451,16 @@ public class WishList extends Activity {
 		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			//search view is part the action bar in honeycomeb and up
+			//Get the SearchView and set the searchable configuration
+			SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+			// Assumes current activity is the searchable activity
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+			searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+		}
 		return true;
 	}
 
@@ -493,8 +505,7 @@ public class WishList extends Activity {
 			return true;
 		}
 		else if (itemId == R.id.menu_search) {
-			// should provide search service
-			onSearchRequested();
+			//do nothing here, the search view is already configured in onCreateOptionsMenu()
 			return true;
 		}
 		//menu view only appears in > Honeycomb
