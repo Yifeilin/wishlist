@@ -1,6 +1,5 @@
 package com.wish.wishlist.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -283,8 +282,6 @@ public class DashBoard extends Activity {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.dashboard_header).setVisibility(View.GONE);
-			ActionBar actionBar = getActionBar();
-			actionBar.hide();
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
