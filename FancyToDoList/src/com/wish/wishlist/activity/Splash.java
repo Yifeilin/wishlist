@@ -14,12 +14,12 @@ public class Splash extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar actionBar = getActionBar();
 			actionBar.hide();
 		}
+
+		setContentView(R.layout.splash);
 
 		Handler x = new Handler();
 		x.postDelayed(new splashhandler(), 2000);
