@@ -18,6 +18,7 @@ import java.lang.Math;
 //import org.json.JSONException;
 //import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.content.Intent;
 //import android.database.Cursor;
 //import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 //import android.util.Log;
 import android.view.Gravity;
@@ -70,6 +72,11 @@ public class WishListMap extends MapActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.hide();
+		}
 
 		FrameLayout frame = new FrameLayout(this);
 		mMapView = new MapView(this, getString(R.string.googleMapKey));
