@@ -29,7 +29,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import android.graphics.Bitmap;
 
 //import com.android.wishlist.activity;
 import com.wish.wishlist.R;
@@ -493,11 +492,17 @@ public class WishList extends Activity {
 			finish();
 			return true;
 		}
-//		case (R.id.menu_search): {
-//			// should provide search service
-//			onSearchRequested();
-//			return true;
-//		}
+		else if (itemId == R.id.menu_search) {
+			// should provide search service
+			onSearchRequested();
+			return true;
+		}
+		//menu view only appears in > Honeycomb
+		else if (itemId == R.id.menu_view) {
+			showDialog(DIALOG_VIEW);
+			return true;
+		}
+
 		else if (itemId == R.id.menu_add) {
 			// let user generate a wish item
 			Intent editItem = new Intent(this, EditItemInfo.class);
@@ -506,7 +511,7 @@ public class WishList extends Activity {
 		}
 		else if (itemId == R.id.menu_map) {
 			Intent mapIntent = new Intent(this, WishListMap.class);
-			mapIntent.putExtra("type", "markAll");			
+			mapIntent.putExtra("type", "markAll");
 			startActivity(mapIntent);
 			return true;
 		}
