@@ -13,6 +13,7 @@ import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
 import com.wish.wishlist.util.social.ShareHelper;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -85,19 +86,6 @@ public class WishItemDetail extends Activity {
 
 		setUpActionBar();
 
-		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-		backImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				//close this activity
-				finish();
-				//start the WishList activity and move the focus to the newly added item
-//				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
-//				startActivity(home);
-				//onSearchRequested();
-				
-			}
-		});	
 
 //		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
 //		shareImageButton.setOnClickListener(new OnClickListener() {
@@ -107,29 +95,6 @@ public class WishItemDetail extends Activity {
 //			}
 //		});
 
-		deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
-		deleteImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				deleteItem();
-			}
-		});
-		
-		editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
-		editImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				editItem();
-			}
-		});
-
-		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
-		shareImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				shareItem();
-			}
-		});
 		
 		// Remember the id of the item user clicked
 		// in the previous activity (WishList.java)
@@ -522,7 +487,11 @@ public class WishItemDetail extends Activity {
 		super.onOptionsItemSelected(item);
 
 		long itemId = item.getItemId();
-		if (itemId == R.id.menu_item_detail_edit) {
+		if (itemId ==  android.R.id.home) {
+			finish();
+			return true;
+		}
+		else if (itemId == R.id.menu_item_detail_edit) {
 			editItem();
 			return true;
 		}
@@ -562,6 +531,8 @@ public class WishItemDetail extends Activity {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.detailView_header).setVisibility(View.GONE);
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
@@ -569,6 +540,42 @@ public class WishItemDetail extends Activity {
 			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_delete).setVisibility(View.VISIBLE);
 			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_edit).setVisibility(View.VISIBLE);
 			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_share).setVisibility(View.VISIBLE);
+
+			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			backImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					finish();
+					//start the WishList activity and move the focus to the newly added item
+					//				Intent home = new Intent(WishItemDetail.this, DashBoard.class);
+					//				startActivity(home);
+					//onSearchRequested();
+				}
+			});
+
+			deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
+			deleteImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					deleteItem();
+				}
+			});
+
+			editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
+			editImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					editItem();
+				}
+			});
+
+			shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
+			shareImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					shareItem();
+				}
+			});
 		}
 	}
 }

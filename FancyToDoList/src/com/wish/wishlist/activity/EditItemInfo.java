@@ -23,6 +23,7 @@ import com.wish.wishlist.util.camera.PhotoFileCreater;
 import com.wish.wishlist.util.camera.CameraManager;
 import com.wish.wishlist.util.ImageManager;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -127,9 +128,6 @@ public class EditItemInfo extends Activity implements Observer {
 		myLocation = (EditText) findViewById(R.id.location);
 		
 
-		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-		saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
-		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
 		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
 		//btnCancel = (Button) findViewById(R.id.button_cancel);
@@ -218,31 +216,6 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 		}
 		
-		backImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				navigateBack();
-			}
-		});	
-
-		saveImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				saveWishItem();
-			}
-		});
-		
-		mapImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				//get the location
-				if (!_isGettingLocation) {
-					_pManager.startLocationUpdates();
-					_isGettingLocation = true;
-					myLocation.setText("Loading location...");
-				}
-			}
-		});
 
 		cameraImageButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -372,6 +345,9 @@ public class EditItemInfo extends Activity implements Observer {
 	@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
+				case android.R.id.home:
+					navigateBack();
+					return true;
 				//this replaced the saveImageButton used in GingerBread
 				case R.id.menu_save:
 					// app icon save in action bar clicked; 
@@ -732,11 +708,43 @@ public class EditItemInfo extends Activity implements Observer {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.addItemView_header).setVisibility(View.GONE);
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
 			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
 			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_save).setVisibility(View.VISIBLE);
+
+			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
+			mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
+
+			backImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					navigateBack();
+				}
+			});
+
+			saveImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					saveWishItem();
+				}
+			});
+
+			mapImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					//get the location
+					if (!_isGettingLocation) {
+						_pManager.startLocationUpdates();
+						_isGettingLocation = true;
+						myLocation.setText("Loading location...");
+					}
+				}
+			});
 		}
 	}
 }

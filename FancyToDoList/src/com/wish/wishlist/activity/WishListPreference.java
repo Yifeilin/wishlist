@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import android.app.ActionBar;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -27,14 +29,6 @@ public class WishListPreference extends PreferenceActivity {
 
 			setUpActionBar();
 
-			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-			_backImageButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					setResult(RESULT_CANCELED, null);
-					finish();
-				}
-			});	
 
 			// Get the custom preference
 			Preference releaseNotes = (Preference) findPreference("releaseNotes");
@@ -69,14 +63,35 @@ public class WishListPreference extends PreferenceActivity {
 			});
 		}
 
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+				case android.R.id.home:
+					finish();
+					return true;
+				default:
+					return super.onOptionsItemSelected(item);
+				}
+			}
+
 	private void setUpActionBar() {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.preference_header).setVisibility(View.GONE);
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
 			findViewById(R.id.preference_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
+
+			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			_backImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					setResult(RESULT_CANCELED, null);
+					finish();
+				}
+			});	
 		}
 	}
 }

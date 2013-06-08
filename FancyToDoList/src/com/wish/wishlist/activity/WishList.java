@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -201,39 +202,6 @@ public class WishList extends Activity {
 //		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //		myViewSpinner.setAdapter(adapter);
 
-		backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-		backImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				//close this activity
-				finish();
-				
-				//start the WishList activity and move the focus to the newly added item
-//				Intent home = new Intent(WishList.this, DashBoard.class);
-//				startActivity(home);
-				//onSearchRequested();
-				
-			}
- 
-		});		
-
-		searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
-		searchImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				onSearchRequested();
-			}
- 
-		});		
-		
-		viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
-		viewImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				showDialog(DIALOG_VIEW);
-			}
- 
-		});
 //		// set the default spinner option
 //		if (viewOption == "list") {
 //			myViewSpinner.setSelection(0);
@@ -521,12 +489,16 @@ public class WishList extends Activity {
 		super.onOptionsItemSelected(item);
 
 		long itemId = item.getItemId();
+		if (itemId ==  android.R.id.home) {
+			finish();
+			return true;
+		}
 //		case (R.id.menu_search): {
 //			// should provide search service
 //			onSearchRequested();
 //			return true;
 //		}
-		if (itemId == R.id.menu_add) {
+		else if (itemId == R.id.menu_add) {
 			// let user generate a wish item
 			Intent editItem = new Intent(this, EditItemInfo.class);
 			startActivityForResult(editItem, ADD_ITEM);
@@ -885,12 +857,43 @@ public class WishList extends Activity {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.listView_header).setVisibility(View.GONE);
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
 			findViewById(R.id.listView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
 			findViewById(R.id.listView_header).findViewById(R.id.imageButton_viewType).setVisibility(View.VISIBLE);
 			findViewById(R.id.listView_header).findViewById(R.id.imageButton_search).setVisibility(View.VISIBLE);
+
+			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			backImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					finish();
+					//start the WishList activity and move the focus to the newly added item
+					//				Intent home = new Intent(WishList.this, DashBoard.class);
+					//				startActivity(home);
+					//onSearchRequested();
+				}
+			});
+
+			searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
+			searchImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					onSearchRequested();
+				}
+
+			});
+		
+			viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
+			viewImageButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					showDialog(DIALOG_VIEW);
+				}
+		});
 		}
 	}
 }
