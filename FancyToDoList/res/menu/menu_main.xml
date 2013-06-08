@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:android1="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_add"
-          android:title="@string/add_new" android1:icon="@android:drawable/ic_menu_add"/>
+		android:title="@string/add_new"
+		android:icon="@android:drawable/ic_menu_add"
+		android:showAsAction="ifRoom|withText"
+	/>
   <!--    <item android:id="@+id/menu_search"
           android:title="@string/search" android1:icon="@android:drawable/ic_search_category_default"/>  
           -->
-   	<item android1:id="@+id/menu_map" 
-   	 	  android1:title="Map" android1:icon="@android:drawable/ic_menu_mapmode"/>
+   	<item android:id="@+id/menu_map" 
+   	 	android:title="Map" android:icon="@android:drawable/ic_menu_mapmode"
+		android:showAsAction="ifRoom|withText"
+	/>
  <!--   	<item android1:id="@+id/menu_post" 
     	  android1:title="@string/post" android1:icon="@android:drawable/ic_menu_upload"/>
     <item android1:id="@+id/menu_scan" 
     	  android1:title="@string/menu_scan" android1:icon="@android:drawable/ic_menu_view"/>
  -->
-   	<item android1:id="@+id/menu_sort" android1:title="Sort" android1:icon="@android:drawable/ic_menu_sort_by_size">
+ <item android:id="@+id/menu_sort" 
+		android:title="Sort"
+		android:icon="@android:drawable/ic_menu_sort_by_size"
+	 	android:showAsAction="ifRoom|withText">
    		<menu>
-   			<item android1:id="@+id/menu_sortByName" android1:title="by name"></item>
-   			<item android1:id="@+id/menu_sortByTime" android1:title="by time"></item>
-   			<item android1:id="@+id/menu_sortByPrice" android1:title="by price"></item>
+   			<item android:id="@+id/menu_sortByName" android:title="by name"></item>
+   			<item android:id="@+id/menu_sortByTime" android:title="by time"></item>
+   			<item android:id="@+id/menu_sortByPrice" android:title="by price"></item>
    			<!--  <item android1:id="@+id/menu_sortByPriority" android1:title="by priority"></item> -->
    		</menu>
    	</item>    	     	  
