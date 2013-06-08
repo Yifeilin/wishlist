@@ -35,6 +35,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -358,6 +361,26 @@ public class EditItemInfo extends Activity implements Observer {
 //			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
 //		}
 	}
+
+	@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.menu_actionbar_edititeminfo, menu);
+			return true;
+		}
+
+	@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+				//this replaced the saveImageButton used in GingerBread
+				case R.id.menu_save:
+					// app icon save in action bar clicked; 
+					saveWishItem();
+					return true;
+				default:
+					return super.onOptionsItemSelected(item);
+				}
+			}
 
 	/***
 	 * Save user input as a wish item
