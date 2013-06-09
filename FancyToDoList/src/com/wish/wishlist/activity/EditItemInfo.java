@@ -349,7 +349,7 @@ public class EditItemInfo extends Activity implements Observer {
 					navigateBack();
 					return true;
 				//this replaced the saveImageButton used in GingerBread
-				case R.id.menu_save:
+				case R.id.menu_done:
 					// app icon save in action bar clicked; 
 					saveWishItem();
 					return true;
