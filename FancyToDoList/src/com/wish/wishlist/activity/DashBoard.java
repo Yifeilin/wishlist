@@ -65,13 +65,6 @@ public class DashBoard extends Activity {
 			editor.commit();
 		}
 	}
-
-		@Override
-			public boolean onCreateOptionsMenu(Menu menu) {
-				MenuInflater inflater = getMenuInflater();
-				inflater.inflate(R.menu.menu_actionbar_dashboard, menu);
-				return true;
-		}
 	
 	/**
 	 * Handle the click of a Feature button.
