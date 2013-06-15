@@ -177,40 +177,43 @@ public class WishItemDetail extends Activity {
 				mPhotoView.setImageBitmap(bitmap);
 			}
 		}
-		
-		//check if pic_str is null, which user added this item without taking a pic.
-		if (fullsize_picture_str == null) {
-//			Log.d("wishlist", "fullsize_picture_str == null");
-			picture_str = item.getPicStr();
-
-			if (picture_str == null){
-//				Log.d("wishlist", "picture_str == null");
-			}
-			else{
-				if (picture_str.endsWith("sample")) {
-					picture_str = picture_str.substring(0, picture_str.length() - 6);
-				}
-				Bitmap bitmap = null;
-				Uri photoUri = Uri.parse(picture_str);
-
-				// check if pic_str is a resId
-				try {
-					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-					int picResId = Integer.valueOf(picture_str, 16).intValue();
-					Log.d("wishlist", "width is " + String.valueOf(width));
-					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height, true);
-					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
-					//		.getResources(), picResId);
-					// it is resource id.
-					mPhotoView.setImageBitmap(bitmap);
-
-				} catch (NumberFormatException e) {
-					// Not a resId, so it must be a content provider uri
-					photoUri = Uri.parse(picture_str);
-					mPhotoView.setImageURI(photoUri);
-				}
-			}
+		else {
+		//pic_str is null, so user added this item without taking a pic.
+		//simply don't show any picture in this case. 
+			mPhotoView.setVisibility(View.GONE);
 		}
+		//if (fullsize_picture_str == null) {
+////			Log.d("wishlist", "fullsize_picture_str == null");
+//			picture_str = item.getPicStr();
+//
+//			if (picture_str == null){
+////				Log.d("wishlist", "picture_str == null");
+//			}
+//			else{
+//				if (picture_str.endsWith("sample")) {
+//					picture_str = picture_str.substring(0, picture_str.length() - 6);
+//				}
+//				Bitmap bitmap = null;
+//				Uri photoUri = Uri.parse(picture_str);
+//
+//				// check if pic_str is a resId
+//				try {
+//					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
+//					int picResId = Integer.valueOf(picture_str, 16).intValue();
+//					Log.d("wishlist", "width is " + String.valueOf(width));
+//					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height, true);
+//					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
+//					//		.getResources(), picResId);
+//					// it is resource id.
+//					mPhotoView.setImageBitmap(bitmap);
+//
+//				} catch (NumberFormatException e) {
+//					// Not a resId, so it must be a content provider uri
+//					photoUri = Uri.parse(picture_str);
+//					mPhotoView.setImageURI(photoUri);
+//				}
+//			}
+//		}
 
 		String dateTimeStr = item.getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
