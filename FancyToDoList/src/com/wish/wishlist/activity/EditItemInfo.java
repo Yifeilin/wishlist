@@ -108,6 +108,18 @@ public class EditItemInfo extends Activity implements Observer {
 
 		setUpActionBar();
 
+		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
+		mapImageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//get the location
+				if (!_isGettingLocation) {
+					_pManager.startLocationUpdates();
+					_isGettingLocation = true;
+					myLocation.setText("Loading location...");
+				}
+			}
+		});
 		
 		// Open the Store table in the database
 		mStoreDBAdapter = new StoreDBAdapter(this);
@@ -718,7 +730,6 @@ public class EditItemInfo extends Activity implements Observer {
 
 			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
 			saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
-			mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
 
 			backImageButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -734,17 +745,6 @@ public class EditItemInfo extends Activity implements Observer {
 				}
 			});
 
-			mapImageButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					//get the location
-					if (!_isGettingLocation) {
-						_pManager.startLocationUpdates();
-						_isGettingLocation = true;
-						myLocation.setText("Loading location...");
-					}
-				}
-			});
 		}
 	}
 }
