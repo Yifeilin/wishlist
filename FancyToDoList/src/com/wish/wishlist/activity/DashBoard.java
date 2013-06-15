@@ -180,16 +180,16 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.6\n" + 
-			"1. Added a Settings section where users can enable/disable auto location tagging, view release notes and rate the app.\n\n" +
-			"2. Improved the experience of location tagging while new wish is being created."
-					).setCancelable(
-			false).setPositiveButton("OK",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-					}
-				});
+		builder.setMessage("Version 1.0.7\n" + 
+				"1. Redesigned the header bar and improved its navigation for Android 3.0+.\n\n" +
+				"2. Applied the Android holo theme across the app for Android 3.0+.\n\n" +
+				"3. Improved the wishlist detail view.");
+		builder.setCancelable(false);
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
 		builder.create().show();
 
 	//	LayoutInflater inflater = LayoutInflater.from(this);

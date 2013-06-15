@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <releaseNote>
+	<release versionName="1.0.7" versionCode="10">
+		<note>Redesigned the header bar and improved its navigation for Android 3.0+.</note>
+		<note>Applied the Android holo theme across the app for Android 3.0+.</note>
+		<note>Improved the wishlist detail view.</note>
+	</release>
 	<release versionName="1.0.6" versionCode="9">
-		<note>Added a Settings section where users can enable/disable auto location tagging, view release notes and rate the app."</note>
-		<note>Improved the experience of location tagging while new wish is being created."</note>
+		<note>Added a Settings section where users can enable/disable auto location tagging, view release notes and rate the app.</note>
+		<note>Improved the experience of location tagging while new wish is being created.</note>
 	</release>
 	<release versionName="1.0.5" versionCode="8">
 		<note>Users can import existing photos on the phone when creating and editing wishes.</note>
