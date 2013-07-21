@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBAdapter {
 	
+	private static final boolean demo = false;
 	private static DBAdapter instance = null;
 	
 	public static DBAdapter getInstance(Context contenxt) {
@@ -43,17 +44,17 @@ public class DBAdapter {
 		, new Patch() {//db version 2
 			public void apply(SQLiteDatabase db) {
 				//delete sample items
-				String sql = "DELETE FROM "
-				+ ItemDBAdapter.DB_TABLE
-				+ " WHERE "
-				+ ItemDBAdapter.KEY_PHOTO_URL
-				+ " LIKE '%sample'";
-				
-				//Log.d(TAG, "sql:" + sql);
-				db.execSQL(sql);
-
-				//add user table
-				db.execSQL(CREATE_TABLE_USER);
+//				String sql = "DELETE FROM "
+//				+ ItemDBAdapter.DB_TABLE
+//				+ " WHERE "
+//				+ ItemDBAdapter.KEY_PHOTO_URL
+//				+ " LIKE '%sample'";
+//				
+//				//Log.d(TAG, "sql:" + sql);
+//				db.execSQL(sql);
+//
+//				//add user table
+//				db.execSQL(CREATE_TABLE_USER);
 			}
 			public void revert(SQLiteDatabase db) {  }
 		}
@@ -168,12 +169,132 @@ public class DBAdapter {
 		public void onCreate(SQLiteDatabase db) {
 			// create table "item" and insert into the table
 			db.execSQL(CREATE_TABLE_ITEM);
+			if (demo) {
+				ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
+				mItemDBAdapter.open(db);
+				String picUrl;
+				picUrl = Integer.toHexString(R.drawable.new_ipad) + "sample";
+				mItemDBAdapter.addItem(	1,
+										"Apple Store",
+										"ipad",
+										"It is the new ipad with retina display",
+										"2012-03-11 11:30:00",
+										picUrl,
+										" ",
+										529f,
+										"220 Yonge Street, Toronto, ON, M5B 2H1",
+										0);
+				
+				picUrl = Integer.toHexString(R.drawable.cake) + "sample";
+				mItemDBAdapter.addItem(	2, 
+										"dessert store",
+										"chocolate cake", 
+										"It looks delicisous", 
+										"2012-03-17 18:22:35", 
+										picUrl,
+										" ",
+										2.99f,
+										"2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
+										3);
+				picUrl = Integer.toHexString(R.drawable.tiffany) + "sample";
+				mItemDBAdapter.addItem(	3,
+										"tiffany",
+										"tiffany necklace", 
+										"beautiful", 
+										"2012-06-03 03:40:50", 
+										picUrl,
+										" ",
+										389f,
+										"85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canada",
+										2);
+				picUrl = Integer.toHexString(R.drawable.d3) + "sample";
+				mItemDBAdapter.addItem(	4, 
+										"Best buy",
+										"diablo 3",
+										"waiting for this game for years", 
+										"2012-05-15 08:17:38", 
+										picUrl,
+										" ",
+										59.0f,
+										"65 Dundas Street West\nToronto, ON, M5G 2C3",
+										1);
+				
+				picUrl = Integer.toHexString(R.drawable.mini_cooper) + "sample";
+				mItemDBAdapter.addItem(	5, 
+										"BMW store",
+										"mini cooper",
+										"i like its color", 
+										"2012-06-20 13:05:22", 
+										picUrl,
+										" ",
+										20000.0f,
+										"11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
+										1);
+				
+				picUrl = Integer.toHexString(R.drawable.sjobs_bio) + "sample";
+				mItemDBAdapter.addItem(	6, 
+										"Indigo",
+										"steve jobs biograhpy",
+										"a must-read book", 
+										"2012-06-22 19:08:20", 
+										picUrl,
+										" ",
+										30.0f,
+										"259 Richmond Street West Toronto ON M5V 3M6",
+										1);
+
+				mItemDBAdapter.close();
+			}
+
 			// create table "itemCategory"
 			db.execSQL(CREATE_TABLE_ITEMCATEGORY);
 			//create table "store"
 			db.execSQL(CREATE_TABLE_STORE);
+			if (demo) {
+				StoreDBAdapter mStoreDBAdapter = new StoreDBAdapter(context);
+				mStoreDBAdapter.open(db);
+				mStoreDBAdapter.addStore("Apple Store", 		1);
+				mStoreDBAdapter.addStore("dessert store",   		2);
+				mStoreDBAdapter.addStore("tiffany",	3);
+				mStoreDBAdapter.addStore("Best buy",		4);
+				mStoreDBAdapter.addStore("BMW store",		5);
+				mStoreDBAdapter.addStore("Indigo",		6);
+				mStoreDBAdapter.close();
+			}
 			//create table "location"
 			db.execSQL(CREATE_TABLE_LOCATION);
+			if (demo) {
+				LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(context);
+				mLocationDBAdapter.open(db);
+				mLocationDBAdapter.addLocation(43.653929,
+												-79.3802132, 
+											   "220 Yonge Street, Toronto, ON, M5B 2H1",
+											   0, null, null, null, null, null);
+				mLocationDBAdapter.addLocation(43.6509499,
+												-79.477205, 
+											   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
+											   0, null, null, null, null, null);
+				mLocationDBAdapter.addLocation(43.6694098,
+												-79.3904, 
+											   "85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canadas",
+											   0, null, null, null, null, null);
+				mLocationDBAdapter.addLocation(43.6555876,
+												-79.3835228, 
+											   "65 Dundas Street West\nToronto, ON, M5G 2C3",
+											   0, null, null, null, null, null);
+				
+				mLocationDBAdapter.addLocation(43.6561902,
+												-79.3489359, 
+											   "11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
+											   0, null, null, null, null, null);
+				
+				mLocationDBAdapter.addLocation(43.6489324,
+												-79.3913844, 
+											   "259 Richmond Street West Toronto ON M5V 3M6 ",
+											   0, null, null, null, null, null);
+
+				mLocationDBAdapter.close();
+			}
 			//create table "user"
 			db.execSQL(CREATE_TABLE_USER);
 		}
