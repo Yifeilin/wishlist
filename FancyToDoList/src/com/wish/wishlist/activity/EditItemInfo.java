@@ -23,6 +23,7 @@ import com.wish.wishlist.util.camera.PhotoFileCreater;
 import com.wish.wishlist.util.camera.CameraManager;
 import com.wish.wishlist.util.ImageManager;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,6 +56,7 @@ import android.preference.PreferenceManager;
  * including its name, description, time, price, location and photo, and saving them
  * as a row in the Item table in the database
  */
+@SuppressLint("NewApi")
 public class EditItemInfo extends Activity implements Observer {
 
 	private EditText myItemName;
@@ -716,6 +718,7 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 	}
 
+	@SuppressLint("NewApi")
 	private void setUpActionBar() {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
