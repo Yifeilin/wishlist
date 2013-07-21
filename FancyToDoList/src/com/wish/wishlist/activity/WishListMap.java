@@ -56,7 +56,7 @@ import com.wish.wishlist.db.ItemDBAdapter;
 public class WishListMap extends MapActivity {
 	private MapView mMapView;
 //	private MyLocationOverlay mMyLocationOverlay;
-	private WishListOverlay mWishListOverlay;
+	private WishListOverlay _wishListOverlay;
 //	private Location myLocation;
 	private double mLatitude;
 	private double mLongitude;
@@ -91,13 +91,18 @@ public class WishListMap extends MapActivity {
 			markAllItems();//map view is invoked from main menu->map
 		}
 
-		mController.animateTo(mWishListOverlay.getSpanCenter());//what if there is no item?
+		GeoPoint p = _wishListOverlay.getSpanCenter();
+		if (p == null) {
+			return;
+		}
+
+		mController.animateTo(p);//what if there is no item?
 		// mark the current location
 		// markCurrentLocation();
 
 		// set map zoom
 //		mController.setZoom(15);
-		int[] spanE6=mWishListOverlay.getSpanE6(1.2f);
+		int[] spanE6=_wishListOverlay.getSpanE6(1.2f);
 		mController.zoomToSpan(spanE6[0], spanE6[1]);
 
 		// configure the map
@@ -108,7 +113,7 @@ public class WishListMap extends MapActivity {
 		mMapView.setStreetView(false);
 		addZoomControls(frame);
 
-		// new NetworkThread(myCurrentPoint, mWishListOverlay).start();
+		// new NetworkThread(myCurrentPoint, _wishListOverlay).start();
 	}
 
 	@Override
@@ -212,11 +217,11 @@ public class WishListMap extends MapActivity {
 		mLatitude = i.getDoubleExtra("latitude", Double.MIN_VALUE);
 		mLongitude = i.getDoubleExtra("longitude", Double.MIN_VALUE);
 
-		mWishListOverlay = new WishListOverlay(mMarker);
+		_wishListOverlay = new WishListOverlay(mMarker);
 		GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
 				(int) (mLongitude * 1000000));
-		mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
-		mOverlays.add(mWishListOverlay);
+		_wishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
+		mOverlays.add(_wishListOverlay);
 	}
 	
 	private void markAllItems() {
@@ -226,20 +231,20 @@ public class WishListMap extends MapActivity {
 		ArrayList<double[]> locationList = new ArrayList<double[]>();
 		locationList = mItemDBAdapter.getAllItemLocation();
 		mItemDBAdapter.close();
-		
-		mWishListOverlay = new WishListOverlay(mMarker);
-		int i=0;
-		if(!locationList.isEmpty()){
-			while(i<locationList.size()){
-				mLatitude=locationList.get(i)[0];
-				mLongitude=locationList.get(i++)[1];
-				GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
-				(int) (mLongitude * 1000000));
-				mWishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
-				mOverlays.add(mWishListOverlay);
-			}
+		if(locationList.isEmpty()) {
+			this.finish();
 		}
 		
+		_wishListOverlay = new WishListOverlay(mMarker);
+		int i=0;
+		while(i<locationList.size()){
+			mLatitude=locationList.get(i)[0];
+			mLongitude=locationList.get(i++)[1];
+			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
+					(int) (mLongitude * 1000000));
+			_wishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
+			mOverlays.add(_wishListOverlay);
+		}
 	}
 
 	/**
@@ -296,7 +301,7 @@ public class WishListMap extends MapActivity {
 					maxLng = Math.max(maxLng, item.getPoint().getLongitudeE6());
 				}
 				int centerLat = (minLat + maxLat)/2;
-				int centerLng = (minLng + maxLng)/2;			
+				int centerLng = (minLng + maxLng)/2;
 				return new GeoPoint(centerLat, centerLng);
 			}
 			else return null;
@@ -331,11 +336,11 @@ public class WishListMap extends MapActivity {
 //		private final String query_URL = "//maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=500&types=food&name=store"
 //				+ "&sensor=true&key=AIzaSyDFtnjfv8bJ8uCU-02J1x8XQ-jFWzhKICE";
 //		private GeoPoint searchPoint;
-//		private WishListOverlay mWishListOverlay;
+//		private WishListOverlay _wishListOverlay;
 //
 //		NetworkThread(GeoPoint point, WishListOverlay wishListOverlay) {
 //			searchPoint = point;
-//			mWishListOverlay = wishListOverlay;
+//			_wishListOverlay = wishListOverlay;
 //		}
 //
 //		@Override
@@ -372,7 +377,7 @@ public class WishListMap extends MapActivity {
 //					double longitude = lobj.getDouble("lng");
 //					GeoPoint point = new GeoPoint((int) (latitude * 1000000),
 //							(int) (longitude * 1000000));
-//					mWishListOverlay
+//					_wishListOverlay
 //							.addOverlay(new OverlayItem(point, "A", "B"));
 //				}
 //			} catch (JSONException e) {
