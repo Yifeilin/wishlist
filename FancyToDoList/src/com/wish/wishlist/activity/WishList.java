@@ -622,24 +622,24 @@ public class WishList extends Activity {
 		}
 		
 		long itemId = item.getItemId();
-		if (itemId == R.id.REMOVE_TODO) {
+		if (itemId == R.id.REMOVE) {
 			// wishListDB.deleteItem(item_id);
 			deleteItem(item_id);
 			return true;
 		}
-		else if (itemId == R.id.EDIT_TODO) {
+		else if (itemId == R.id.EDIT) {
 			Intent editItem = new Intent(this, EditItemInfo.class);
 			editItem.putExtra("item_id", item_id);
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
-	//	else if (itemId == R.id.POST_TODO): {
+	//	else if (itemId == R.id.POST): {
 	//		Intent snsIntent = new Intent(this, WishItemPostToSNS.class);
 	//		snsIntent.putExtra("wishItem", "test");
 	//		startActivityForResult(snsIntent, POST_ITEM);
 	//		return true;
 	//	}
-		else if (itemId == R.id.MARK_TODO) {
+		else if (itemId == R.id.MARK) {
 //			String address = myItemDBAdapter.getItemAddress(item_id);
 //			if (address.equals("unknown")||address.equals("")){
 //				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -664,10 +664,9 @@ public class WishList extends Activity {
 				}
 //			}
 			return true;
-
 		}
 
-		else if (itemId == R.id.SHARE_TODO) {
+		else if (itemId == R.id.SHARE) {
 			//Display display = getWindowManager().getDefaultDisplay(); 
 			//int width = display.getWidth();  // deprecated
 			//int height = display.getHeight();  // deprecated
@@ -690,6 +689,9 @@ public class WishList extends Activity {
 			//}
 			//startActivity(Intent.createChooser(sendIntent, "Share using"));
 			return true;
+		}
+
+		else if (itemId == R.id.COMPLETE) {
 		}
 		return false; }
 
