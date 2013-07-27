@@ -167,9 +167,15 @@ public class WishList extends Activity {
 				i.putExtra("item_id", item_id);
 				i.putExtra("position", position);
 				startActivity(i);
-
 			}
 
+		});
+
+		_addNew.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent editItem = new Intent(WishList.this, EditItemInfo.class);
+				startActivityForResult(editItem, ADD_ITEM);
+			}
 		});
 
 		// register context menu for both listview and gridview
