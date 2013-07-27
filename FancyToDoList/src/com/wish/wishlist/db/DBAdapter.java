@@ -88,7 +88,8 @@ public class DBAdapter {
 			+ ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, " 
 			+ ItemDBAdapter.KEY_PRICE 		+ " REAL, " 
 			+ ItemDBAdapter.KEY_ADDRESS 	+ " TEXT, "
-			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER"
+			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER, "
+			+ ItemDBAdapter.KEY_COMPLETE 	+ " INTEGER"
 			+ ");";
 
 
