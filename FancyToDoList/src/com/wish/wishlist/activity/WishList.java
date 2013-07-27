@@ -90,7 +90,7 @@ public class WishList extends Activity {
 	private ImageButton searchImageButton;
 
 	// private WishListDataBase wishListDB;
-	private ItemsCursor wishItemCursor;
+	private ItemsCursor _wishItemCursor;
 	private WishListItemCursorAdapter wishListItemAdapterCursor;
 
 	private DBAdapter myDBAdapter;
@@ -302,11 +302,11 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView(ItemsCursor.SortBy sortBy) {
+		_wishItemCursor = myItemDBAdapter.getItems(sortBy);
 		if (myItemDBAdapter.getItemsCount() == 0) {
 			myViewFlipper.setDisplayedChild(2);
 			return;
 		}
-		wishItemCursor = myItemDBAdapter.getItems(sortBy);
 
 		if (viewOption.equals("list")) {
 			updateListView();
@@ -330,7 +330,7 @@ public class WishList extends Activity {
 
 	// private void displaySearchItem(String itemName, ItemsCursor.SortBy
 	// sortBy){
-	// wishItemCursor = myItemDBAdapter.searchItems(itemName);
+	// _wishItemCursor = myItemDBAdapter.searchItems(itemName);
 	// // updateListView();
 	// // updateGridView();
 	// updateView();
@@ -349,11 +349,11 @@ public class WishList extends Activity {
 		if (searchName == null) {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
-			// wishItemCursor = wishListDB.getItems(sortBy);
-			wishItemCursor = myItemDBAdapter.getItems(sortBy);
+			// _wishItemCursor = wishListDB.getItems(sortBy);
+			_wishItemCursor = myItemDBAdapter.getItems(sortBy);
 
 		} else {
-			wishItemCursor = myItemDBAdapter.searchItems(searchName, sortBy);
+			_wishItemCursor = myItemDBAdapter.searchItems(searchName, sortBy);
 		}
 
 		updateView();
@@ -384,8 +384,8 @@ public class WishList extends Activity {
 	}
 
 	private void updateGridView() {
-		if (wishItemCursor != null) {
-			wishItemCursor.requery();
+		if (_wishItemCursor != null) {
+			_wishItemCursor.requery();
 			int resID = R.layout.wishitem_photo;
 
 			String[] from = new String[] { ItemDBAdapter.KEY_ID,
@@ -393,7 +393,7 @@ public class WishList extends Activity {
 
 			int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
 			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
-					resID, wishItemCursor, from, to);
+					resID, _wishItemCursor, from, to);
 
 			myGridView.setAdapter(wishListItemAdapterCursor);
 			wishListItemAdapterCursor.notifyDataSetChanged();
@@ -405,8 +405,8 @@ public class WishList extends Activity {
 
 	private void updateListView() {
 
-		if (wishItemCursor != null) {
-			wishItemCursor.requery();
+		if (_wishItemCursor != null) {
+			_wishItemCursor.requery();
 			int resID = R.layout.wishitem_single;
 
 			String[] from = new String[] { 
@@ -426,7 +426,7 @@ public class WishList extends Activity {
 					R.id.txtAddress};
 			
 			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
-					resID, wishItemCursor, from, to);
+					resID, _wishItemCursor, from, to);
 
 			myListView.setAdapter(wishListItemAdapterCursor);
 			wishListItemAdapterCursor.notifyDataSetChanged();

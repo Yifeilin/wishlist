@@ -104,6 +104,7 @@ public class WishItemManager {
 	}
 
 	public List<WishItem> retrieveAll() {
+		return null;
 	}
 	
 	public void deleteItembyId(long itemId) {
