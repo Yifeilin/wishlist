@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,6 +56,7 @@ import com.wish.wishlist.util.social.ShareHelper;
  * sorting items is via "SELECT ... ORDER BY" query to the database
  * 
  */
+@SuppressLint("NewApi")
 public class WishList extends Activity {
 	static final private int DIALOG_MAIN = 0;
 	static final private int DIALOG_VIEW = 1;
@@ -462,6 +464,7 @@ public class WishList extends Activity {
 		alert.show();
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
