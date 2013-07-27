@@ -198,6 +198,7 @@ public class DBAdapter {
 										" ",
 										529f,
 										"220 Yonge Street, Toronto, ON, M5B 2H1",
+										0,
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.cake) + "sample";
@@ -210,7 +211,9 @@ public class DBAdapter {
 										" ",
 										2.99f,
 										"2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
-										3);
+										3,
+										0);
+				
 				picUrl = Integer.toHexString(R.drawable.tiffany) + "sample";
 				mItemDBAdapter.addItem(	3,
 										"tiffany",
@@ -221,7 +224,9 @@ public class DBAdapter {
 										" ",
 										389f,
 										"85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canada",
-										2);
+										2,
+										0);
+				
 				picUrl = Integer.toHexString(R.drawable.d3) + "sample";
 				mItemDBAdapter.addItem(	4, 
 										"Best buy",
@@ -232,7 +237,8 @@ public class DBAdapter {
 										" ",
 										59.0f,
 										"65 Dundas Street West\nToronto, ON, M5G 2C3",
-										1);
+										1,
+										0);
 				
 				picUrl = Integer.toHexString(R.drawable.mini_cooper) + "sample";
 				mItemDBAdapter.addItem(	5, 
@@ -244,7 +250,8 @@ public class DBAdapter {
 										" ",
 										20000.0f,
 										"11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
-										1);
+										1,
+										0);
 				
 				picUrl = Integer.toHexString(R.drawable.sjobs_bio) + "sample";
 				mItemDBAdapter.addItem(	6, 
@@ -256,7 +263,8 @@ public class DBAdapter {
 										" ",
 										30.0f,
 										"259 Richmond Street West Toronto ON M5V 3M6",
-										1);
+										1,
+										0);
 
 				mItemDBAdapter.close();
 			}

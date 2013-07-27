@@ -189,7 +189,7 @@ public class ItemDBAdapter {
 	 */
 	public long addItem(long store_id, String store_name, String name, String description, String date_time,
 			String picture_uri, String fullsize_picture_path, double price, String location,
-			int priority) {
+			int priority, int complete) {
 		// String sql = String.format(
 		// "INSERT INTO ITEM (_id, name, description, create_date, store_id,  picture, price, location, priority) "
 		// +
@@ -209,6 +209,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PRICE, price);
 		initialValues.put(KEY_ADDRESS, location);
 		initialValues.put(KEY_PRIORITY, priority);
+		initialValues.put(KEY_COMPLETE, complete);
 
 		long id = this.mDb.insert(DB_TABLE, null, initialValues);
 		return id;

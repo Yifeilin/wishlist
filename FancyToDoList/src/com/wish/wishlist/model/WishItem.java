@@ -331,7 +331,7 @@ public class WishItem {
 		mItemDBAdapter.open();
 		if(_id == -1) {
 			_id = mItemDBAdapter.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
-					_price, _address, _priority);
+					_price, _address, _priority, _complete);
 		}
 		else {
 			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
