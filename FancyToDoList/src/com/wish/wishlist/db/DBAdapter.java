@@ -29,7 +29,7 @@ public class DBAdapter {
 	public static final String DB_NAME = "WishList";
 
 	//Database version
-	public static final int DB_VERSION = 2;
+	public static final int DB_VERSION = 3;
 	private static final String TAG="DBAdapter";
 
 	public static final Patch[] PATCHES = new Patch[] {
@@ -44,18 +44,32 @@ public class DBAdapter {
 		, new Patch() {//db version 2
 			public void apply(SQLiteDatabase db) {
 				//delete sample items
-//				String sql = "DELETE FROM "
-//				+ ItemDBAdapter.DB_TABLE
-//				+ " WHERE "
-//				+ ItemDBAdapter.KEY_PHOTO_URL
-//				+ " LIKE '%sample'";
-//				
-//				//Log.d(TAG, "sql:" + sql);
-//				db.execSQL(sql);
-//
-//				//add user table
-//				db.execSQL(CREATE_TABLE_USER);
+				String sql = "DELETE FROM "
+				+ ItemDBAdapter.DB_TABLE
+				+ " WHERE "
+				+ ItemDBAdapter.KEY_PHOTO_URL
+				+ " LIKE '%sample'";
+				
+				//Log.d(TAG, "sql:" + sql);
+				db.execSQL(sql);
+
+				//add user table
+				db.execSQL(CREATE_TABLE_USER);
 			}
+		}
+		, new Patch() {//db version 3
+			public void apply(SQLiteDatabase db) {
+				//add wish complete flag column in the Item table
+				//representing if a wish is complete or not
+				//set its default value to be 0
+				String sql = "ALTER TABLE "
+				+ ItemDBAdapter.DB_TABLE
+				+ " ADD COLUMN complete INTEGER DEFAULT 0 NOT NULL";
+				
+				//Log.d(TAG, "sql:" + sql);
+				db.execSQL(sql);
+			}
+		
 			public void revert(SQLiteDatabase db) {  }
 		}
 	};
