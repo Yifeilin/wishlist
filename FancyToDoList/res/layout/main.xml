@@ -38,6 +38,32 @@
 			android:background="@color/black"
 			android:listSelector="@null"
 		/>
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+			>
+
+			<Button
+					android:id="@+id/addNewWishButton"
+					android:layout_width="205dp"
+					android:layout_height="44dp"
+					android:gravity="center"
+					android:layout_margin="25dp"
+					android:bottomRightRadius="10dp"
+					android:bottomLeftRadius="10dp"
+					android:topLeftRadius="10dp"
+					android:topRightRadius="10dp"
+					android:text="Add your first wish"
+					android:textSize="16.0sp"
+					android:clickable="true"
+					android:textColor="@color/white"
+					android:background="@xml/button_selector"
+					android:layout_centerInParent="true"
+				/>
+			</RelativeLayout>
+
 	<!-- default listSelector in android 10 has a left/right margins, while in android >10 has no margins,
 	 	set to null will remove these margins and make it consistent over different android version -->
 	

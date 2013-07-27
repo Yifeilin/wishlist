@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 //import android.widget.AdapterView.OnItemSelectedListener;
 //import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -81,6 +82,7 @@ public class WishList extends Activity {
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
 	private GridView myGridView;
+	private Button _addNew;
 	// private EditText mySearchText;
 //	private Spinner myViewSpinner;
 	private ImageButton backImageButton;
@@ -121,6 +123,7 @@ public class WishList extends Activity {
 		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
 		myListView = (ListView) findViewById(R.id.myListView);
 		myGridView = (GridView) findViewById(R.id.myGridView);
+		_addNew = (Button) findViewById(R.id.addNewWishButton);
 		// mySearchText = (EditText) findViewById(R.id.mySearchText);
 
 		// Listener for myListView.
@@ -293,6 +296,10 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView(ItemsCursor.SortBy sortBy) {
+		if (myItemDBAdapter.getItemsCount() == 0) {
+			myViewFlipper.setDisplayedChild(2);
+			return;
+		}
 		wishItemCursor = myItemDBAdapter.getItems(sortBy);
 
 		if (viewOption.equals("list")) {
@@ -304,7 +311,6 @@ public class WishList extends Activity {
 			updateGridView();
 			myViewFlipper.setDisplayedChild(1);
 		}
-
 	}
 
 	/***
@@ -351,6 +357,10 @@ public class WishList extends Activity {
 	 * update either list view or grid view according view option
 	 */
 	private void updateView() {
+		if (myItemDBAdapter.getItemsCount() == 0) {
+			myViewFlipper.setDisplayedChild(2);
+			return;
+		}
 
 		if (viewOption.equals("list")) {
 			// Update the list view
@@ -692,13 +702,11 @@ public class WishList extends Activity {
 						// Recall populate here is inefficient
 						viewOption = "list";
 						populateItems(nameQuery, SORT_BY);
-						myViewFlipper.setDisplayedChild(0);
 					}
 
 					else{
 						viewOption = "grid";
 						populateItems(nameQuery, SORT_BY);
-						myViewFlipper.setDisplayedChild(1);
 					}
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 				}

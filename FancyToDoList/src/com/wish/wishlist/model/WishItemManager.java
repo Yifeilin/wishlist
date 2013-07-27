@@ -102,6 +102,9 @@ public class WishItemManager {
 		return item;
 
 	}
+
+	public List<WishItem> retrieveAll() {
+	}
 	
 	public void deleteItembyId(long itemId) {
 		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
