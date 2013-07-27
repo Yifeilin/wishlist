@@ -28,6 +28,7 @@ public class ItemDBAdapter {
 	public static final String KEY_PRICE = "price";
 	public static final String KEY_ADDRESS = "location";
 	public static final String KEY_PRIORITY = "priority";
+	public static final String KEY_COMPLETE = "complete";
 
 	public static final String DB_TABLE = "Item";
 
@@ -225,7 +226,7 @@ public class ItemDBAdapter {
 	 */
 	public void updateItem(long _id, long store_id, String store_name, String name, String description, String date_time,
 			String picture_uri, String fullsize_picture_path, double price, String address,
-			int priority) {
+			int priority, int complete) {
 
 //		String sql = String.format("UPDATE Item " + "SET item_name = '%s',  "
 //				+ " description = '%s', " + " date_time = '%s', "
@@ -251,6 +252,7 @@ public class ItemDBAdapter {
 		initialValues.put(KEY_PRICE, price);
 		initialValues.put(KEY_ADDRESS, address);
 		initialValues.put(KEY_PRIORITY, priority);
+		initialValues.put(KEY_COMPLETE, complete);
 		
 		String where = String.format("_id = '%d'", _id);
 		this.mDb.update(DB_TABLE, initialValues, where, null);

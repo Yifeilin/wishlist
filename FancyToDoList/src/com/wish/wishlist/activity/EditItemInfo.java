@@ -389,6 +389,7 @@ public class EditItemInfo extends Activity implements Observer {
 		String itemStoreName = "";
 		double itemPrice = 0;
 		int itemPriority = 0;
+		int itemComplete = 0;
 		
 		try {
 			// read in the name, description, price and location of the item
@@ -440,7 +441,7 @@ public class EditItemInfo extends Activity implements Observer {
 
 		WishItem item = new WishItem(this, mItem_id, mStore_id, itemStoreName, itemName, itemDesc, 
 				date, picture_str, _fullsizePhotoPath, itemPrice, lat, lng, 
-				addStr, itemPriority);
+				addStr, itemPriority, itemComplete);
 		
 		mItem_id = item.save();
 

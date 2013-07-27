@@ -31,6 +31,7 @@ public class WishItem {
 	private String _picStr; //this is a uri
 	private String _fullsizePicPath;
 	private int _priority;
+	private int _complete;
 	//private Bitmap _fullsizePhoto;
 	//public static final String KEY_PHOTO_URL = "picture";
 	private double _price;
@@ -63,7 +64,7 @@ public class WishItem {
 
 	public WishItem(Context ctx, long itemId, long storeId, String storeName, String name, String desc, 
 			String date, String picStr, String fullsizePicPath, double price, double latitude, double longitude, 
-			String address, int priority) {
+			String address, int priority, int complete) {
 		_id = itemId;
 		_fullsizePicPath = fullsizePicPath;
 		_price = price;
@@ -79,6 +80,7 @@ public class WishItem {
 		_desc = desc;
 		_date = date;
 		_priority = priority;
+		_complete = complete;
 	}
 
 	public long getId() {
@@ -152,6 +154,14 @@ public class WishItem {
 
 	public void setPriority(String priority) {
 		this._priority = Integer.getInteger(priority);
+	}
+	
+	public int getComplete() {
+		return _complete;
+	}
+	
+	public void setComplete(int complete) {
+		this._complete = complete;
 	}
 
 	public String getName() {
@@ -325,7 +335,7 @@ public class WishItem {
 		}
 		else {
 			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
-					_price, _address, _priority);
+					_price, _address, _priority, _complete);
 		}
 		mItemDBAdapter.close();
 		return _id;

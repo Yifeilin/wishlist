@@ -89,9 +89,12 @@ public class WishItemManager {
 		int itemPriority = wishItemCursor.getInt(wishItemCursor
 				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
 		
+		int itemComplete = wishItemCursor.getInt(wishItemCursor
+				.getColumnIndexOrThrow(ItemDBAdapter.KEY_COMPLETE));
+		
 		WishItem item = new WishItem(_ctx, itemId, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, fullsize_pic_path, itemPrice, latitude, longitude,
-				itemLocation, itemPriority);
+				itemLocation, itemPriority, itemComplete);
 		
 		wishItemCursor.close();
 		mStoreCursor.close();
