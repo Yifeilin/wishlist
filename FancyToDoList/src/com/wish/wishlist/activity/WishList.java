@@ -101,7 +101,7 @@ public class WishList extends Activity {
 	private ItemDBAdapter myItemDBAdapter;
 //	private LocationDBAdapter myLocationDBAdapter;
 	
-	private long selectedItem_id;
+	private long _selectedItem_id;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -443,13 +443,13 @@ public class WishList extends Activity {
 	}
 
 	private void deleteItem(long item_id){
-		selectedItem_id = item_id;
+		_selectedItem_id = item_id;
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Delete the wish?");
 		builder.setCancelable(false);
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						myItemDBAdapter.deleteItem(selectedItem_id);
+						myItemDBAdapter.deleteItem(_selectedItem_id);
 						updateView();
 					}
 				});
@@ -504,9 +504,56 @@ public class WishList extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		//menu.setHeaderTitle("Selected Wish Item");
+
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_item_context, menu);
+
+		AdapterView.AdapterContextMenuInfo menu_info;
+		menu_info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+		//get the position of the item in the list
+		//this is the position of the items among all items including the invisible ones
+		int pos = menu_info.position;
+		View selected_view = null;
+		_selectedItem_id = -1;
+		if(viewOption.equals("list")){
+			//get the position of the items among the visible items
+			pos = pos - myListView.getFirstVisiblePosition();
+			selected_view = myListView.getChildAt(pos);
+			if (selected_view != null) {
+				_selectedItem_id = getDBItemID(selected_view, LIST_MODE);
+			}
+			else {
+//				Log.d(WishList.LOG_TAG, "selected_view is null");
+				return;
+			}
+		}
+		else if(viewOption.equals("grid")){
+			pos = pos - myGridView.getFirstVisiblePosition();
+			selected_view = myGridView.getChildAt(pos);
+			if (selected_view != null) {
+				_selectedItem_id = getDBItemID(selected_view, GRID_MODE);
+			}
+			else {
+//				Log.d(WishList.LOG_TAG, "selected_view is null");
+				return;
+			}
+		}
+		else if(selected_view == null){
+//			Log.d(WishList.LOG_TAG, "selected view is null");
+			return;
+		}
+
+		WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(_selectedItem_id);
+		int complete = wish_item.getComplete();
+		MenuItem mi = (MenuItem) menu.findItem(R.id.COMPLETE);
+		if (complete == 1) {
+			mi.setTitle("Mark as incomplete");
+		}
+		else {
+			mi.setTitle("Mark as complete");
+		}
+
 		return;
 	}
 
@@ -587,51 +634,16 @@ public class WishList extends Activity {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		super.onContextItemSelected(item);
-		AdapterView.AdapterContextMenuInfo menuInfo;
-		menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-		//get the position of the item in the list
-		//this is the position of the items among all items including the invisible ones
-		int pos = menuInfo.position;
-		View selected_view = null;
-		long item_id = -1;
-		if(viewOption.equals("list")){
-			//get the position of the items among the visible items
-			pos = pos - myListView.getFirstVisiblePosition();
-			selected_view = myListView.getChildAt(pos);
-			if (selected_view != null) {
-				item_id = getDBItemID(selected_view, LIST_MODE);
-			}
-			else {
-//				Log.d(WishList.LOG_TAG, "selected_view is null");
-				return false;
-			}
-		}
-		else if(viewOption.equals("grid")){
-			pos = pos - myGridView.getFirstVisiblePosition();
-			selected_view = myGridView.getChildAt(pos);
-			if (selected_view != null) {
-				item_id = getDBItemID(selected_view, GRID_MODE);
-			}
-			else {
-//				Log.d(WishList.LOG_TAG, "selected_view is null");
-				return false;
-			}
-		}
-		else if(selected_view == null){
-//			Log.d(WishList.LOG_TAG, "selected view is null");
-			return false;
-		}
-		
 		long itemId = item.getItemId();
 		if (itemId == R.id.REMOVE) {
-			// wishListDB.deleteItem(item_id);
-			deleteItem(item_id);
+			// wishListDB.deleteItem(_selectedItem_id);
+			deleteItem(_selectedItem_id);
 			return true;
 		}
 		else if (itemId == R.id.EDIT) {
 			Intent editItem = new Intent(this, EditItemInfo.class);
-			editItem.putExtra("item_id", item_id);
+			editItem.putExtra("item_id", _selectedItem_id);
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;
 		}
@@ -642,7 +654,7 @@ public class WishList extends Activity {
 	//		return true;
 	//	}
 		else if (itemId == R.id.MARK) {
-//			String address = myItemDBAdapter.getItemAddress(item_id);
+//			String address = myItemDBAdapter.getItemAddress(_selectedItem_id);
 //			if (address.equals("unknown")||address.equals("")){
 //				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
 //				toast.show();
@@ -651,7 +663,7 @@ public class WishList extends Activity {
 				
 				// get the latitude and longitude of the clicked item
 				double[] dLocation = new double[2];
-				dLocation = myItemDBAdapter.getItemLocation(item_id);
+				dLocation = myItemDBAdapter.getItemLocation(_selectedItem_id);
 				
 				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
 					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -672,7 +684,7 @@ public class WishList extends Activity {
 			//Display display = getWindowManager().getDefaultDisplay(); 
 			//int width = display.getWidth();  // deprecated
 			//int height = display.getHeight();  // deprecated
-			ShareHelper share = new ShareHelper(this, item_id);
+			ShareHelper share = new ShareHelper(this, _selectedItem_id);
 			share.share();
 			//Intent sendIntent = new Intent();
 			//sendIntent.setAction(Intent.ACTION_SEND);
@@ -694,8 +706,13 @@ public class WishList extends Activity {
 		}
 
 		else if (itemId == R.id.COMPLETE) {
-			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(item_id);
-			wish_item.setComplete(1);
+			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(_selectedItem_id);
+			if (wish_item.getComplete() == 1) {
+				wish_item.setComplete(0);
+			}
+			else {
+				wish_item.setComplete(1);
+			}
 			wish_item.save();
 		}
 		return false; }
