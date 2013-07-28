@@ -13,6 +13,7 @@ import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
 import com.wish.wishlist.util.social.ShareHelper;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -278,7 +279,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name);
+		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name, null);
 		myItemDBAdapter.close();
 		long nextItemID;
 		if (mPosition < c.getCount())
@@ -314,7 +315,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name);
+		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name, null);
 		myItemDBAdapter.close();
 		long prevItemID;
 		if (mPosition > 0)
@@ -530,6 +531,7 @@ public class WishItemDetail extends Activity {
 		return false;
 	}
 
+	@SuppressLint("NewApi")
 	private void setUpActionBar() {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

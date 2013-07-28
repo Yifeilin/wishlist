@@ -1,5 +1,8 @@
 package com.wish.wishlist.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -77,6 +80,7 @@ public class WishList extends Activity {
 	private static final int GRID_MODE = 2;
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
+	private Map<String,String> _where = new HashMap<String, String>();
 	private String nameQuery = null;
 	public static final String LOG_TAG = "WishList";
 	private static final int EDIT_ITEM = 0;
@@ -199,7 +203,7 @@ public class WishList extends Activity {
 			nameQuery = intent.getStringExtra(SearchManager.QUERY);
 
 			// displaySearchItem(query, SORT_BY);
-			populateItems(nameQuery, SORT_BY);
+			populateItems(nameQuery, SORT_BY, _where);
 		} else {
 			// activity is not started from search
 			// display all the items saved in the Item table
@@ -295,8 +299,8 @@ public class WishList extends Activity {
 	 *            : enum defined in ItemsCursor which determines the sort order 
 	 *              of the selected rows in db
 	 */
-	private void onSort(ItemsCursor.SortBy sortBy) {
-		populateItems(null, sortBy);
+	private void onSort(ItemsCursor.SortBy sortBy, Map<String,String> where) {
+		populateItems(null, sortBy, where);
 	}
 
 	/***
@@ -306,7 +310,7 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView(ItemsCursor.SortBy sortBy) {
-		_wishItemCursor = myItemDBAdapter.getItems(sortBy);
+		_wishItemCursor = myItemDBAdapter.getItems(sortBy, _where);
 		if (myItemDBAdapter.getItemsCount() == 0) {
 			myViewFlipper.setDisplayedChild(2);
 			return;
@@ -348,13 +352,13 @@ public class WishList extends Activity {
 	 * @param searchName
 	 *            : the item name to match, null for all items
 	 */
-	private void populateItems(String searchName, ItemsCursor.SortBy sortBy) {
+	private void populateItems(String searchName, ItemsCursor.SortBy sortBy, Map<String,String> where) {
 
 		if (searchName == null) {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
 			// _wishItemCursor = wishListDB.getItems(sortBy);
-			_wishItemCursor = myItemDBAdapter.getItems(sortBy);
+			_wishItemCursor = myItemDBAdapter.getItems(sortBy, where);
 
 		} else {
 			_wishItemCursor = myItemDBAdapter.searchItems(searchName, sortBy);
@@ -605,29 +609,52 @@ public class WishList extends Activity {
 //			return true;
 //		}
 
-		else if (itemId == R.id.menu_sortByTime) {
-			SORT_BY = ItemsCursor.SortBy.date_time;
-			onSort(SORT_BY);
-			return true;
-		}
+		//sort submenu
+			else if (itemId == R.id.menu_sortByTime) {
+				SORT_BY = ItemsCursor.SortBy.date_time;
+				onSort(SORT_BY, _where);
+				return true;
+			}
 
-		else if (itemId == R.id.menu_sortByName) {
-			SORT_BY = ItemsCursor.SortBy.item_name;
-			onSort(SORT_BY);
-			return true;
-		}
+			else if (itemId == R.id.menu_sortByName) {
+				SORT_BY = ItemsCursor.SortBy.item_name;
+				onSort(SORT_BY, _where);
+				return true;
+			}
 
-		else if (itemId == R.id.menu_sortByPrice) {
-			SORT_BY = ItemsCursor.SortBy.price;
-			onSort(SORT_BY);
-			return true;
-		}
+			else if (itemId == R.id.menu_sortByPrice) {
+				SORT_BY = ItemsCursor.SortBy.price;
+				onSort(SORT_BY, _where);
+				return true;
+			}
 
-//		else if (itemId == R.id.menu_sortByPriority) {
-//			SORT_BY = ItemsCursor.SortBy.priority;
-//			onSort(SORT_BY);
-//			return true;
-//		}
+	//		else if (itemId == R.id.menu_sortByPriority) {
+	//			SORT_BY = ItemsCursor.SortBy.priority;
+	//			onSort(SORT_BY);
+	//			return true;
+	//		}
+	//
+	//		//filter submenu
+			else if (itemId == R.id.menu_showAll) {
+				_where.clear();
+				onSort(SORT_BY, _where);
+				return true;
+			}
+
+			else if (itemId == R.id.menu_showComplete) {
+				_where.clear();
+				_where.put("complete", "1");
+				onSort(SORT_BY, _where);
+				return true;
+			}
+
+			else if (itemId == R.id.menu_showInComplete) {
+				_where.clear();
+				_where.put("complete", "0");
+				onSort(SORT_BY, _where);
+				return true;
+			}
+
 		return false;
 	}
 
@@ -734,12 +761,12 @@ public class WishList extends Activity {
 					if(items[item].equals("List")){
 						// Recall populate here is inefficient
 						viewOption = "list";
-						populateItems(nameQuery, SORT_BY);
+						populateItems(nameQuery, SORT_BY, _where);
 					}
 
 					else{
 						viewOption = "grid";
-						populateItems(nameQuery, SORT_BY);
+						populateItems(nameQuery, SORT_BY, _where);
 					}
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 				}

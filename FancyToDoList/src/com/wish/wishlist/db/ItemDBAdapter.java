@@ -3,6 +3,7 @@ package com.wish.wishlist.db;
 //import com.android.wishlist.WishListDataBase.ItemsCursor;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -409,11 +410,26 @@ public class ItemDBAdapter {
 	 * @param sortBy
 	 *            the sort criteria
 	 */
-	public ItemsCursor getItems(ItemsCursor.SortBy sortBy) {
-		String sqlQuery = ItemsCursor.QUERY + sortBy.toString();
+
+	public ItemsCursor getItems(ItemsCursor.SortBy sortBy, Map<String,String> where) {
+		String sql;
+		if (where == null || where.isEmpty()) {
+			sql = "SELECT * FROM Item " + "ORDER BY " + sortBy.toString();
+		}
+		else {
+			//right now, we assume there is only one entry in where
+			String field = "";
+			String value = "";
+			for (String key : where.keySet()) {
+				field = key;
+				value = where.get(key);
+			}
+			sql = "SELECT * FROM Item WHERE " + field + "=" + value + " ORDER BY " + sortBy.toString();
+		}
+
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
-				new ItemsCursor.Factory(), sqlQuery, null, null);
+				new ItemsCursor.Factory(), sql, null, null);
 		c.moveToFirst();
 		return c;
 	}
