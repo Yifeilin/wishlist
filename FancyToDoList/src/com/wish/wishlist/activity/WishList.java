@@ -39,6 +39,8 @@ import com.wish.wishlist.R;
 import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.wish.wishlist.model.WishItem;
+import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
 import com.wish.wishlist.util.social.ShareHelper;
 
@@ -692,6 +694,9 @@ public class WishList extends Activity {
 		}
 
 		else if (itemId == R.id.COMPLETE) {
+			WishItem wish_item = WishItemManager.getInstance(this).retrieveItembyId(item_id);
+			wish_item.setComplete(1);
+			wish_item.save();
 		}
 		return false; }
 
