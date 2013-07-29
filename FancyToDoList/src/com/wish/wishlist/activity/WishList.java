@@ -65,6 +65,7 @@ import com.wish.wishlist.util.social.ShareHelper;
 public class WishList extends Activity {
 	static final private int DIALOG_MAIN = 0;
 	static final private int DIALOG_VIEW = 1;
+	static final private int DIALOG_FILTER = 2;
 
 //	static final private int DETAIL_INFO_ACT = 2;
 	// static final private int TAKE_PICTURE = 1;
@@ -634,26 +635,28 @@ public class WishList extends Activity {
 	//			return true;
 	//		}
 	//
-	//		//filter submenu
-			else if (itemId == R.id.menu_showAll) {
-				_where.clear();
-				onSort(SORT_BY, _where);
-				return true;
-			}
+		else if (itemId == R.id.menu_filter) {
+				showDialog(DIALOG_FILTER);
+		}
+		//	else if (itemId == R.id.menu_showAll) {
+		//		_where.clear();
+		//		onSort(SORT_BY, _where);
+		//		return true;
+		//	}
 
-			else if (itemId == R.id.menu_showComplete) {
-				_where.clear();
-				_where.put("complete", "1");
-				onSort(SORT_BY, _where);
-				return true;
-			}
+		//	else if (itemId == R.id.menu_showComplete) {
+		//		_where.clear();
+		//		_where.put("complete", "1");
+		//		onSort(SORT_BY, _where);
+		//		return true;
+		//	}
 
-			else if (itemId == R.id.menu_showInComplete) {
-				_where.clear();
-				_where.put("complete", "0");
-				onSort(SORT_BY, _where);
-				return true;
-			}
+		//	else if (itemId == R.id.menu_showInComplete) {
+		//		_where.clear();
+		//		_where.put("complete", "0");
+		//		onSort(SORT_BY, _where);
+		//		return true;
+		//	}
 
 		return false;
 	}
@@ -758,13 +761,12 @@ public class WishList extends Activity {
 			builder.setTitle("Show wishes in");
 			builder.setItems(items, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
-					if(items[item].equals("List")){
+					if (items[item].equals("List")) {
 						// Recall populate here is inefficient
 						viewOption = "list";
 						populateItems(nameQuery, SORT_BY, _where);
 					}
-
-					else{
+					else {
 						viewOption = "grid";
 						populateItems(nameQuery, SORT_BY, _where);
 					}
@@ -772,6 +774,52 @@ public class WishList extends Activity {
 				}
 			});
 			dialog = builder.create();
+			break;
+
+		case DIALOG_FILTER:
+			final String BY_ALL = "By all";
+			final String BY_COMPLETE = "By complete";
+			final String BY_INCOMPLETE = "By incomplete";
+			final CharSequence[] options = {BY_ALL, BY_COMPLETE, BY_INCOMPLETE};
+
+			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(WishList.this);
+			optionBuilder.setTitle("Filter wishes");
+			optionBuilder.setSingleChoiceItems(options, 1, new DialogInterface.OnClickListener() {
+			//optionBuilder.setItems(options, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+
+						if (options[item].equals(BY_ALL)) {
+							// Recall populate here is inefficient
+							//viewOption = "list";
+						//	populateItems(nameQuery, SORT_BY, _where);
+							_where.clear();
+						}
+
+						else if (options[item].equals(BY_COMPLETE)) {
+							//viewOption = "grid";
+						//	populateItems(nameQuery, SORT_BY, _where);
+							_where.put("complete", "1");
+						}
+						else {
+						//	populateItems(nameQuery, SORT_BY, _where);
+							_where.put("complete", "0");
+						}
+					}
+					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+			});
+
+			optionBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+
+			optionBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					populateItems(null, SORT_BY, _where);
+				}
+			});
+
+			dialog = optionBuilder.create();
 			break;
 		default:
 			dialog = null;

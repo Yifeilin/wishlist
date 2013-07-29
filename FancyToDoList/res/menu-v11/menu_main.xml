@@ -40,7 +40,20 @@
    			<item android:id="@+id/menu_sortByPrice" android:title="by price"></item>
    			<!--  <item android1:id="@+id/menu_sortByPriority" android1:title="by priority"></item> -->
    		</menu>
-   	</item>    	     	  
+   	</item>
+
+ <item android:id="@+id/menu_filter" 
+		android:title="Filter"
+		android:icon="@android:drawable/ic_menu_sort_by_size"
+	 	android:showAsAction="ifRoom|withText"
+	/>
+	<!--<menu>
+   			<item android:id="@+id/menu_showAll" android:title="show all"></item>
+   			<item android:id="@+id/menu_showComplete" android:title="show completed"></item>
+   			<item android:id="@+id/menu_showInComplete" android:title="show incomplete"></item>
+   		</menu>
+   	</item> -->
+	<!--  <item android1:id="@+id/menu_sortByPriority" android1:title="by priority"></item> -->
 </menu>  
     
     
