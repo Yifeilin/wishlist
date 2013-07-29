@@ -777,35 +777,27 @@ public class WishList extends Activity {
 			break;
 
 		case DIALOG_FILTER:
-			final String BY_ALL = "By all";
-			final String BY_COMPLETE = "By complete";
-			final String BY_INCOMPLETE = "By incomplete";
-			final CharSequence[] options = {BY_ALL, BY_COMPLETE, BY_INCOMPLETE};
+			final String BY_ALL = "All";
+			final String BY_COMPLETED = "Completed";
+			final String BY_INPROGRESS = "In progress";
+			final CharSequence[] options = {BY_ALL, BY_COMPLETED, BY_INPROGRESS};
 
 			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(WishList.this);
 			optionBuilder.setTitle("Filter wishes");
 			optionBuilder.setSingleChoiceItems(options, 1, new DialogInterface.OnClickListener() {
-			//optionBuilder.setItems(options, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
 
 						if (options[item].equals(BY_ALL)) {
-							// Recall populate here is inefficient
-							//viewOption = "list";
-						//	populateItems(nameQuery, SORT_BY, _where);
 							_where.clear();
 						}
 
-						else if (options[item].equals(BY_COMPLETE)) {
-							//viewOption = "grid";
-						//	populateItems(nameQuery, SORT_BY, _where);
+						else if (options[item].equals(BY_COMPLETED)) {
 							_where.put("complete", "1");
 						}
 						else {
-						//	populateItems(nameQuery, SORT_BY, _where);
 							_where.put("complete", "0");
 						}
 					}
-					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 			});
 
 			optionBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
