@@ -424,7 +424,8 @@ public class WishList extends Activity {
 					ItemDBAdapter.KEY_NAME,
 					ItemDBAdapter.KEY_PRICE,
 					ItemDBAdapter.KEY_STORENAME,
-					ItemDBAdapter.KEY_ADDRESS};
+					ItemDBAdapter.KEY_ADDRESS,
+					ItemDBAdapter.KEY_COMPLETE};
 			
 			int[] to = new int[] {
 					R.id.txtItemID, 
@@ -432,7 +433,8 @@ public class WishList extends Activity {
 					R.id.txtName,
 					R.id.txtPrice,
 					R.id.txtStore, 
-					R.id.txtAddress};
+					R.id.txtAddress,
+					R.id.checkmark_complete};
 			
 			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, _wishItemCursor, from, to);

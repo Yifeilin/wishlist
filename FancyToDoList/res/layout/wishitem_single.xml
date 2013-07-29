@@ -104,4 +104,15 @@
 			      android:textSize="16sp" />
 	
 	</LinearLayout>
+
+	<ImageView
+	    android:id="@+id/checkmark_complete"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="top"
+	    android:adjustViewBounds="true"
+	    android:src="@drawable/ic_checkmark_holo_light"
+	    android:visibility="visible" 
+	 />
+
 </LinearLayout>

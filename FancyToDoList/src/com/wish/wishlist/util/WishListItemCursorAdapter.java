@@ -70,6 +70,9 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 			int nStoreNameIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORENAME);
 
 			int nAddIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS);
+
+			int nCompleteIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_COMPLETE);
+			
 			// set the photo to the image view
 			if (columnIndex == nImageIndex) {
 				Bitmap bitmap = null;
@@ -217,6 +220,18 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				}
 				else {
 					viewAddress.setVisibility(View.GONE);
+				}
+				return true;
+			}
+
+			else if (columnIndex == nCompleteIndex) {
+				ImageView viewComplete = (ImageView) view;
+				int complete = cursor.getInt(columnIndex);
+				if (complete == 1) {
+					viewComplete.setVisibility(View.VISIBLE);
+				}
+				else {
+					viewComplete.setVisibility(View.GONE);
 				}
 				return true;
 			}
