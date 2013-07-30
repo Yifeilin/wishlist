@@ -66,6 +66,7 @@ public class WishList extends Activity {
 
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
+	private static final String VIEW_OPTION = "viewOption";
 
 	// other view mode can be extended in the future
 	private static final int LIST_MODE = 1;
@@ -103,7 +104,7 @@ public class WishList extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
-		_viewOption = pref.getString("viewOption", "list");
+		_viewOption = pref.getString(VIEW_OPTION, "list");
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -737,7 +738,7 @@ public class WishList extends Activity {
 					}
 					SharedPreferences pref = getPreferences(MODE_PRIVATE);
 					SharedPreferences.Editor editor = pref.edit();
-					editor.putString("viewOption", _viewOption);
+					editor.putString(VIEW_OPTION, _viewOption);
 					editor.commit();
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 				}
@@ -825,7 +826,7 @@ public class WishList extends Activity {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 			}
-		//	_viewOption = savedInstanceState.getString("viewOption");
+		//	_viewOption = savedInstanceState.getString(VIEW_OPTION);
 		}
 		
 //		if (_viewOption.equals("list")) {
