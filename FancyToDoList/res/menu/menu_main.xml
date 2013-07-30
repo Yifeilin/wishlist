@@ -22,13 +22,7 @@
 		android:title="Sort"
 		android:icon="@android:drawable/ic_menu_sort_by_size"
 	 	android:showAsAction="ifRoom|withText">
-   		<menu>
-   			<item android:id="@+id/menu_sortByName" android:title="by name"></item>
-   			<item android:id="@+id/menu_sortByTime" android:title="by time"></item>
-   			<item android:id="@+id/menu_sortByPrice" android:title="by price"></item>
-   			<!--  <item android1:id="@+id/menu_sortByPriority" android1:title="by priority"></item> -->
-   		</menu>
-   	</item>    	     	  
+ </item>
 </menu>  
     
     

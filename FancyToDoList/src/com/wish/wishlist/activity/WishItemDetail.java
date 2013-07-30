@@ -279,7 +279,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name, null);
+		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
 		myItemDBAdapter.close();
 		long nextItemID;
 		if (mPosition < c.getCount())
@@ -315,7 +315,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
 		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name, null);
+		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
 		myItemDBAdapter.close();
 		long prevItemID;
 		if (mPosition > 0)

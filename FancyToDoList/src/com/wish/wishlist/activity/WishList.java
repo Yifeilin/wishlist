@@ -62,12 +62,14 @@ public class WishList extends Activity {
 	static final private int DIALOG_MAIN = 0;
 	static final private int DIALOG_VIEW = 1;
 	static final private int DIALOG_FILTER = 2;
-	static final private int POST_ITEM = 3;
+	static final private int DIALOG_SORT = 3;
+	static final private int POST_ITEM = 4;
 
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
 	private static final String PREF_VIEW_OPTION = "viewOption";
 	private static final String PREF_FILTER_OPTION = "filterOption";
+	private static final String PREF_SORT_OPTION = "sortOption";
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private Map<String,String> _where = new HashMap<String, String>();
@@ -77,6 +79,7 @@ public class WishList extends Activity {
 	private static final int ADD_ITEM = 1;
 	private String _viewOption = "list";
 	private String _filterOption = "all";
+	private String _sortOption = ItemsCursor.SortBy.item_name.toString();
 
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
@@ -113,6 +116,7 @@ public class WishList extends Activity {
 		else if(_filterOption.equals("in_progress")) {
 			_where.put("complete", "0");
 		}
+		_sortOption = pref.getString(PREF_SORT_OPTION, ItemsCursor.SortBy.item_name.toString());
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -193,12 +197,12 @@ public class WishList extends Activity {
 			nameQuery = intent.getStringExtra(SearchManager.QUERY);
 
 			// displaySearchItem(query, SORT_BY);
-			populateItems(nameQuery, SORT_BY, _where);
+			populateItems(nameQuery, _where);
 		} else {
 			// activity is not started from search
 			// display all the items saved in the Item table
 			// sorted by item name
-			initializeView(SORT_BY);
+			initializeView();
 
 		}
 
@@ -277,16 +281,6 @@ public class WishList extends Activity {
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		return item_id;
 	}
-	
-	/***
-	 * called when sort is selected
-	 * @param sortBy
-	 *            : enum defined in ItemsCursor which determines the sort order 
-	 *              of the selected rows in db
-	 */
-	private void onSort(ItemsCursor.SortBy sortBy, Map<String,String> where) {
-		populateItems(null, sortBy, where);
-	}
 
 	/***
 	 * initial display of items in both list and grid view, called when the
@@ -294,8 +288,8 @@ public class WishList extends Activity {
 	 * 
 	 * @param sortBy
 	 */
-	private void initializeView(ItemsCursor.SortBy sortBy) {
-		_wishItemCursor = myItemDBAdapter.getItems(sortBy, _where);
+	private void initializeView() {
+		_wishItemCursor = myItemDBAdapter.getItems(_sortOption, _where);
 		if (myItemDBAdapter.getItemsCount() == 0) {
 			myViewFlipper.setDisplayedChild(2);
 			return;
@@ -337,16 +331,14 @@ public class WishList extends Activity {
 	 * @param searchName
 	 *            : the item name to match, null for all items
 	 */
-	private void populateItems(String searchName, ItemsCursor.SortBy sortBy, Map<String,String> where) {
-
+	private void populateItems(String searchName, Map<String,String> where) {
 		if (searchName == null) {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
 			// _wishItemCursor = wishListDB.getItems(sortBy);
-			_wishItemCursor = myItemDBAdapter.getItems(sortBy, where);
-
+			_wishItemCursor = myItemDBAdapter.getItems(_sortOption, where);
 		} else {
-			_wishItemCursor = myItemDBAdapter.searchItems(searchName, sortBy);
+			_wishItemCursor = myItemDBAdapter.searchItems(searchName, _sortOption);
 		}
 
 		updateView();
@@ -596,31 +588,10 @@ public class WishList extends Activity {
 //			return true;
 //		}
 
-		//sort submenu
-			else if (itemId == R.id.menu_sortByTime) {
-				SORT_BY = ItemsCursor.SortBy.date_time;
-				onSort(SORT_BY, _where);
-				return true;
-			}
+		else if(itemId == R.id.menu_sort) {
+				showDialog(DIALOG_SORT);
+		}
 
-			else if (itemId == R.id.menu_sortByName) {
-				SORT_BY = ItemsCursor.SortBy.item_name;
-				onSort(SORT_BY, _where);
-				return true;
-			}
-
-			else if (itemId == R.id.menu_sortByPrice) {
-				SORT_BY = ItemsCursor.SortBy.price;
-				onSort(SORT_BY, _where);
-				return true;
-			}
-
-	//		else if (itemId == R.id.menu_sortByPriority) {
-	//			SORT_BY = ItemsCursor.SortBy.priority;
-	//			onSort(SORT_BY);
-	//			return true;
-	//		}
-	//
 		else if (itemId == R.id.menu_filter) {
 				showDialog(DIALOG_FILTER);
 		}
@@ -731,11 +702,11 @@ public class WishList extends Activity {
 					if (items[item].equals("List")) {
 						// Recall populate here is inefficient
 						_viewOption = "list";
-						populateItems(nameQuery, SORT_BY, _where);
+						populateItems(nameQuery, _where);
 					}
 					else {
 						_viewOption = "grid";
-						populateItems(nameQuery, SORT_BY, _where);
+						populateItems(nameQuery, _where);
 					}
 					SharedPreferences pref = getPreferences(MODE_PRIVATE);
 					SharedPreferences.Editor editor = pref.edit();
@@ -745,6 +716,54 @@ public class WishList extends Activity {
 				}
 			});
 			dialog = builder.create();
+			break;
+
+		case DIALOG_SORT:
+			final String BY_NAME = "By name";
+			final String BY_TIME = "By time";
+			final String BY_PRICE = "By price";
+			final CharSequence[] sortOption = {BY_NAME, BY_TIME, BY_PRICE};
+
+			AlertDialog.Builder sortBuilder = new AlertDialog.Builder(WishList.this);
+			sortBuilder.setTitle("Sort wishes");
+
+			int j = 0;// 0 is by name
+			if (_filterOption.equals(ItemsCursor.SortBy.date_time.toString())) {
+				j = 1;
+			}
+			else if (_filterOption.equals(ItemsCursor.SortBy.price.toString())) {
+				j = 2;
+			}
+			sortBuilder.setSingleChoiceItems(sortOption, j, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+						if (sortOption[item].equals(BY_NAME)) {
+							_sortOption = ItemsCursor.SortBy.item_name.toString();
+						}
+						else if (sortOption[item].equals(BY_TIME)) {
+							_sortOption = ItemsCursor.SortBy.date_time.toString();
+						}
+						else {
+							_sortOption = ItemsCursor.SortBy.price.toString();
+						}
+						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+						SharedPreferences.Editor editor = pref.edit();
+						editor.putString(PREF_FILTER_OPTION, _filterOption);
+						editor.commit();
+					}
+			});
+
+			sortBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+
+			sortBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					populateItems(null, _where);
+				}
+			});
+
+			dialog = sortBuilder.create();
 			break;
 
 		case DIALOG_FILTER:
@@ -757,10 +776,10 @@ public class WishList extends Activity {
 			optionBuilder.setTitle("Filter wishes");
 
 			int i = 0;
-			if(_filterOption.equals("completed")) {
+			if (_filterOption.equals("completed")) {
 				i = 1;
 			}
-			else if(_filterOption.equals("in_progress")) {
+			else if (_filterOption.equals("in_progress")) {
 				i = 2;
 			}
 			optionBuilder.setSingleChoiceItems(options, i, new DialogInterface.OnClickListener() {
@@ -793,7 +812,7 @@ public class WishList extends Activity {
 
 			optionBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					populateItems(null, SORT_BY, _where);
+					populateItems(null, _where);
 				}
 			});
 
@@ -828,7 +847,7 @@ public class WishList extends Activity {
 				myGridView.getSelectedItemPosition());
 		}
 		// save the current sort criterion
-		savedInstanceState.putString(SORT_BY_KEY, SORT_BY.name());
+		//savedInstanceState.putString(SORT_BY_KEY, SORT_BY.item_name());
 		
 		super.onSaveInstanceState(savedInstanceState);
 	}

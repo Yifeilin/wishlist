@@ -411,10 +411,10 @@ public class ItemDBAdapter {
 	 *            the sort criteria
 	 */
 
-	public ItemsCursor getItems(ItemsCursor.SortBy sortBy, Map<String,String> where) {
+	public ItemsCursor getItems(String sortOption, Map<String,String> where) {
 		String sql;
 		if (where == null || where.isEmpty()) {
-			sql = "SELECT * FROM Item " + "ORDER BY " + sortBy.toString();
+			sql = "SELECT * FROM Item " + "ORDER BY " + sortOption;
 		}
 		else {
 			//right now, we assume there is only one entry in where
@@ -424,7 +424,7 @@ public class ItemDBAdapter {
 				field = key;
 				value = where.get(key);
 			}
-			sql = "SELECT * FROM Item WHERE " + field + "=" + value + " ORDER BY " + sortBy.toString();
+			sql = "SELECT * FROM Item WHERE " + field + "=" + value + " ORDER BY " + sortOption;
 		}
 
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
@@ -491,9 +491,9 @@ public class ItemDBAdapter {
 	 * ordered by sortBy
 	 * 
 	 */
-	public ItemsCursor searchItems(String query, ItemsCursor.SortBy sortBy) {
+	public ItemsCursor searchItems(String query, String sortOption) {
 		String sql = String.format("SELECT * FROM Item "
-				+ "WHERE item_name LIKE '%%%s%%' " + "ORDER BY '%s'" , query, sortBy);
+				+ "WHERE item_name LIKE '%%%s%%' " + "ORDER BY " + sortOption, query);
 		
 		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
