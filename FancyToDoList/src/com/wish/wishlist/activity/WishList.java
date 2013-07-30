@@ -68,10 +68,6 @@ public class WishList extends Activity {
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
 	private static final String VIEW_OPTION = "viewOption";
 
-	// other view mode can be extended in the future
-	private static final int LIST_MODE = 1;
-	private static final int GRID_MODE = 2;
-
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private Map<String,String> _where = new HashMap<String, String>();
 	private String nameQuery = null;
@@ -129,7 +125,7 @@ public class WishList extends Activity {
 					long id) {
 				// find which item in the list view has been clicked
 				// and get its _id in database
-				long item_id = getDBItemID(v, LIST_MODE);
+				long item_id = getDBItemID(v);
 				if (item_id == -1) {
 //					Log.d(LOG_TAG, "item id == -1");
 					return;
@@ -150,10 +146,9 @@ public class WishList extends Activity {
 		// detailed info.
 		myGridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> a, View v, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 				// find which item has been clicked and get its _id in database
-				long item_id = getDBItemID(v, GRID_MODE);
+				long item_id = getDBItemID(v);
 				// Create an intent to show the item detail.
 				// Pass the item_id along so the next activity can use it to
 				// retrieve the info. about the item from database
@@ -259,19 +254,14 @@ public class WishList extends Activity {
 	 *            : the current view mode
 	 * @return the Item ID
 	 */
-	public long getDBItemID(View v, int viewMode) {
+	public long getDBItemID(View v) {
 		TextView itemIdTextView = null;
 		// Note that txtItemID is not visible in the UI but can be retrieved
-		switch (viewMode) {
-		case LIST_MODE:
+		if (_viewOption.equals("list")) {
 			itemIdTextView = (TextView) v.findViewById(R.id.txtItemID);
-			break;
-		case GRID_MODE:
+		}
+		else {
 			itemIdTextView = (TextView) v.findViewById(R.id.txtItemID_Grid);
-			break;
-		default:
-//			Log.d(LOG_TAG, "View mode not specified correctly.");
-			return -1;
 		}
 		long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		return item_id;
@@ -511,7 +501,7 @@ public class WishList extends Activity {
 			pos = pos - myListView.getFirstVisiblePosition();
 			selected_view = myListView.getChildAt(pos);
 			if (selected_view != null) {
-				_selectedItem_id = getDBItemID(selected_view, LIST_MODE);
+				_selectedItem_id = getDBItemID(selected_view);
 			}
 			else {
 //				Log.d(WishList.LOG_TAG, "selected_view is null");
@@ -522,7 +512,7 @@ public class WishList extends Activity {
 			pos = pos - myGridView.getFirstVisiblePosition();
 			selected_view = myGridView.getChildAt(pos);
 			if (selected_view != null) {
-				_selectedItem_id = getDBItemID(selected_view, GRID_MODE);
+				_selectedItem_id = getDBItemID(selected_view);
 			}
 			else {
 //				Log.d(WishList.LOG_TAG, "selected_view is null");
