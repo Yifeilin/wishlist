@@ -26,18 +26,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-//import android.widget.AdapterView.OnItemSelectedListener;
-//import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
-//import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-//import com.android.wishlist.activity;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.DBAdapter;
 import com.wish.wishlist.db.ItemDBAdapter;
@@ -66,13 +62,8 @@ public class WishList extends Activity {
 	static final private int DIALOG_MAIN = 0;
 	static final private int DIALOG_VIEW = 1;
 	static final private int DIALOG_FILTER = 2;
-
-//	static final private int DETAIL_INFO_ACT = 2;
-	// static final private int TAKE_PICTURE = 1;
 	static final private int POST_ITEM = 3;
 
-	// private static final String TEXT_ENTRY_KEY = "TEXT_ENTRY_KEY";
-	// private static final String ADDING_ITEM_KEY = "ADDING_ITEM_KEY";
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
 
@@ -98,13 +89,11 @@ public class WishList extends Activity {
 	private ImageButton viewImageButton;
 	private ImageButton searchImageButton;
 
-	// private WishListDataBase wishListDB;
 	private ItemsCursor _wishItemCursor;
 	private WishListItemCursorAdapter wishListItemAdapterCursor;
 
 	private DBAdapter myDBAdapter;
 	private ItemDBAdapter myItemDBAdapter;
-//	private LocationDBAdapter myLocationDBAdapter;
 	
 	private long _selectedItem_id;
 
@@ -640,25 +629,6 @@ public class WishList extends Activity {
 		else if (itemId == R.id.menu_filter) {
 				showDialog(DIALOG_FILTER);
 		}
-		//	else if (itemId == R.id.menu_showAll) {
-		//		_where.clear();
-		//		onSort(SORT_BY, _where);
-		//		return true;
-		//	}
-
-		//	else if (itemId == R.id.menu_showComplete) {
-		//		_where.clear();
-		//		_where.put("complete", "1");
-		//		onSort(SORT_BY, _where);
-		//		return true;
-		//	}
-
-		//	else if (itemId == R.id.menu_showInComplete) {
-		//		_where.clear();
-		//		_where.put("complete", "0");
-		//		onSort(SORT_BY, _where);
-		//		return true;
-		//	}
 
 		return false;
 	}
@@ -669,7 +639,6 @@ public class WishList extends Activity {
 
 		long itemId = item.getItemId();
 		if (itemId == R.id.REMOVE) {
-			// wishListDB.deleteItem(_selectedItem_id);
 			deleteItem(_selectedItem_id);
 			return true;
 		}
