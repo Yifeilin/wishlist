@@ -102,13 +102,8 @@ public class WishList extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if (savedInstanceState != null) {
-			_viewOption = savedInstanceState.getString("viewOption");
-		}
-
-		// Get the saved UI preferences in onPause, the default option is list
-		// SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-		// _viewOption = preferences.getString("viewOption", "list");
+		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
+		_viewOption = pref.getString("viewOption", "list");
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -179,8 +174,6 @@ public class WishList extends Activity {
 		// register context menu for both listview and gridview
 		registerForContextMenu(myListView);
 		registerForContextMenu(myGridView);
-
-		restoreUIState();
 
 		// open the database for operations of Item table
 		myItemDBAdapter = new ItemDBAdapter(this);
@@ -742,6 +735,10 @@ public class WishList extends Activity {
 						_viewOption = "grid";
 						populateItems(nameQuery, SORT_BY, _where);
 					}
+					SharedPreferences pref = getPreferences(MODE_PRIVATE);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putString("viewOption", _viewOption);
+					editor.commit();
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 				}
 			});
@@ -799,35 +796,12 @@ public class WishList extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		saveUIState();
-	}
-	
-	private void saveUIState() {
-		// Get the activity preferences object.
-		SharedPreferences uiState = getPreferences(MODE_PRIVATE);
-		// Get the preferences editor.
-		SharedPreferences.Editor editor = uiState.edit();
-		// Add the UI state preference values.
-		editor.putString("viewOption", _viewOption); // value to store
-		// Commit the preferences.
-		editor.commit();
-	}
-
-	private void restoreUIState() {
-		// Get the activity preferences object.
-		SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
-		// Read the UI state values, specifying default values.
-		_viewOption = settings.getString("viewOption", "list");
-		// Restore the UI to the previous state.
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
 		
 		// save the position of the currently selected item in the list
-		//savedInstanceState.putString("viewOption", _viewOption);
-		saveUIState();
-		
 		if (_viewOption.equals("list")) {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
 				myListView.getSelectedItemPosition());
@@ -847,7 +821,6 @@ public class WishList extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		int pos = -1;
-		restoreUIState();
 		if (savedInstanceState != null) {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
@@ -945,7 +918,6 @@ public class WishList extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		restoreUIState();
 		updateView();
 	}
 
