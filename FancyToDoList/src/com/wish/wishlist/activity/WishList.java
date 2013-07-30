@@ -746,6 +746,7 @@ public class WishList extends Activity {
 				wish_item.setComplete(1);
 			}
 			wish_item.save();
+			updateView();
 		}
 		return false; }
 
