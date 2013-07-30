@@ -77,7 +77,7 @@ public class WishList extends Activity {
 	public static final String LOG_TAG = "WishList";
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
-	private String viewOption = "list";
+	private String _viewOption = "list";
 
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
@@ -103,12 +103,12 @@ public class WishList extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		if (savedInstanceState != null) {
-			viewOption = savedInstanceState.getString("viewOption");
+			_viewOption = savedInstanceState.getString("viewOption");
 		}
 
 		// Get the saved UI preferences in onPause, the default option is list
 		// SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-		// viewOption = preferences.getString("viewOption", "list");
+		// _viewOption = preferences.getString("viewOption", "list");
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -211,7 +211,7 @@ public class WishList extends Activity {
 //		myViewSpinner.setAdapter(adapter);
 
 //		// set the default spinner option
-//		if (viewOption == "list") {
+//		if (_viewOption == "list") {
 //			myViewSpinner.setSelection(0);
 //		} else {
 //			myViewSpinner.setSelection(1);
@@ -225,14 +225,14 @@ public class WishList extends Activity {
 //				// list view is selected
 //				if (pos == 0) {
 //					// Recall populate here is inefficient
-//					viewOption = "list";
+//					_viewOption = "list";
 //					populateItems(nameQuery, SORT_BY);
 //					myViewFlipper.setDisplayedChild(0);
 //
 //				}
 //				// grid view is selected
 //				else if (pos == 1) {
-//					viewOption = "grid";
+//					_viewOption = "grid";
 //					populateItems(nameQuery, SORT_BY);
 //					myViewFlipper.setDisplayedChild(1);
 //
@@ -306,7 +306,7 @@ public class WishList extends Activity {
 			return;
 		}
 
-		if (viewOption.equals("list")) {
+		if (_viewOption.equals("list")) {
 			updateListView();
 			myViewFlipper.setDisplayedChild(0);
 		}
@@ -366,14 +366,14 @@ public class WishList extends Activity {
 			return;
 		}
 
-		if (viewOption.equals("list")) {
+		if (_viewOption.equals("list")) {
 			// Update the list view
 			updateListView();
 			myViewFlipper.setDisplayedChild(0);
 
 		}
 
-		else if (viewOption.equals("grid")) {
+		else if (_viewOption.equals("grid")) {
 			// Update the grid view
 			updateGridView();
 			myViewFlipper.setDisplayedChild(1);
@@ -512,7 +512,7 @@ public class WishList extends Activity {
 		int pos = menu_info.position;
 		View selected_view = null;
 		_selectedItem_id = -1;
-		if(viewOption.equals("list")){
+		if(_viewOption.equals("list")){
 			//get the position of the items among the visible items
 			pos = pos - myListView.getFirstVisiblePosition();
 			selected_view = myListView.getChildAt(pos);
@@ -524,7 +524,7 @@ public class WishList extends Activity {
 				return;
 			}
 		}
-		else if(viewOption.equals("grid")){
+		else if(_viewOption.equals("grid")){
 			pos = pos - myGridView.getFirstVisiblePosition();
 			selected_view = myGridView.getChildAt(pos);
 			if (selected_view != null) {
@@ -735,11 +735,11 @@ public class WishList extends Activity {
 				public void onClick(DialogInterface dialog, int item) {
 					if (items[item].equals("List")) {
 						// Recall populate here is inefficient
-						viewOption = "list";
+						_viewOption = "list";
 						populateItems(nameQuery, SORT_BY, _where);
 					}
 					else {
-						viewOption = "grid";
+						_viewOption = "grid";
 						populateItems(nameQuery, SORT_BY, _where);
 					}
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
@@ -808,7 +808,7 @@ public class WishList extends Activity {
 		// Get the preferences editor.
 		SharedPreferences.Editor editor = uiState.edit();
 		// Add the UI state preference values.
-		editor.putString("viewOption", viewOption); // value to store
+		editor.putString("viewOption", _viewOption); // value to store
 		// Commit the preferences.
 		editor.commit();
 	}
@@ -817,7 +817,7 @@ public class WishList extends Activity {
 		// Get the activity preferences object.
 		SharedPreferences settings = this.getPreferences(MODE_PRIVATE);
 		// Read the UI state values, specifying default values.
-		viewOption = settings.getString("viewOption", "list");
+		_viewOption = settings.getString("viewOption", "list");
 		// Restore the UI to the previous state.
 	}
 
@@ -825,10 +825,10 @@ public class WishList extends Activity {
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
 		
 		// save the position of the currently selected item in the list
-		//savedInstanceState.putString("viewOption", viewOption);
+		//savedInstanceState.putString("viewOption", _viewOption);
 		saveUIState();
 		
-		if (viewOption.equals("list")) {
+		if (_viewOption.equals("list")) {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
 				myListView.getSelectedItemPosition());
 		}
@@ -852,10 +852,10 @@ public class WishList extends Activity {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 			}
-		//	viewOption = savedInstanceState.getString("viewOption");
+		//	_viewOption = savedInstanceState.getString("viewOption");
 		}
 		
-//		if (viewOption.equals("list")) {
+//		if (_viewOption.equals("list")) {
 			myListView.setSelection(pos);
 //		}
 //		else {
