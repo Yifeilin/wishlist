@@ -66,7 +66,8 @@ public class WishList extends Activity {
 
 	private static final String SELECTED_INDEX_KEY = "SELECTED_INDEX_KEY";
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
-	private static final String VIEW_OPTION = "viewOption";
+	private static final String PREF_VIEW_OPTION = "viewOption";
+	private static final String PREF_FILTER_OPTION = "filterOption";
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private Map<String,String> _where = new HashMap<String, String>();
@@ -75,6 +76,7 @@ public class WishList extends Activity {
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
 	private String _viewOption = "list";
+	private String _filterOption = "all";
 
 	private ViewFlipper myViewFlipper;
 	private ListView myListView;
@@ -100,7 +102,17 @@ public class WishList extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
-		_viewOption = pref.getString(VIEW_OPTION, "list");
+		_viewOption = pref.getString(PREF_VIEW_OPTION, "list");
+		_filterOption = pref.getString(PREF_FILTER_OPTION, "all");
+		if (_filterOption.equals("all")) {
+			_where.clear();
+		}
+		else if(_filterOption.equals("completed")) {
+			_where.put("complete", "1");
+		}
+		else if(_filterOption.equals("in_progress")) {
+			_where.put("complete", "0");
+		}
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
@@ -157,7 +169,6 @@ public class WishList extends Activity {
 				i.putExtra("position", position);
 				startActivity(i);
 			}
-
 		});
 
 		_addNew.setOnClickListener(new View.OnClickListener() {
@@ -728,7 +739,7 @@ public class WishList extends Activity {
 					}
 					SharedPreferences pref = getPreferences(MODE_PRIVATE);
 					SharedPreferences.Editor editor = pref.edit();
-					editor.putString(VIEW_OPTION, _viewOption);
+					editor.putString(PREF_VIEW_OPTION, _viewOption);
 					editor.commit();
 					//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 				}
@@ -749,14 +760,21 @@ public class WishList extends Activity {
 
 						if (options[item].equals(BY_ALL)) {
 							_where.clear();
+							_filterOption = "all";
 						}
 
 						else if (options[item].equals(BY_COMPLETED)) {
 							_where.put("complete", "1");
+							_filterOption = "completed";
 						}
 						else {
 							_where.put("complete", "0");
+							_filterOption = "in_progress";
 						}
+						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+						SharedPreferences.Editor editor = pref.edit();
+						editor.putString(PREF_FILTER_OPTION, _filterOption);
+						editor.commit();
 					}
 			});
 
@@ -816,7 +834,7 @@ public class WishList extends Activity {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 			}
-		//	_viewOption = savedInstanceState.getString(VIEW_OPTION);
+		//	_viewOption = savedInstanceState.getString(PREF_VIEW_OPTION);
 		}
 		
 //		if (_viewOption.equals("list")) {
