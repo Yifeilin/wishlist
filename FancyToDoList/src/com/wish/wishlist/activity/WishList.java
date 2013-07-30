@@ -745,10 +745,6 @@ public class WishList extends Activity {
 						else {
 							_sortOption = ItemsCursor.SortBy.price.toString();
 						}
-						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
-						SharedPreferences.Editor editor = pref.edit();
-						editor.putString(PREF_FILTER_OPTION, _filterOption);
-						editor.commit();
 					}
 			});
 
@@ -759,6 +755,11 @@ public class WishList extends Activity {
 
 			sortBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
+					SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putString(PREF_SORT_OPTION, _sortOption);
+					editor.commit();
+
 					populateItems(null, _where);
 				}
 			});
@@ -798,10 +799,6 @@ public class WishList extends Activity {
 							_where.put("complete", "0");
 							_filterOption = "in_progress";
 						}
-						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
-						SharedPreferences.Editor editor = pref.edit();
-						editor.putString(PREF_FILTER_OPTION, _filterOption);
-						editor.commit();
 					}
 			});
 
@@ -812,6 +809,10 @@ public class WishList extends Activity {
 
 			optionBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
+					SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putString(PREF_FILTER_OPTION, _filterOption);
+					editor.commit();
 					populateItems(null, _where);
 				}
 			});
