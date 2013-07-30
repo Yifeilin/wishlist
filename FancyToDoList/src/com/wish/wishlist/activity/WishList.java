@@ -755,7 +755,15 @@ public class WishList extends Activity {
 
 			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(WishList.this);
 			optionBuilder.setTitle("Filter wishes");
-			optionBuilder.setSingleChoiceItems(options, 1, new DialogInterface.OnClickListener() {
+
+			int i = 0;
+			if(_filterOption.equals("completed")) {
+				i = 1;
+			}
+			else if(_filterOption.equals("in_progress")) {
+				i = 2;
+			}
+			optionBuilder.setSingleChoiceItems(options, i, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
 
 						if (options[item].equals(BY_ALL)) {
