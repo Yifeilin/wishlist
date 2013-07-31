@@ -67,22 +67,22 @@ public class EditItemInfo extends Activity implements Observer {
 	private EditText _locationEditText;
 	private CheckBox _completeCheckBox;
 
-	private ImageButton backImageButton;
-	private ImageButton saveImageButton;
-	private ImageButton mapImageButton;
-	private ImageButton cameraImageButton;
-	private ImageButton galleryImageButton;
-	private ImageView imageItem;
+	private ImageButton _backImageButton;
+	private ImageButton _saveImageButton;
+	private ImageButton _mapImageButton;
+	private ImageButton _cameraImageButton;
+	private ImageButton _galleryImageButton;
+	private ImageView _imageItem;
 	private Date mDate;
-	private double lat = Double.MIN_VALUE;
-	private double lng = Double.MIN_VALUE;
-	private String addStr = "unknown";
+	private double _lat = Double.MIN_VALUE;
+	private double _lng = Double.MIN_VALUE;
+	private String _ddStr = "unknown";
 	private Bitmap _thumbnail;
-	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is "W" letter
+	private String _picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is "W" letter
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
-	private StoreDBAdapter mStoreDBAdapter;
-	private LocationDBAdapter mLocationDBAdapter;
+	private StoreDBAdapter _storeDBAdapter;
+	private LocationDBAdapter _locationDBAdapter;
 	PositionManager _pManager;
 	private int mYear = -1;
 	private int mMonth = -1;
@@ -94,10 +94,10 @@ public class EditItemInfo extends Activity implements Observer {
 	private long mLocation_id = -1;
 	private long mStore_id = -1;
 	private int _complete = -1;
-	private boolean mEditNew = true;
+	private boolean _editNew = true;
 	private boolean _isGettingLocation = false;
 	
-	private AlertDialog alert;
+	private AlertDialog _alert;
 	static final private int TAKE_PICTURE = 1;
 	private static final int SELECT_PICTURE = 2;
 	static final private String TAG = "EditItemInfo";
@@ -109,8 +109,8 @@ public class EditItemInfo extends Activity implements Observer {
 
 		setUpActionBar();
 
-		mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
-		mapImageButton.setOnClickListener(new OnClickListener() {
+		_mapImageButton = (ImageButton) findViewById(R.id.imageButton_map);
+		_mapImageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				//get the location
@@ -123,12 +123,12 @@ public class EditItemInfo extends Activity implements Observer {
 		});
 		
 		// Open the Store table in the database
-		mStoreDBAdapter = new StoreDBAdapter(this);
-		mStoreDBAdapter.open();
+		_storeDBAdapter = new StoreDBAdapter(this);
+		_storeDBAdapter.open();
 
 		// Open the Location table in the database
-		mLocationDBAdapter = new LocationDBAdapter(this);
-		mLocationDBAdapter.open();
+		_locationDBAdapter = new LocationDBAdapter(this);
+		_locationDBAdapter.open();
 		
 		_pManager = new PositionManager(EditItemInfo.this);
 		_pManager.addObserver(this);
@@ -142,11 +142,11 @@ public class EditItemInfo extends Activity implements Observer {
 		_completeCheckBox = (CheckBox) findViewById(R.id.completeCheckBox);
 		
 
-		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
-		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
-		imageItem = (ImageView) findViewById(R.id.image_photo);
+		_cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
+		_galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
+		_imageItem = (ImageView) findViewById(R.id.image_photo);
 
-		imageItem.setOnClickListener(new OnClickListener() {
+		_imageItem.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
@@ -172,9 +172,9 @@ public class EditItemInfo extends Activity implements Observer {
 		mItem_id = i.getLongExtra("item_id", -1);
 		
 		if (mItem_id != -1) {
-			mEditNew = false;
+			_editNew = false;
 			
-			mapImageButton.setVisibility(View.GONE);
+			_mapImageButton.setVisibility(View.GONE);
 			_completeCheckBox.setVisibility(View.VISIBLE);
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
@@ -196,26 +196,26 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 			_locationEditText.setText(item.getAddress());
 			_storeEditText.setText(item.getStoreName());
-			picture_str = item.getPicStr();
+			_picture_str = item.getPicStr();
 			_fullsizePhotoPath = item.getFullsizePicPath();
 			Bitmap bitmap = null;
 			
 			//check if pic_str is null, which user added this item without taking a pic.
-			if (picture_str != null){
-				Uri picture_Uri = Uri.parse(picture_str);
+			if (_picture_str != null){
+				Uri picture_Uri = Uri.parse(_picture_str);
 				
 				// check if pic_str is a resId
 				try {
 					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
-					int picResId = Integer.valueOf(picture_str, 16).intValue();
-					bitmap = BitmapFactory.decodeResource(imageItem.getContext().getResources(), picResId);
+					int picResId = Integer.valueOf(_picture_str, 16).intValue();
+					bitmap = BitmapFactory.decodeResource(_imageItem.getContext().getResources(), picResId);
 					// it is resource id.
-					imageItem.setImageBitmap(bitmap);
+					_imageItem.setImageBitmap(bitmap);
 
 				} catch (NumberFormatException e) {
 					// Not a resId, so it must be a content provider uri
-					picture_Uri = Uri.parse(picture_str);
-					imageItem.setImageURI(picture_Uri);
+					picture_Uri = Uri.parse(_picture_str);
+					_imageItem.setImageURI(picture_Uri);
 				}
 			}
 		}
@@ -234,7 +234,7 @@ public class EditItemInfo extends Activity implements Observer {
 		}
 		
 
-		cameraImageButton.setOnClickListener(new OnClickListener() {
+		_cameraImageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
@@ -256,7 +256,7 @@ public class EditItemInfo extends Activity implements Observer {
 			};
 		});
 
-		galleryImageButton.setOnClickListener(new OnClickListener() {
+		_galleryImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 			public void onClick(View view) {
 				//open gallery;
@@ -318,7 +318,7 @@ public class EditItemInfo extends Activity implements Observer {
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
 			_thumbnail = savedInstanceState.getParcelable("bitmap");
-			imageItem.setImageBitmap(_thumbnail);
+			_imageItem.setImageBitmap(_thumbnail);
 			
 //			Log.d(WishList.LOG_TAG, "_newfullsizePhotoPath " + _newfullsizePhotoPath);			
 //			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath " + _fullsizePhotoPath);
@@ -383,9 +383,9 @@ public class EditItemInfo extends Activity implements Observer {
 			itemName = _itemNameEditText.getText().toString().trim();
 			itemDesc = _noteEditText.getText().toString().trim();
 			itemStoreName = _storeEditText.getText().toString().trim();
-			addStr = _locationEditText.getText().toString().trim();
-			if (addStr.equals("Loading location...")) {
-				addStr = "unknown";
+			_ddStr = _locationEditText.getText().toString().trim();
+			if (_ddStr.equals("Loading location...")) {
+				_ddStr = "unknown";
 			}
 
 			if (_completeCheckBox.isChecked()) {
@@ -422,20 +422,20 @@ public class EditItemInfo extends Activity implements Observer {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = sdf.format(mDate);
 
-		if (mEditNew) {//we are creating a new item
+		if (_editNew) {//we are creating a new item
 			// insert the location to the Location table in database
-			mLocation_id = mLocationDBAdapter.addLocation(lat, lng, addStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
+			mLocation_id = _locationDBAdapter.addLocation(_lat, _lng, _ddStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
 
 			// insert the store to the Store table in database, linked to the location
-			mStore_id = mStoreDBAdapter.addStore(itemStoreName, mLocation_id);
+			mStore_id = _storeDBAdapter.addStore(itemStoreName, mLocation_id);
 		}
 		else {//we are editing an existing item
-			mStoreDBAdapter.updateStore(mStore_id, itemStoreName, mLocation_id);
+			_storeDBAdapter.updateStore(mStore_id, itemStoreName, mLocation_id);
 		}
 
 		WishItem item = new WishItem(this, mItem_id, mStore_id, itemStoreName, itemName, itemDesc, 
-				date, picture_str, _fullsizePhotoPath, itemPrice, lat, lng, 
-				addStr, itemPriority, itemComplete);
+				date, _picture_str, _fullsizePhotoPath, itemPrice, _lat, _lng, 
+				_ddStr, itemPriority, itemComplete);
 		
 		mItem_id = item.save();
 
@@ -555,7 +555,7 @@ public class EditItemInfo extends Activity implements Observer {
 		}
 		
 		//only show warnning if user is editing a new item
-		if(mEditNew){
+		if(_editNew){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("Discard the wish?").setCancelable(
 					false).setPositiveButton("Yes",
@@ -572,8 +572,8 @@ public class EditItemInfo extends Activity implements Observer {
 							//return false;
 						}
 					});
-			alert = builder.create();
-			alert.show();
+			_alert = builder.create();
+			_alert.show();
 		}
 		else{
 			setResult(RESULT_CANCELED, null);
@@ -609,7 +609,7 @@ public class EditItemInfo extends Activity implements Observer {
 		}
 		else {
 			Log.d(WishList.LOG_TAG, "_thumbnail is not null");
-			imageItem.setImageBitmap(_thumbnail);
+			_imageItem.setImageBitmap(_thumbnail);
 		}
 		
 		//compress the _thumbnail to JPEG and write the JEPG to 
@@ -632,7 +632,7 @@ public class EditItemInfo extends Activity implements Observer {
 					outStream);
 
 			outStream.close();
-			picture_str = uri.toString();
+			_picture_str = uri.toString();
 		} catch (Exception e) {
 //			Log.e(WishList.LOG_TAG,
 //					"exception while writing image", e);s
@@ -665,7 +665,7 @@ public class EditItemInfo extends Activity implements Observer {
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
 			_thumbnail = savedInstanceState.getParcelable("bitmap");
-			imageItem.setImageBitmap(_thumbnail);			
+			_imageItem.setImageBitmap(_thumbnail);			
 		}
 //		else {
 //			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
@@ -679,17 +679,17 @@ public class EditItemInfo extends Activity implements Observer {
 			//get the location
 			Location location = _pManager.getCurrentLocation();
 			if (location == null){
-				addStr = "unknown";
+				_ddStr = "unknown";
 				//need better value to indicate it's not valid lat and lng
-				lat = Double.MIN_VALUE;
-				lng = Double.MIN_VALUE;
-				_locationEditText.setText(addStr);
+				_lat = Double.MIN_VALUE;
+				_lng = Double.MIN_VALUE;
+				_locationEditText.setText(_ddStr);
 				_isGettingLocation = false;
 			}
 			else {
 				//get current latitude and longitude
-				lat = location.getLatitude();
-				lng = location.getLongitude();
+				_lat = location.getLatitude();
+				_lng = location.getLongitude();
 				new GetAddressTask().execute("");
 			}
 		}
@@ -698,17 +698,17 @@ public class EditItemInfo extends Activity implements Observer {
 		@Override
 			protected String doInBackground(String... arg) {
 				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
-				addStr = _pManager.getCuttentAddStr();
+				_ddStr = _pManager.getCuttentAddStr();
 				Log.d(TAG, "finish doInBackground");
-				return addStr;
+				return _ddStr;
 			}
 		@Override
 			protected void onPostExecute(String add) {
 				Log.d(TAG, "onPostExe");
-				if (addStr.equals("unknown")) {
+				if (_ddStr.equals("unknown")) {
 					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
 				}
-				_locationEditText.setText(addStr);
+				_locationEditText.setText(_ddStr);
 				_isGettingLocation = false;
 			}
 	}
@@ -726,17 +726,17 @@ public class EditItemInfo extends Activity implements Observer {
 			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_back_logo).setVisibility(View.VISIBLE);
 			findViewById(R.id.addItemView_header).findViewById(R.id.imageButton_save).setVisibility(View.VISIBLE);
 
-			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-			saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
+			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			_saveImageButton = (ImageButton) findViewById(R.id.imageButton_save);
 
-			backImageButton.setOnClickListener(new OnClickListener() {
+			_backImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					navigateBack();
 				}
 			});
 
-			saveImageButton.setOnClickListener(new OnClickListener() {
+			_saveImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					saveWishItem();
