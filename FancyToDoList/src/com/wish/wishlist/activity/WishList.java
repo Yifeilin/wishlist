@@ -728,10 +728,10 @@ public class WishList extends Activity {
 			sortBuilder.setTitle("Sort wishes");
 
 			int j = 0;// 0 is by name
-			if (_filterOption.equals(ItemsCursor.SortBy.date_time.toString())) {
+			if (_sortOption.equals(ItemsCursor.SortBy.date_time.toString())) {
 				j = 1;
 			}
-			else if (_filterOption.equals(ItemsCursor.SortBy.price.toString())) {
+			else if (_sortOption.equals(ItemsCursor.SortBy.price.toString())) {
 				j = 2;
 			}
 			sortBuilder.setSingleChoiceItems(sortOption, j, new DialogInterface.OnClickListener() {
