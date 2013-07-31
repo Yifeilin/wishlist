@@ -59,11 +59,11 @@ import android.preference.PreferenceManager;
 @SuppressLint("NewApi")
 public class EditItemInfo extends Activity implements Observer {
 
-	private EditText myItemName;
-	private EditText myNote;
-	private EditText myPrice;
-	private EditText myStore;
-	private EditText myLocation;
+	private EditText _itemNameEditText;
+	private EditText _noteEditText;
+	private EditText _priceEditText;
+	private EditText _storeEditText;
+	private EditText _locationEditText;
 
 	private ImageButton backImageButton;
 	private ImageButton saveImageButton;
@@ -118,7 +118,7 @@ public class EditItemInfo extends Activity implements Observer {
 				if (!_isGettingLocation) {
 					_pManager.startLocationUpdates();
 					_isGettingLocation = true;
-					myLocation.setText("Loading location...");
+					_locationEditText.setText("Loading location...");
 				}
 			}
 		});
@@ -135,11 +135,11 @@ public class EditItemInfo extends Activity implements Observer {
 		_pManager.addObserver(this);
 
 		//find the resources by their ids
-		myItemName = (EditText) findViewById(R.id.itemname);
-		myNote = (EditText) findViewById(R.id.note);
-		myPrice = (EditText) findViewById(R.id.price);
-		myStore = (EditText) findViewById(R.id.store);
-		myLocation = (EditText) findViewById(R.id.location);
+		_itemNameEditText = (EditText) findViewById(R.id.itemname);
+		_noteEditText = (EditText) findViewById(R.id.note);
+		_priceEditText = (EditText) findViewById(R.id.price);
+		_storeEditText = (EditText) findViewById(R.id.store);
+		_locationEditText = (EditText) findViewById(R.id.location);
 		
 
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
@@ -184,14 +184,14 @@ public class EditItemInfo extends Activity implements Observer {
 			mLocation_id = item.getLocatonId();
 			mStore_id = item.getStoreId();
 
-			myItemName.setText(item.getName());
-			myNote.setText(item.getDesc());
+			_itemNameEditText.setText(item.getName());
+			_noteEditText.setText(item.getDesc());
 			String priceStr = item.getPriceAsString();
 			if (priceStr != null) {
-				myPrice.setText(priceStr);
+				_priceEditText.setText(priceStr);
 			}
-			myLocation.setText(item.getAddress());
-			myStore.setText(item.getStoreName());
+			_locationEditText.setText(item.getAddress());
+			_storeEditText.setText(item.getStoreName());
 			picture_str = item.getPicStr();
 			_fullsizePhotoPath = item.getFullsizePicPath();
 			Bitmap bitmap = null;
@@ -223,7 +223,7 @@ public class EditItemInfo extends Activity implements Observer {
 				Log.d(WishList.LOG_TAG, "tag location true"); 
 				_pManager.startLocationUpdates();
 				_isGettingLocation = true;
-				myLocation.setText("Loading location...");
+				_locationEditText.setText("Loading location...");
 			}
 			else {
 				Log.d(WishList.LOG_TAG, "tag location false"); 
@@ -263,48 +263,48 @@ public class EditItemInfo extends Activity implements Observer {
 		});
 
 		//set the keyListener for the Item Name EditText
-		myItemName.setOnKeyListener(new OnKeyListener() {
+		_itemNameEditText.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
 					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						myItemName.setSelected(false);
+						_itemNameEditText.setSelected(false);
 					}
 				return false;
 			}
 		});
 
 		//set the keyListener for the Item Description EditText
-		myNote.setOnKeyListener(new OnKeyListener() {
+		_noteEditText.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
 					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						myNote.setSelected(false);
+						_noteEditText.setSelected(false);
 					}
 				return false;
 			}
 		});
 
 		//set the keyListener for the Item Price EditText
-		myPrice.setOnKeyListener(new OnKeyListener() {
+		_priceEditText.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
 					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						myPrice.setSelected(false);
+						_priceEditText.setSelected(false);
 					}
 				return false;
 			}
 		});
 
 		//set the keyListener for the Item Location EditText
-		myLocation.setOnKeyListener(new OnKeyListener() {
+		_locationEditText.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN)
 					if (keyCode == KeyEvent.KEYCODE_ENTER) {
-						myLocation.setSelected(false);
+						_locationEditText.setSelected(false);
 					}
 				return false;
 			}
@@ -377,7 +377,7 @@ public class EditItemInfo extends Activity implements Observer {
 	 */
 	private void saveWishItem() {
 
-		if(myItemName.getText().toString().trim().length() == 0){
+		if(_itemNameEditText.getText().toString().trim().length() == 0){
 			Toast toast = Toast.makeText(this, "Please give a name to your wish", Toast.LENGTH_SHORT);
 			toast.show();
 			return;
@@ -394,14 +394,14 @@ public class EditItemInfo extends Activity implements Observer {
 		try {
 			// read in the name, description, price and location of the item
 			// from the EditText
-			itemName = myItemName.getText().toString().trim();
-			itemDesc = myNote.getText().toString().trim();
-			itemStoreName = myStore.getText().toString().trim();
-			addStr = myLocation.getText().toString().trim();
+			itemName = _itemNameEditText.getText().toString().trim();
+			itemDesc = _noteEditText.getText().toString().trim();
+			itemStoreName = _storeEditText.getText().toString().trim();
+			addStr = _locationEditText.getText().toString().trim();
 			if (addStr.equals("Loading location...")) {
 				addStr = "unknown";
 			}
-			itemPrice = Double.valueOf(myPrice.getText().toString().trim());
+			itemPrice = Double.valueOf(_priceEditText.getText().toString().trim());
 		}
 
 		catch (NumberFormatException e) {
@@ -549,11 +549,11 @@ public class EditItemInfo extends Activity implements Observer {
 
 	private boolean navigateBack(){
 		//all fields are empty
-		if(myItemName.getText().toString().length() == 0 &&
-				myNote.getText().toString().length() == 0 &&
-				myPrice.getText().toString().length() == 0 &&
-				myLocation.getText().toString().length() == 0 &&
-				myStore.getText().toString().length() == 0){
+		if(_itemNameEditText.getText().toString().length() == 0 &&
+				_noteEditText.getText().toString().length() == 0 &&
+				_priceEditText.getText().toString().length() == 0 &&
+				_locationEditText.getText().toString().length() == 0 &&
+				_storeEditText.getText().toString().length() == 0){
 
 			setResult(RESULT_CANCELED, null);
 			finish();
@@ -689,7 +689,7 @@ public class EditItemInfo extends Activity implements Observer {
 				//need better value to indicate it's not valid lat and lng
 				lat = Double.MIN_VALUE;
 				lng = Double.MIN_VALUE;
-				myLocation.setText(addStr);
+				_locationEditText.setText(addStr);
 				_isGettingLocation = false;
 			}
 			else {
@@ -714,7 +714,7 @@ public class EditItemInfo extends Activity implements Observer {
 				if (addStr.equals("unknown")) {
 					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
 				}
-				myLocation.setText(addStr);
+				_locationEditText.setText(addStr);
 				_isGettingLocation = false;
 			}
 	}
