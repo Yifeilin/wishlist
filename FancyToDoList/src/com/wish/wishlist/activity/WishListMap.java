@@ -54,34 +54,34 @@ import com.wish.wishlist.db.ItemDBAdapter;
  * the photo was taken.
  */
 public class WishListMap extends MapActivity {
-	private MapView mMapView;
+	private MapView _mapView;
 //	private MyLocationOverlay mMyLocationOverlay;
 	private WishListOverlay _wishListOverlay;
 //	private Location myLocation;
-	private double mLatitude;
-	private double mLongitude;
-	private GeoPoint myCurrentPoint;
-	private Drawable mMarker;
-	private int mMarkerXOffset;
-	private int mMarkerYOffset;
-	private List<Overlay> mOverlays;
-	private MapController mController;
+	private double _latitude;
+	private double _longitude;
+	private GeoPoint _currentPoint;
+	private Drawable _marker;
+	private int _markerXOffset;
+	private int _markerYOffset;
+	private List<Overlay> _overlays;
+	private MapController _controller;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		FrameLayout frame = new FrameLayout(this);
-		mMapView = new MapView(this, getString(R.string.googleMapKey));
+		_mapView = new MapView(this, getString(R.string.googleMapKey));
 
-		frame.addView(mMapView, new FrameLayout.LayoutParams(
+		frame.addView(_mapView, new FrameLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		setContentView(frame);
 		Intent i = getIntent();
 		prepareMarker();
 
-		mOverlays = mMapView.getOverlays();
-		mController = mMapView.getController();
+		_overlays = _mapView.getOverlays();
+		_controller = _mapView.getController();
 		if(i.getStringExtra("type").equals("markOne")){
 			// mark one item on map, mapview is invoked from item context menu
 			markOneItem();
@@ -96,21 +96,21 @@ public class WishListMap extends MapActivity {
 			return;
 		}
 
-		mController.animateTo(p);//what if there is no item?
+		_controller.animateTo(p);//what if there is no item?
 		// mark the current location
 		// markCurrentLocation();
 
 		// set map zoom
 //		mController.setZoom(15);
 		int[] spanE6=_wishListOverlay.getSpanE6(1.2f);
-		mController.zoomToSpan(spanE6[0], spanE6[1]);
+		_controller.zoomToSpan(spanE6[0], spanE6[1]);
 
 		// configure the map
-		mMapView.setClickable(true);
-		mMapView.setEnabled(true);
-		mMapView.setSatellite(false);
-		mMapView.setTraffic(false);
-		mMapView.setStreetView(false);
+		_mapView.setClickable(true);
+		_mapView.setEnabled(true);
+		_mapView.setSatellite(false);
+		_mapView.setTraffic(false);
+		_mapView.setStreetView(false);
 		addZoomControls(frame);
 
 		// new NetworkThread(myCurrentPoint, _wishListOverlay).start();
@@ -132,7 +132,7 @@ public class WishListMap extends MapActivity {
 	 * Get the zoom controls and add them to the bottom of the map
 	 */
 	private void addZoomControls(FrameLayout frame) {
-		View zoomControls = mMapView.getZoomControls();
+		View zoomControls = _mapView.getZoomControls();
 
 		FrameLayout.LayoutParams p = new FrameLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
@@ -195,12 +195,12 @@ public class WishListMap extends MapActivity {
 	 * prepare the marker used to mark the item
 	 */
 	private void prepareMarker() {
-		mMarker = getResources().getDrawable(R.drawable.map_pin);
+		_marker = getResources().getDrawable(R.drawable.map_pin);
 
 		// Make sure to give mMarker bounds so it will draw in the overlay
-		final int intrinsicWidth = mMarker.getIntrinsicWidth();
-		final int intrinsicHeight = mMarker.getIntrinsicHeight();
-		mMarker.setBounds(0, 0, intrinsicWidth, intrinsicHeight);
+		final int intrinsicWidth = _marker.getIntrinsicWidth();
+		final int intrinsicHeight = _marker.getIntrinsicHeight();
+		_marker.setBounds(0, 0, intrinsicWidth, intrinsicHeight);
 
 		// mMarkerXOffset = -(intrinsicWidth / 2);
 		// mMarkerYOffset = -intrinsicHeight;
@@ -214,14 +214,14 @@ public class WishListMap extends MapActivity {
 		// Read the item we are displaying from the intent, along with the
 		// parameters used to set up the map
 		Intent i = getIntent();
-		mLatitude = i.getDoubleExtra("latitude", Double.MIN_VALUE);
-		mLongitude = i.getDoubleExtra("longitude", Double.MIN_VALUE);
+		_latitude = i.getDoubleExtra("latitude", Double.MIN_VALUE);
+		_longitude = i.getDoubleExtra("longitude", Double.MIN_VALUE);
 
-		_wishListOverlay = new WishListOverlay(mMarker);
-		GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
-				(int) (mLongitude * 1000000));
+		_wishListOverlay = new WishListOverlay(_marker);
+		GeoPoint itemPoint = new GeoPoint((int) (_latitude * 1000000),
+				(int) (_longitude * 1000000));
 		_wishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
-		mOverlays.add(_wishListOverlay);
+		_overlays.add(_wishListOverlay);
 	}
 	
 	private void markAllItems() {
@@ -235,15 +235,15 @@ public class WishListMap extends MapActivity {
 			this.finish();
 		}
 		
-		_wishListOverlay = new WishListOverlay(mMarker);
+		_wishListOverlay = new WishListOverlay(_marker);
 		int i=0;
 		while(i<locationList.size()){
-			mLatitude=locationList.get(i)[0];
-			mLongitude=locationList.get(i++)[1];
-			GeoPoint itemPoint = new GeoPoint((int) (mLatitude * 1000000),
-					(int) (mLongitude * 1000000));
+			_latitude=locationList.get(i)[0];
+			_longitude=locationList.get(i++)[1];
+			GeoPoint itemPoint = new GeoPoint((int) (_latitude * 1000000),
+					(int) (_longitude * 1000000));
 			_wishListOverlay.addOverlay(new OverlayItem(itemPoint, "A", "B"));
-			mOverlays.add(_wishListOverlay);
+			_overlays.add(_wishListOverlay);
 		}
 	}
 
@@ -319,10 +319,10 @@ public class WishListMap extends MapActivity {
 			if (!shadow) {
 				Point point = new Point();
 				Projection p = mapView.getProjection();
-				p.toPixels(myCurrentPoint, point);
+				p.toPixels(_currentPoint, point);
 				super.draw(canvas, mapView, shadow);
-				drawAt(canvas, mMarker, point.x + mMarkerXOffset, point.y
-						+ mMarkerYOffset, shadow);
+				drawAt(canvas, _marker, point.x + _markerXOffset, point.y
+						+ _markerYOffset, shadow);
 			}
 		}
 	}

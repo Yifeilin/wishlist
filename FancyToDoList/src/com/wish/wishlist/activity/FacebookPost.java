@@ -60,12 +60,12 @@ public class FacebookPost extends Activity {
 	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
     private ProgressDialog progressDialog;
 
-	private boolean pendingAnnounce;
+	private boolean _pendingAnnounce;
 	private long _itemId;
 	private WishItem _wishItem;
 	private Context _ctx;
 
-    private UiLifecycleHelper uiHelper;
+    private UiLifecycleHelper _uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 			public void call(Session session, SessionState state, Exception exception) {
@@ -78,8 +78,8 @@ public class FacebookPost extends Activity {
      */
 	private void tokenUpdated() {
 		Log.d(TAG, "tokenUpdated");
-		Log.d(TAG, "pendingAnnounce is " + Boolean.valueOf(pendingAnnounce));
-		if (pendingAnnounce) {
+		Log.d(TAG, "pendingAnnounce is " + Boolean.valueOf(_pendingAnnounce));
+		if (_pendingAnnounce) {
 			handleAnnounce();
 		}
 	}
@@ -143,7 +143,7 @@ public class FacebookPost extends Activity {
 	private void init(Bundle savedInstanceState) {
 		Log.d(TAG, "init");
 		if (savedInstanceState != null) {
-			pendingAnnounce = savedInstanceState.getBoolean(PENDING_ANNOUNCE_KEY, false);
+			_pendingAnnounce = savedInstanceState.getBoolean(PENDING_ANNOUNCE_KEY, false);
 		}
 
 		Session session = Session.getActiveSession();
@@ -158,7 +158,7 @@ public class FacebookPost extends Activity {
 
 	private void postWish(String imageUri) {
 		Log.d(TAG, "postWish");
-		pendingAnnounce = false;
+		_pendingAnnounce = false;
 		Session session = Session.getActiveSession();
 
 		if (session == null || !session.isOpened()) {
@@ -169,7 +169,7 @@ public class FacebookPost extends Activity {
 		List<String> permissions = session.getPermissions();
 		if (!permissions.containsAll(PERMISSIONS)) {
 			Log.d(TAG, "handleAnnounce: session not contain all permission");
-			pendingAnnounce = true;
+			_pendingAnnounce = true;
 			requestPublishPermissions(session);
 			return;
 		}
@@ -230,7 +230,7 @@ public class FacebookPost extends Activity {
 
 	private void makeWish(String objectId) {
 		Log.d(TAG, "makeWish");
-		pendingAnnounce = false;
+		_pendingAnnounce = false;
 		Session session = Session.getActiveSession();
 
 		if (session == null || !session.isOpened()) {
@@ -241,7 +241,7 @@ public class FacebookPost extends Activity {
 		List<String> permissions = session.getPermissions();
 		if (!permissions.containsAll(PERMISSIONS)) {
 			Log.d(TAG, "handleAnnounce: session not contain all permission");
-			pendingAnnounce = true;
+			_pendingAnnounce = true;
 			requestPublishPermissions(session);
 			return;
 		}
@@ -282,7 +282,7 @@ public class FacebookPost extends Activity {
 
 	private void handleAnnounce() {
 		Log.d(TAG, "handleAnnounce");
-		pendingAnnounce = false;
+		_pendingAnnounce = false;
 		Session session = Session.getActiveSession();
 
 		if (session == null || !session.isOpened()) {
@@ -293,7 +293,7 @@ public class FacebookPost extends Activity {
 		List<String> permissions = session.getPermissions();
 		if (!permissions.containsAll(PERMISSIONS)) {
 			Log.d(TAG, "handleAnnounce: session not contain all permission");
-			pendingAnnounce = true;
+			_pendingAnnounce = true;
 			requestPublishPermissions(session);
 			return;
 		}
@@ -420,7 +420,7 @@ public class FacebookPost extends Activity {
 					listener = new DialogInterface.OnClickListener() {
 						@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
-								pendingAnnounce = true;
+								_pendingAnnounce = true;
 								requestPublishPermissions(Session.getActiveSession());
 							}
 					};
@@ -533,8 +533,8 @@ public class FacebookPost extends Activity {
 		public void onCreate(Bundle savedInstanceState) {
 			Log.d(TAG, "onCreate");
 			super.onCreate(savedInstanceState);
-			uiHelper = new UiLifecycleHelper(this, callback);
-			uiHelper.onCreate(savedInstanceState);
+			_uiHelper = new UiLifecycleHelper(this, callback);
+			_uiHelper.onCreate(savedInstanceState);
 
 			//setContentView(R.layout.login);
 
@@ -567,14 +567,14 @@ public class FacebookPost extends Activity {
 					(session.isOpened() || session.isClosed()) ) {
 				onSessionStateChange(session, session.getState(), null);
 			}
-			uiHelper.onResume();
+			_uiHelper.onResume();
 		}
 
 	@Override
 		public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			super.onActivityResult(requestCode, resultCode, data);
 			//if (requestCode == REAUTH_ACTIVITY_CODE) {
-				uiHelper.onActivityResult(requestCode, resultCode, data);
+				_uiHelper.onActivityResult(requestCode, resultCode, data);
 			//}
 		}
 
@@ -582,19 +582,19 @@ public class FacebookPost extends Activity {
 		public void onSaveInstanceState(Bundle bundle) {
 			super.onSaveInstanceState(bundle);
 			//bundle.putBoolean(PENDING_ANNOUNCE_KEY, pendingAnnounce);
-			uiHelper.onSaveInstanceState(bundle);
+			_uiHelper.onSaveInstanceState(bundle);
 		}
 
 	@Override
 		public void onPause() {
 			super.onPause();
-			uiHelper.onPause();
+			_uiHelper.onPause();
 		}
 
 	@Override
 		public void onDestroy() {
 			super.onDestroy();
-			uiHelper.onDestroy();
+			_uiHelper.onDestroy();
 		}
 
 	protected void populateOGAction(OpenGraphAction action) {

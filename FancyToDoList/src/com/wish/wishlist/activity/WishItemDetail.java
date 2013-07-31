@@ -52,10 +52,10 @@ public class WishItemDetail extends Activity {
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 //	private GestureDetector gestureDetector;
-	View.OnTouchListener gestureListener;
+	View.OnTouchListener _gestureListener;
 
 	private static final int EDIT_ITEM = 0;
-	private ItemDBAdapter myItemDBAdapter;
+	private ItemDBAdapter _itemDBAdapter;
 
 	private ImageView _photoView;
 	private TextView _nameView;
@@ -65,19 +65,19 @@ public class WishItemDetail extends Activity {
 	private TextView _priceView;
 	private TextView _storeView;
 	private TextView _locationView;
-	private ImageButton backImageButton;
+	private ImageButton _backImageButton;
 //	private ImageButton shareImageButton;
-	private ImageButton deleteImageButton;
-	private ImageButton editImageButton;
-	private ImageButton shareImageButton;
+	private ImageButton _deleteImageButton;
+	private ImageButton _editImageButton;
+	private ImageButton _shareImageButton;
 	
 	private long _itemId = -1;
 	private int _position;
-	private int mPrevPosition;
-	private int mNextPosition;
-	private AlertDialog alert;
-	private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
-	private String fullsize_picture_str=null;
+	private int _prevPosition;
+	private int _nextPosition;
+	private AlertDialog _alert;
+	private String _picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
+	private String _fullsize_picture_str=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -153,8 +153,8 @@ public class WishItemDetail extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
-				if (fullsize_picture_str != null) {
-					i.putExtra("fullsize_pic_str", fullsize_picture_str);
+				if (_fullsize_picture_str != null) {
+					i.putExtra("fullsize_pic_str", _fullsize_picture_str);
 					startActivity(i);
 				}
 			}
@@ -163,13 +163,13 @@ public class WishItemDetail extends Activity {
 	}
 	
 	private void showItemInfo(WishItem item) {
-		fullsize_picture_str = item.getFullsizePicPath();
+		_fullsize_picture_str = item.getFullsizePicPath();
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int width = display.getWidth();  // deprecated
 		int height = display.getHeight();  // deprecated
-		if (fullsize_picture_str != null) {
+		if (_fullsize_picture_str != null) {
 //			Log.d("wishlist", "fullsize_picture_str == " + fullsize_picture_str);
-			Bitmap bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(fullsize_picture_str, width, height, true);
+			Bitmap bitmap = ImageManager.getInstance().decodeSampledBitmapFromFile(_fullsize_picture_str, width, height, true);
 			//Bitmap bitmap = BitmapFactory.decodeFile(fullsize_picture_str, null);
 			if (bitmap == null) {
 //				Log.d("wishlist", "bitmap == null");
@@ -280,24 +280,24 @@ public class WishItemDetail extends Activity {
 		long[] next_pos_id = new long[2];
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
 		// open the database for operations of Item table
-		myItemDBAdapter = new ItemDBAdapter(this);
-		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
-		myItemDBAdapter.close();
+		_itemDBAdapter = new ItemDBAdapter(this);
+		_itemDBAdapter.open();
+		ItemsCursor c = _itemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		_itemDBAdapter.close();
 		long nextItemID;
 		if (_position < c.getCount())
-			mNextPosition = _position + 1;
+			_nextPosition = _position + 1;
 
 		else
-			mNextPosition = _position;
+			_nextPosition = _position;
 
-		c.move(mNextPosition);
+		c.move(_nextPosition);
 		// nextItemID = c.getLong(
 		// c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
 		nextItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID));
 
 		// long item_id = Long.parseLong(itemIdTextView.getText().toString());
-		next_pos_id[0] = mNextPosition;
+		next_pos_id[0] = _nextPosition;
 		next_pos_id[1] = nextItemID;
 		return next_pos_id;
 	}
@@ -316,23 +316,23 @@ public class WishItemDetail extends Activity {
 
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
 		// open the database for operations of Item table
-		myItemDBAdapter = new ItemDBAdapter(this);
-		myItemDBAdapter.open();
-		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
-		myItemDBAdapter.close();
+		_itemDBAdapter = new ItemDBAdapter(this);
+		_itemDBAdapter.open();
+		ItemsCursor c = _itemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		_itemDBAdapter.close();
 		long prevItemID;
 		if (_position > 0)
-			mPrevPosition = _position - 1;
+			_prevPosition = _position - 1;
 
 		else
-			mPrevPosition = _position;
+			_prevPosition = _position;
 
-		c.move(mPrevPosition);
+		c.move(_prevPosition);
 		// prevItemID = c.getLong(
 		// c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
 		prevItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID));
 		// long item_id = Long.parseLong(itemIdTextView.getText().toString());
-		prev_pos_id[0] = mPrevPosition;
+		prev_pos_id[0] = _prevPosition;
 		prev_pos_id[1] = prevItemID;
 		return prev_pos_id;
 	}
@@ -353,8 +353,8 @@ public class WishItemDetail extends Activity {
 						dialog.cancel();
 					}
 				});
-		alert = builder.create();
-		alert.show();
+		_alert = builder.create();
+		_alert.show();
 	}
 	
 	private void editItem(){
@@ -509,10 +509,10 @@ public class WishItemDetail extends Activity {
 		else if (itemId == R.id.menu_item_detail_map) {
 			double[] dLocation = new double[2];
 			// open the database for operations of Item table
-			myItemDBAdapter = new ItemDBAdapter(this);
-			myItemDBAdapter.open();
-			dLocation = myItemDBAdapter.getItemLocation(_itemId);
-			myItemDBAdapter.close();
+			_itemDBAdapter = new ItemDBAdapter(this);
+			_itemDBAdapter.open();
+			dLocation = _itemDBAdapter.getItemLocation(_itemId);
+			_itemDBAdapter.close();
 			
 			if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -549,8 +549,8 @@ public class WishItemDetail extends Activity {
 			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_edit).setVisibility(View.VISIBLE);
 			findViewById(R.id.detailView_header).findViewById(R.id.imageButton_share).setVisibility(View.VISIBLE);
 
-			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-			backImageButton.setOnClickListener(new OnClickListener() {
+			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			_backImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					finish();
@@ -561,24 +561,24 @@ public class WishItemDetail extends Activity {
 				}
 			});
 
-			deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
-			deleteImageButton.setOnClickListener(new OnClickListener() {
+			_deleteImageButton = (ImageButton) findViewById(R.id.imageButton_delete);
+			_deleteImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					deleteItem();
 				}
 			});
 
-			editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
-			editImageButton.setOnClickListener(new OnClickListener() {
+			_editImageButton = (ImageButton) findViewById(R.id.imageButton_edit);
+			_editImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					editItem();
 				}
 			});
 
-			shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
-			shareImageButton.setOnClickListener(new OnClickListener() {
+			_shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
+			_shareImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					shareItem();
