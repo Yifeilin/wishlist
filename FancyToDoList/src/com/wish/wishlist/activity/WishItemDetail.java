@@ -59,6 +59,7 @@ public class WishItemDetail extends Activity {
 
 	private ImageView _photoView;
 	private TextView _nameView;
+	private TextView _completeView;
 	private TextView _descrpView;
 	private TextView _dateView;
 	private TextView _priceView;
@@ -126,6 +127,7 @@ public class WishItemDetail extends Activity {
 		}
 
 		_nameView = (TextView) findViewById(R.id.itemNameDetail);
+		_completeView = (TextView) findViewById(R.id.itemCompleteState);
 		_descrpView = (TextView) findViewById(R.id.itemDesriptDetail);
 		_dateView = (TextView) findViewById(R.id.itemDateDetail);
 		_priceView = (TextView) findViewById(R.id.itemPriceDetail);
@@ -218,6 +220,9 @@ public class WishItemDetail extends Activity {
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
 		
 		_nameView.setText(item.getName());
+		if (item.getComplete() == 1) {
+			_completeView.setVisibility(View.VISIBLE);
+		}
 		_dateView.setText(dateTimeStrNew);
 		
 		// format the price

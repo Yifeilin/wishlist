@@ -68,7 +68,8 @@
 					    android:paddingTop="15dip"
 					    android:text="Completed"
 					    android:textColor="@color/bodyText_dark_grey"
-					    android:textSize="15sp" />
+					    android:textSize="15sp"
+					    android:visibility="gone" />
 
 				</LinearLayout>
 				
