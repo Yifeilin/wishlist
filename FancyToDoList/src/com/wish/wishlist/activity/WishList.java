@@ -687,7 +687,7 @@ public class WishList extends Activity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Dialog dialog;
+		AlertDialog dialog;
 		switch (id) {
 		case DIALOG_MAIN:
 			dialog = null;
@@ -745,23 +745,16 @@ public class WishList extends Activity {
 						else {
 							_sortOption = ItemsCursor.SortBy.price.toString();
 						}
+
+						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+						SharedPreferences.Editor editor = pref.edit();
+						editor.putString(PREF_SORT_OPTION, _sortOption);
+						editor.commit();
+						
+						dialog.dismiss();
+	
+						populateItems(null, _where);
 					}
-			});
-
-			sortBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-				}
-			});
-
-			sortBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
-					SharedPreferences.Editor editor = pref.edit();
-					editor.putString(PREF_SORT_OPTION, _sortOption);
-					editor.commit();
-
-					populateItems(null, _where);
-				}
 			});
 
 			dialog = sortBuilder.create();
@@ -799,22 +792,15 @@ public class WishList extends Activity {
 							_where.put("complete", "0");
 							_filterOption = "in_progress";
 						}
+						
+						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+						SharedPreferences.Editor editor = pref.edit();
+						editor.putString(PREF_FILTER_OPTION, _filterOption);
+						editor.commit();
+						
+						dialog.dismiss();
+						populateItems(null, _where);
 					}
-			});
-
-			optionBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-				}
-			});
-
-			optionBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
-					SharedPreferences.Editor editor = pref.edit();
-					editor.putString(PREF_FILTER_OPTION, _filterOption);
-					editor.commit();
-					populateItems(null, _where);
-				}
 			});
 
 			dialog = optionBuilder.create();
