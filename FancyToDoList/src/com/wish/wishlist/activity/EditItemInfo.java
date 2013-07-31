@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ public class EditItemInfo extends Activity implements Observer {
 	private EditText _priceEditText;
 	private EditText _storeEditText;
 	private EditText _locationEditText;
+	private CheckBox _completeCheckBox;
 
 	private ImageButton backImageButton;
 	private ImageButton saveImageButton;
@@ -95,6 +97,7 @@ public class EditItemInfo extends Activity implements Observer {
 	private long mItem_id = -1;
 	private long mLocation_id = -1;
 	private long mStore_id = -1;
+	private int _complete = -1;
 	private boolean mEditNew = true;
 	private boolean _isGettingLocation = false;
 	
@@ -140,6 +143,7 @@ public class EditItemInfo extends Activity implements Observer {
 		_priceEditText = (EditText) findViewById(R.id.price);
 		_storeEditText = (EditText) findViewById(R.id.store);
 		_locationEditText = (EditText) findViewById(R.id.location);
+		_completeCheckBox = (CheckBox) findViewById(R.id.completeCheckBox);
 		
 
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
@@ -179,10 +183,18 @@ public class EditItemInfo extends Activity implements Observer {
 			mEditNew = false;
 			
 			mapImageButton.setVisibility(View.GONE);
+			_completeCheckBox.setVisibility(View.VISIBLE);
 			
 			WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
 			mLocation_id = item.getLocatonId();
 			mStore_id = item.getStoreId();
+			_complete = item.getComplete();
+			if (_complete == 1) {
+				_completeCheckBox.setChecked(true);
+			}
+			else {
+				_completeCheckBox.setChecked(false);
+			}
 
 			_itemNameEditText.setText(item.getName());
 			_noteEditText.setText(item.getDesc());
@@ -214,7 +226,6 @@ public class EditItemInfo extends Activity implements Observer {
 					imageItem.setImageURI(picture_Uri);
 				}
 			}
-
 		}
 		
 		else { //we are editing a new wish, get the location in background
@@ -401,6 +412,14 @@ public class EditItemInfo extends Activity implements Observer {
 			if (addStr.equals("Loading location...")) {
 				addStr = "unknown";
 			}
+
+			if (_completeCheckBox.isChecked()) {
+				itemComplete = 1;
+			}
+			else {
+				itemComplete = 0;
+			}
+
 			itemPrice = Double.valueOf(_priceEditText.getText().toString().trim());
 		}
 
