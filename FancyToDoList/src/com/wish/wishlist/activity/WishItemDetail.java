@@ -55,25 +55,23 @@ public class WishItemDetail extends Activity {
 	View.OnTouchListener gestureListener;
 
 	private static final int EDIT_ITEM = 0;
-
-	// private WishListDataBase wishListDB;
 	private ItemDBAdapter myItemDBAdapter;
 
-	private ImageView mPhotoView;
-	private TextView mNameView;
-	private TextView mDescrptView;
-	private TextView mDateView;
-	private TextView mPriceView;
-	private TextView mStoreView;
-	private TextView mLocationView;
+	private ImageView _photoView;
+	private TextView _nameView;
+	private TextView _descrpView;
+	private TextView _dateView;
+	private TextView _priceView;
+	private TextView _storeView;
+	private TextView _locationView;
 	private ImageButton backImageButton;
 //	private ImageButton shareImageButton;
 	private ImageButton deleteImageButton;
 	private ImageButton editImageButton;
 	private ImageButton shareImageButton;
 	
-	private long mItem_id = -1;
-	private int mPosition;
+	private long _itemId = -1;
+	private int _position;
 	private int mPrevPosition;
 	private int mNextPosition;
 	private AlertDialog alert;
@@ -100,10 +98,10 @@ public class WishItemDetail extends Activity {
 		// Remember the id of the item user clicked
 		// in the previous activity (WishList.java)
 		Intent i = getIntent();
-		mItem_id = i.getLongExtra("item_id", -1);
-		mPosition = i.getIntExtra("position", 0);
+		_itemId = i.getLongExtra("item_id", -1);
+		_position = i.getIntExtra("position", 0);
 
-		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(mItem_id);
+		WishItem item = WishItemManager.getInstance(this).retrieveItembyId(_itemId);
 		double lat = item.getLatitude();
 		double lng = item.getLongitude();
 		String address = item.getAddress();
@@ -127,13 +125,13 @@ public class WishItemDetail extends Activity {
 			item.save();
 		}
 
-		mNameView = (TextView) findViewById(R.id.itemNameDetail);
-		mDescrptView = (TextView) findViewById(R.id.itemDesriptDetail);
-		mDateView = (TextView) findViewById(R.id.itemDateDetail);
-		mPriceView = (TextView) findViewById(R.id.itemPriceDetail);
-		mStoreView = (TextView) findViewById(R.id.itemStoreDetail);
-		mLocationView = (TextView) findViewById(R.id.itemLocationDetail);
-		mPhotoView = (ImageView) findViewById(R.id.imgPhotoDetail);
+		_nameView = (TextView) findViewById(R.id.itemNameDetail);
+		_descrpView = (TextView) findViewById(R.id.itemDesriptDetail);
+		_dateView = (TextView) findViewById(R.id.itemDateDetail);
+		_priceView = (TextView) findViewById(R.id.itemPriceDetail);
+		_storeView = (TextView) findViewById(R.id.itemStoreDetail);
+		_locationView = (TextView) findViewById(R.id.itemLocationDetail);
+		_photoView = (ImageView) findViewById(R.id.imgPhotoDetail);
 		
 		showItemInfo(item);
 
@@ -149,7 +147,7 @@ public class WishItemDetail extends Activity {
 //			}
 //		};
 		
-		mPhotoView.setOnClickListener(new OnClickListener() {
+		_photoView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(WishItemDetail.this, FullscreenPhoto.class);
@@ -175,13 +173,13 @@ public class WishItemDetail extends Activity {
 //				Log.d("wishlist", "bitmap == null");
 			}
 			else {
-				mPhotoView.setImageBitmap(bitmap);
+				_photoView.setImageBitmap(bitmap);
 			}
 		}
 		else {
 		//pic_str is null, so user added this item without taking a pic.
 		//simply don't show any picture in this case. 
-			mPhotoView.setVisibility(View.GONE);
+			_photoView.setVisibility(View.GONE);
 		}
 		//if (fullsize_picture_str == null) {
 ////			Log.d("wishlist", "fullsize_picture_str == null");
@@ -202,16 +200,16 @@ public class WishItemDetail extends Activity {
 //					// view.getContext().getResources().getDrawable(Integer.parseInt(pic_str));
 //					int picResId = Integer.valueOf(picture_str, 16).intValue();
 //					Log.d("wishlist", "width is " + String.valueOf(width));
-//					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(mPhotoView.getContext().getResources(), picResId, width, height, true);
-//					//bitmap = BitmapFactory.decodeResource(mPhotoView.getContext()
+//					bitmap = ImageManager.getInstance().decodeSampledBitmapFromResource(_photoView.getContext().getResources(), picResId, width, height, true);
+//					//bitmap = BitmapFactory.decodeResource(_photoView.getContext()
 //					//		.getResources(), picResId);
 //					// it is resource id.
-//					mPhotoView.setImageBitmap(bitmap);
+//					_photoView.setImageBitmap(bitmap);
 //
 //				} catch (NumberFormatException e) {
 //					// Not a resId, so it must be a content provider uri
 //					photoUri = Uri.parse(picture_str);
-//					mPhotoView.setImageURI(photoUri);
+//					_photoView.setImageURI(photoUri);
 //				}
 //			}
 //		}
@@ -219,36 +217,36 @@ public class WishItemDetail extends Activity {
 		String dateTimeStr = item.getDate();
 		String dateTimeStrNew = DateTimeFormatter.getInstance().getDateTimeString(dateTimeStr);
 		
-		mNameView.setText(item.getName());
-		mDateView.setText(dateTimeStrNew);
+		_nameView.setText(item.getName());
+		_dateView.setText(dateTimeStrNew);
 		
 		// format the price
 		String priceStr = item.getPriceAsString();
 		if (priceStr != null) {
-			mPriceView.setText("$" + priceStr);	
-			mPriceView.setVisibility(View.VISIBLE);
+			_priceView.setText("$" + priceStr);	
+			_priceView.setVisibility(View.VISIBLE);
 		}
 		else {
-			mPriceView.setVisibility(View.GONE);
+			_priceView.setVisibility(View.GONE);
 		}
 		
 		//used as a note
 		String descrptStr = item.getDesc();
 		if (!descrptStr.equals("")) {
-			mDescrptView.setText(descrptStr);
-			mDescrptView.setVisibility(View.VISIBLE);
+			_descrpView.setText(descrptStr);
+			_descrpView.setVisibility(View.VISIBLE);
 		}
 		else {
-			mDescrptView.setVisibility(View.GONE);
+			_descrpView.setVisibility(View.GONE);
 		}
 		
 		String storeName = item.getStoreName();
 		if (!storeName.equals("")) {
-			mStoreView.setText("At " + storeName);	
-			mStoreView.setVisibility(View.VISIBLE);
+			_storeView.setText("At " + storeName);	
+			_storeView.setVisibility(View.VISIBLE);
 		}
 		else {
-			mStoreView.setVisibility(View.GONE);
+			_storeView.setVisibility(View.GONE);
 		}
 		
 		String address = item.getAddress();
@@ -256,11 +254,11 @@ public class WishItemDetail extends Activity {
 			if (storeName.equals("")) {
 				address = "At " + address;
 			}
-			mLocationView.setText(address);	
-			mLocationView.setVisibility(View.VISIBLE);
+			_locationView.setText(address);	
+			_locationView.setVisibility(View.VISIBLE);
 		}
 		else {
-			mLocationView.setVisibility(View.GONE);
+			_locationView.setVisibility(View.GONE);
 		}
 	}
 
@@ -282,11 +280,11 @@ public class WishItemDetail extends Activity {
 		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
 		myItemDBAdapter.close();
 		long nextItemID;
-		if (mPosition < c.getCount())
-			mNextPosition = mPosition + 1;
+		if (_position < c.getCount())
+			mNextPosition = _position + 1;
 
 		else
-			mNextPosition = mPosition;
+			mNextPosition = _position;
 
 		c.move(mNextPosition);
 		// nextItemID = c.getLong(
@@ -318,11 +316,11 @@ public class WishItemDetail extends Activity {
 		ItemsCursor c = myItemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
 		myItemDBAdapter.close();
 		long prevItemID;
-		if (mPosition > 0)
-			mPrevPosition = mPosition - 1;
+		if (_position > 0)
+			mPrevPosition = _position - 1;
 
 		else
-			mPrevPosition = mPosition;
+			mPrevPosition = _position;
 
 		c.move(mPrevPosition);
 		// prevItemID = c.getLong(
@@ -340,7 +338,7 @@ public class WishItemDetail extends Activity {
 				false).setPositiveButton("Yes",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						WishItemManager.getInstance(WishItemDetail.this).deleteItembyId(mItem_id);
+						WishItemManager.getInstance(WishItemDetail.this).deleteItembyId(_itemId);
 						WishItemDetail.this.finish();
 						//return super.onKeyDown(keyCode, event);
 					}
@@ -356,13 +354,13 @@ public class WishItemDetail extends Activity {
 	
 	private void editItem(){
 		Intent i = new Intent(WishItemDetail.this, EditItemInfo.class);
-		i.putExtra("item_id", mItem_id);
+		i.putExtra("item_id", _itemId);
 		//i.putExtra("position", position);
 		startActivityForResult(i, EDIT_ITEM);
 	}
 	
 	private void shareItem(){
-		ShareHelper share = new ShareHelper(this, mItem_id);
+		ShareHelper share = new ShareHelper(this, _itemId);
 		share.share();
 	}
 
@@ -508,7 +506,7 @@ public class WishItemDetail extends Activity {
 			// open the database for operations of Item table
 			myItemDBAdapter = new ItemDBAdapter(this);
 			myItemDBAdapter.open();
-			dLocation = myItemDBAdapter.getItemLocation(mItem_id);
+			dLocation = myItemDBAdapter.getItemLocation(_itemId);
 			myItemDBAdapter.close();
 			
 			if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
