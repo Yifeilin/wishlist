@@ -72,17 +72,13 @@ public class EditItemInfo extends Activity implements Observer {
 	private ImageButton mapImageButton;
 	private ImageButton cameraImageButton;
 	private ImageButton galleryImageButton;
-//	private Button btnCancel;
-//	private Button btnPhoto;
 	private ImageView imageItem;
 	private Date mDate;
 	private double lat = Double.MIN_VALUE;
 	private double lng = Double.MIN_VALUE;
 	private String addStr = "unknown";
 	private Bitmap _thumbnail;
-//	private Bitmap mImageBitmap;
-	//private String picture_str = Integer.toHexString(R.drawable.logo);//default pic is logo
-	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is W
+	private String picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is "W" letter
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
 	private StoreDBAdapter mStoreDBAdapter;
@@ -148,16 +144,12 @@ public class EditItemInfo extends Activity implements Observer {
 
 		cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
 		galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
-		//btnCancel = (Button) findViewById(R.id.button_cancel);
-		//btnPhoto = (Button) findViewById(R.id.button_photo);
-
 		imageItem = (ImageView) findViewById(R.id.image_photo);
 
 		imageItem.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
-				//i.putExtra("pic_str", picture_str);
 				if (_fullsizePhotoPath != null) {
 					i.putExtra("fullsize_pic_str", _fullsizePhotoPath);
 					startActivity(i);
@@ -246,7 +238,6 @@ public class EditItemInfo extends Activity implements Observer {
 			@Override
 			public void onClick(View view) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
-				//builder.setTitle(R.string.pick_color);
 				final CharSequence[] items = {"Take a photo", "From gallary"};
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
@@ -321,22 +312,6 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 		});
 
-//		btnCancel.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				alert.show();
-//			}
-//		});
-
-//		btnPhoto.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				getThumbailPicture();
-//			}
-//
-//		});
-		
 		if (savedInstanceState != null) {
 //			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
 			// restore the current selected item in the list
