@@ -81,21 +81,20 @@ public class WishList extends Activity {
 	private String _filterOption = "all";
 	private String _sortOption = ItemsCursor.SortBy.item_name.toString();
 
-	private ViewFlipper myViewFlipper;
-	private ListView myListView;
-	private GridView myGridView;
+	private ViewFlipper _viewFlipper;
+	private ListView _listView;
+	private GridView _gridView;
 	private Button _addNew;
 	// private EditText mySearchText;
 //	private Spinner myViewSpinner;
-	private ImageButton backImageButton;
-	private ImageButton viewImageButton;
-	private ImageButton searchImageButton;
+	private ImageButton _backImageButton;
+	private ImageButton _viewImageButton;
+	private ImageButton _searchImageButton;
 
 	private ItemsCursor _wishItemCursor;
-	private WishListItemCursorAdapter wishListItemAdapterCursor;
+	private WishListItemCursorAdapter _wishListItemAdapterCursor;
 
-	private DBAdapter myDBAdapter;
-	private ItemDBAdapter myItemDBAdapter;
+	private ItemDBAdapter _itemDBAdapter;
 	
 	private long _selectedItem_id;
 
@@ -126,16 +125,16 @@ public class WishList extends Activity {
 		setUpActionBar();
 
 		// get the resources by their IDs
-		myViewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
-		myListView = (ListView) findViewById(R.id.myListView);
-		myGridView = (GridView) findViewById(R.id.myGridView);
+		_viewFlipper = (ViewFlipper) findViewById(R.id.myFlipper);
+		_listView = (ListView) findViewById(R.id.myListView);
+		_gridView = (GridView) findViewById(R.id.myGridView);
 		_addNew = (Button) findViewById(R.id.addNewWishButton);
 		// mySearchText = (EditText) findViewById(R.id.mySearchText);
 
-		// Listener for myListView.
+		// Listener for _listView.
 		// When clicked, it starts a new activity to display the clicked item's
 		// detailed info.
-		myListView.setOnItemClickListener(new OnItemClickListener() {
+		_listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
@@ -157,10 +156,10 @@ public class WishList extends Activity {
 			}
 		});
 
-		// Listener for myGridView
+		// Listener for _gridView
 		// When clicked, it starts a new activity to display the clicked item's
 		// detailed info.
-		myGridView.setOnItemClickListener(new OnItemClickListener() {
+		_gridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 				// find which item has been clicked and get its _id in database
@@ -183,12 +182,12 @@ public class WishList extends Activity {
 		});
 
 		// register context menu for both listview and gridview
-		registerForContextMenu(myListView);
-		registerForContextMenu(myGridView);
+		registerForContextMenu(_listView);
+		registerForContextMenu(_gridView);
 
 		// open the database for operations of Item table
-		myItemDBAdapter = new ItemDBAdapter(this);
-		myItemDBAdapter.open();
+		_itemDBAdapter = new ItemDBAdapter(this);
+		_itemDBAdapter.open();
 
 		// check if the activity is started from search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -231,14 +230,14 @@ public class WishList extends Activity {
 //					// Recall populate here is inefficient
 //					_viewOption = "list";
 //					populateItems(nameQuery, SORT_BY);
-//					myViewFlipper.setDisplayedChild(0);
+//					_viewFlipper.setDisplayedChild(0);
 //
 //				}
 //				// grid view is selected
 //				else if (pos == 1) {
 //					_viewOption = "grid";
 //					populateItems(nameQuery, SORT_BY);
-//					myViewFlipper.setDisplayedChild(1);
+//					_viewFlipper.setDisplayedChild(1);
 //
 //				}
 //				// Toast.makeText(parent.getContext(), "The view is " +
@@ -289,20 +288,20 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView() {
-		_wishItemCursor = myItemDBAdapter.getItems(_sortOption, _where);
-		if (myItemDBAdapter.getItemsCount() == 0) {
-			myViewFlipper.setDisplayedChild(2);
+		_wishItemCursor = _itemDBAdapter.getItems(_sortOption, _where);
+		if (_itemDBAdapter.getItemsCount() == 0) {
+			_viewFlipper.setDisplayedChild(2);
 			return;
 		}
 
 		if (_viewOption.equals("list")) {
 			updateListView();
-			myViewFlipper.setDisplayedChild(0);
+			_viewFlipper.setDisplayedChild(0);
 		}
 
 		else {
 			updateGridView();
-			myViewFlipper.setDisplayedChild(1);
+			_viewFlipper.setDisplayedChild(1);
 		}
 	}
 
@@ -317,7 +316,7 @@ public class WishList extends Activity {
 
 	// private void displaySearchItem(String itemName, ItemsCursor.SortBy
 	// sortBy){
-	// _wishItemCursor = myItemDBAdapter.searchItems(itemName);
+	// _wishItemCursor = _itemDBAdapter.searchItems(itemName);
 	// // updateListView();
 	// // updateGridView();
 	// updateView();
@@ -336,9 +335,9 @@ public class WishList extends Activity {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
 			// _wishItemCursor = wishListDB.getItems(sortBy);
-			_wishItemCursor = myItemDBAdapter.getItems(_sortOption, where);
+			_wishItemCursor = _itemDBAdapter.getItems(_sortOption, where);
 		} else {
-			_wishItemCursor = myItemDBAdapter.searchItems(searchName, _sortOption);
+			_wishItemCursor = _itemDBAdapter.searchItems(searchName, _sortOption);
 		}
 
 		updateView();
@@ -348,22 +347,22 @@ public class WishList extends Activity {
 	 * update either list view or grid view according view option
 	 */
 	private void updateView() {
-		if (myItemDBAdapter.getItemsCount() == 0) {
-			myViewFlipper.setDisplayedChild(2);
+		if (_itemDBAdapter.getItemsCount() == 0) {
+			_viewFlipper.setDisplayedChild(2);
 			return;
 		}
 
 		if (_viewOption.equals("list")) {
 			// Update the list view
 			updateListView();
-			myViewFlipper.setDisplayedChild(0);
+			_viewFlipper.setDisplayedChild(0);
 
 		}
 
 		else if (_viewOption.equals("grid")) {
 			// Update the grid view
 			updateGridView();
-			myViewFlipper.setDisplayedChild(1);
+			_viewFlipper.setDisplayedChild(1);
 
 		}
 	}
@@ -377,11 +376,11 @@ public class WishList extends Activity {
 					ItemDBAdapter.KEY_PHOTO_URL };
 
 			int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
-			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
+			_wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, _wishItemCursor, from, to);
 
-			myGridView.setAdapter(wishListItemAdapterCursor);
-			wishListItemAdapterCursor.notifyDataSetChanged();
+			_gridView.setAdapter(_wishListItemAdapterCursor);
+			_wishListItemAdapterCursor.notifyDataSetChanged();
 		} else {
 			// give message about empty cursor
 		}
@@ -412,11 +411,11 @@ public class WishList extends Activity {
 					R.id.txtAddress,
 					R.id.checkmark_complete};
 			
-			wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
+			_wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, _wishItemCursor, from, to);
 
-			myListView.setAdapter(wishListItemAdapterCursor);
-			wishListItemAdapterCursor.notifyDataSetChanged();
+			_listView.setAdapter(_wishListItemAdapterCursor);
+			_wishListItemAdapterCursor.notifyDataSetChanged();
 		}
 
 		else {
@@ -432,7 +431,7 @@ public class WishList extends Activity {
 		builder.setCancelable(false);
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						myItemDBAdapter.deleteItem(_selectedItem_id);
+						_itemDBAdapter.deleteItem(_selectedItem_id);
 						updateView();
 					}
 				});
@@ -501,8 +500,8 @@ public class WishList extends Activity {
 		_selectedItem_id = -1;
 		if(_viewOption.equals("list")){
 			//get the position of the items among the visible items
-			pos = pos - myListView.getFirstVisiblePosition();
-			selected_view = myListView.getChildAt(pos);
+			pos = pos - _listView.getFirstVisiblePosition();
+			selected_view = _listView.getChildAt(pos);
 			if (selected_view != null) {
 				_selectedItem_id = getDBItemID(selected_view);
 			}
@@ -512,8 +511,8 @@ public class WishList extends Activity {
 			}
 		}
 		else if(_viewOption.equals("grid")){
-			pos = pos - myGridView.getFirstVisiblePosition();
-			selected_view = myGridView.getChildAt(pos);
+			pos = pos - _gridView.getFirstVisiblePosition();
+			selected_view = _gridView.getChildAt(pos);
 			if (selected_view != null) {
 				_selectedItem_id = getDBItemID(selected_view);
 			}
@@ -621,7 +620,7 @@ public class WishList extends Activity {
 	//		return true;
 	//	}
 		else if (itemId == R.id.MARK) {
-//			String address = myItemDBAdapter.getItemAddress(_selectedItem_id);
+//			String address = _itemDBAdapter.getItemAddress(_selectedItem_id);
 //			if (address.equals("unknown")||address.equals("")){
 //				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
 //				toast.show();
@@ -630,7 +629,7 @@ public class WishList extends Activity {
 				
 				// get the latitude and longitude of the clicked item
 				double[] dLocation = new double[2];
-				dLocation = myItemDBAdapter.getItemLocation(_selectedItem_id);
+				dLocation = _itemDBAdapter.getItemLocation(_selectedItem_id);
 				
 				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
 					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -827,11 +826,11 @@ public class WishList extends Activity {
 		// save the position of the currently selected item in the list
 		if (_viewOption.equals("list")) {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
-				myListView.getSelectedItemPosition());
+				_listView.getSelectedItemPosition());
 		}
 		else {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
-				myGridView.getSelectedItemPosition());
+				_gridView.getSelectedItemPosition());
 		}
 		// save the current sort criterion
 		//savedInstanceState.putString(SORT_BY_KEY, SORT_BY.item_name());
@@ -852,10 +851,10 @@ public class WishList extends Activity {
 		}
 		
 //		if (_viewOption.equals("list")) {
-			myListView.setSelection(pos);
+			_listView.setSelection(pos);
 //		}
 //		else {
-			myGridView.setSelection(pos);		
+			_gridView.setSelection(pos);		
 //		}
 		
 		updateView();
@@ -877,9 +876,7 @@ public class WishList extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Close the database
-		// wishListDB.close();
-//		myDBAdapter.close();
-		myItemDBAdapter.close();
+		_itemDBAdapter.close();
 	}
 
 	@Override
@@ -957,8 +954,8 @@ public class WishList extends Activity {
 			findViewById(R.id.listView_header).findViewById(R.id.imageButton_viewType).setVisibility(View.VISIBLE);
 			findViewById(R.id.listView_header).findViewById(R.id.imageButton_search).setVisibility(View.VISIBLE);
 
-			backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
-			backImageButton.setOnClickListener(new OnClickListener() {
+			_backImageButton = (ImageButton) findViewById(R.id.imageButton_back_logo);
+			_backImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					finish();
@@ -969,8 +966,8 @@ public class WishList extends Activity {
 				}
 			});
 
-			searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
-			searchImageButton.setOnClickListener(new OnClickListener() {
+			_searchImageButton = (ImageButton) findViewById(R.id.imageButton_search);
+			_searchImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					onSearchRequested();
@@ -978,8 +975,8 @@ public class WishList extends Activity {
 
 			});
 		
-			viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
-			viewImageButton.setOnClickListener(new OnClickListener() {
+			_viewImageButton = (ImageButton) findViewById(R.id.imageButton_viewType);
+			_viewImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					showDialog(DIALOG_VIEW);
