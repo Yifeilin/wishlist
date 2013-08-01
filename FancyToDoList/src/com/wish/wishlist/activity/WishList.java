@@ -366,7 +366,7 @@ public class WishList extends Activity {
 
 		}
 	}
-
+	
 	private void updateGridView() {
 		if (_wishItemCursor != null) {
 			_wishItemCursor.requery();
@@ -381,10 +381,10 @@ public class WishList extends Activity {
 
 			_gridView.setAdapter(_wishListItemAdapterCursor);
 			_wishListItemAdapterCursor.notifyDataSetChanged();
+
 		} else {
 			// give message about empty cursor
 		}
-
 	}
 
 	private void updateListView() {
@@ -414,8 +414,16 @@ public class WishList extends Activity {
 			_wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
 					resID, _wishItemCursor, from, to);
 
+			// save index and top position
+			int index = _listView.getFirstVisiblePosition();
+			View v = _listView.getChildAt(0);
+			int top = (v == null) ? 0 : v.getTop();
+
 			_listView.setAdapter(_wishListItemAdapterCursor);
 			_wishListItemAdapterCursor.notifyDataSetChanged();
+
+			// restore
+			_listView.setSelectionFromTop(index, top);
 		}
 
 		else {
