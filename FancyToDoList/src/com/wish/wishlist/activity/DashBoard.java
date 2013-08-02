@@ -180,10 +180,8 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.7\n" + 
-				"1. Redesigned the header bar and improved its navigation for Android 3.0+.\n\n" +
-				"2. Applied the Android holo theme across the app for Android 3.0+.\n\n" +
-				"3. Improved the wishlist detail view.");
+		builder.setMessage("Version 1.0.8\n" + 
+				"1. Users can mark wishes as completed, and view wishes filtered by completed or in progress.");
 		builder.setCancelable(false);
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {

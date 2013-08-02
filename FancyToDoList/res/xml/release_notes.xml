@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <releaseNote>
+	<release versionName="1.0.8" versionCode="11">
+		<note>Users can mark wishes as completed, and view wishes filtered by completed or in progress.</note>
+	</release>
 	<release versionName="1.0.7" versionCode="10">
 		<note>Redesigned the header bar and improved its navigation for Android 3.0+.</note>
 		<note>Applied the Android holo theme across the app for Android 3.0+.</note>
