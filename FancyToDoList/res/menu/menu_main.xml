@@ -21,8 +21,13 @@
  <item android:id="@+id/menu_sort" 
 		android:title="Sort"
 		android:icon="@android:drawable/ic_menu_sort_by_size"
-	 	android:showAsAction="ifRoom|withText">
- </item>
+	 	android:showAsAction="ifRoom|withText"
+ />
+ 
+ <item android:id="@+id/menu_filter" 
+		android:title="Filter"
+		android:icon="@drawable/ic_menu_filter"
+	/>
 </menu>  
     
     

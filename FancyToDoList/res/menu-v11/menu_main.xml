@@ -38,8 +38,6 @@
 
  <item android:id="@+id/menu_filter" 
 		android:title="Filter"
-		android:icon="@android:drawable/ic_menu_sort_by_size"
-	 	android:showAsAction="ifRoom|withText"
 	/>
 </menu>  
     
