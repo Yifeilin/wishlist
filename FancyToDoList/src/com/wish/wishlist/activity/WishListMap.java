@@ -32,7 +32,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
-//import android.widget.Toast;
+import android.widget.Toast;
 
 import com.wish.wishlist.R;
 //import com.android.wishlist.R.drawable;
@@ -232,6 +232,8 @@ public class WishListMap extends MapActivity {
 		locationList = mItemDBAdapter.getAllItemLocation();
 		mItemDBAdapter.close();
 		if(locationList.isEmpty()) {
+			Toast toast = Toast.makeText(this, "No wish available on map", Toast.LENGTH_SHORT);
+			toast.show();
 			this.finish();
 		}
 		
