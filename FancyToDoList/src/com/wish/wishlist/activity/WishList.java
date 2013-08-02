@@ -688,7 +688,12 @@ public class WishList extends Activity {
 				wish_item.setComplete(1);
 			}
 			wish_item.save();
-			updateView();
+			if (_viewOption.equals("list")) {
+				//we only need to update the view if it is list view, as the the check mark will be updated
+				//in grid view, we don't have the checkmark, so no need to update
+				//there is also a problem of updating the grid view while maintaining its scroll position
+				updateView();
+			}
 		}
 		return false; }
 
