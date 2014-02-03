@@ -122,6 +122,8 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 		});
 		
+		// Open the Store table in the database		
+		_storeDBAdapter = new StoreDBAdapter(this);
 		_storeDBAdapter.open();
 
 		// Open the Location table in the database
