@@ -122,8 +122,6 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 		});
 		
-		// Open the Store table in the database
-		_storeDBAdapter = new StoreDBAdapter(this);
 		_storeDBAdapter.open();
 
 		// Open the Location table in the database
@@ -344,19 +342,21 @@ public class EditItemInfo extends Activity implements Observer {
 
 	@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-				case android.R.id.home:
-					navigateBack();
-					return true;
-				//this replaced the saveImageButton used in GingerBread
-				case R.id.menu_done:
-					// app icon save in action bar clicked; 
-					saveWishItem();
-					return true;
-				default:
-					return super.onOptionsItemSelected(item);
-				}
+			int id = item.getItemId();
+			if (id == android.R.id.home) {
+				navigateBack();
+				return true;
 			}
+			else if (id == R.id.menu_done) {
+				//this replaced the saveImageButton used in GingerBread
+				// app icon save in action bar clicked; 
+				saveWishItem();
+				return true;
+			}
+			else {
+				return super.onOptionsItemSelected(item);
+			}
+		}
 
 	/***
 	 * Save user input as a wish item
