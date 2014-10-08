@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string-array name="views_array">
+        <item>List View</item>
+        <item>Grid View</item>
+    </string-array>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/color.xml -->
+    <eat-comment />
+
+    <color name="background1">#ffffffff</color>
+    <color name="background2">#ffd5ddeb</color>
+    <color name="background3">#ffe3e8f1</color>
+    <color name="black">#FF000000</color>
+    <color name="bodyBackground_light_grey">#F1F1F1</color>
+    <color name="bodyText_dark_grey">#424242</color>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/res/values/values.xml -->
+    <eat-comment />
+
+    <color name="com_facebook_blue">#3B5998</color>
+    <color name="com_facebook_loginview_text_color">#FFFFFF</color>
+    <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
+    <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
+    <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/color.xml -->
+    <eat-comment />
+
+    <color name="dark_grey">#4F4F4F</color>
+    <color name="dark_purple">#790980</color>
+    <color name="error_color">#F00</color>
+    <color name="footerBarBackground_dark_grey">#222222</color>
+    <color name="foreground1">#ff355689</color>
+    <color name="foreground2">#ff7081a3</color>
+    <color name="green">#FF00FF00</color>
+    <color name="grey">#545454</color>
+    <color name="headBarBackground_dark_grey">#222222</color>
+    <color name="headBarText_light_grey">#aeaeae</color>
+    <color name="item_backgrd">#FFFFFFFF</color>
+    <color name="light_yellow">#F5E856</color>
+    <color name="logo_color">#FFFF0F</color>
+    <color name="menu_color">#FFFF0F</color>
+    <color name="menu_glow">#F00</color>
+    <color name="notepad_lines">#FF0000FF</color>
+    <color name="notepad_margin">#90FF0000</color>
+    <color name="notepad_paper">#AAFFFF99</color>
+    <color name="notepad_text">#AA0000FF</color>
+    <color name="red">#FFFF0000</color>
+    <color name="semitransparent_white">#77ffffff</color>
+    <color name="title_background">#ff355689</color>
+    <color name="title_color">#f0f0f0</color>
+    <color name="title_glow">#F00</color>
+    <color name="title_separator">#40ffffff</color>
+    <color name="title_text">#ffffffff</color>
+    <color name="title_text_alt">#ff000000</color>
+    <color name="version_bkgrd">#1a1a48</color>
+    <color name="version_color">#f0f0f0</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#FFFFFF00</color>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/res/values/values.xml -->
+    <eat-comment />
+
+    <declare-styleable name="com_facebook_friend_picker_fragment">
+        <attr name="multi_select" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="com_facebook_login_view">
+        <attr name="confirm_logout" format="boolean" />
+        <attr name="fetch_user_info" format="boolean" />
+        <attr name="login_text" format="string" />
+        <attr name="logout_text" format="string" />
+    </declare-styleable>
+    <declare-styleable name="com_facebook_picker_fragment">
+        <attr name="show_pictures" format="boolean" />
+        <attr name="extra_fields" format="string" />
+        <attr name="show_title_bar" format="boolean" />
+        <attr name="title_text" format="string" />
+        <attr name="done_button_text" format="string" />
+        <attr name="title_bar_background" format="reference" />
+        <attr name="done_button_background" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="com_facebook_place_picker_fragment">
+        <attr name="radius_in_meters" format="integer" />
+        <attr name="results_limit" format="integer" />
+        <attr name="search_text" format="string" />
+        <attr name="show_search_box" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="com_facebook_profile_picture_view">
+        <attr name="preset_size">
+
+            <!-- Keep in sync with constants in ProfilePictureView -->
+            <enum name="small" value="-2" />
+            <enum name="normal" value="-3" />
+            <enum name="large" value="-4" />
+        </attr>
+        <attr name="is_cropped" format="boolean" />
+    </declare-styleable>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="avatar_size">75px</dimen>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/res/values/values.xml -->
+    <eat-comment />
+
+    <dimen name="com_facebook_loginview_height">44dp</dimen>
+    <dimen name="com_facebook_loginview_padding_bottom">0dp</dimen>
+    <dimen name="com_facebook_loginview_padding_left">42dp</dimen>
+    <dimen name="com_facebook_loginview_padding_right">0dp</dimen>
+    <dimen name="com_facebook_loginview_padding_top">0dp</dimen>
+    <dimen name="com_facebook_loginview_text_size">16.0sp</dimen>
+    <dimen name="com_facebook_loginview_width">205dp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_large">180dp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_normal">100dp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_small">50dp</dimen>
+    <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
+    <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="fav_place_textbox_size">200px</dimen>
+    <dimen name="footBar_height">50dip</dimen>
+    <dimen name="game_question_size">10pt</dimen>
+    <dimen name="headBarText_size">20sp</dimen>
+    <dimen name="headBar_height">50dip</dimen>
+    <dimen name="help_text_padding">20px</dimen>
+    <dimen name="help_text_size">7pt</dimen>
+    <dimen name="iconName_dashboard_size">30pt</dimen>
+    <dimen name="itemInfo_detail_size">25pt</dimen>
+    <dimen name="itemName_detail_size">30pt</dimen>
+    <dimen name="logo_size">24pt</dimen>
+    <dimen name="menu_item_size">16pt</dimen>
+    <dimen name="notepad_margin">30dp</dimen>
+    <dimen name="screen_title_size">16pt</dimen>
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="title_backLogo_width">70dip</dimen>
+    <dimen name="title_height">45dip</dimen>
+    <dimen name="title_imageButtonHeight">50dip</dimen>
+    <dimen name="title_wish_back_width">100dip</dimen>
+    <dimen name="version_size">5pt</dimen>
+    <dimen name="version_spacing">3pt</dimen>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/ids.xml -->
+    <eat-comment />
+
+    <item name="blocks_now" type="id"/>
+    <item name="blocks_ruler" type="id"/>
+    <item name="dialog_discard_confirm" type="id"/>
+    <item name="dialog_moderator" type="id"/>
+    <item name="dialog_wave" type="id"/>
+    <item name="title_backLogo" type="id"/>
+    <item name="title_container" type="id"/>
+    <item name="title_logo" type="id"/>
+    <item name="title_text" type="id"/>
+    <item name="title_wish" type="id"/>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="WishListDataBase_Create">"
+	CREATE TABLE WishItems (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, create_date TEXT, store_id INTEGER, picture TEXT NOT NULL, price REAL, location TEXT, priority INTEGER);
+	
+	CREATE TABLE StoreInfo (store_id INTEGER, store_name TEXT, address TEXT, latitude INTEGER, longitude INTEGER);
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Car', 'It is a very nice car', '1983-07-06 11:30:00', '0', '7f020004', '25000.0', 'BMW, Shanghai, China', '0');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Book', 'It is a great book', '1984-03-17 18:22:35', '1', '7f020003', '9.990000', 'Chapter store, Toronto, ON Canada', '3');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Cake', 'It is a delicious cake', '2011-05-03 03:40:50', '2', '7f020006', '15.0', 'YuanZu Food, Jiaxing, Zhejiang, China', '2');
+	
+	INSERT INTO WishItems (_id, name, description, create_date, store_id,  picture, price, location, priority) VALUES ( NULL, 'Heart', 'It is a warm heart', '2000-11-23 08:17:38', '3', '7f020008', '324.49', 'Hospital, Beijing, China', '1');
+	"</string>
+    <string name="WishListDataBase_Upgrade">"
+	DROP TABLE IF EXISTS WishItems
+	
+	DROP TABLE IF EXISTS StoreInfo
+	"</string>
+    <string name="add_new">Add</string>
+    <string name="album_name">WishListPhoto</string>
+    <string name="all_scores">"All Scores"</string>
+    <string name="app_logo_bottom">and Post It!</string>
+    <string name="app_logo_top">Make A Wish</string>
+    <string name="app_name">Wishlist</string>
+    <string name="app_version_info">Version 1.0.0\nCopyright © 2011 aripio All Rights Reserved.</string>
+    <string name="applicationId">221345307993103</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_view_prompt">Change view</string>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/res/values/values.xml -->
+    <eat-comment />
+
+    <string name="com_facebook_choose_friends">Choose Friends</string>
+    <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
+    <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
+    <string name="com_facebook_internet_permission_error_title">AndroidManifest Error</string>
+    <string name="com_facebook_loading">Loading...</string>
+    <string name="com_facebook_loginview_cancel_action">Cancel</string>
+    <string name="com_facebook_loginview_log_in_button">Log In</string>
+    <string name="com_facebook_loginview_log_out_action">Log Out</string>
+    <string name="com_facebook_loginview_log_out_button">Log Out</string>
+    <string name="com_facebook_loginview_logged_in_as">Logged in as: %1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">Logged in using Facebook</string>
+    <string name="com_facebook_logo_content_description">Facebook Logo</string>
+    <string name="com_facebook_nearby">Nearby</string>
+    <string name="com_facebook_picker_done_button_text">Done</string>
+    <string name="com_facebook_placepicker_subtitle_catetory_only_format">%1$s</string>
+    <string name="com_facebook_placepicker_subtitle_format">%1$s • %2$,d were here</string>
+    <string name="com_facebook_placepicker_subtitle_were_here_only_format">%1$,d were here</string>
+    <string name="com_facebook_requesterror_password_changed">Your password on Facebook has changed, please reconnect the app with Facebook.</string>
+    <string name="com_facebook_requesterror_permissions">An app connection with Facebook failed due to insufficient permissions, please grant the app permissions to perform the operation.</string>
+    <string name="com_facebook_requesterror_reconnect">An error occurred when connecting with Facebook, please reconnect the app with Facebook.</string>
+    <string name="com_facebook_requesterror_relogin">The app is not connected with Facebook, please log in and reconnect this app.</string>
+    <string name="com_facebook_requesterror_web_login">Please log in via https://www.facebook.com or https://m.facebook.com to re-enable the app to connect with Facebook.</string>
+    <string name="com_facebook_usersettingsfragment_log_in_button">Log In…</string>
+    <string name="com_facebook_usersettingsfragment_logged_in">Logged In</string>
+    <string name="com_facebook_usersettingsfragment_not_logged_in">Not Logged In</string>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="description_about">About</string>
+    <string name="description_back_logo">logo with back arrow</string>
+    <string name="description_camera">Camera</string>
+    <string name="description_delete">Delete</string>
+    <string name="description_edit">Edit</string>
+    <string name="description_fullscreenPhoto">photo in full screen</string>
+    <string name="description_gallery">Gallery</string>
+    <string name="description_home">Home</string>
+    <string name="description_location">Map</string>
+    <string name="description_logo">Logo</string>
+    <string name="description_pref">Preferences</string>
+    <string name="description_save">Save</string>
+    <string name="description_search">Search</string>
+    <string name="description_share">Share</string>
+    <string name="description_view">View</string>
+    <string name="detail">Detail Information</string>
+    <string name="edit">Edit</string>
+    <string name="error_authentication_reopen">An error occurred, please re-login.</string>
+    <string name="error_authentication_retry">An error occurred that requires your attention. %1$s</string>
+    <string name="error_bad_request">An error occurred, please contact the developer with the following message: %1$s</string>
+    <string name="error_dialog_button_text">OK</string>
+    <string name="error_dialog_default_text">No response from server.</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_permission">Please allow us to post on your behalf.</string>
+    <string name="error_server">The server is busy, please retry later.</string>
+    <string name="error_unknown">An unknown error occurred, please contact the developer with the following message: %1$s</string>
+    <string name="exit">Exit</string>
+    <string name="friends_scores">"Scores of Friends"</string>
+    <string name="fullSizePhotoLocation">FullSizeOutput</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_neutral">Prefer Not To Say</string>
+    <string name="googleMapKey">0f2l_-BqB8u34VeaR4SLtfXhLtMjE9WkI25fJug</string>
+    <string name="hello">Hello World, ToDoList!</string>
+    <string name="help">Help</string>
+    <string name="make_a_wish">Make a Wish</string>
+    <string name="map_menu_set_map">Toggle Street View</string>
+    <string name="map_menu_set_satellite">Toggle Satellite</string>
+    <string name="map_menu_set_traffic">Toggle Traffic View</string>
+    <string name="map_menu_show_list">List Items</string>
+    <string name="map_menu_zoom_in">Zoom in</string>
+    <string name="map_menu_zoom_out">Zoom out</string>
+    <string name="mark">Show on map</string>
+    <string name="menu">MAIN MENU</string>
+    <string name="menu_item_help">Help</string>
+    <string name="menu_item_play">Play Game</string>
+    <string name="menu_item_scores">View Scores</string>
+    <string name="menu_item_settings">Settings</string>
+    <string name="menu_scan">Scan</string>
+    <string name="my_wishes">My wishes</string>
+    <string name="no">No</string>
+    <string name="no_questions">No more questions available. Try back later.</string>
+    <string name="no_scores">"No scores to show."</string>
+    <string name="post">Post</string>
+    <string name="progress_dialog_text">Announcing, please wait...</string>
+    <string name="rank">"Ranking"</string>
+    <string name="remove">Delete</string>
+    <string name="result_dialog_button_text">Thanks!</string>
+    <string name="result_dialog_text">Posted Open Graph action, id: %1$s</string>
+    <string name="result_dialog_title">Result</string>
+    <string name="score">"Score"</string>
+    <string name="scores">Scores Screen</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search items by name</string>
+    <string name="search_results">Search Result</string>
+    <string name="settings">Settings</string>
+    <string name="settings_button_dob">Pick Date</string>
+    <string name="settings_button_favoriteplace">Pick a Place</string>
+    <string name="settings_button_favplace_map">Map It!</string>
+    <string name="settings_button_friend_email">Add Friend</string>
+    <string name="settings_button_pwd">Set Password</string>
+    <string name="settings_description">Find Item</string>
+    <string name="settings_dob">Birth Date:</string>
+    <string name="settings_dob_not_set">No Date Set</string>
+    <string name="settings_email">Email:</string>
+    <string name="settings_favoriteplace">Favorite Place:</string>
+    <string name="settings_favoriteplace_not_set">No Favorite Place Set.</string>
+    <string name="settings_favplace_coords">Coordinates:</string>
+    <string name="settings_favplace_currentlocation"> (Current Location)</string>
+    <string name="settings_friend_email">Enter email address of friend:</string>
+    <string name="settings_friend_email_label">Friends</string>
+    <string name="settings_friend_email_tip">Add a new friend by email</string>
+    <string name="settings_gender">Gender:</string>
+    <string name="settings_nickname">Nickname:</string>
+    <string name="settings_password">Password:</string>
+    <string name="settings_password2">Password (again):</string>
+    <string name="settings_pwd_equal">Passwords match.</string>
+    <string name="settings_pwd_not_equal">Passwords do not match, please try again. </string>
+    <string name="settings_pwd_not_set">No Password Set</string>
+    <string name="settings_pwd_set">Password Set</string>
+    <string name="share">Share</string>
+    <string name="splash">Splash Screen</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_help">Help</string>
+    <string name="title_new_item">Add Wish</string>
+    <string name="title_scan">Scan</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_wishlist">Wishes</string>
+    <string name="username">"Username"</string>
+    <string name="wait_msg">"Retrieving Scores..."</string>
+    <string name="wait_title">"Loading..."</string>
+    <string name="yes">Yes</string>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/values/style.xml -->
+    <eat-comment />
+
+    <style name="FooterBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/footBar_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:background">@color/footerBarBackground_dark_grey</item>
+    </style>
+
+    <style name="GridImageView">
+        <item name="android:padding">3dp</item>
+    </style>
+
+    <style name="HomeButton">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/foreground1</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="ItemInfoText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textColor">@color/bodyText_dark_grey</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ItemNameText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textColor">@color/dark_purple</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextBody">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
+    </style>
+
+    <style name="Theme.D1" parent="android:style/Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.D1.noActionBar" parent="android:style/Theme.Light"></style>
+
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="TitleBar">
+        <item name="android:id">@id/title_container</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/headBar_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/headBarBackground_dark_grey</item>
+    </style>
+
+    <style name="TitleBarAction">
+        <item name="android:layout_width">@dimen/title_imageButtonHeight</item>
+        <item name="android:layout_height">fill_parent</item>
+        <!-- - <item name="android:background">@null</item> -->
+        <item name="android:background">@drawable/title_button</item>
+    </style>
+
+    <style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">14dip</item>
+        <item name="android:layout_marginRight">15dip</item>
+        <item name="android:layout_marginTop">14dip</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
+    <style name="TitleBarSeparator">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@color/title_separator</item>
+    </style>
+
+    <style name="TitleBarSpring">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="TitleBarText">
+        <item name="android:id">@id/title_text</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/headBarText_size</item>
+        <item name="android:paddingLeft">12dip</item>
+        <item name="android:paddingRight">12dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/headBarText_light_grey</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TitleBarWish">
+        <item name="android:id">@id/title_wish</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleType">fitStart</item>
+    </style>
+
+    <style name="TitleBarWishBack">
+        <item name="android:layout_width">@dimen/title_wish_back_width</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:gravity">left</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/title_button</item>
+    </style>
+
+    <style name="ToDoTheme" parent="@android:style/Theme.Black">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/res/values/values.xml -->
+    <eat-comment />
+
+    <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
+        <item name="android:width">@dimen/com_facebook_loginview_width</item>
+        <item name="android:height">@dimen/com_facebook_loginview_height</item>
+        <item name="android:background">@drawable/com_facebook_loginbutton_blue</item>
+        <item name="android:textColor">@color/com_facebook_loginview_text_color</item>
+        <item name="android:textSize">@dimen/com_facebook_loginview_text_size</item>
+        <item name="android:paddingLeft">@dimen/com_facebook_loginview_padding_left</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="com_facebook_loginview_silver_style" parent="@android:style/Widget.Button">
+        <item name="android:width">205dp</item>
+        <item name="android:height">44dp</item>
+        <item name="android:background">@drawable/com_facebook_loginbutton_silver</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#4B5164</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

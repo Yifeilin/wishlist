@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+ 	android:gravity="center_vertical"
+	android:layout_height="wrap_content" 
+	android:layout_width="wrap_content" 
+	android:orientation="horizontal">
+	<!--     android:paddingTop="3dip" -->
+	<!--android:paddingBottom="3dip" -->
+
+	<ImageView android:id="@+id/imgPhotoGrid" style="@style/GridImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+	    
+   	<TextView android:id="@+id/txtItemID_Grid" android:visibility="invisible"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+</LinearLayout>
+<!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/layout/wishitem_photo.xml -->

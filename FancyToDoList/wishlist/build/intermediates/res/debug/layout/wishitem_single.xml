@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+ 	android:gravity="center_vertical"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:orientation="horizontal"
+	
+	android:background="@xml/list_item_selector">
+	<!--  android:background="@color/bodyBackground_light_grey"> -->
+	   <!--   android:paddingTop="3dip"
+    android:paddingBottom="3dip"
+    -->
+		
+	<ImageView android:id="@+id/imgPhoto"
+		android:layout_width="100dip" 
+	    android:layout_height="100dip"
+	/>
+<!-- 	    android:layout_weight="1" -->
+
+	<LinearLayout 
+		android:layout_width="fill_parent"
+		android:layout_weight="1"
+		android:layout_marginLeft="6dip"
+		android:layout_marginRight="6dip"
+		android:layout_height="wrap_content" 
+		android:orientation="vertical">
+<!--		android:background="@xml/selector"  -->
+<!-- 		android:background="@color/notepad_paper"> -->
+			
+<!-- 		<TextView android:id="@+id/txtName" android:layout_width="fill_parent" -->
+<!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
+<!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
+<!-- 			android:layout_weight="1" -->
+<!-- 			android:textSize="10sp" -->
+<!-- 			android:textColor="@color/notepad_text"/> -->
+
+		<TextView android:id="@+id/txtName"	
+	 		android:textSize="18sp"
+	 		android:singleLine="true"
+            android:ellipsize="marquee"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
+		    android:textColor="@color/dark_purple"/>
+		    <!--android:textColor="@xml/selector"/>      -->
+				<!--    android:maxLines="1"  --> 
+		
+		 	<TextView android:id="@+id/txtPrice"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content" 
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
+ 			android:textSize="15sp"
+		    android:singleLine="true"
+		    android:textColor="@color/bodyText_dark_grey"/>
+ 			 <!--  		android:layout_weight="1"-->
+  			<!--  android:scrollbars="vertical" android:fadingEdge="vertical" -->
+<!--   			 			android:padding="12dp"  --> 
+		 	
+			<TextView android:id="@+id/txtStore" android:visibility="visible"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content" 
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
+ 			android:textSize="15sp"
+ 		    android:singleLine="true"
+            android:ellipsize="marquee"
+ 			android:textColor="@color/bodyText_dark_grey"/>
+						
+			<TextView android:id="@+id/txtAddress"
+		 	android:layout_width="fill_parent"
+ 			android:layout_height="wrap_content"
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
+ 			android:maxLines="1" 
+ 			android:textSize="15sp"
+ 			android:textColor="@color/bodyText_dark_grey"/>
+<!-- 		<TextView android:id="@+id/txtDesc" android:layout_width="fill_parent" -->
+<!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
+<!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
+<!-- 			android:layout_weight="1" -->
+<!-- 			android:textSize="10sp" -->
+<!-- 			android:textColor="@color/notepad_text"/> -->
+			
+<!-- 		<TextView android:id="@+id/txtDate" android:layout_width="fill_parent" -->
+<!-- 			android:layout_height="fill_parent" android:padding="10dp" -->
+<!-- 			android:scrollbars="vertical" android:fadingEdge="vertical" -->
+<!-- 			android:layout_weight="1" -->
+<!-- 			android:textSize="10sp" -->
+<!-- 			android:textColor="@color/notepad_text"/> -->
+<!--		<TextView
+	    	android:id="@+id/txtDate"
+	 		android:layout_width="fill_parent"
+		    android:layout_height="wrap_content" 
+		    android:textSize="16sp"
+		    android:maxLines="1"/>
+		    -->
+<!-- 		    android:textColor="@color/notepad_text"/> -->
+			
+ 		<TextView android:id="@+id/txtItemID" android:visibility="invisible"
+				  android:layout_width="fill_parent"
+			      android:layout_height="wrap_content"
+			      android:textSize="16sp" />
+	
+	</LinearLayout>
+
+	<ImageView
+	    android:id="@+id/checkmark_complete"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="top"
+	    android:adjustViewBounds="true"
+	    android:src="@drawable/ic_checkmark_holo_light"
+	    android:visibility="visible" 
+	 />
+
+</LinearLayout>
+<!-- From: file:/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/src/main/res/layout/wishitem_single.xml -->

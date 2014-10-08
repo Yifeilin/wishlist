@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/httpmime-4.2.5-7c069a9cc50985e61140216471bdfa908a8cd16d.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/libs/httpmime-4.2.5.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="6efc2f9df23c2ac4d3b701a11cab9f9fa6a641d4"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/classes-b5707981f0c88bca1d2b853bf1d2ac9422a4632a.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/FancyToDoList1/facebookSDK/unspecified/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8f361d018a836cd81ffa2dfd1fe5df4c46bd8526"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/httpcore-4.2.4-192cbd1a333725243928f30941ab17a6e788fb99.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/libs/httpcore-4.2.4.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="3b7f38df6de5dd8b500e602ae8c2dd5ee446f883"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-bca9cd8c8082330ef7549e0398af852faae531fd.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/httpclient-4.2.5-58cee54d59b64433c887d61466cd91de0f5083db.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/libs/httpclient-4.2.5.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="3bfeb9062b12d5b340445336790dbc14c59c2d79"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-ccd5700b29171efe3bc10ea3ed21ba05b1a7cb05.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/pre-dexed/debug/classes-5b31716fbef9d1df426724dd72f67d06c15c854d.jar"
+        jar="/Users/jiawen/Development/wishlist/FancyToDoList1/wishlist/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+
+</pre-dex-items>
