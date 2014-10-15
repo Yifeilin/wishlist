@@ -18,68 +18,93 @@ import android.widget.Toast;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.view.ReleaseNotesView;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.SharedPreferences;
+import android.preference.EditTextPreference;
  
 @SuppressLint("NewApi")
-public class WishListPreference extends PreferenceActivity {
+public class WishListPreference extends PreferenceActivity implements
+        OnSharedPreferenceChangeListener {
 	private ImageButton _backImageButton;
 
-	@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.layout.wishlist_preference);
-			setContentView(R.layout.preference_parent);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.layout.wishlist_preference);
+        setContentView(R.layout.preference_parent);
 
-			setUpActionBar();
+        setUpActionBar();
 
-			// Get the custom preference
-			Preference currencySymbol = (Preference) findPreference("currencySymbol");
-			currencySymbol.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				public boolean onPreferenceClick(Preference preference) {
-					Toast.makeText(getBaseContext(), "The currency symbol has been clicked", Toast.LENGTH_LONG).show();
-					return true;
-				}
-			});
-			Preference releaseNotes = (Preference) findPreference("releaseNotes");
-			releaseNotes.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				public boolean onPreferenceClick(Preference preference) {
-					//Toast.makeText(getBaseContext(), "The release notes has been clicked", Toast.LENGTH_LONG).show();
-			//		SharedPreferences customSharedPreference = getSharedPreferences(
-			//			"myCustomSharedPrefs", Activity.MODE_PRIVATE);
-			//		SharedPreferences.Editor editor = customSharedPreference;
-			//	.edit();
-			//editor.putString("myCustomPref",
-			//	"The preference has been clicked");
-			//editor.commit();
-				   ReleaseNotesView view = new ReleaseNotesView(WishListPreference.this); 
-				   view.show();
-					return true;
-				}
-			});
+        // Get the custom preference
+        Preference releaseNotes = (Preference) findPreference("releaseNotes");
+        releaseNotes.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                //Toast.makeText(getBaseContext(), "The release notes has been clicked", Toast.LENGTH_LONG).show();
+                //		SharedPreferences customSharedPreference = getSharedPreferences(
+                //			"myCustomSharedPrefs", Activity.MODE_PRIVATE);
+                //		SharedPreferences.Editor editor = customSharedPreference;
+                //	.edit();
+                //editor.putString("myCustomPref",
+                //	"The preference has been clicked");
+                //editor.commit();
+                ReleaseNotesView view = new ReleaseNotesView(WishListPreference.this);
+                view.show();
+                return true;
+            }
+        });
 
-			Preference rateApp = (Preference) findPreference("rateApp");
-			rateApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				public boolean onPreferenceClick(Preference preference) {
-					Uri uri = Uri.parse("market://details?id=" + getPackageName());
-					Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-					try {
-						startActivity(goToMarket);
-					} catch (ActivityNotFoundException e) {
-					}
-					//Toast.makeText(getBaseContext(), "The rate app has been clicked", Toast.LENGTH_LONG).show();
-					return true;
-				}
-			});
-		}
+        Preference rateApp = (Preference) findPreference("rateApp");
+        rateApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                }
+                //Toast.makeText(getBaseContext(), "The rate app has been clicked", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+    }
 
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-				case android.R.id.home:
-					finish();
-					return true;
-				default:
-					return super.onOptionsItemSelected(item);
-				}
-			}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set up a listener whenever a key changes
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the listener whenever a key changes
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        updatePrefSummary(findPreference(key));
+    }
+
+    private void updatePrefSummary(Preference p) {
+        if (p instanceof EditTextPreference) {
+            EditTextPreference editTextPref = (EditTextPreference) p;
+            p.setSummary(editTextPref.getText());
+        }
+    }
 
 	private void setUpActionBar() {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs

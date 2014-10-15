@@ -7,15 +7,10 @@
 		android:key="autoLocation"
 		android:layout="@xml/checkbox_preference_style"/>
 
-	 <EditTextPreference
-        android:title="Password"
-        android:summary="Set Your Password"
-        android:key="prefUserPassword"/>
-
-	<Preference
-		android:title="Currency symbol"
-		android:key="currencySymbol"
-		android:layout="@xml/preference_style"/>
+    <EditTextPreference
+        android:title="Currency symbol"
+        android:summary="$"
+        android:key="currency"/>
 
 	<Preference
 		android:title="Release notes"
