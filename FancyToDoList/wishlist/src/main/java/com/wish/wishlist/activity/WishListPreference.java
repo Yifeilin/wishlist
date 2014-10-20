@@ -21,7 +21,7 @@ import com.wish.wishlist.view.ReleaseNotesView;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
- 
+
 @SuppressLint("NewApi")
 public class WishListPreference extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {

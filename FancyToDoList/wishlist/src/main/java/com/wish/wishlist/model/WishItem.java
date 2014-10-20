@@ -16,6 +16,7 @@ import android.database.Cursor;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
+import android.preference.PreferenceManager;
 
 
 public class WishItem {
@@ -119,6 +120,14 @@ public class WishItem {
 			return priceStr;
 		}
 	}
+
+    public static String priceStringWithCurrency(String price, Context ctx) {
+        String currencySymbol = PreferenceManager.getDefaultSharedPreferences(ctx).getString("currency", "");
+        if (currencySymbol.isEmpty()) {
+            return price;
+        }
+        return currencySymbol + " " + price;
+    }
 	
 	public long getLocatonId() {
 		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
@@ -287,7 +296,7 @@ public class WishItem {
 		// format the price
 		String priceStr = getPriceAsString();
 		if (priceStr != null) {
-			message += ("$" + priceStr + "\n");
+            message += priceStringWithCurrency(priceStr, _ctx) + "\n";
 		}
 		
 		//used as a note

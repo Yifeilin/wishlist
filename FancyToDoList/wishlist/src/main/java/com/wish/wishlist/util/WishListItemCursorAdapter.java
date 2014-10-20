@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBAdapter;
 import com.wish.wishlist.util.ImageManager;
-//import com.wish.wishlist.model.WishItem;
+import com.wish.wishlist.model.WishItem;
 //import com.wish.wishlist.model.WishItemManager;
 
 import android.content.Context;
@@ -160,8 +160,7 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 				if (price != Double.MIN_VALUE) {
 					DecimalFormat Dec = new DecimalFormat("0.00");
 					String priceStr = (Dec.format(price));
-					priceStr = "$ " + priceStr;
-					viewPrice.setText(priceStr);
+					viewPrice.setText(WishItem.priceStringWithCurrency(priceStr, view.getContext()));
 					viewPrice.setVisibility(View.VISIBLE);
 				}
 				else {

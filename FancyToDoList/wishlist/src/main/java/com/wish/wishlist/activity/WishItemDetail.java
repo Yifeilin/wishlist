@@ -1,8 +1,29 @@
 package com.wish.wishlist.activity;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.view.Display;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBAdapter;
@@ -13,31 +34,9 @@ import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
 import com.wish.wishlist.util.social.ShareHelper;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Display;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.View.OnClickListener;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /***
  * WishItemDetail is responsible for displaying the detailed info. of an item. 
@@ -228,7 +227,7 @@ public class WishItemDetail extends Activity {
 		// format the price
 		String priceStr = item.getPriceAsString();
 		if (priceStr != null) {
-			_priceView.setText("$" + priceStr);	
+			_priceView.setText(WishItem.priceStringWithCurrency(priceStr, this));
 			_priceView.setVisibility(View.VISIBLE);
 		}
 		else {
