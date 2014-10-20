@@ -36,6 +36,9 @@ public class WishListPreference extends PreferenceActivity implements
         setUpActionBar();
 
         // Get the custom preference
+        EditTextPreference currencyTextPref = (EditTextPreference) findPreference("currency");
+        currencyTextPref.setSummary(currencyTextPref.getText());
+
         Preference releaseNotes = (Preference) findPreference("releaseNotes");
         releaseNotes.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
