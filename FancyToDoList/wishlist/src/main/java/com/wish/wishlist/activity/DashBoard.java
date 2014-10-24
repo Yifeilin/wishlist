@@ -180,8 +180,8 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.8\n" + 
-				"1. Users can mark wishes as completed, and view wishes filtered by completed or in progress.");
+		builder.setMessage("Version 1.0.9\n" +
+				"Users can customize the currency symbol of the wished item's price");
 		builder.setCancelable(false);
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
