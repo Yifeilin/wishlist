@@ -57,20 +57,29 @@ public class DBAdapter {
 				db.execSQL(CREATE_TABLE_USER);
 			}
 		}
-		, new Patch() {//db version 3
-			public void apply(SQLiteDatabase db) {
-				//add wish complete flag column in the Item table
-				//representing if a wish is complete or not
-				//set its default value to be 0
-				String sql = "ALTER TABLE "
-				+ ItemDBAdapter.DB_TABLE
-				+ " ADD COLUMN complete INTEGER DEFAULT 0 NOT NULL";
-				
-				//Log.d(TAG, "sql:" + sql);
-				db.execSQL(sql);
-			}
 
-			public void revert(SQLiteDatabase db) {  }
+        , new Patch() {//db version 3
+            public void apply(SQLiteDatabase db) {
+                //add wish complete flag column in the Item table
+                //representing if a wish is complete or not
+                //set its default value to be 0
+                String sql = "ALTER TABLE "
+                        + ItemDBAdapter.DB_TABLE
+                        + " ADD COLUMN complete INTEGER DEFAULT 0 NOT NULL";
+
+                //Log.d(TAG, "sql:" + sql);
+                db.execSQL(sql);
+            }
+        }
+
+        , new Patch() {//db version 4, 1.0.9 -> 1.0.10
+            public void apply(SQLiteDatabase db) {
+                //drop table ItemCategory and create table Tag
+                String sql = "DROP TABLE IF EXISTS ItemCategory";
+                //Log.d(TAG, "sql:" + sql);
+                db.execSQL(sql);
+                db.execSQL(CREATE_TABLE_TAG);
+            }
 		}
 	};
 	
@@ -93,8 +102,8 @@ public class DBAdapter {
 			+ ");";
 
 
-	//Query string to create table "ItemCategory"
-	private static final String CREATE_TABLE_ITEMCATEGORY = "create table "
+	//Query string to create table "Tag"
+	private static final String CREATE_TABLE_TAG = "create table "
 			+ TagDBAdapter.DB_TABLE + " ("
 			+ TagDBAdapter.KEY_ID
 			+ " integer primary key autoincrement, " 
@@ -269,8 +278,6 @@ public class DBAdapter {
 				mItemDBAdapter.close();
 			}
 
-			// create table "itemCategory"
-			db.execSQL(CREATE_TABLE_ITEMCATEGORY);
 			//create table "store"
 			db.execSQL(CREATE_TABLE_STORE);
 			if (demo) {
