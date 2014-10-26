@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /***
  * LocationDBManager provides access to operations on data in location table
  */
-public class LocationDBManager {
+public class LocationDBManager extends DBManager {
 
 	public static final String KEY_ID = "_id";
 	public static final String KEY_LATITUDE = "latitude";
@@ -27,11 +27,6 @@ public class LocationDBManager {
 	public static final String KEY_POSTCODE = "postcode";
 
 	public static final String DB_TABLE = "location";
-
-	private DatabaseHelper mDbHelper;
-	private SQLiteDatabase mDb;
-
-	private final Context mCtx;
 	private static final String TAG="LocationDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -58,48 +53,7 @@ public class LocationDBManager {
 	 *            the Context within which to work
 	 */
 	public LocationDBManager(Context ctx) {
-		this.mCtx = ctx;
-	}
-
-	/**
-	 * Open the location database. If it cannot be opened, try to create a new
-	 * instance of the database. If it cannot be created, throw an exception to
-	 * signal the failure
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 * @throws SQLException
-	 *             if the database could be neither opened or created
-	 */
-	public LocationDBManager open() throws SQLException {
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = this.mDbHelper.getWritableDatabase();
-		return this;
-	}
-	
-	/**
-	 * Open the wishlist database by passing the instance of the db.
-	 * its difference from open() is that it uses the db passed in as mDb
-	 * instead of getting mDb from calling this.mDbHelper.getWritableDatabase();
-	 * open(SQLiteDatabase db) is only called in DBAdapter.DatabaseHelper.onCreate() for 
-	 * inserting items into the item table the first time wishlist database is
-	 * created
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 *         
-	 */
-	public LocationDBManager open(SQLiteDatabase db) throws SQLException {
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = db;
-		return this;
-	}
-
-	/**
-	 * close return type: void
-	 */
-	public void close() {
-		this.mDbHelper.close();
+        super(ctx);
 	}
 
 	/**

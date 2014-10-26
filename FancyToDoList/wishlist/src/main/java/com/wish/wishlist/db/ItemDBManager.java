@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
-public class ItemDBManager {
+public class ItemDBManager extends DBManager {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_STORE_ID = "store_id";
 	public static final String KEY_STORENAME = "store_name";
@@ -32,11 +32,6 @@ public class ItemDBManager {
 	public static final String KEY_COMPLETE = "complete";
 
 	public static final String DB_TABLE = "Item";
-
-	private DatabaseHelper mDbHelper;
-	private SQLiteDatabase mDb;
-
-	private final Context mCtx;
 	private static final String TAG="ItemDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -64,50 +59,7 @@ public class ItemDBManager {
 	 *            the Context within which to work
 	 */
 	public ItemDBManager(Context ctx) {
-		this.mCtx = ctx;
-	}
-
-	/**
-	 * Open the wishlist database. If it cannot be opened, try to create a new
-	 * instance of the database. If it cannot be created, throw an exception to
-	 * signal the failure
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 * @throws SQLException
-	 *             if the database could be neither opened or created
-	 */
-	public ItemDBManager open() throws SQLException {
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = this.mDbHelper.getWritableDatabase();
-		return this;
-	}
-	
-	/**
-	 * Open the wishlist database by passing the instance of the db.
-	 * its difference from open() is that it uses the db passed in as mDb
-	 * instead of getting mDb from calling this.mDbHelper.getWritableDatabase();
-	 * open(SQLiteDatabase db) is only called in DBAdapter.DatabaseHelper.onCreate() for 
-	 * inserting items into the item table the first time wishlist database is
-	 * created
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 *         
-	 */
-	public ItemDBManager open(SQLiteDatabase db) throws SQLException {
-		//this.mDbHelper = new DatabaseHelper(this.mCtx);
-		//this.mDbHelper.getWritableDatabase();
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = db;
-		return this;
-	}
-
-	/**
-	 * close return type: void
-	 */
-	public void close() {
-		this.mDbHelper.close();
+        super(ctx);
 	}
 
 	/**
@@ -235,7 +187,7 @@ public class ItemDBManager {
 //				+ " store_id = '%d' " + "WHERE _id = '%d' ", name, description,
 //				date, store_id, _id);
 //		try {
-//			this.mDbHelper.getWritableDatabase().execSQL(sql);
+//			writableDB().execSQL(sql);
 //		} catch (SQLException e) {
 //			Log.e("Error writing an exsiting item", e.toString());
 //		}
@@ -298,7 +250,7 @@ public class ItemDBManager {
 		String sql = String.format("DELETE FROM Item " + "WHERE _id = '%d' ",
 				_id);
 		try {
-			this.mDbHelper.getWritableDatabase().execSQL(sql);
+            writableDB().execSQL(sql);
 		} catch (SQLException e) {
 			Log.e("Error deleteing item", e.toString());
 		}
@@ -315,7 +267,7 @@ public class ItemDBManager {
 
 		Cursor c = null;
 		try {
-			c = this.mDbHelper.getReadableDatabase().rawQuery(
+            c = readableDB().rawQuery(
 					"SELECT count(*) FROM Item", null);
 			if (0 >= c.getCount()) {
 				return 0;
@@ -427,7 +379,7 @@ public class ItemDBManager {
 			sql = "SELECT * FROM Item WHERE " + field + "=" + value + " ORDER BY " + sortOption;
 		}
 
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 		c.moveToFirst();
@@ -442,7 +394,7 @@ public class ItemDBManager {
 //	 */
 //	public ItemsCursor getItemsByName(String name, ItemsCursor.SortBy sortBy) {
 //		String sql = ItemsCursor.QUERY_NAME + sortBy.toString();
-//		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+//		SQLiteDatabase d = readableDB();
 //		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 //				new ItemsCursor.Factory(), sql, null, null);
 //		c.moveToFirst();
@@ -459,7 +411,7 @@ public class ItemDBManager {
 	public ItemsCursor getItem(long _id) {
 		String sql = String.format("SELECT * FROM Item " + "WHERE _id = '%d' ",
 				_id);
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 
@@ -477,7 +429,7 @@ public class ItemDBManager {
 		String sql = String.format("SELECT * FROM Item "
 				+ "WHERE item_name LIKE '%%%s%%' ", query);
 
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 		if (c != null) {
@@ -495,7 +447,7 @@ public class ItemDBManager {
 		String sql = String.format("SELECT * FROM Item "
 				+ "WHERE item_name LIKE '%%%s%%' " + "ORDER BY " + sortOption, query);
 		
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 		if (c != null) {
@@ -542,7 +494,7 @@ public class ItemDBManager {
 	
 	public ArrayList<double[]> getAllItemLocation(){
 		String sql = String.format("SELECT _id FROM Item");
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 
@@ -590,7 +542,7 @@ public class ItemDBManager {
 	public Cursor getItemStoreCursor(long _id){
 		String sql = String.format("SELECT store_id FROM Item " + "WHERE _id = '%d' ",
 				_id);
-		SQLiteDatabase d = this.mDbHelper.getReadableDatabase();
+        SQLiteDatabase d = readableDB();
 		ItemsCursor itemC = (ItemsCursor) d.rawQueryWithFactory(
 				new ItemsCursor.Factory(), sql, null, null);
 

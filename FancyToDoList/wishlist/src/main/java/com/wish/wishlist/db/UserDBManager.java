@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /***
  * StoreDBManager provides access to opexarations on data in store table
  */
-public class UserDBManager {
+public class UserDBManager extends DBManager {
 	public static final String KEY_ID = "_id";
 	public static final String USER_ID = "user_id";
 	public static final String USER_KEY = "user_key";
@@ -18,11 +18,6 @@ public class UserDBManager {
 	//public static final String KEY_LOCATION_ID = "location_id";
 
 	public static final String DB_TABLE = "user";
-
-	private DatabaseHelper mDbHelper;
-	private SQLiteDatabase mDb;
-
-	private final Context mCtx;
 	private static final String TAG="UserDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -49,48 +44,7 @@ public class UserDBManager {
 	 *            the Context within which to work
 	 */
 	public UserDBManager(Context ctx) {
-		this.mCtx = ctx;
-	}
-
-	/**
-	 * Open the store database. If it cannot be opened, try to create a new
-	 * instance of the database. If it cannot be created, throw an exception to
-	 * signal the failure
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 * @throws SQLException
-	 *             if the database could be neither opened or created
-	 */
-	public UserDBManager open() throws SQLException {
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = this.mDbHelper.getWritableDatabase();
-		return this;
-	}
-	
-	/**
-	 * Open the wishlist database by passing the instance of the db.
-	 * its difference from open() is that it uses the db passed in as mDb
-	 * instead of getting mDb from calling this.mDbHelper.getWritableDatabase();
-	 * open(SQLiteDatabase db) is only called in DBAdapter.DatabaseHelper.onCreate() for 
-	 * inserting items into the item table the first time wishlist database is
-	 * created
-	 * 
-	 * @return this (self reference, allowing this to be chained in an
-	 *         initialization call)
-	 *         
-	 */
-	public UserDBManager open(SQLiteDatabase db) throws SQLException {
-		this.mDbHelper = new DatabaseHelper(this.mCtx);
-		this.mDb = db;
-		return this;
-	}
-
-	/**
-	 * close return type: void
-	 */
-	public void close() {
-		this.mDbHelper.close();
+        super(ctx);
 	}
 
 //	/**
