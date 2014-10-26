@@ -79,6 +79,7 @@ public class DBAdapter {
                 //Log.d(TAG, "sql:" + sql);
                 db.execSQL(sql);
                 db.execSQL(CREATE_TABLE_TAG);
+                db.execSQL(CREATE_TABLE_ITEMTAG);
             }
 		}
 	};
@@ -109,6 +110,17 @@ public class DBAdapter {
 			+ " integer primary key autoincrement, " 
 			+ TagDBManager.KEY_NAME + " TEXT"
 			+ ");";
+
+    //Query string to create table "Tag"
+    private static final String CREATE_TABLE_ITEMTAG = "create table "
+            + ItemTagDBManager.DB_TABLE + " ("
+            + ItemTagDBManager.KEY_ID
+            + " integer primary key autoincrement, "
+            + ItemTagDBManager.ITEM_ID + " INTEGER, "
+            + ItemTagDBManager.TAG_ID + " INTEGER, "
+            + "FOREIGN KEY(" + ItemTagDBManager.ITEM_ID +")" + " REFERENCES Item(_id), "
+            + "FOREIGN KEY(" + ItemTagDBManager.TAG_ID +")" + " REFERENCES Tag(_id)"
+            + ");";
 
 	//Query string to create table "store"
 	private static final String CREATE_TABLE_STORE = "create table "
@@ -327,6 +339,12 @@ public class DBAdapter {
 			}
 			//create table "user"
 			db.execSQL(CREATE_TABLE_USER);
+
+            //create table "Tag", added on version 4
+            db.execSQL(CREATE_TABLE_TAG);
+
+            //create table "ItemTag" added on version 4
+            db.execSQL(CREATE_TABLE_ITEMTAG);
 		}
 
 		/***
