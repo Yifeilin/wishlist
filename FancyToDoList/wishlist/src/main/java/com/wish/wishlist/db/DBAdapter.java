@@ -29,7 +29,7 @@ public class DBAdapter {
 	public static final String DB_NAME = "WishList";
 
 	//Database version
-	public static final int DB_VERSION = 3;
+	public static final int DB_VERSION = 4;
 	private static final String TAG="DBAdapter";
 
 	public static final Patch[] PATCHES = new Patch[] {
