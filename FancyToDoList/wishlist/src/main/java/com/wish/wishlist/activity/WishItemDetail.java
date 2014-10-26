@@ -11,7 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.view.Display;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -26,8 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wish.wishlist.R;
-import com.wish.wishlist.db.ItemDBAdapter;
-import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.wish.wishlist.db.ItemDBManager;
+import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.DateTimeFormatter;
@@ -54,7 +53,7 @@ public class WishItemDetail extends Activity {
 	View.OnTouchListener _gestureListener;
 
 	private static final int EDIT_ITEM = 0;
-	private ItemDBAdapter _itemDBAdapter;
+	private ItemDBManager _itemDBManager;
 
 	private ImageView _photoView;
 	private TextView _nameView;
@@ -279,10 +278,10 @@ public class WishItemDetail extends Activity {
 		long[] next_pos_id = new long[2];
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
 		// open the database for operations of Item table
-		_itemDBAdapter = new ItemDBAdapter(this);
-		_itemDBAdapter.open();
-		ItemsCursor c = _itemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
-		_itemDBAdapter.close();
+		_itemDBManager = new ItemDBManager(this);
+		_itemDBManager.open();
+		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		_itemDBManager.close();
 		long nextItemID;
 		if (_position < c.getCount())
 			_nextPosition = _position + 1;
@@ -293,7 +292,7 @@ public class WishItemDetail extends Activity {
 		c.move(_nextPosition);
 		// nextItemID = c.getLong(
 		// c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
-		nextItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID));
+		nextItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBManager.KEY_ID));
 
 		// long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		next_pos_id[0] = _nextPosition;
@@ -315,10 +314,10 @@ public class WishItemDetail extends Activity {
 
 		// ItemsCursor c = wishListDB.getItems(ItemsCursor.SortBy.name);
 		// open the database for operations of Item table
-		_itemDBAdapter = new ItemDBAdapter(this);
-		_itemDBAdapter.open();
-		ItemsCursor c = _itemDBAdapter.getItems(ItemsCursor.SortBy.item_name.toString(), null);
-		_itemDBAdapter.close();
+		_itemDBManager = new ItemDBManager(this);
+		_itemDBManager.open();
+		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		_itemDBManager.close();
 		long prevItemID;
 		if (_position > 0)
 			_prevPosition = _position - 1;
@@ -329,7 +328,7 @@ public class WishItemDetail extends Activity {
 		c.move(_prevPosition);
 		// prevItemID = c.getLong(
 		// c.getColumnIndexOrThrow(WishListDataBase.KEY_ITEMID));
-		prevItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID));
+		prevItemID = c.getLong(c.getColumnIndexOrThrow(ItemDBManager.KEY_ID));
 		// long item_id = Long.parseLong(itemIdTextView.getText().toString());
 		prev_pos_id[0] = _prevPosition;
 		prev_pos_id[1] = prevItemID;
@@ -508,10 +507,10 @@ public class WishItemDetail extends Activity {
 		else if (itemId == R.id.menu_item_detail_map) {
 			double[] dLocation = new double[2];
 			// open the database for operations of Item table
-			_itemDBAdapter = new ItemDBAdapter(this);
-			_itemDBAdapter.open();
-			dLocation = _itemDBAdapter.getItemLocation(_itemId);
-			_itemDBAdapter.close();
+			_itemDBManager = new ItemDBManager(this);
+			_itemDBManager.open();
+			dLocation = _itemDBManager.getItemLocation(_itemId);
+			_itemDBManager.close();
 			
 			if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
 				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);

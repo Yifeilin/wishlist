@@ -5,10 +5,10 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.wish.wishlist.db.ItemDBAdapter;
-import com.wish.wishlist.db.LocationDBAdapter;
-import com.wish.wishlist.db.StoreDBAdapter;
-import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.wish.wishlist.db.ItemDBManager;
+import com.wish.wishlist.db.LocationDBManager;
+import com.wish.wishlist.db.StoreDBManager;
+import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
 
 public class WishItemManager {
 	static private Context _ctx;
@@ -32,65 +32,65 @@ public class WishItemManager {
 	
 	public WishItem retrieveItembyId(long itemId) {
 	
-		ItemDBAdapter mItemDBAdapter;
-		StoreDBAdapter mStoreDBAdapter;
-		LocationDBAdapter mLocationDBAdapter;
+		ItemDBManager mItemDBManager;
+		StoreDBManager mStoreDBManager;
+		LocationDBManager mLocationDBManager;
 		
-		mItemDBAdapter = new ItemDBAdapter(_ctx);
-		mItemDBAdapter.open();
+		mItemDBManager = new ItemDBManager(_ctx);
+		mItemDBManager.open();
 
 		// Open the Store table in the database
-		mStoreDBAdapter = new StoreDBAdapter(_ctx);
-		mStoreDBAdapter.open();
+		mStoreDBManager = new StoreDBManager(_ctx);
+		mStoreDBManager.open();
 
 		// Open the Location table in the database
-		mLocationDBAdapter = new LocationDBAdapter(_ctx);
-		mLocationDBAdapter.open();
+		mLocationDBManager = new LocationDBManager(_ctx);
+		mLocationDBManager.open();
 		
 		ItemsCursor wishItemCursor;
 		Cursor mStoreCursor;
 		
-		wishItemCursor = mItemDBAdapter.getItem(itemId);
+		wishItemCursor = mItemDBManager.getItem(itemId);
 		long storeID = wishItemCursor.getLong(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_STORE_ID));
 		
-		mStoreCursor = mStoreDBAdapter.getStore(storeID);
-		//String storeName = mStoreDBAdapter.getStoreName(storeID);
+		mStoreCursor = mStoreDBManager.getStore(storeID);
+		//String storeName = mStoreDBManager.getStoreName(storeID);
 		
 		long locationID = mStoreCursor.getLong(mStoreCursor
-				.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
-//		String itemLocation = mLocationDBAdapter.getAddress(locationID);
+				.getColumnIndexOrThrow(StoreDBManager.KEY_LOCATION_ID));
+//		String itemLocation = mLocationDBManager.getAddress(locationID);
 		String itemLocation = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS));
-		double latitude = mLocationDBAdapter.getLatitude(locationID);
-		double longitude =  mLocationDBAdapter.getLongitude(locationID);
+				.getColumnIndexOrThrow(ItemDBManager.KEY_ADDRESS));
+		double latitude = mLocationDBManager.getLatitude(locationID);
+		double longitude =  mLocationDBManager.getLongitude(locationID);
 		
 		String storeName = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORENAME));		
+				.getColumnIndexOrThrow(ItemDBManager.KEY_STORENAME));
 		
 		String picture_str = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_PHOTO_URL));
 		
 		String fullsize_pic_path = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_FULLSIZE_PHOTO_PATH));
 		 
 		String itemName = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_NAME));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_NAME));
 
 		String itemDesc = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DESCRIPTION));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_DESCRIPTION));
 
 		String date = wishItemCursor.getString(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_DATE_TIME));
 
 		double itemPrice = wishItemCursor.getDouble(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_PRICE));
 
 		int itemPriority = wishItemCursor.getInt(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRIORITY));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_PRIORITY));
 		
 		int itemComplete = wishItemCursor.getInt(wishItemCursor
-				.getColumnIndexOrThrow(ItemDBAdapter.KEY_COMPLETE));
+				.getColumnIndexOrThrow(ItemDBManager.KEY_COMPLETE));
 		
 		WishItem item = new WishItem(_ctx, itemId, storeID, storeName, itemName, itemDesc, 
 				date, picture_str, fullsize_pic_path, itemPrice, latitude, longitude,
@@ -98,9 +98,9 @@ public class WishItemManager {
 		
 		wishItemCursor.close();
 		mStoreCursor.close();
-		mItemDBAdapter.close();
-		mStoreDBAdapter.close();
-		mLocationDBAdapter.close();
+		mItemDBManager.close();
+		mStoreDBManager.close();
+		mLocationDBManager.close();
 
 		return item;
 
@@ -111,10 +111,10 @@ public class WishItemManager {
 	}
 	
 	public void deleteItembyId(long itemId) {
-		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
-		mItemDBAdapter.open();
-		mItemDBAdapter.deleteItem(itemId);
-		mItemDBAdapter.close();
+		ItemDBManager mItemDBManager = new ItemDBManager(_ctx);
+		mItemDBManager.open();
+		mItemDBManager.deleteItem(itemId);
+		mItemDBManager.close();
 	}
 
 }

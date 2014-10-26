@@ -9,25 +9,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /***
- * StoreDBAdapter provides access to opexarations on data in store table
+ * TagDBManager provides access to operations on data in ItemCategory table
  */
-public class StoreDBAdapter {
+public class TagDBManager {
 	public static final String KEY_ID = "_id";
-	public static final String KEY_NAME = "store_name";
-	public static final String KEY_LOCATION_ID = "location_id";
+	public static final String KEY_NAME = "name";
 
-	public static final String DB_TABLE = "store";
+	public static final String DB_TABLE = "Tag";
 
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
-	private static final String TAG="StoreDBAdapter";
+	private static final String TAG="TagDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		DatabaseHelper(Context context) {
 			super(context, DBAdapter.DB_NAME, null, DBAdapter.DB_VERSION);
+			//I have to have the follwoing code, otherwise, the DBAdapter.DB_VERSION 
+			//is somehow not passed to the super and the db version will be incorrect
+			//this will trigger a onDowngrade() and cause a crash. I don't know why
+			//Is it an android bug or is it because I don't understand java?
+			//this seems to only happne on > anroid 4.03
+			//the same applies to other DBAdapter
 			Log.d(TAG, "DBAdapter.DB_VERSION" + String.valueOf(DBAdapter.DB_VERSION));
 		}
 
@@ -47,12 +52,12 @@ public class StoreDBAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public StoreDBAdapter(Context ctx) {
+	public TagDBManager(Context ctx) {
 		this.mCtx = ctx;
 	}
 
 	/**
-	 * Open the store database. If it cannot be opened, try to create a new
+	 * Open the wishlist database. If it cannot be opened, try to create a new
 	 * instance of the database. If it cannot be created, throw an exception to
 	 * signal the failure
 	 * 
@@ -61,7 +66,7 @@ public class StoreDBAdapter {
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
-	public StoreDBAdapter open() throws SQLException {
+	public TagDBManager open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
 		return this;
@@ -79,7 +84,8 @@ public class StoreDBAdapter {
 	 *         initialization call)
 	 *         
 	 */
-	public StoreDBAdapter open(SQLiteDatabase db) throws SQLException {
+	
+	public TagDBManager open(SQLiteDatabase db) throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = db;
 		return this;
@@ -93,94 +99,71 @@ public class StoreDBAdapter {
 	}
 
 	/**
-	 * Add a new store. If the store is successfully created return the new rowId
-	 * for that store, otherwise return a -1 to indicate failure.
+	 * Create a new itemCategory. If the car is successfully created return the new rowId
+	 * for that car, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
 	 */
-	public long addStore(String name, long locationID) {
+	public long createItemCategory(String name) {
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_LOCATION_ID, locationID);		
 		initialValues.put(KEY_NAME, name);
 		return this.mDb.insert(DB_TABLE, null, initialValues);
 	}
 
 	/**
-	 * Delete the store with the given rowId
+	 * Delete the itemCategory with the given rowId
 	 * 
 	 * @param rowId
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deleteStore(long rowId) {
+	public boolean deleteItemCategory(long rowId) {
 
 		return this.mDb.delete(DB_TABLE, KEY_ID + "=" + rowId, null) > 0; //$NON-NLS-1$
 	}
 
 	/**
-	 * Return a Cursor over the list of all stores in the database
+	 * Return a Cursor over the list of all itemCategories in the database
 	 * 
-	 * @return Cursor over all stores
+	 * @return Cursor over all cars
 	 */
-	public Cursor getAllStores() {
+	public Cursor getAllItemCategory() {
 
-		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_LOCATION_ID},
+		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME },
 				null, null, null, null, null);
 	}
 
 	/**
-	 * Return a Cursor positioned at the store that matches the given rowId
+	 * Return a Cursor positioned at the itemCategory that matches the given rowId
 	 * 
 	 * @param rowId
-	 * @return Cursor positioned to matching store, if found
+	 * @return Cursor positioned to matching itemCategory, if found
 	 * @throws SQLException
-	 *             if store could not be found/retrieved
+	 *             if car could not be found/retrieved
 	 */
-	public Cursor getStore(long _id) throws SQLException {
+	public Cursor getItemCategory(long rowId) throws SQLException {
 
 		Cursor mCursor =
 
-		this.mDb.query(true, DB_TABLE, new String[] { KEY_ID, KEY_NAME, KEY_LOCATION_ID},
-				KEY_ID + "=" + _id, null, null, null, null, null);
+		this.mDb.query(true, DB_TABLE, new String[] { KEY_ID, KEY_NAME },
+				KEY_ID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
 	}
-	
-	/**
-	 * Return a store name that matches the given Id
-	 * 
-	 * @param rowId
-	 * @return a String of store name positioned to matching store id, if found; otherwise, return null
-	 */
-	public String getStoreName(long _id){
-		String storeName = null;
-		Cursor mCursor =
-
-			this.mDb.query(true, DB_TABLE, new String[] { KEY_NAME },
-					KEY_ID + "=" + _id, null, null, null, null, null);
-			if (mCursor != null) {
-				mCursor.moveToFirst();
-				
-				storeName = mCursor.getString(mCursor.
-						getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
-				
-			}
-		return storeName;
-	}
 
 	/**
-	 * Update the store.
+	 * Update the itemCategory.
 	 * 
 	 * @param rowId
 	 * @param name
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateStore(long rowId, String name, long locationID) {
+	public boolean updateItemCategory(long rowId, String name, String model,
+			String year) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_NAME, name);
-		args.put(KEY_LOCATION_ID, locationID);
 
 		return this.mDb.update(DB_TABLE, args, KEY_ID + "=" + rowId, null) > 0;
 	}

@@ -37,8 +37,8 @@ import android.widget.Toast;
 import com.wish.wishlist.R;
 //import com.android.wishlist.R.drawable;
 //import com.android.wishlist.R.string;
-//import com.wish.wishlist.db.LocationDBAdapter;
-//import com.wish.wishlist.db.StoreDBAdapter;
+//import com.wish.wishlist.db.LocationDBManager;
+//import com.wish.wishlist.db.StoreDBManager;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -47,7 +47,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.google.android.maps.Projection;
-import com.wish.wishlist.db.ItemDBAdapter;
+import com.wish.wishlist.db.ItemDBManager;
 
 /**
  * Displays a custom map which shows our current location and the location where
@@ -226,11 +226,11 @@ public class WishListMap extends MapActivity {
 	
 	private void markAllItems() {
 		// Read all item location from db
-		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(this);
-		mItemDBAdapter.open();
+		ItemDBManager mItemDBManager = new ItemDBManager(this);
+		mItemDBManager.open();
 		ArrayList<double[]> locationList = new ArrayList<double[]>();
-		locationList = mItemDBAdapter.getAllItemLocation();
-		mItemDBAdapter.close();
+		locationList = mItemDBManager.getAllItemLocation();
+		mItemDBManager.close();
 		if(locationList.isEmpty()) {
 			Toast toast = Toast.makeText(this, "No wish available on map", Toast.LENGTH_SHORT);
 			toast.show();

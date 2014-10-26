@@ -1,10 +1,7 @@
 package com.wish.wishlist.util;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.text.DecimalFormat;
-import com.wish.wishlist.R;
-import com.wish.wishlist.db.ItemDBAdapter;
-import com.wish.wishlist.util.ImageManager;
+
+import com.wish.wishlist.db.ItemDBManager;
 import com.wish.wishlist.model.WishItem;
 //import com.wish.wishlist.model.WishItemManager;
 
@@ -58,20 +55,20 @@ public class WishListItemCursorAdapter extends SimpleCursorAdapter {
 
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			//int nIdIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_ID);
+			//int nIdIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_ID);
 			//long id = cursor.getLong(nIdIndex);
 			//WishItem item = WishItemManager.getInstance(_ctx).retrieveItembyId(id);
 
-			int nImageIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_PHOTO_URL);
+			int nImageIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_PHOTO_URL);
 //			int nDateIndex = cursor
-//					.getColumnIndexOrThrow(ItemDBAdapter.KEY_DATE_TIME);
-			int nPriceIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_PRICE);
+//					.getColumnIndexOrThrow(ItemDBManager.KEY_DATE_TIME);
+			int nPriceIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_PRICE);
 			
-			int nStoreNameIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORENAME);
+			int nStoreNameIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_STORENAME);
 
-			int nAddIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_ADDRESS);
+			int nAddIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_ADDRESS);
 
-			int nCompleteIndex = cursor.getColumnIndexOrThrow(ItemDBAdapter.KEY_COMPLETE);
+			int nCompleteIndex = cursor.getColumnIndexOrThrow(ItemDBManager.KEY_COMPLETE);
 			
 			// set the photo to the image view
 			if (columnIndex == nImageIndex) {

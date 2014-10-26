@@ -45,9 +45,9 @@ public class DBAdapter {
 			public void apply(SQLiteDatabase db) {
 				//delete sample items
 				String sql = "DELETE FROM "
-				+ ItemDBAdapter.DB_TABLE
+				+ ItemDBManager.DB_TABLE
 				+ " WHERE "
-				+ ItemDBAdapter.KEY_PHOTO_URL
+				+ ItemDBManager.KEY_PHOTO_URL
 				+ " LIKE '%sample'";
 				
 				//Log.d(TAG, "sql:" + sql);
@@ -64,7 +64,7 @@ public class DBAdapter {
                 //representing if a wish is complete or not
                 //set its default value to be 0
                 String sql = "ALTER TABLE "
-                        + ItemDBAdapter.DB_TABLE
+                        + ItemDBManager.DB_TABLE
                         + " ADD COLUMN complete INTEGER DEFAULT 0 NOT NULL";
 
                 //Log.d(TAG, "sql:" + sql);
@@ -85,74 +85,74 @@ public class DBAdapter {
 	
 	//Query string to create table "Item"
 	private static final String CREATE_TABLE_ITEM = "create table "
-			+ ItemDBAdapter.DB_TABLE 
+			+ ItemDBManager.DB_TABLE
 			+ " (" 
-			+ ItemDBAdapter.KEY_ID			+ " integer primary key autoincrement, " 
-			+ ItemDBAdapter.KEY_STORE_ID 	+ " INTEGER, "
-			+ ItemDBAdapter.KEY_STORENAME	+ " TEXT, "
-			+ ItemDBAdapter.KEY_NAME 		+ " TEXT, " 
-			+ ItemDBAdapter.KEY_DESCRIPTION + " TEXT, " 
-			+ ItemDBAdapter.KEY_DATE_TIME 	+ " TEXT, " 
-			+ ItemDBAdapter.KEY_PHOTO_URL 	+ " TEXT, " 
-			+ ItemDBAdapter.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, " 
-			+ ItemDBAdapter.KEY_PRICE 		+ " REAL, " 
-			+ ItemDBAdapter.KEY_ADDRESS 	+ " TEXT, "
-			+ ItemDBAdapter.KEY_PRIORITY 	+ " INTEGER, "
-			+ ItemDBAdapter.KEY_COMPLETE 	+ " INTEGER"
+			+ ItemDBManager.KEY_ID			+ " integer primary key autoincrement, "
+			+ ItemDBManager.KEY_STORE_ID 	+ " INTEGER, "
+			+ ItemDBManager.KEY_STORENAME	+ " TEXT, "
+			+ ItemDBManager.KEY_NAME 		+ " TEXT, "
+			+ ItemDBManager.KEY_DESCRIPTION + " TEXT, "
+			+ ItemDBManager.KEY_DATE_TIME 	+ " TEXT, "
+			+ ItemDBManager.KEY_PHOTO_URL 	+ " TEXT, "
+			+ ItemDBManager.KEY_FULLSIZE_PHOTO_PATH 	+ " TEXT, "
+			+ ItemDBManager.KEY_PRICE 		+ " REAL, "
+			+ ItemDBManager.KEY_ADDRESS 	+ " TEXT, "
+			+ ItemDBManager.KEY_PRIORITY 	+ " INTEGER, "
+			+ ItemDBManager.KEY_COMPLETE 	+ " INTEGER"
 			+ ");";
 
 
 	//Query string to create table "Tag"
 	private static final String CREATE_TABLE_TAG = "create table "
-			+ TagDBAdapter.DB_TABLE + " ("
-			+ TagDBAdapter.KEY_ID
+			+ TagDBManager.DB_TABLE + " ("
+			+ TagDBManager.KEY_ID
 			+ " integer primary key autoincrement, " 
-			+ TagDBAdapter.KEY_NAME + " TEXT"
-			+ ");"; 
+			+ TagDBManager.KEY_NAME + " TEXT"
+			+ ");";
 
 	//Query string to create table "store"
 	private static final String CREATE_TABLE_STORE = "create table "
-			+ StoreDBAdapter.DB_TABLE 
+			+ StoreDBManager.DB_TABLE
 			+ " (" 
-			+ StoreDBAdapter.KEY_ID				+ " integer primary key autoincrement, " 
-			+ StoreDBAdapter.KEY_LOCATION_ID	+ " INTEGER, "
-			+ StoreDBAdapter.KEY_NAME 			+ " TEXT" 
+			+ StoreDBManager.KEY_ID				+ " integer primary key autoincrement, "
+			+ StoreDBManager.KEY_LOCATION_ID	+ " INTEGER, "
+			+ StoreDBManager.KEY_NAME 			+ " TEXT"
 			+ ");";
 	
 	//Query string to create table "location"
 	private static final String CREATE_TABLE_LOCATION = "create table "
-			+ LocationDBAdapter.DB_TABLE
+			+ LocationDBManager.DB_TABLE
 			+ " ("
-			+ LocationDBAdapter.KEY_ID
+			+ LocationDBManager.KEY_ID
 			+ " integer primary key autoincrement, "
-			+ LocationDBAdapter.KEY_LATITUDE
+			+ LocationDBManager.KEY_LATITUDE
 			+ " REAL,"
-			+ LocationDBAdapter.KEY_LONGITUDE
+			+ LocationDBManager.KEY_LONGITUDE
 			+ " REAL,"
-			+ LocationDBAdapter.KEY_ADDSTR
+			+ LocationDBManager.KEY_ADDSTR
 			+ " TEXT,"
-//			+ LocationDBAdapter.KEY_ADDLINE2
+//			+ LocationDBManager.KEY_ADDLINE2
 //			+ " TEXT,"
-//			+ LocationDBAdapter.KEY_ADDLINE3
+//			+ LocationDBManager.KEY_ADDLINE3
 //			+ " TEXT,"
-			+ LocationDBAdapter.KEY_STREET_NO
+			+ LocationDBManager.KEY_STREET_NO
 			+ " INTEGER," 
-			+ LocationDBAdapter.KEY_STREET
+			+ LocationDBManager.KEY_STREET
 			+ " TEXT," 
-			+ LocationDBAdapter.KEY_CITY + " TEXT,"
-			+ LocationDBAdapter.KEY_STATE + " TEXT,"
-			+ LocationDBAdapter.KEY_COUNTRY + " TEXT,"
-			+ LocationDBAdapter.KEY_POSTCODE + " TEXT" + ");";
+			+ LocationDBManager.KEY_CITY + " TEXT,"
+			+ LocationDBManager.KEY_STATE + " TEXT,"
+			+ LocationDBManager.KEY_COUNTRY + " TEXT,"
+			+ LocationDBManager.KEY_POSTCODE + " TEXT" + ");";
 
 	//Query string to create table "user"
 	private static final String CREATE_TABLE_USER = "create table "
-			+ UserDBAdapter.DB_TABLE 
+			+ UserDBManager.DB_TABLE
 			+ " (" 
-			+ UserDBAdapter.KEY_ID			+ " integer primary key autoincrement, " 
-			+ UserDBAdapter.USER_ID	+ " TEXT, "
-			+ UserDBAdapter.USER_KEY	+ " TEXT, "
-			+ UserDBAdapter.USER_DISPLAY_NAME	+ " TEXT, " 
-			+ UserDBAdapter.USER_EMAIL + " TEXT" 
+			+ UserDBManager.KEY_ID			+ " integer primary key autoincrement, "
+			+ UserDBManager.USER_ID	+ " TEXT, "
+			+ UserDBManager.USER_KEY	+ " TEXT, "
+			+ UserDBManager.USER_DISPLAY_NAME	+ " TEXT, "
+			+ UserDBManager.USER_EMAIL + " TEXT"
 			+ ");";
 
 	private static Context context;
@@ -194,11 +194,11 @@ public class DBAdapter {
 			// create table "item" and insert into the table
 			db.execSQL(CREATE_TABLE_ITEM);
 			if (demo) {
-				ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(context);
-				mItemDBAdapter.open(db);
+				ItemDBManager mItemDBManager = new ItemDBManager(context);
+				mItemDBManager.open(db);
 				String picUrl;
 				picUrl = Integer.toHexString(R.drawable.new_ipad) + "sample";
-				mItemDBAdapter.addItem(	1,
+				mItemDBManager.addItem(	1,
 										"Apple Store",
 										"ipad",
 										"It is the new ipad with retina display",
@@ -211,7 +211,7 @@ public class DBAdapter {
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.cake) + "sample";
-				mItemDBAdapter.addItem(	2, 
+				mItemDBManager.addItem(	2,
 										"dessert store",
 										"chocolate cake", 
 										"It looks delicisous", 
@@ -224,7 +224,7 @@ public class DBAdapter {
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.tiffany) + "sample";
-				mItemDBAdapter.addItem(	3,
+				mItemDBManager.addItem(	3,
 										"tiffany",
 										"tiffany necklace", 
 										"beautiful", 
@@ -237,7 +237,7 @@ public class DBAdapter {
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.d3) + "sample";
-				mItemDBAdapter.addItem(	4, 
+				mItemDBManager.addItem(	4,
 										"Best buy",
 										"diablo 3",
 										"waiting for this game for years", 
@@ -250,7 +250,7 @@ public class DBAdapter {
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.mini_cooper) + "sample";
-				mItemDBAdapter.addItem(	5, 
+				mItemDBManager.addItem(	5,
 										"BMW store",
 										"mini cooper",
 										"i like its color", 
@@ -263,7 +263,7 @@ public class DBAdapter {
 										0);
 				
 				picUrl = Integer.toHexString(R.drawable.sjobs_bio) + "sample";
-				mItemDBAdapter.addItem(	6, 
+				mItemDBManager.addItem(	6,
 										"Indigo",
 										"steve jobs biograhpy",
 										"a must-read book", 
@@ -275,55 +275,55 @@ public class DBAdapter {
 										1,
 										0);
 
-				mItemDBAdapter.close();
+				mItemDBManager.close();
 			}
 
 			//create table "store"
 			db.execSQL(CREATE_TABLE_STORE);
 			if (demo) {
-				StoreDBAdapter mStoreDBAdapter = new StoreDBAdapter(context);
-				mStoreDBAdapter.open(db);
-				mStoreDBAdapter.addStore("Apple Store", 		1);
-				mStoreDBAdapter.addStore("dessert store",   		2);
-				mStoreDBAdapter.addStore("tiffany",	3);
-				mStoreDBAdapter.addStore("Best buy",		4);
-				mStoreDBAdapter.addStore("BMW store",		5);
-				mStoreDBAdapter.addStore("Indigo",		6);
-				mStoreDBAdapter.close();
+				StoreDBManager mStoreDBManager = new StoreDBManager(context);
+				mStoreDBManager.open(db);
+				mStoreDBManager.addStore("Apple Store", 		1);
+				mStoreDBManager.addStore("dessert store",   		2);
+				mStoreDBManager.addStore("tiffany",	3);
+				mStoreDBManager.addStore("Best buy",		4);
+				mStoreDBManager.addStore("BMW store",		5);
+				mStoreDBManager.addStore("Indigo",		6);
+				mStoreDBManager.close();
 			}
 			//create table "location"
 			db.execSQL(CREATE_TABLE_LOCATION);
 			if (demo) {
-				LocationDBAdapter mLocationDBAdapter = new LocationDBAdapter(context);
-				mLocationDBAdapter.open(db);
-				mLocationDBAdapter.addLocation(43.653929,
+				LocationDBManager mLocationDBManager = new LocationDBManager(context);
+				mLocationDBManager.open(db);
+				mLocationDBManager.addLocation(43.653929,
 												-79.3802132, 
 											   "220 Yonge Street, Toronto, ON, M5B 2H1",
 											   0, null, null, null, null, null);
-				mLocationDBAdapter.addLocation(43.6509499,
+				mLocationDBManager.addLocation(43.6509499,
 												-79.477205, 
 											   "2243 Bloor ST W\nToronto, ON M6S 1N7\nCanada",
 											   0, null, null, null, null, null);
-				mLocationDBAdapter.addLocation(43.6694098,
+				mLocationDBManager.addLocation(43.6694098,
 												-79.3904, 
 											   "85 Bloor Street West, Toronto, Ontario\nM5S 1M1 Canadas",
 											   0, null, null, null, null, null);
-				mLocationDBAdapter.addLocation(43.6555876,
+				mLocationDBManager.addLocation(43.6555876,
 												-79.3835228, 
 											   "65 Dundas Street West\nToronto, ON, M5G 2C3",
 											   0, null, null, null, null, null);
 				
-				mLocationDBAdapter.addLocation(43.6561902,
+				mLocationDBManager.addLocation(43.6561902,
 												-79.3489359, 
 											   "11 Sunlight Park Rd\nToronto, ON, M4M 1B5",
 											   0, null, null, null, null, null);
 				
-				mLocationDBAdapter.addLocation(43.6489324,
+				mLocationDBManager.addLocation(43.6489324,
 												-79.3913844, 
 											   "259 Richmond Street West Toronto ON M5V 3M6 ",
 											   0, null, null, null, null, null);
 
-				mLocationDBAdapter.close();
+				mLocationDBManager.close();
 			}
 			//create table "user"
 			db.execSQL(CREATE_TABLE_USER);

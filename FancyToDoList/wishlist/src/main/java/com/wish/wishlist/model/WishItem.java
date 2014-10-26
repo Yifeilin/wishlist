@@ -13,7 +13,7 @@ import android.content.ContentValues;
 import android.util.Log;
 import android.database.Cursor;
 
-import com.wish.wishlist.db.ItemDBAdapter;
+import com.wish.wishlist.db.ItemDBManager;
 import com.wish.wishlist.util.DateTimeFormatter;
 import com.wish.wishlist.util.ImageManager;
 import android.preference.PreferenceManager;
@@ -130,10 +130,10 @@ public class WishItem {
     }
 	
 	public long getLocatonId() {
-		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
-		mItemDBAdapter.open();
-		long locationId = mItemDBAdapter.getlocationIdbyItemId(_id);
-		mItemDBAdapter.close();
+		ItemDBManager mItemDBManager = new ItemDBManager(_ctx);
+		mItemDBManager.open();
+		long locationId = mItemDBManager.getlocationIdbyItemId(_id);
+		mItemDBManager.close();
 		return locationId;
 	}
 	
@@ -336,17 +336,17 @@ public class WishItem {
 	}
 
 	public long save() {
-		ItemDBAdapter mItemDBAdapter = new ItemDBAdapter(_ctx);
-		mItemDBAdapter.open();
+		ItemDBManager mItemDBManager = new ItemDBManager(_ctx);
+		mItemDBManager.open();
 		if(_id == -1) {
-			_id = mItemDBAdapter.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
+			_id = mItemDBManager.addItem(_storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath,
 					_price, _address, _priority, _complete);
 		}
 		else {
-			mItemDBAdapter.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath, 
+			mItemDBManager.updateItem(_id, _storeId, _storeName, _name, _desc, _date, _picStr, _fullsizePicPath,
 					_price, _address, _priority, _complete);
 		}
-		mItemDBAdapter.close();
+		mItemDBManager.close();
 		return _id;
 	}
 }

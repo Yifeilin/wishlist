@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /***
- * LocationDBAdapter provides access to operations on data in location table
+ * LocationDBManager provides access to operations on data in location table
  */
-public class LocationDBAdapter {
+public class LocationDBManager {
 
 	public static final String KEY_ID = "_id";
 	public static final String KEY_LATITUDE = "latitude";
@@ -32,7 +32,7 @@ public class LocationDBAdapter {
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
-	private static final String TAG="LocationDBAdapter";
+	private static final String TAG="LocationDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -57,7 +57,7 @@ public class LocationDBAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public LocationDBAdapter(Context ctx) {
+	public LocationDBManager(Context ctx) {
 		this.mCtx = ctx;
 	}
 
@@ -71,7 +71,7 @@ public class LocationDBAdapter {
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
-	public LocationDBAdapter open() throws SQLException {
+	public LocationDBManager open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
 		return this;
@@ -89,7 +89,7 @@ public class LocationDBAdapter {
 	 *         initialization call)
 	 *         
 	 */
-	public LocationDBAdapter open(SQLiteDatabase db) throws SQLException {
+	public LocationDBManager open(SQLiteDatabase db) throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = db;
 		return this;
@@ -197,7 +197,7 @@ public class LocationDBAdapter {
 		}
 		double lat = 3;
 		lat = mCursor.getDouble(mCursor.
-				getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+				getColumnIndexOrThrow(LocationDBManager.KEY_LATITUDE));
 		return lat;
 	}
 	
@@ -212,7 +212,7 @@ public class LocationDBAdapter {
 		}
 		double lng = 2;
 		lng = mCursor.getDouble(mCursor.
-				getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+				getColumnIndexOrThrow(LocationDBManager.KEY_LONGITUDE));
 		return lng;
 	}
 
@@ -234,7 +234,7 @@ public class LocationDBAdapter {
 			
 			mCursor.moveToFirst();
 			addressStr =  mCursor.getString(mCursor.
-					getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+					getColumnIndexOrThrow(LocationDBManager.KEY_ADDSTR));
 			
 		}
 		return addressStr;

@@ -14,8 +14,8 @@ import java.util.Observer;
 import java.util.Observable;
 
 import com.wish.wishlist.R;
-import com.wish.wishlist.db.LocationDBAdapter;
-import com.wish.wishlist.db.StoreDBAdapter;
+import com.wish.wishlist.db.LocationDBManager;
+import com.wish.wishlist.db.StoreDBManager;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.PositionManager;
@@ -81,8 +81,8 @@ public class EditItemInfo extends Activity implements Observer {
 	private String _picture_str = Integer.toHexString(R.drawable.empty_photo_200by200);//default pic is "W" letter
 	private String _fullsizePhotoPath = null;
 	private String _newfullsizePhotoPath = null;
-	private StoreDBAdapter _storeDBAdapter;
-	private LocationDBAdapter _locationDBAdapter;
+	private StoreDBManager _storeDBManager;
+	private LocationDBManager _locationDBManager;
 	PositionManager _pManager;
 	private int mYear = -1;
 	private int mMonth = -1;
@@ -123,12 +123,12 @@ public class EditItemInfo extends Activity implements Observer {
 		});
 		
 		// Open the Store table in the database		
-		_storeDBAdapter = new StoreDBAdapter(this);
-		_storeDBAdapter.open();
+		_storeDBManager = new StoreDBManager(this);
+		_storeDBManager.open();
 
 		// Open the Location table in the database
-		_locationDBAdapter = new LocationDBAdapter(this);
-		_locationDBAdapter.open();
+		_locationDBManager = new LocationDBManager(this);
+		_locationDBManager.open();
 		
 		_pManager = new PositionManager(EditItemInfo.this);
 		_pManager.addObserver(this);
@@ -426,13 +426,13 @@ public class EditItemInfo extends Activity implements Observer {
 
 		if (_editNew) {//we are creating a new item
 			// insert the location to the Location table in database
-			mLocation_id = _locationDBAdapter.addLocation(_lat, _lng, _ddStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
+			mLocation_id = _locationDBManager.addLocation(_lat, _lng, _ddStr, -1, "N/A", "N/A", "N/A", "N/A", "N/A");
 
 			// insert the store to the Store table in database, linked to the location
-			mStore_id = _storeDBAdapter.addStore(itemStoreName, mLocation_id);
+			mStore_id = _storeDBManager.addStore(itemStoreName, mLocation_id);
 		}
 		else {//we are editing an existing item
-			_storeDBAdapter.updateStore(mStore_id, itemStoreName, mLocation_id);
+			_storeDBManager.updateStore(mStore_id, itemStoreName, mLocation_id);
 		}
 
 		WishItem item = new WishItem(this, mItem_id, mStore_id, itemStoreName, itemName, itemDesc, 

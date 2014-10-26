@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
-public class ItemDBAdapter {
+public class ItemDBManager {
 	public static final String KEY_ID = "_id";
 	public static final String KEY_STORE_ID = "store_id";
 	public static final String KEY_STORENAME = "store_name";
@@ -37,7 +37,7 @@ public class ItemDBAdapter {
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
-	private static final String TAG="ItemDBAdapter";
+	private static final String TAG="ItemDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -63,7 +63,7 @@ public class ItemDBAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public ItemDBAdapter(Context ctx) {
+	public ItemDBManager(Context ctx) {
 		this.mCtx = ctx;
 	}
 
@@ -77,7 +77,7 @@ public class ItemDBAdapter {
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
-	public ItemDBAdapter open() throws SQLException {
+	public ItemDBManager open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
 		return this;
@@ -95,7 +95,7 @@ public class ItemDBAdapter {
 	 *         initialization call)
 	 *         
 	 */
-	public ItemDBAdapter open(SQLiteDatabase db) throws SQLException {
+	public ItemDBManager open(SQLiteDatabase db) throws SQLException {
 		//this.mDbHelper = new DatabaseHelper(this.mCtx);
 		//this.mDbHelper.getWritableDatabase();
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
@@ -516,10 +516,10 @@ public class ItemDBAdapter {
 		Cursor locationC = getItemLocationCursor(_id);
 		if(locationC != null){
 			double latitude = locationC.getDouble(locationC.
-					getColumnIndexOrThrow(LocationDBAdapter.KEY_LATITUDE));
+					getColumnIndexOrThrow(LocationDBManager.KEY_LATITUDE));
 			
 			double longitude = locationC.getDouble(locationC.
-					getColumnIndexOrThrow(LocationDBAdapter.KEY_LONGITUDE));
+					getColumnIndexOrThrow(LocationDBManager.KEY_LONGITUDE));
 			
 			//storeDBA.close();
 			//locationDBA.close();
@@ -535,7 +535,7 @@ public class ItemDBAdapter {
 		Cursor locationC = getItemLocationCursor(_itemId);
 		if(locationC != null){
 			return locationC.getLong(locationC.
-					getColumnIndexOrThrow(LocationDBAdapter.KEY_ID));
+					getColumnIndexOrThrow(LocationDBManager.KEY_ID));
 		}
 		else return -1;
 	}
@@ -575,7 +575,7 @@ public class ItemDBAdapter {
 		Cursor locationC = getItemLocationCursor(_id);
 		if(locationC != null){
 			AddStr = locationC.getString(locationC.
-					getColumnIndexOrThrow(LocationDBAdapter.KEY_ADDSTR));
+					getColumnIndexOrThrow(LocationDBManager.KEY_ADDSTR));
 		}
 	
 		return AddStr;
@@ -599,11 +599,11 @@ public class ItemDBAdapter {
 			//get the store id
 			itemC.moveToFirst();
 			long storeID = itemC.getLong(itemC
-					.getColumnIndexOrThrow(ItemDBAdapter.KEY_STORE_ID));
+					.getColumnIndexOrThrow(ItemDBManager.KEY_STORE_ID));
 			
 			//open the store table
-			StoreDBAdapter storeDBA;
-			storeDBA = new StoreDBAdapter(mCtx);
+			StoreDBManager storeDBA;
+			storeDBA = new StoreDBManager(mCtx);
 			storeDBA.open();
 			
 			// get store cursor
@@ -628,13 +628,13 @@ public class ItemDBAdapter {
 		Cursor locationC = null;
 		if (storeC != null) {
 			//open the location table
-			LocationDBAdapter locationDBA;
-			locationDBA = new LocationDBAdapter(mCtx);
+			LocationDBManager locationDBA;
+			locationDBA = new LocationDBManager(mCtx);
 			locationDBA.open();
 			
 			//get the location id
 			long locationID = storeC.getLong(storeC
-					.getColumnIndexOrThrow(StoreDBAdapter.KEY_LOCATION_ID));
+					.getColumnIndexOrThrow(StoreDBManager.KEY_LOCATION_ID));
 			
 			// get the latitude and longitude from table location
 			locationC = locationDBA.getLocation(locationID);

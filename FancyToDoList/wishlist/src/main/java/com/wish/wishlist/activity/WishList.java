@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -35,9 +34,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.wish.wishlist.R;
-import com.wish.wishlist.db.DBAdapter;
-import com.wish.wishlist.db.ItemDBAdapter;
-import com.wish.wishlist.db.ItemDBAdapter.ItemsCursor;
+import com.wish.wishlist.db.ItemDBManager;
+import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
@@ -94,7 +92,7 @@ public class WishList extends Activity {
 	private ItemsCursor _wishItemCursor;
 	private WishListItemCursorAdapter _wishListItemAdapterCursor;
 
-	private ItemDBAdapter _itemDBAdapter;
+	private ItemDBManager _itemDBManager;
 	
 	private long _selectedItem_id;
 
@@ -186,8 +184,8 @@ public class WishList extends Activity {
 		registerForContextMenu(_gridView);
 
 		// open the database for operations of Item table
-		_itemDBAdapter = new ItemDBAdapter(this);
-		_itemDBAdapter.open();
+		_itemDBManager = new ItemDBManager(this);
+		_itemDBManager.open();
 
 		// check if the activity is started from search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -288,8 +286,8 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView() {
-		_wishItemCursor = _itemDBAdapter.getItems(_sortOption, _where);
-		if (_itemDBAdapter.getItemsCount() == 0) {
+		_wishItemCursor = _itemDBManager.getItems(_sortOption, _where);
+		if (_itemDBManager.getItemsCount() == 0) {
 			_viewFlipper.setDisplayedChild(2);
 			return;
 		}
@@ -316,7 +314,7 @@ public class WishList extends Activity {
 
 	// private void displaySearchItem(String itemName, ItemsCursor.SortBy
 	// sortBy){
-	// _wishItemCursor = _itemDBAdapter.searchItems(itemName);
+	// _wishItemCursor = _itemDBManager.searchItems(itemName);
 	// // updateListView();
 	// // updateGridView();
 	// updateView();
@@ -335,9 +333,9 @@ public class WishList extends Activity {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
 			// _wishItemCursor = wishListDB.getItems(sortBy);
-			_wishItemCursor = _itemDBAdapter.getItems(_sortOption, where);
+			_wishItemCursor = _itemDBManager.getItems(_sortOption, where);
 		} else {
-			_wishItemCursor = _itemDBAdapter.searchItems(searchName, _sortOption);
+			_wishItemCursor = _itemDBManager.searchItems(searchName, _sortOption);
 		}
 
 		updateView();
@@ -347,7 +345,7 @@ public class WishList extends Activity {
 	 * update either list view or grid view according view option
 	 */
 	private void updateView() {
-		if (_itemDBAdapter.getItemsCount() == 0) {
+		if (_itemDBManager.getItemsCount() == 0) {
 			_viewFlipper.setDisplayedChild(2);
 			return;
 		}
@@ -372,8 +370,8 @@ public class WishList extends Activity {
 			_wishItemCursor.requery();
 			int resID = R.layout.wishitem_photo;
 
-			String[] from = new String[] { ItemDBAdapter.KEY_ID,
-					ItemDBAdapter.KEY_PHOTO_URL };
+			String[] from = new String[] { ItemDBManager.KEY_ID,
+					ItemDBManager.KEY_PHOTO_URL };
 
 			int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
 			_wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
@@ -394,13 +392,13 @@ public class WishList extends Activity {
 			int resID = R.layout.wishitem_single;
 
 			String[] from = new String[] { 
-					ItemDBAdapter.KEY_ID,
-					ItemDBAdapter.KEY_PHOTO_URL,
-					ItemDBAdapter.KEY_NAME,
-					ItemDBAdapter.KEY_PRICE,
-					ItemDBAdapter.KEY_STORENAME,
-					ItemDBAdapter.KEY_ADDRESS,
-					ItemDBAdapter.KEY_COMPLETE};
+					ItemDBManager.KEY_ID,
+					ItemDBManager.KEY_PHOTO_URL,
+					ItemDBManager.KEY_NAME,
+					ItemDBManager.KEY_PRICE,
+					ItemDBManager.KEY_STORENAME,
+					ItemDBManager.KEY_ADDRESS,
+					ItemDBManager.KEY_COMPLETE};
 			
 			int[] to = new int[] {
 					R.id.txtItemID, 
@@ -439,7 +437,7 @@ public class WishList extends Activity {
 		builder.setCancelable(false);
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						_itemDBAdapter.deleteItem(_selectedItem_id);
+						_itemDBManager.deleteItem(_selectedItem_id);
 						updateView();
 					}
 				});
@@ -628,7 +626,7 @@ public class WishList extends Activity {
 	//		return true;
 	//	}
 		else if (itemId == R.id.MARK) {
-//			String address = _itemDBAdapter.getItemAddress(_selectedItem_id);
+//			String address = _itemDBManager.getItemAddress(_selectedItem_id);
 //			if (address.equals("unknown")||address.equals("")){
 //				Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
 //				toast.show();
@@ -637,7 +635,7 @@ public class WishList extends Activity {
 				
 				// get the latitude and longitude of the clicked item
 				double[] dLocation = new double[2];
-				dLocation = _itemDBAdapter.getItemLocation(_selectedItem_id);
+				dLocation = _itemDBManager.getItemLocation(_selectedItem_id);
 				
 				if (dLocation[0] == Double.MIN_VALUE && dLocation[1] == Double.MIN_VALUE) {
 					Toast toast = Toast.makeText(this, "location unknown", Toast.LENGTH_SHORT);
@@ -889,7 +887,7 @@ public class WishList extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Close the database
-		_itemDBAdapter.close();
+		_itemDBManager.close();
 	}
 
 	@Override

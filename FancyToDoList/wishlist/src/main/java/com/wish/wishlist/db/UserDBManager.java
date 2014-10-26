@@ -1,17 +1,15 @@
 package com.wish.wishlist.db;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /***
- * StoreDBAdapter provides access to opexarations on data in store table
+ * StoreDBManager provides access to opexarations on data in store table
  */
-public class UserDBAdapter {
+public class UserDBManager {
 	public static final String KEY_ID = "_id";
 	public static final String USER_ID = "user_id";
 	public static final String USER_KEY = "user_key";
@@ -25,7 +23,7 @@ public class UserDBAdapter {
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
-	private static final String TAG="UserDBAdapter";
+	private static final String TAG="UserDBManager";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -50,7 +48,7 @@ public class UserDBAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public UserDBAdapter(Context ctx) {
+	public UserDBManager(Context ctx) {
 		this.mCtx = ctx;
 	}
 
@@ -64,7 +62,7 @@ public class UserDBAdapter {
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
-	public UserDBAdapter open() throws SQLException {
+	public UserDBManager open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
 		return this;
@@ -82,7 +80,7 @@ public class UserDBAdapter {
 	 *         initialization call)
 	 *         
 	 */
-	public UserDBAdapter open(SQLiteDatabase db) throws SQLException {
+	public UserDBManager open(SQLiteDatabase db) throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = db;
 		return this;
@@ -155,7 +153,7 @@ public class UserDBAdapter {
 //				mCursor.moveToFirst();
 //				
 //				storeName = mCursor.getString(mCursor.
-//						getColumnIndexOrThrow(StoreDBAdapter.KEY_NAME));
+//						getColumnIndexOrThrow(StoreDBManager.KEY_NAME));
 //				
 //			}
 //		return storeName;
