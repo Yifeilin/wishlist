@@ -337,7 +337,7 @@ public class DBAdapter {
 
 				mLocationDBManager.close();
 			}
-			//create table "user"
+			//create table "user", added on version 3
 			db.execSQL(CREATE_TABLE_USER);
 
             //create table "Tag", added on version 4

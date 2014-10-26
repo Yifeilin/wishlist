@@ -34,23 +34,6 @@ public class ItemDBManager extends DBManager {
 	public static final String DB_TABLE = "Item";
 	private static final String TAG="ItemDBManager";
 
-	private static class DatabaseHelper extends SQLiteOpenHelper {
-
-		DatabaseHelper(Context context) {
-			super(context, DBAdapter.DB_NAME, null, DBAdapter.DB_VERSION);
-			Log.d(TAG, "DBAdapter.DB_VERSION" + String.valueOf(DBAdapter.DB_VERSION));
-			//super(context, DBAdapter.DB_NAME, null, 2);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		}
-	}
-
 	/**
 	 * Constructor - takes the context to allow the database to be
 	 * opened/created
