@@ -36,7 +36,7 @@ public class TagDBManager extends DBManager {
 	 * @param name
 	 * @return rowId or -1 if failed
 	 */
-	public long createItemCategory(String name) {
+	public long createTag(String name) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
 		return this.mDb.insert(DB_TABLE, null, initialValues);
@@ -48,7 +48,7 @@ public class TagDBManager extends DBManager {
 	 * @param rowId
 	 * @return true if deleted, false otherwise
 	 */
-	public boolean deleteItemCategory(long rowId) {
+	public boolean deleteTag(long rowId) {
 
 		return this.mDb.delete(DB_TABLE, KEY_ID + "=" + rowId, null) > 0; //$NON-NLS-1$
 	}
@@ -58,21 +58,21 @@ public class TagDBManager extends DBManager {
 	 * 
 	 * @return Cursor over all cars
 	 */
-	public Cursor getAllItemCategory() {
+	public Cursor getAllTags() {
 
 		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME },
 				null, null, null, null, null);
 	}
 
 	/**
-	 * Return a Cursor positioned at the itemCategory that matches the given rowId
+	 * Return a Cursor positioned at the Tag that matches the given rowId
 	 * 
 	 * @param rowId
 	 * @return Cursor positioned to matching itemCategory, if found
 	 * @throws SQLException
 	 *             if car could not be found/retrieved
 	 */
-	public Cursor getItemCategory(long rowId) throws SQLException {
+	public Cursor getTag(long rowId) throws SQLException {
 
 		Cursor mCursor =
 
@@ -85,18 +85,16 @@ public class TagDBManager extends DBManager {
 	}
 
 	/**
-	 * Update the itemCategory.
+	 * Update the Tag.
 	 * 
 	 * @param rowId
 	 * @param name
 	 * @return true if the note was successfully updated, false otherwise
 	 */
-	public boolean updateItemCategory(long rowId, String name, String model,
-			String year) {
+	public boolean updateTag(long rowId, String name) {
 		ContentValues args = new ContentValues();
 		args.put(KEY_NAME, name);
 
 		return this.mDb.update(DB_TABLE, args, KEY_ID + "=" + rowId, null) > 0;
 	}
-
 }
