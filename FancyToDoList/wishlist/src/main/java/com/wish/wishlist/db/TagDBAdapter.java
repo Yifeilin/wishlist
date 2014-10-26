@@ -9,19 +9,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /***
- * ItemCategoryDBAdapter provides access to operations on data in ItemCategory table
+ * TagDBAdapter provides access to operations on data in ItemCategory table
  */
-public class ItemCategoryDBAdapter {
+public class TagDBAdapter {
 	public static final String KEY_ID = "_id";
-	public static final String KEY_NAME = "category_name";
+	public static final String KEY_NAME = "name";
 
-	public static final String DB_TABLE = "ItemCategory";
+	public static final String DB_TABLE = "Tag";
 
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 
 	private final Context mCtx;
-	private static final String TAG="ItemCategoryDBAdapter";
+	private static final String TAG="TagDBAdapter";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -52,7 +52,7 @@ public class ItemCategoryDBAdapter {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public ItemCategoryDBAdapter(Context ctx) {
+	public TagDBAdapter(Context ctx) {
 		this.mCtx = ctx;
 	}
 
@@ -66,7 +66,7 @@ public class ItemCategoryDBAdapter {
 	 * @throws SQLException
 	 *             if the database could be neither opened or created
 	 */
-	public ItemCategoryDBAdapter open() throws SQLException {
+	public TagDBAdapter open() throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = this.mDbHelper.getWritableDatabase();
 		return this;
@@ -85,7 +85,7 @@ public class ItemCategoryDBAdapter {
 	 *         
 	 */
 	
-	public ItemCategoryDBAdapter open(SQLiteDatabase db) throws SQLException {
+	public TagDBAdapter open(SQLiteDatabase db) throws SQLException {
 		this.mDbHelper = new DatabaseHelper(this.mCtx);
 		this.mDb = db;
 		return this;

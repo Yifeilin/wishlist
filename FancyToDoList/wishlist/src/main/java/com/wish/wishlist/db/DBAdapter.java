@@ -69,7 +69,7 @@ public class DBAdapter {
 				//Log.d(TAG, "sql:" + sql);
 				db.execSQL(sql);
 			}
-		
+
 			public void revert(SQLiteDatabase db) {  }
 		}
 	};
@@ -95,10 +95,10 @@ public class DBAdapter {
 
 	//Query string to create table "ItemCategory"
 	private static final String CREATE_TABLE_ITEMCATEGORY = "create table "
-			+ ItemCategoryDBAdapter.DB_TABLE + " ("
-			+ ItemCategoryDBAdapter.KEY_ID
+			+ TagDBAdapter.DB_TABLE + " ("
+			+ TagDBAdapter.KEY_ID
 			+ " integer primary key autoincrement, " 
-			+ ItemCategoryDBAdapter.KEY_NAME + " TEXT"
+			+ TagDBAdapter.KEY_NAME + " TEXT"
 			+ ");"; 
 
 	//Query string to create table "store"
