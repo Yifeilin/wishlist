@@ -8,6 +8,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /***
  * TagDBManager provides access to operations on data in ItemCategory table
  */
@@ -54,21 +57,28 @@ public class TagDBManager extends DBManager {
 	}
 
 	/**
-	 * Return a Cursor over the list of all itemCategories in the database
+	 * Return a Cursor over the list of all tags in the database
 	 * 
 	 * @return Cursor over all cars
 	 */
-	public Cursor getAllTags() {
-
-		return this.mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME },
-				null, null, null, null, null);
+	public ArrayList<String> getAllTags() {
+        ArrayList<String> tagList = new ArrayList<String>();
+		Cursor cursor = mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME }, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String tagName = cursor.getString(cursor.getColumnIndexOrThrow(TagDBManager.KEY_NAME));
+                tagList.add(tagName);
+            } while (cursor.moveToNext());
+        }
+        return tagList;
 	}
+
 
 	/**
 	 * Return a Cursor positioned at the Tag that matches the given rowId
 	 * 
 	 * @param rowId
-	 * @return Cursor positioned to matching itemCategory, if found
+	 * @return Cursor positioned to matching tags, if found
 	 * @throws SQLException
 	 *             if car could not be found/retrieved
 	 */

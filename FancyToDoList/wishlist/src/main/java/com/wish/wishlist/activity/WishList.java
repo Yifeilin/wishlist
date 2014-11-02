@@ -696,10 +696,10 @@ public class WishList extends Activity {
 			}
 		}
         else if (itemId == R.id.TAG) {
-            TagItemDBManager manager = new TagItemDBManager(this);
-            manager.open();
-            manager.Tag_item("tag1", _selectedItem_id);
-            manager.close();
+            //TagItemDBManager manager = new TagItemDBManager(this);
+            //manager.open();
+            //manager.Tag_item("tag2", _selectedItem_id);
+            //manager.close();
 
             Intent i = new Intent(WishList.this, AddTag.class);
             startActivity(i);

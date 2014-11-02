@@ -25,6 +25,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.wish.wishlist.R;
+import com.wish.wishlist.db.TagDBManager;
 
 public class AddTag extends Activity {
     MyCustomAdapter dataAdapter = null;
@@ -38,9 +39,11 @@ public class AddTag extends Activity {
     }
 
     private void displayListView() {
-        //Array list of countries
-        ArrayList<String> tagList = new ArrayList<String>();
-        tagList.add("tag");
+        ArrayList<String> tagList;
+        TagDBManager manager = new TagDBManager(this);
+        manager.open();
+        tagList = manager.getAllTags();
+        manager.close();
 
         //create an ArrayAdaptar from the String Array
         dataAdapter = new MyCustomAdapter(this, R.layout.tag_list, tagList);
