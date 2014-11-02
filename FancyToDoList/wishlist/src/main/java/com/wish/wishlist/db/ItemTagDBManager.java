@@ -27,4 +27,20 @@ public class ItemTagDBManager extends DBManager {
 	public ItemTagDBManager(Context ctx) {
         super(ctx);
 	}
+
+    public long Tag_item(String tagName, long itemId) {
+        TagDBManager tagDBManager = new TagDBManager(mCtx);
+        tagDBManager.open();
+        long tagId = tagDBManager.createTag(tagName);
+        tagDBManager.close();
+
+        return Tag_item(tagId, itemId);
+    }
+
+    public long Tag_item(long tagId, long itemId) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(TAG_ID, tagId);
+        initialValues.put(ITEM_ID, itemId);
+        return this.mDb.replace(DB_TABLE, null, initialValues);
+    }
 }
