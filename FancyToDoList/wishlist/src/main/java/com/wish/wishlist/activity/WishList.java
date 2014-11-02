@@ -700,6 +700,9 @@ public class WishList extends Activity {
             manager.open();
             manager.Tag_item("tag1", _selectedItem_id);
             manager.close();
+
+            Intent i = new Intent(WishList.this, AddTag.class);
+            startActivity(i);
         }
 
 		return false; }
