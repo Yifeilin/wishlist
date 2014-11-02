@@ -30,8 +30,8 @@ public class TagDBManager extends DBManager {
 	}
 
 	/**
-	 * Create a new itemCategory. If the car is successfully created return the new rowId
-	 * for that car, otherwise return a -1 to indicate failure.
+	 * Create a new tag. If the tag exists, replace it. If successfully created return the new rowId
+	 * for that tag, otherwise return a -1 to indicate failure.
 	 * 
 	 * @param name
 	 * @return rowId or -1 if failed
@@ -39,11 +39,11 @@ public class TagDBManager extends DBManager {
 	public long createTag(String name) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
-		return this.mDb.insert(DB_TABLE, null, initialValues);
+		return mDb.replace(DB_TABLE, null, initialValues);
 	}
 
 	/**
-	 * Delete the itemCategory with the given rowId
+	 * Delete the tag with the given rowId
 	 * 
 	 * @param rowId
 	 * @return true if deleted, false otherwise
