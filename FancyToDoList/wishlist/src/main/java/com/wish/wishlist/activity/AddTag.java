@@ -28,25 +28,23 @@ import com.wish.wishlist.R;
 import com.wish.wishlist.db.TagDBManager;
 
 public class AddTag extends Activity {
-    MyCustomAdapter dataAdapter = null;
+    TagListAdapter dataAdapter = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tag);
 
-        //Generate list View from ArrayList
-        displayListView();
+        showTags();
     }
 
-    private void displayListView() {
+    private void showTags() {
         ArrayList<String> tagList;
         TagDBManager manager = new TagDBManager(this);
         manager.open();
         tagList = manager.getAllTags();
         manager.close();
 
-        //create an ArrayAdaptar from the String Array
-        dataAdapter = new MyCustomAdapter(this, R.layout.tag_list, tagList);
+        dataAdapter = new TagListAdapter(this, R.layout.tag_list, tagList);
         ListView listView = (ListView) findViewById(R.id.taglist);
         // Assign adapter to ListView
         listView.setAdapter(dataAdapter);
@@ -76,12 +74,12 @@ public class AddTag extends Activity {
         });
     }
 
-    private class MyCustomAdapter extends ArrayAdapter<String> {
+    private class TagListAdapter extends ArrayAdapter<String> {
         private ArrayList<String> originalList;
         private ArrayList<String> tagList;
-        private CountryFilter filter;
+        private TagFilter filter;
 
-        public MyCustomAdapter(Context context, int textViewResourceId, ArrayList<String> tagList) {
+        public TagListAdapter(Context context, int textViewResourceId, ArrayList<String> tagList) {
             super(context, textViewResourceId, tagList);
             this.tagList = new ArrayList<String>();
             this.tagList.addAll(tagList);
@@ -92,7 +90,7 @@ public class AddTag extends Activity {
         @Override
         public Filter getFilter() {
             if (filter == null) {
-                filter = new CountryFilter();
+                filter = new TagFilter();
             }
             return filter;
         }
@@ -120,28 +118,25 @@ public class AddTag extends Activity {
             return convertView;
         }
 
-        private class CountryFilter extends Filter
+        private class TagFilter extends Filter
         {
             @Override
             protected FilterResults performFiltering (CharSequence constraint){
 
                 constraint = constraint.toString().toLowerCase();
                 FilterResults result = new FilterResults();
-                if (constraint != null && constraint.toString().length() > 0)
-                {
+                if (constraint != null && constraint.toString().length() > 0) {
                     ArrayList<String> filteredItems = new ArrayList<String>();
 
-                    for (int i = 0, l = originalList.size(); i < l; i++)
-                    {
-                        String tag = originalList.get(i);
-                        if (tag.toLowerCase().contains(constraint))
+                    for (String tag : originalList) {
+                        if (tag.toLowerCase().contains(constraint)) {
                             filteredItems.add(tag);
+                        }
                     }
                     result.count = filteredItems.size();
                     result.values = filteredItems;
                 }
-                else
-                {
+                else {
                     synchronized (this)
                     {
                         result.values = originalList;
@@ -157,8 +152,9 @@ public class AddTag extends Activity {
                 tagList = (ArrayList<String>) results.values;
                 notifyDataSetChanged();
                 clear();
-                for (int i = 0, l = tagList.size(); i < l; i++)
-                    add(tagList.get(i));
+                for (String tag : tagList) {
+                    add(tag);
+                }
                 notifyDataSetInvalidated();
             }
         }
