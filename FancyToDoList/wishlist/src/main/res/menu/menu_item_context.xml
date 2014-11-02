@@ -13,7 +13,9 @@
     	  android1:title="@string/share"/>
    	<item android1:id="@+id/COMPLETE" 
     	  android1:title="Mark as complete"/>
-</menu>  
+    <item android1:id="@+id/TAG"
+        android1:title="Tag"/>
+</menu>
     
     
     

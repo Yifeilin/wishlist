@@ -36,6 +36,8 @@ import android.widget.ViewFlipper;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBManager;
 import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
+import com.wish.wishlist.db.TagDBManager;
+import com.wish.wishlist.db.TagItemDBManager;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
@@ -693,6 +695,13 @@ public class WishList extends Activity {
 				updateView();
 			}
 		}
+        else if (itemId == R.id.TAG) {
+            TagItemDBManager manager = new TagItemDBManager(this);
+            manager.open();
+            manager.Tag_item("tag1", _selectedItem_id);
+            manager.close();
+        }
+
 		return false; }
 
 	@Override
