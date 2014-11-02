@@ -106,9 +106,9 @@ public class DBAdapter {
 	//Query string to create table "Tag"
 	private static final String CREATE_TABLE_TAG = "create table "
 			+ TagDBManager.DB_TABLE + " ("
-			+ TagDBManager.KEY_ID
-			+ " integer primary key autoincrement, " 
-			+ TagDBManager.KEY_NAME + " TEXT"
+            + TagDBManager.KEY_NAME + " TEXT NOT NULL, "
+			+ TagDBManager.KEY_ID  + " INTEGER AUTO_INCREMENT, "
+            + "PRIMARY KEY (" + TagDBManager.KEY_NAME + ")"
 			+ ");";
 
     //Query string to create table "Tag"
@@ -116,10 +116,10 @@ public class DBAdapter {
             + ItemTagDBManager.DB_TABLE + " ("
             + ItemTagDBManager.KEY_ID
             + " integer primary key autoincrement, "
-            + ItemTagDBManager.ITEM_ID + " INTEGER, "
             + ItemTagDBManager.TAG_ID + " INTEGER, "
-            + "FOREIGN KEY(" + ItemTagDBManager.ITEM_ID +")" + " REFERENCES Item(_id), "
-            + "FOREIGN KEY(" + ItemTagDBManager.TAG_ID +")" + " REFERENCES Tag(_id)"
+            + ItemTagDBManager.ITEM_ID + " INTEGER, "
+            + "FOREIGN KEY(" + ItemTagDBManager.TAG_ID +")" + " REFERENCES Tag(_id), "
+            + "FOREIGN KEY(" + ItemTagDBManager.ITEM_ID +")" + " REFERENCES Item(_id)"
             + ");";
 
 	//Query string to create table "store"
