@@ -79,8 +79,7 @@ public class DBAdapter {
                 //Log.d(TAG, "sql:" + sql);
                 db.execSQL(sql);
                 db.execSQL(CREATE_TABLE_TAG);
-                db.execSQL(CREATE_TABLE_ITEMTAG);
-            }
+                db.execSQL(CREATE_TABLE_TAGITEM); }
 		}
 	};
 	
@@ -112,7 +111,7 @@ public class DBAdapter {
 			+ ");";
 
     //Query string to create table "Tag"
-    private static final String CREATE_TABLE_ITEMTAG = "create table "
+    private static final String CREATE_TABLE_TAGITEM = "create table "
             + ItemTagDBManager.DB_TABLE + " ("
             + ItemTagDBManager.TAG_ID + " INTEGER, "
             + ItemTagDBManager.ITEM_ID + " INTEGER, "
@@ -343,7 +342,7 @@ public class DBAdapter {
             db.execSQL(CREATE_TABLE_TAG);
 
             //create table "ItemTag" added on version 4
-            db.execSQL(CREATE_TABLE_ITEMTAG);
+            db.execSQL(CREATE_TABLE_TAGITEM);
 		}
 
 		/***
