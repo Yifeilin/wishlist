@@ -11,7 +11,7 @@ import android.util.Log;
 /***
  * TagDBManager provides access to operations on data in ItemCategory table
  */
-public class ItemTagDBManager extends DBManager {
+public class TagItemDBManager extends DBManager {
     public static final String TAG_ID = "tag_id";
 	public static final String ITEM_ID = "item_id";
 	public static final String DB_TABLE = "TagItem";
@@ -24,7 +24,7 @@ public class ItemTagDBManager extends DBManager {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public ItemTagDBManager(Context ctx) {
+	public TagItemDBManager(Context ctx) {
         super(ctx);
 	}
 

@@ -112,12 +112,12 @@ public class DBAdapter {
 
     //Query string to create table "Tag"
     private static final String CREATE_TABLE_TAGITEM = "create table "
-            + ItemTagDBManager.DB_TABLE + " ("
-            + ItemTagDBManager.TAG_ID + " INTEGER, "
-            + ItemTagDBManager.ITEM_ID + " INTEGER, "
-            + "FOREIGN KEY(" + ItemTagDBManager.TAG_ID +")" + " REFERENCES Tag(_id), "
-            + "FOREIGN KEY(" + ItemTagDBManager.ITEM_ID +")" + " REFERENCES Item(_id), "
-            + "PRIMARY KEY(" + ItemTagDBManager.TAG_ID + ", " + ItemTagDBManager.ITEM_ID + ")"
+            + TagItemDBManager.DB_TABLE + " ("
+            + TagItemDBManager.TAG_ID + " INTEGER, "
+            + TagItemDBManager.ITEM_ID + " INTEGER, "
+            + "FOREIGN KEY(" + TagItemDBManager.TAG_ID +")" + " REFERENCES Tag(_id), "
+            + "FOREIGN KEY(" + TagItemDBManager.ITEM_ID +")" + " REFERENCES Item(_id), "
+            + "PRIMARY KEY(" + TagItemDBManager.TAG_ID + ", " + TagItemDBManager.ITEM_ID + ")"
             + ");";
 
 	//Query string to create table "store"
@@ -341,7 +341,7 @@ public class DBAdapter {
             //create table "Tag", added on version 4
             db.execSQL(CREATE_TABLE_TAG);
 
-            //create table "ItemTag" added on version 4
+            //create table "TagItem" added on version 4
             db.execSQL(CREATE_TABLE_TAGITEM);
 		}
 
