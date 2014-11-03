@@ -111,6 +111,7 @@ public class AddTag extends Activity {
             manager.open();
             manager.Tag_item(tag, mItem_id);
             manager.close();
+            finish();
             return true;
         }
         else {
