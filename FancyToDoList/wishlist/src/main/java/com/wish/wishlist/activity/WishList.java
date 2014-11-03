@@ -702,6 +702,7 @@ public class WishList extends Activity {
             //manager.close();
 
             Intent i = new Intent(WishList.this, AddTag.class);
+            i.putExtra(AddTag.ITEM_ID, _selectedItem_id);
             startActivity(i);
         }
 

@@ -6,7 +6,7 @@
 
     <include android:id="@+id/addTagView_header" layout="@layout/header" />
 
-    <EditText android:id="@+id/myFilter" android:layout_width="match_parent"
+    <EditText android:id="@+id/tagFilter" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_marginTop="10dp"

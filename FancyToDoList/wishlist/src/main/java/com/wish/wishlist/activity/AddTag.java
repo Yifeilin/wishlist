@@ -31,15 +31,22 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.TagDBManager;
+import com.wish.wishlist.db.TagItemDBManager;
 
 public class AddTag extends Activity {
-    TagListAdapter dataAdapter = null;
+    TagListAdapter tagsAdapter = null;
+    final static String ITEM_ID = "item_id";
+
+    long mItem_id;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tag);
 
         setUpActionBar();
+
+        mItem_id = getIntent().getLongExtra(ITEM_ID, -1);
         showTags();
     }
 
@@ -50,10 +57,10 @@ public class AddTag extends Activity {
         tagList = manager.getAllTags();
         manager.close();
 
-        dataAdapter = new TagListAdapter(this, R.layout.tag_list, tagList);
+        tagsAdapter = new TagListAdapter(this, R.layout.tag_list, tagList);
         ListView listView = (ListView) findViewById(R.id.taglist);
         // Assign adapter to ListView
-        listView.setAdapter(dataAdapter);
+        listView.setAdapter(tagsAdapter);
 
         //enables filtering for the contents of the given ListView
         listView.setTextFilterEnabled(true);
@@ -65,8 +72,8 @@ public class AddTag extends Activity {
             }
         });
 
-        EditText myFilter = (EditText) findViewById(R.id.myFilter);
-        myFilter.addTextChangedListener(new TextWatcher() {
+        EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
+        tagFilter.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
             }
@@ -75,7 +82,7 @@ public class AddTag extends Activity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                dataAdapter.getFilter().filter(s.toString());
+                tagsAdapter.getFilter().filter(s.toString());
             }
         });
     }
@@ -98,6 +105,12 @@ public class AddTag extends Activity {
         else if (id == R.id.menu_done) {
             //this replaced the saveImageButton used in GingerBread
             // app icon save in action bar clicked;
+            EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
+            String tag = tagFilter.getText().toString();
+            TagItemDBManager manager = new TagItemDBManager(this);
+            manager.open();
+            manager.Tag_item(tag, mItem_id);
+            manager.close();
             return true;
         }
         else {
