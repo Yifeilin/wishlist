@@ -4,6 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include android:id="@+id/addTagView_header" layout="@layout/header" />
+
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:padding="10dp"
         android:text="some text" android:textSize="20sp" />

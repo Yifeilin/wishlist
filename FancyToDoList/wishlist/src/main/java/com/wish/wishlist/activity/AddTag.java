@@ -6,13 +6,18 @@ package com.wish.wishlist.activity;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +39,7 @@ public class AddTag extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tag);
 
+        setUpActionBar();
         showTags();
     }
 
@@ -72,6 +78,40 @@ public class AddTag extends Activity {
                 dataAdapter.getFilter().filter(s.toString());
             }
         });
+    }
+
+    @Override
+    //needed for action bar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actionbar_edititeminfo, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        else if (id == R.id.menu_done) {
+            //this replaced the saveImageButton used in GingerBread
+            // app icon save in action bar clicked;
+            return true;
+        }
+        else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setUpActionBar() {
+        // Make sure we're running on Honeycomb or higher to use ActionBar APIs
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            findViewById(R.id.addTagView_header).setVisibility(View.GONE);
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private class TagListAdapter extends ArrayAdapter<String> {
