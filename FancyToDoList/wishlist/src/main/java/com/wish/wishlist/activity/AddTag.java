@@ -68,7 +68,11 @@ public class AddTag extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // When clicked, show a toast with the TextView text
                 String tag = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), tag, Toast.LENGTH_SHORT).show();
+                TagItemDBManager manager = new TagItemDBManager(AddTag.this);
+                manager.open();
+                manager.Tag_item(tag, mItem_id);
+                manager.close();
+                finish();
             }
         });
 
