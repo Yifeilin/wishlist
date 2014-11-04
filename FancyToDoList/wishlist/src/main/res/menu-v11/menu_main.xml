@@ -39,7 +39,11 @@
  <item android:id="@+id/menu_filter" 
 		android:title="Filter"
 	/>
-</menu>  
+
+<item android:id="@+id/menu_tags"
+        android:title="Tags"
+    />
+</menu>
     
     
     
