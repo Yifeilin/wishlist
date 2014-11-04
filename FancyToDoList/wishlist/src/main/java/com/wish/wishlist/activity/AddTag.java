@@ -65,10 +65,7 @@ public class AddTag extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // When clicked, show a toast with the TextView text
                 String tag = (String) parent.getItemAtPosition(position);
-                TagItemDBManager manager = new TagItemDBManager(AddTag.this);
-                manager.open();
-                manager.Tag_item(tag, mItem_id);
-                manager.close();
+                TagItemDBManager.instance(AddTag.this).Tag_item(tag, mItem_id);
                 finish();
             }
         });
@@ -108,10 +105,7 @@ public class AddTag extends Activity {
             // app icon save in action bar clicked;
             EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
             String tag = tagFilter.getText().toString();
-            TagItemDBManager manager = new TagItemDBManager(this);
-            manager.open();
-            manager.Tag_item(tag, mItem_id);
-            manager.close();
+            TagItemDBManager.instance(this).Tag_item(tag, mItem_id);
             finish();
             return true;
         }

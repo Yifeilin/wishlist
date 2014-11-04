@@ -2,11 +2,6 @@ package com.wish.wishlist.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /***
  * TagDBManager provides access to operations on data in ItemCategory table
@@ -17,6 +12,15 @@ public class TagItemDBManager extends DBManager {
 	public static final String DB_TABLE = "TagItem";
 	private static final String TAG="TagItemDBManager";
 
+    private static TagItemDBManager _instance = null;
+
+    public static TagItemDBManager instance(Context ctx) {
+        if (_instance == null) {
+            _instance = new TagItemDBManager(ctx.getApplicationContext());
+        }
+        return _instance;
+    }
+
 	/**
 	 * Constructor - takes the context to allow the database to be
 	 * opened/created
@@ -24,7 +28,7 @@ public class TagItemDBManager extends DBManager {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public TagItemDBManager(Context ctx) {
+	private TagItemDBManager(Context ctx) {
         super(ctx);
 	}
 
@@ -34,9 +38,12 @@ public class TagItemDBManager extends DBManager {
     }
 
     public long Tag_item(long tagId, long itemId) {
+        open();
         ContentValues initialValues = new ContentValues();
         initialValues.put(TAG_ID, tagId);
         initialValues.put(ITEM_ID, itemId);
-        return this.mDb.replace(DB_TABLE, null, initialValues);
+        long rowId = mDb.replace(DB_TABLE, null, initialValues);
+        close();
+        return rowId;
     }
 }
