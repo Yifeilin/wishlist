@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * The DBAdapter class only gets called when the app first starts 
  * and its responsibility is to create/upgrade the tables. 
  * All other access to the data in the database 
- * is done through the individual "adapter" class.
+ * is done through the individual "DBManager" class.
  */
 public class DBAdapter {
 	

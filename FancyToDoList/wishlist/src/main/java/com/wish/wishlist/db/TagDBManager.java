@@ -5,11 +5,8 @@ import android.content.Context;
 import android.util.Log;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /***
  * TagDBManager provides access to operations on data in ItemCategory table
@@ -21,6 +18,15 @@ public class TagDBManager extends DBManager {
 	public static final String DB_TABLE = "Tag";
 	private static final String TAG="TagDBManager";
 
+    private static TagDBManager _instance = null;
+
+    public static TagDBManager instance(Context ctx) {
+        if (_instance == null) {
+            _instance = new TagDBManager(ctx.getApplicationContext());
+        }
+        return _instance;
+    }
+
 	/**
 	 * Constructor - takes the context to allow the database to be
 	 * opened/created
@@ -28,7 +34,7 @@ public class TagDBManager extends DBManager {
 	 * @param ctx
 	 *            the Context within which to work
 	 */
-	public TagDBManager(Context ctx) {
+	private TagDBManager(Context ctx) {
         super(ctx);
 	}
 
@@ -40,9 +46,12 @@ public class TagDBManager extends DBManager {
 	 * @return rowId or -1 if failed
 	 */
 	public long createTag(String name) {
+        open();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
-		return mDb.replace(DB_TABLE, null, initialValues);
+        long rowId = mDb.replace(DB_TABLE, null, initialValues);
+        close();
+        return rowId;
 	}
 
 	/**
@@ -62,6 +71,7 @@ public class TagDBManager extends DBManager {
 	 * @return Cursor over all cars
 	 */
 	public ArrayList<String> getAllTags() {
+        open();
         ArrayList<String> tagList = new ArrayList<String>();
 		Cursor cursor = mDb.query(DB_TABLE, new String[] { KEY_ID, KEY_NAME }, null, null, null, null, null);
         if (cursor.moveToFirst()) {
@@ -70,6 +80,7 @@ public class TagDBManager extends DBManager {
                 tagList.add(tagName);
             } while (cursor.moveToNext());
         }
+        close();
         return tagList;
 	}
 

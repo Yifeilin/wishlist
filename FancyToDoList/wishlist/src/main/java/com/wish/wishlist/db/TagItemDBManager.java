@@ -29,11 +29,7 @@ public class TagItemDBManager extends DBManager {
 	}
 
     public long Tag_item(String tagName, long itemId) {
-        TagDBManager tagDBManager = new TagDBManager(mCtx);
-        tagDBManager.open();
-        long tagId = tagDBManager.createTag(tagName);
-        tagDBManager.close();
-
+        long tagId = TagDBManager.instance(mCtx).createTag(tagName);
         return Tag_item(tagId, itemId);
     }
 

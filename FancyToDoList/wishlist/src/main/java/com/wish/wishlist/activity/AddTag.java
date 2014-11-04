@@ -52,10 +52,7 @@ public class AddTag extends Activity {
 
     private void showTags() {
         ArrayList<String> tagList;
-        TagDBManager manager = new TagDBManager(this);
-        manager.open();
-        tagList = manager.getAllTags();
-        manager.close();
+        tagList = TagDBManager.instance(this).getAllTags();
 
         tagsAdapter = new TagListAdapter(this, R.layout.tag_list, tagList);
         ListView listView = (ListView) findViewById(R.id.taglist);
