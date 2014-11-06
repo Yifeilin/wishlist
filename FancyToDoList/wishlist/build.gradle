@@ -45,6 +45,7 @@ android {
 
 dependencies {
     compile project(':facebookSDK')
+    compile project(':Library')
     compile files('libs/httpclient-4.2.5.jar')
     compile files('libs/httpcore-4.2.4.jar')
     compile files('libs/httpmime-4.2.5.jar')

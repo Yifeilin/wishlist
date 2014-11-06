@@ -1,2 +1,3 @@
 include ':facebookSDK'
+include ':Library'
 include ':wishlist'
