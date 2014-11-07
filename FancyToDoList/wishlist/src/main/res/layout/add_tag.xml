@@ -6,13 +6,25 @@
 
     <include android:id="@+id/addTagView_header" layout="@layout/header" />
 
-    <EditText android:id="@+id/tagFilter" android:layout_width="match_parent"
+    <com.wish.wishlist.activity.TagsCompletionView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="19sp"
+        android:nextFocusDown="@+id/editText">
+        <requestFocus />
+    </com.wish.wishlist.activity.TagsCompletionView>
+
+  <!--  <EditText android:id="@+id/tagFilter" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_marginTop="10dp"
         android:hint="Select or enter a tag...">
         <requestFocus />
     </EditText>
+    -->
 
     <ListView android:id="@+id/taglist" android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

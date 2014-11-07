@@ -27,10 +27,10 @@ public class AddTag extends TagList {
     protected void onDone() {
         //this replaced the saveImageButton used in GingerBread
         // app icon save in action bar clicked;
-        EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
-        String tag = tagFilter.getText().toString();
-        TagItemDBManager.instance(this).Tag_item(tag, mItem_id);
-        finish();
+        //EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
+        //String tag = tagFilter.getText().toString();
+        //TagItemDBManager.instance(this).Tag_item(tag, mItem_id);
+        //finish();
     }
 }
 

@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,17 +21,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
+import com.tokenautocomplete.FilteredArrayAdapter;
+import com.tokenautocomplete.TokenCompleteTextView;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.TagDBManager;
-import com.wish.wishlist.db.TagItemDBManager;
 
-public class TagList extends Activity {
+public class TagList extends Activity implements TokenCompleteTextView.TokenListener {
+    final static String PREFIX = "Tags: ";
+    TagsCompletionView completionView;
+    ArrayAdapter<String> adapter;
+
     TagListAdapter tagsAdapter = null;
     protected final static String ITEM_ID = "item_id";
 
@@ -42,6 +44,35 @@ public class TagList extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_tag);
+
+        adapter = new FilteredArrayAdapter<String>(this, R.layout.tag_layout, new String[]{}) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    convertView = (View)l.inflate(R.layout.tag_layout, parent, false);
+                }
+
+                String tag = getItem(position);
+                ((TextView)convertView.findViewById(R.id.name)).setText(tag);
+
+                return convertView;
+            }
+
+            @Override
+            protected boolean keepObject(String obj, String mask) {
+                mask = mask.toLowerCase();
+                return obj.toLowerCase().startsWith(mask);
+            }
+        };
+
+        completionView = (TagsCompletionView)findViewById(R.id.searchView);
+        completionView.setAdapter(adapter);
+        completionView.setTokenListener(this);
+
+        if (savedInstanceState == null) {
+            completionView.setPrefix(PREFIX);
+        }
 
         setUpActionBar();
 
@@ -62,9 +93,7 @@ public class TagList extends Activity {
         listView.setTextFilterEnabled(true);
         setTagClick(listView);
 
-        EditText tagFilter = (EditText) findViewById(R.id.tagFilter);
-        tagFilter.addTextChangedListener(new TextWatcher() {
-
+        completionView.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
             }
 
@@ -72,12 +101,21 @@ public class TagList extends Activity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tagsAdapter.getFilter().filter(s.toString());
+                //Remove the prefix and all the ',' in the string.
+                String constraint = s.toString().replaceFirst(PREFIX, "").replace(",", "").trim();
+                tagsAdapter.getFilter().filter(constraint);
             }
         });
     }
 
-    protected void setTagClick(ListView listView) {}
+    protected void setTagClick(ListView listView) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tag = (String) parent.getItemAtPosition(position);
+                finish();
+            }
+        });
+    }
 
     @Override
     //needed for action bar
@@ -142,7 +180,6 @@ public class TagList extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            Log.v("ConvertView", String.valueOf(position));
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.tag_list, null);
@@ -162,7 +199,6 @@ public class TagList extends Activity {
         {
             @Override
             protected FilterResults performFiltering (CharSequence constraint){
-
                 constraint = constraint.toString().toLowerCase();
                 FilterResults result = new FilterResults();
                 if (constraint != null && constraint.toString().length() > 0) {
@@ -198,5 +234,15 @@ public class TagList extends Activity {
                 notifyDataSetInvalidated();
             }
         }
+    }
+
+    @Override
+    public void onTokenAdded(Object token) {
+        showTags();
+    }
+
+    @Override
+    public void onTokenRemoved(Object token) {
+        showTags();
     }
 }
