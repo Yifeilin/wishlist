@@ -2,6 +2,9 @@ package com.wish.wishlist.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+
+import java.util.ArrayList;
 
 /***
  * TagDBManager provides access to operations on data in ItemCategory table
@@ -45,5 +48,17 @@ public class TagItemDBManager extends DBManager {
         long rowId = mDb.replace(DB_TABLE, null, initialValues);
         close();
         return rowId;
+    }
+
+    public ArrayList<String> tags_of_item(long itemId) {
+        open();
+        Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, ITEM_ID + "=" + itemId, null, null, null, null, null);
+        ArrayList<String> ids = new ArrayList<String>();
+        while (cursor.moveToNext()) {
+            ids.add(cursor.getString(cursor.getColumnIndexOrThrow(TAG_ID)));
+        }
+        close();
+        ArrayList<String> tags = TagDBManager.instance(mCtx).getTagsByIds(ids.toArray(new String[ids.size()]));
+        return tags;
     }
 }

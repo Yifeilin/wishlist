@@ -2,7 +2,6 @@ package com.wish.wishlist.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 import android.database.Cursor;
 import android.database.SQLException;
 
@@ -83,6 +82,33 @@ public class TagDBManager extends DBManager {
         close();
         return tagList;
 	}
+
+    public ArrayList<String> getTagsByIds(String[] ids) {
+        ArrayList<String> tags = new ArrayList<String>();
+        open();
+        String query = "SELECT * FROM Tag"
+                + " WHERE rowId IN (" + makePlaceholders(ids.length) + ")";
+        Cursor cursor = mDb.rawQuery(query, ids);
+        while (cursor.moveToNext()) {
+            tags.add(cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME)));
+        }
+        close();
+        return tags;
+    }
+
+    String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
+    }
 
 
 	/**

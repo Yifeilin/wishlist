@@ -1,15 +1,27 @@
 package com.wish.wishlist.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.wish.wishlist.db.TagItemDBManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by jiawen on 2014-11-03.
  */
 public class AddTag extends TagList {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ArrayList<String> tags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
+        for (String tag : tags) {
+            completionView.addObject(tag);
+        }
+    }
 
     protected void setTagClick(ListView listView) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

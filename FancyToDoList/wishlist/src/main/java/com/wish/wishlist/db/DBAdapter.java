@@ -108,6 +108,7 @@ public class DBAdapter {
             + TagDBManager.KEY_NAME + " TEXT NOT NULL, "
 			+ TagDBManager.KEY_ID  + " INTEGER AUTO_INCREMENT, "
             + "PRIMARY KEY(" + TagDBManager.KEY_NAME + ")"
+            // We want to make sure no duplicate tag names can exist, so use the tag name as the primary key
 			+ ");";
 
     //Query string to create table "Tag"
