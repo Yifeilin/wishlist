@@ -13,7 +13,6 @@ public class TagItemDBManager extends DBManager {
     public static final String TAG_ID = "tag_id";
 	public static final String ITEM_ID = "item_id";
 	public static final String DB_TABLE = "TagItem";
-	private static final String TAG="TagItemDBManager";
 
     private static TagItemDBManager _instance = null;
 

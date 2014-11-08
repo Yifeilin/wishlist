@@ -50,7 +50,6 @@ public class DBAdapter {
 				+ ItemDBManager.KEY_PHOTO_URL
 				+ " LIKE '%sample'";
 				
-				//Log.d(TAG, "sql:" + sql);
 				db.execSQL(sql);
 
 				//add user table
@@ -67,7 +66,6 @@ public class DBAdapter {
                         + ItemDBManager.DB_TABLE
                         + " ADD COLUMN complete INTEGER DEFAULT 0 NOT NULL";
 
-                //Log.d(TAG, "sql:" + sql);
                 db.execSQL(sql);
             }
         }
@@ -76,7 +74,6 @@ public class DBAdapter {
             public void apply(SQLiteDatabase db) {
                 //drop table ItemCategory and create table Tag
                 String sql = "DROP TABLE IF EXISTS ItemCategory";
-                //Log.d(TAG, "sql:" + sql);
                 db.execSQL(sql);
                 db.execSQL(CREATE_TABLE_TAG);
                 db.execSQL(CREATE_TABLE_TAGITEM); }
@@ -123,15 +120,14 @@ public class DBAdapter {
 	private static final String CREATE_TABLE_STORE = "create table "
 			+ StoreDBManager.DB_TABLE
 			+ " (" 
-			+ StoreDBManager.KEY_ID				+ " integer primary key autoincrement, "
+			+ StoreDBManager.KEY_ID				+ " INTEGER PRIMARY KEY, "
 			+ StoreDBManager.KEY_LOCATION_ID	+ " INTEGER, "
 			+ StoreDBManager.KEY_NAME 			+ " TEXT"
 			+ ");";
 	
 	//Query string to create table "location"
 	private static final String CREATE_TABLE_LOCATION = "create table "
-			+ LocationDBManager.DB_TABLE
-			+ " ("
+			+ LocationDBManager.DB_TABLE + " ("
 			+ LocationDBManager.KEY_ID
 			+ " integer primary key autoincrement, "
 			+ LocationDBManager.KEY_LATITUDE
@@ -155,9 +151,8 @@ public class DBAdapter {
 
 	//Query string to create table "user"
 	private static final String CREATE_TABLE_USER = "create table "
-			+ UserDBManager.DB_TABLE
-			+ " (" 
-			+ UserDBManager.KEY_ID			+ " integer primary key autoincrement, "
+			+ UserDBManager.DB_TABLE + " ("
+			+ UserDBManager.KEY_ID			+ " INTEGER PRIMARY KEY, "
 			+ UserDBManager.USER_ID	+ " TEXT, "
 			+ UserDBManager.USER_KEY	+ " TEXT, "
 			+ UserDBManager.USER_DISPLAY_NAME	+ " TEXT, "
