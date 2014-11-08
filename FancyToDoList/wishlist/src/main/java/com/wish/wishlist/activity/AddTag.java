@@ -20,6 +20,7 @@ public class AddTag extends TagList {
         ArrayList<String> tags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
         for (String tag : tags) {
             completionView.addObject(tag);
+            currentTags.add(tag);
         }
     }
 

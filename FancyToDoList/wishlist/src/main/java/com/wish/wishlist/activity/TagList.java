@@ -5,6 +5,8 @@ package com.wish.wishlist.activity;
  */
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -37,6 +39,7 @@ public class TagList extends Activity implements TokenCompleteTextView.TokenList
 
     TagListAdapter tagsAdapter = null;
     protected final static String ITEM_ID = "item_id";
+    protected Set<String> currentTags = new HashSet<String>();
 
     protected long mItem_id;
 
@@ -81,8 +84,12 @@ public class TagList extends Activity implements TokenCompleteTextView.TokenList
     }
 
     private void showTags() {
-        ArrayList<String> tagList;
-        tagList = TagDBManager.instance(this).getAllTags();
+        ArrayList<String> tagList = new ArrayList<String>();
+        for (String tag : TagDBManager.instance(this).getAllTags()) {
+            if (!currentTags.contains(tag)) {
+                tagList.add(tag);
+            }
+        }
 
         tagsAdapter = new TagListAdapter(this, R.layout.tag_list, tagList);
         ListView listView = (ListView) findViewById(R.id.taglist);
@@ -238,11 +245,13 @@ public class TagList extends Activity implements TokenCompleteTextView.TokenList
 
     @Override
     public void onTokenAdded(Object token) {
+        currentTags.add((String) token);
         showTags();
     }
 
     @Override
     public void onTokenRemoved(Object token) {
+        currentTags.remove((String) token);
         showTags();
     }
 }
