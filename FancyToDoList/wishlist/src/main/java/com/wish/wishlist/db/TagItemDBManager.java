@@ -50,6 +50,18 @@ public class TagItemDBManager extends DBManager {
         return rowId;
     }
 
+    public void Untag_item(String tagName, long itemId) {
+        long tagId = TagDBManager.instance(mCtx).getIdByName(tagName);
+        Untag_item(tagId, itemId);
+    }
+
+    public void Untag_item(long tagId, long itemId) {
+        open();
+        String where = TAG_ID + "=" + tagId + " AND " + ITEM_ID + "=" + itemId;
+        mDb.delete(DB_TABLE, where, null);
+        close();
+    }
+
     public ArrayList<String> tags_of_item(long itemId) {
         open();
         Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, ITEM_ID + "=" + itemId, null, null, null, null, null);

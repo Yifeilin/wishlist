@@ -36,8 +36,22 @@ public class AddTag extends TagList {
     protected void onDone() {
         //this replaced the saveImageButton used in GingerBread
         // app icon save in action bar clicked;
-        for (Object tag_obj : completionView.getObjects()) {
-            TagItemDBManager.instance(AddTag.this).Tag_item(tag_obj.toString(), mItem_id);
+        ArrayList<String> oldTags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
+
+        //Remove the deleted tags
+        for (String tag : oldTags) {
+            if (!currentTags.contains(tag)) {
+                TagItemDBManager.instance(AddTag.this).Untag_item(tag, mItem_id);
+            }
+            else {
+                //Remove the tags we already have so the following for loop will not tag them again
+                currentTags.remove(tag);
+            }
+        }
+
+        //Add the new tags
+        for (String tag : currentTags) {
+            TagItemDBManager.instance(AddTag.this).Tag_item(tag, mItem_id);
         }
         finish();
     }

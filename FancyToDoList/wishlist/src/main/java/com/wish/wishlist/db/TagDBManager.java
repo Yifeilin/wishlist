@@ -96,6 +96,18 @@ public class TagDBManager extends DBManager {
         return tags;
     }
 
+    public long getIdByName(String name) {
+        long tagId = -1;
+        String where = KEY_NAME + " = ?";
+        open();
+        Cursor cursor = mDb.query(DB_TABLE, new String[] { KEY_ID }, where, new String[]{name}, null, null, null);
+        while (cursor.moveToNext()) {
+            tagId = cursor.getLong(cursor.getColumnIndexOrThrow(KEY_ID));
+        }
+        close();
+        return tagId;
+    }
+
     String makePlaceholders(int len) {
         if (len < 1) {
             // It will lead to an invalid query anyway ..
