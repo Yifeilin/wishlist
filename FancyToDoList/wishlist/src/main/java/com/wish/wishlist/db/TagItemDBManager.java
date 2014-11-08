@@ -54,6 +54,10 @@ public class TagItemDBManager extends DBManager {
         open();
         Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, ITEM_ID + "=" + itemId, null, null, null, null, null);
         ArrayList<String> ids = new ArrayList<String>();
+        if (ids.isEmpty()) {
+            //We don't have any tags for this item, return an empty tag list
+            return new ArrayList<String>();
+        }
         while (cursor.moveToNext()) {
             ids.add(cursor.getString(cursor.getColumnIndexOrThrow(TAG_ID)));
         }
