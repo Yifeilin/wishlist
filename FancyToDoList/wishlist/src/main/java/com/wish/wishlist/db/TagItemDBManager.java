@@ -59,6 +59,19 @@ public class TagItemDBManager extends DBManager {
         String where = TAG_ID + "=" + tagId + " AND " + ITEM_ID + "=" + itemId;
         mDb.delete(DB_TABLE, where, null);
         close();
+
+        //Delete the tag in the tag table if no item is referencing it
+        if (!tagExists(tagId)) {
+            TagDBManager.instance(mCtx).deleteTag(tagId);
+        }
+    }
+
+    Boolean tagExists(long tagId) {
+        open();
+        Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, TAG_ID + "=" + tagId, null, null, null, null, null);
+        Boolean exists = cursor.getCount() > 1;
+        close();
+        return exists;
     }
 
     public ArrayList<String> tags_of_item(long itemId) {

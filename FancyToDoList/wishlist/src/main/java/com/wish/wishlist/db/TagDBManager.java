@@ -53,16 +53,25 @@ public class TagDBManager extends DBManager {
         return rowId;
 	}
 
-	/**
-	 * Delete the tag with the given rowId
-	 * 
-	 * @param rowId
-	 * @return true if deleted, false otherwise
-	 */
-	public boolean deleteTag(long rowId) {
+    public void deleteTag(String name) {
+        open();
+        String where = KEY_NAME + "=" + name;
+        mDb.delete(DB_TABLE, where, null);
+        close();
+    }
 
-		return this.mDb.delete(DB_TABLE, KEY_ID + "=" + rowId, null) > 0; //$NON-NLS-1$
-	}
+    /**
+     * Delete the tag with the given rowId
+     *
+     * @param rowId
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteTag(long tagId) {
+        open();
+        boolean success = mDb.delete(DB_TABLE, KEY_ID + "=" + tagId, null) > 0; //$NON-NLS-1$
+        close();
+        return success;
+    }
 
 	/**
 	 * Return a Cursor over the list of all tags in the database
