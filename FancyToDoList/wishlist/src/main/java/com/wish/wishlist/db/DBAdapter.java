@@ -85,9 +85,8 @@ public class DBAdapter {
 	
 	//Query string to create table "Item"
 	private static final String CREATE_TABLE_ITEM = "create table "
-			+ ItemDBManager.DB_TABLE
-			+ " (" 
-			+ ItemDBManager.KEY_ID			+ " integer primary key autoincrement, "
+			+ ItemDBManager.DB_TABLE + " ("
+			+ ItemDBManager.KEY_ID			+ " INTEGER PRIMARY KEY, "
 			+ ItemDBManager.KEY_STORE_ID 	+ " INTEGER, "
 			+ ItemDBManager.KEY_STORENAME	+ " TEXT, "
 			+ ItemDBManager.KEY_NAME 		+ " TEXT, "
@@ -104,11 +103,10 @@ public class DBAdapter {
 
 	//Query string to create table "Tag"
 	private static final String CREATE_TABLE_TAG = "create table "
-			+ TagDBManager.DB_TABLE + " ("
-            + TagDBManager.KEY_NAME + " TEXT NOT NULL, "
-			+ TagDBManager.KEY_ID  + " INTEGER AUTO_INCREMENT, "
-            + "PRIMARY KEY(" + TagDBManager.KEY_NAME + ")"
-            // We want to make sure no duplicate tag names can exist, so use the tag name as the primary key
+            + TagDBManager.DB_TABLE + " ("
+            + TagDBManager.KEY_ID  + " INTEGER PRIMARY KEY, "
+            // We want to make sure no duplicate tag names can exist
+            + TagDBManager.KEY_NAME + " TEXT UNIQUE"
 			+ ");";
 
     //Query string to create table "Tag"
