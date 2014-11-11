@@ -78,15 +78,15 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
             completionView.setPrefix(PREFIX);
         }
 
+
+        setUpActionBar();
+
+        mItem_id = getIntent().getLongExtra(ITEM_ID, -1);
         ArrayList<String> tags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
         for (String tag : tags) {
             completionView.addObject(tag);
             currentTags.add(tag);
         }
-
-        setUpActionBar();
-
-        mItem_id = getIntent().getLongExtra(ITEM_ID, -1);
         showTags();
 
     }
