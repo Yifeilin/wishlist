@@ -34,6 +34,11 @@ public class AddTag extends TagList {
     }
 
     protected void onDone() {
+        //Get the text after the last token in the view. This text has not been tokenized, but it should be regarded as a tag
+        String lastTag = completionView.getText().toString().replaceFirst(PREFIX, "").replace(",", "").trim();
+        if (!lastTag.isEmpty()) {
+            currentTags.add(lastTag);
+        }
         //this replaced the saveImageButton used in GingerBread
         // app icon save in action bar clicked;
         ArrayList<String> oldTags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);

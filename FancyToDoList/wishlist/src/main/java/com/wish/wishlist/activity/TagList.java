@@ -33,7 +33,7 @@ import com.wish.wishlist.R;
 import com.wish.wishlist.db.TagDBManager;
 
 public class TagList extends Activity implements TokenCompleteTextView.TokenListener {
-    final static String PREFIX = "Tags: ";
+    protected final static String PREFIX = "Tags: ";
     protected TagsCompletionView completionView;
     ArrayAdapter<String> adapter;
 
