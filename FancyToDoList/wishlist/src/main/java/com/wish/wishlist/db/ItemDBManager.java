@@ -346,10 +346,10 @@ public class ItemDBManager extends DBManager {
 	 *            the sort criteria
 	 */
 
-	public ItemsCursor getItems(String sortOption, Map<String,String> where) {
+	public ItemsCursor getItems(String sortOption, Map<String,String> where, ArrayList<Long> itemIds) {
 		String sql;
+        String WHERE = "";
 		if (where == null || where.isEmpty()) {
-			sql = "SELECT * FROM Item " + "ORDER BY " + sortOption;
 		}
 		else {
 			//right now, we assume there is only one entry in where
@@ -359,8 +359,23 @@ public class ItemDBManager extends DBManager {
 				field = key;
 				value = where.get(key);
 			}
-			sql = "SELECT * FROM Item WHERE " + field + "=" + value + " ORDER BY " + sortOption;
+            WHERE = "WHERE " + field + "=" + value;
 		}
+        if (!itemIds.isEmpty()) {
+            if (WHERE.isEmpty()) {
+                WHERE = "WHERE _id IN (";
+            }
+            else {
+                WHERE += " AND _id IN (";
+            }
+            for (Long id : itemIds) {
+                WHERE += id + ", ";
+            }
+            //remote the last ', '
+            WHERE = WHERE.substring(0, WHERE.length()-2);
+            WHERE += ")";
+        }
+        sql = "SELECT * FROM Item " + WHERE + " ORDER BY " + sortOption;
 
         SQLiteDatabase d = readableDB();
 		ItemsCursor c = (ItemsCursor) d.rawQueryWithFactory(

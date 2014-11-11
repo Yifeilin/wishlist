@@ -1,5 +1,6 @@
 package com.wish.wishlist.activity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import android.widget.ViewFlipper;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBManager;
 import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
+import com.wish.wishlist.db.TagItemDBManager;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.WishListItemCursorAdapter;
@@ -77,6 +79,7 @@ public class WishList extends Activity {
 	private static final int ADD_ITEM = 1;
 	private String _viewOption = "list";
 	private String _filterOption = "all";
+    private String _tagOption = "";
 	private String _sortOption = ItemsCursor.SortBy.item_name.toString();
 
 	private ViewFlipper _viewFlipper;
@@ -93,6 +96,7 @@ public class WishList extends Activity {
 	private WishListItemCursorAdapter _wishListItemAdapterCursor;
 
 	private ItemDBManager _itemDBManager;
+    private ArrayList<Long> _itemIds = new ArrayList<Long>();
 	
 	private long _selectedItem_id;
 
@@ -103,7 +107,7 @@ public class WishList extends Activity {
 		
 		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
 		_viewOption = pref.getString(PREF_VIEW_OPTION, "list");
-		_filterOption = pref.getString(PREF_FILTER_OPTION, "all");
+        _filterOption = pref.getString(PREF_FILTER_OPTION, "all");
 		if (_filterOption.equals("all")) {
 			_where.clear();
 		}
@@ -113,10 +117,16 @@ public class WishList extends Activity {
 		else if(_filterOption.equals("in_progress")) {
 			_where.put("complete", "0");
 		}
+
+
 		_sortOption = pref.getString(PREF_SORT_OPTION, ItemsCursor.SortBy.item_name.toString());
 
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
+        _tagOption = intent.getStringExtra("tag");
+        if (_tagOption != null && !_tagOption.isEmpty()) {
+            _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
+        }
 
 		setContentView(R.layout.main);
 
@@ -286,7 +296,7 @@ public class WishList extends Activity {
 	 * @param sortBy
 	 */
 	private void initializeView() {
-		_wishItemCursor = _itemDBManager.getItems(_sortOption, _where);
+		_wishItemCursor = _itemDBManager.getItems(_sortOption, _where, _itemIds);
 		if (_itemDBManager.getItemsCount() == 0) {
 			_viewFlipper.setDisplayedChild(2);
 			return;
@@ -333,7 +343,7 @@ public class WishList extends Activity {
 			// Get all of the rows from the Item table
 			// Keep track of the TextViews added in list lstTable
 			// _wishItemCursor = wishListDB.getItems(sortBy);
-			_wishItemCursor = _itemDBManager.getItems(_sortOption, where);
+			_wishItemCursor = _itemDBManager.getItems(_sortOption, where, _itemIds);
 		} else {
 			_wishItemCursor = _itemDBManager.searchItems(searchName, _sortOption);
 		}

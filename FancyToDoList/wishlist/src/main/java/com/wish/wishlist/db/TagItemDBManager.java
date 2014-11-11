@@ -89,4 +89,17 @@ public class TagItemDBManager extends DBManager {
         ArrayList<String> tags = TagDBManager.instance(mCtx).getTagsByIds(ids.toArray(new String[ids.size()]));
         return tags;
     }
+
+    public ArrayList<Long> ItemIds_by_tag(String tagName) {
+        long tagId = TagDBManager.instance(mCtx).getIdByName(tagName);
+        open();
+        Cursor cursor = mDb.query(true, DB_TABLE, new String[] { ITEM_ID }, TAG_ID + "=" + tagId, null, null, null, null, null);
+        ArrayList<Long> ItemIds = new ArrayList<Long>();
+        while (cursor.moveToNext()) {
+            long item_id = cursor.getLong(cursor.getColumnIndexOrThrow(ITEM_ID));
+            ItemIds.add(new Long(item_id));
+        }
+        close();
+        return ItemIds;
+    }
 }

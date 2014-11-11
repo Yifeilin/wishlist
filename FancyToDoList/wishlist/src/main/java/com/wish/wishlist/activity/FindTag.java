@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -73,7 +74,16 @@ public class FindTag extends Activity {
         });
     }
 
-    protected void setTagClick(ListView listView) {}
+    protected void setTagClick(ListView listView) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tag = (String) parent.getItemAtPosition(position);
+                Intent i = new Intent(FindTag.this, WishList.class);
+                i.putExtra("tag", tag);
+                startActivity(i);
+            }
+        });
+    }
 
     @Override
     //needed for action bar

@@ -34,6 +34,7 @@ import com.wish.wishlist.util.ImageManager;
 import com.wish.wishlist.util.social.ShareHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -280,7 +281,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		_itemDBManager = new ItemDBManager(this);
 		_itemDBManager.open();
-		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null, new ArrayList<Long>());
 		_itemDBManager.close();
 		long nextItemID;
 		if (_position < c.getCount())
@@ -316,7 +317,7 @@ public class WishItemDetail extends Activity {
 		// open the database for operations of Item table
 		_itemDBManager = new ItemDBManager(this);
 		_itemDBManager.open();
-		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null);
+		ItemsCursor c = _itemDBManager.getItems(ItemsCursor.SortBy.item_name.toString(), null, new ArrayList<Long>());
 		_itemDBManager.close();
 		long prevItemID;
 		if (_position > 0)
