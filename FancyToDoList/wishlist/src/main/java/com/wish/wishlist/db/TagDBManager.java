@@ -46,11 +46,18 @@ public class TagDBManager extends DBManager {
 	 */
 	public long createTag(String name) {
         open();
+        String where = KEY_NAME + " = ?";
+        Cursor cursor = mDb.query(DB_TABLE, new String[] { KEY_ID }, where, new String[]{name}, null, null, null);
+        while (cursor.moveToNext()) {
+            long tagId = cursor.getLong(cursor.getColumnIndexOrThrow(KEY_ID));
+            close();
+            return tagId;
+        }
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_NAME, name);
-        long rowId = mDb.replace(DB_TABLE, null, initialValues);
+        long tagId = mDb.insert(DB_TABLE, null, initialValues);
         close();
-        return rowId;
+        return tagId;
 	}
 
     public void deleteTag(String name) {
