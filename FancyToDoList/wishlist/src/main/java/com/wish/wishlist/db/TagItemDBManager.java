@@ -69,7 +69,7 @@ public class TagItemDBManager extends DBManager {
     Boolean tagExists(long tagId) {
         open();
         Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, TAG_ID + "=" + tagId, null, null, null, null, null);
-        Boolean exists = cursor.getCount() > 1;
+        Boolean exists = cursor.getCount() >= 1;
         close();
         return exists;
     }
