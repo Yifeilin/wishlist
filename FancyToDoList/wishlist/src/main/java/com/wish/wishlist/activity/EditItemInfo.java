@@ -238,7 +238,7 @@ public class EditItemInfo extends Activity implements Observer {
 			@Override
 			public void onClick(View view) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
-				final CharSequence[] items = {"Take a photo", "From gallary"};
+				final CharSequence[] items = {"Take a photo", "From gallery"};
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 					// The 'which' argument contains the index position

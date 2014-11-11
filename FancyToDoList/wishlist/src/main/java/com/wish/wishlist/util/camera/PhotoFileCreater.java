@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.wish.wishlist.util.camera.AlbumStorageDirFactory;
-import com.wish.wishlist.util.camera.BaseAlbumDirFactory;
-import com.wish.wishlist.util.camera.FroyoAlbumDirFactory;
-
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -45,7 +41,7 @@ public class PhotoFileCreater {
 	}
 
 	public File setUpPhotoFile(boolean thumnail) throws IOException {
-		hideAlbumFromGallary(); //should not be called here, it shold be less frequent
+		hideAlbumFromGallery(); //should not be called here, it shold be less frequent
 		File f = createImageFile(thumnail);
 		return f;
 	}
@@ -80,7 +76,7 @@ public class PhotoFileCreater {
 		return storageDir;
 	}
 
-	private void hideAlbumFromGallary() {
+	private void hideAlbumFromGallery() {
 		File thumnailDir = getAlbumDir(true);
 		String thumnailPath = thumnailDir.getAbsolutePath() + "/.nomedia";
 		//Log.d("wishlist", thumnailPath);
