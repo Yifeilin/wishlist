@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include android:id="@+id/addTagView_header" layout="@layout/header" />
+
+    <EditText android:id="@+id/tagFilter" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:hint="Find a tag...">
+        <requestFocus />
+    </EditText>
+
+    <ListView android:id="@+id/taglist" android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+</LinearLayout>

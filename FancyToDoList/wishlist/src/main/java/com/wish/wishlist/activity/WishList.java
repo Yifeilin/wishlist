@@ -602,8 +602,7 @@ public class WishList extends Activity {
 		}
 
         else if (itemId == R.id.menu_tags) {
-            Intent i = new Intent(WishList.this, TagList.class);
-            i.putExtra(TagList.ITEM_ID, _selectedItem_id);
+            Intent i = new Intent(WishList.this, FindTag.class);
             startActivity(i);
         }
 
@@ -701,7 +700,7 @@ public class WishList extends Activity {
 		}
         else if (itemId == R.id.TAG) {
             Intent i = new Intent(WishList.this, AddTag.class);
-            i.putExtra(TagList.ITEM_ID, _selectedItem_id);
+            i.putExtra(AddTag.ITEM_ID, _selectedItem_id);
             startActivity(i);
         }
 
