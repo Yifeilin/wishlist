@@ -66,6 +66,25 @@ public class TagItemDBManager extends DBManager {
         }
     }
 
+    //This gets called when an item is deleted, we need to clean up both the TagItem table
+    //and the Tag table
+    public void Remove_tags_by_item(long itemId) {
+        ArrayList<Long> tagIds = tagIds_by_item(itemId);
+
+        //delete all the entries referencing this item in the TagItem table
+        open();
+        String where = ITEM_ID + "=" + itemId;
+        mDb.delete(DB_TABLE, where, null);
+        close();
+
+        //Delete the tags in the tag table if no other items are referencing it
+        for (long tagId : tagIds) {
+            if (!tagExists(tagId)) {
+                TagDBManager.instance(mCtx).deleteTag(tagId);
+            }
+        }
+    }
+
     Boolean tagExists(long tagId) {
         open();
         Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, TAG_ID + "=" + tagId, null, null, null, null, null);
@@ -88,6 +107,18 @@ public class TagItemDBManager extends DBManager {
         }
         ArrayList<String> tags = TagDBManager.instance(mCtx).getTagsByIds(ids.toArray(new String[ids.size()]));
         return tags;
+    }
+
+    public ArrayList<Long> tagIds_by_item(long itemId) {
+        open();
+        Cursor cursor = mDb.query(true, DB_TABLE, new String[] { TAG_ID }, ITEM_ID + "=" + itemId, null, null, null, null, null);
+        ArrayList<Long> tagIds = new ArrayList<Long>();
+        while (cursor.moveToNext()) {
+            long tagId = cursor.getLong(cursor.getColumnIndexOrThrow(TAG_ID));
+            tagIds.add(new Long(tagId));
+        }
+        close();
+        return tagIds;
     }
 
     public ArrayList<Long> ItemIds_by_tag(String tagName) {

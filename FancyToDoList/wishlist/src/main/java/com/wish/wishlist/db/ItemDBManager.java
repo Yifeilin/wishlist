@@ -235,8 +235,11 @@ public class ItemDBManager extends DBManager {
 		try {
             writableDB().execSQL(sql);
 		} catch (SQLException e) {
-			Log.e("Error deleteing item", e.toString());
+			Log.e("Error deleting item", e.toString());
 		}
+        TagItemDBManager.instance(mCtx).Remove_tags_by_item(_id);
+
+        //delete tags associated with this item
 		
 		//delete from location table
 		
