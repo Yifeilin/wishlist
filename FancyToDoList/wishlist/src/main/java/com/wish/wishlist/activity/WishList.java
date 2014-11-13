@@ -979,6 +979,12 @@ public class WishList extends Activity {
 			findViewById(R.id.listView_header).setVisibility(View.GONE);
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
+            if (_tagOption == null || _tagOption.isEmpty()) {
+                actionBar.setTitle(R.string.app_name);
+            }
+            else {
+                actionBar.setTitle(_tagOption);
+            }
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
