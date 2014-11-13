@@ -954,6 +954,7 @@ public class WishList extends Activity {
             case FIND_TAG: {
                 if (resultCode == Activity.RESULT_OK) {
                     _tagOption = data.getStringExtra("tag");
+                    updateActionBarTitle();
                     if (_tagOption != null && !_tagOption.isEmpty()) {
                         _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
                     }
@@ -981,18 +982,21 @@ public class WishList extends Activity {
 		updateView();
 	}
 
+    private void updateActionBarTitle() {
+        if (_tagOption == null || _tagOption.isEmpty()) {
+            getActionBar().setTitle(R.string.app_name);
+        }
+        else {
+            getActionBar().setTitle(_tagOption);
+        }
+    }
+
 	private void setUpActionBar() {
 		// Make sure we're running on Honeycomb or higher to use ActionBar APIs
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			findViewById(R.id.listView_header).setVisibility(View.GONE);
-			ActionBar actionBar = getActionBar();
-			actionBar.setDisplayHomeAsUpEnabled(true);
-            if (_tagOption == null || _tagOption.isEmpty()) {
-                actionBar.setTitle(R.string.app_name);
-            }
-            else {
-                actionBar.setTitle(_tagOption);
-            }
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            updateActionBarTitle();
 		}
 		else {
 			// we use the header instead of action bar for GingerBread and lower
