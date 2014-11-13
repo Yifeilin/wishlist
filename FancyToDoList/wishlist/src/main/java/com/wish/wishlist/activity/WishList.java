@@ -77,6 +77,7 @@ public class WishList extends Activity {
 	public static final String LOG_TAG = "WishList";
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
+    private static final int FIND_TAG = 2;
 	private String _viewOption = "list";
 	private String _filterOption = "all";
     private String _tagOption = "";
@@ -104,8 +105,8 @@ public class WishList extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
+
+        SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
 		_viewOption = pref.getString(PREF_VIEW_OPTION, "list");
         _filterOption = pref.getString(PREF_FILTER_OPTION, "all");
 		if (_filterOption.equals("all")) {
@@ -150,7 +151,6 @@ public class WishList extends Activity {
 				// and get its _id in database
 				long item_id = getDBItemID(v);
 				if (item_id == -1) {
-//					Log.d(LOG_TAG, "item id == -1");
 					return;
 				}
 
@@ -522,7 +522,6 @@ public class WishList extends Activity {
 				_selectedItem_id = getDBItemID(selected_view);
 			}
 			else {
-//				Log.d(WishList.LOG_TAG, "selected_view is null");
 				return;
 			}
 		}
@@ -533,12 +532,10 @@ public class WishList extends Activity {
 				_selectedItem_id = getDBItemID(selected_view);
 			}
 			else {
-//				Log.d(WishList.LOG_TAG, "selected_view is null");
 				return;
 			}
 		}
 		else if(selected_view == null){
-//			Log.d(WishList.LOG_TAG, "selected view is null");
 			return;
 		}
 
@@ -613,7 +610,7 @@ public class WishList extends Activity {
 
         else if (itemId == R.id.menu_tags) {
             Intent i = new Intent(WishList.this, FindTag.class);
-            startActivity(i);
+            startActivityForResult(i, FIND_TAG);
         }
 
 		return false;
@@ -923,39 +920,50 @@ public class WishList extends Activity {
 //		}
 
 		switch (requestCode) {
-		case EDIT_ITEM: {
-			if (resultCode == Activity.RESULT_OK) {
+            case EDIT_ITEM: {
+                if (resultCode == Activity.RESULT_OK) {
 
-			}
-			else {
+                }
+                else {
 
-			}
-			break;
-		}
-		case ADD_ITEM: {
-			if (resultCode == Activity.RESULT_OK) {
-					// Create an intent to show the item detail.
-					// Pass the item_id along so the next activity can use it to
-					// retrieve the info. about the item from database
-					long id = -1;
-					if (data != null) {
-						id = data.getLongExtra("itemID", -1);
-					}
-					
-					if (id != -1) {
+                }
+                break;
+            }
+            case ADD_ITEM: {
+                if (resultCode == Activity.RESULT_OK) {
+                    // Create an intent to show the item detail.
+                    // Pass the item_id along so the next activity can use it to
+                    // retrieve the info. about the item from database
+                    long id = -1;
+                    if (data != null) {
+                        id = data.getLongExtra("itemID", -1);
+                    }
+
+                    if (id != -1) {
 //						finish();
-						Intent i = new Intent(WishList.this, WishItemDetail.class);
-						i.putExtra("item_id", id);
-						startActivity(i);
-					}
-				}
-			else {
+                        Intent i = new Intent(WishList.this, WishItemDetail.class);
+                        i.putExtra("item_id", id);
+                        startActivity(i);
+                    }
+                }
+                else {
 
-			}
-			break;
-
-		}
-		}
+                }
+                break;
+            }
+            case FIND_TAG: {
+                if (resultCode == Activity.RESULT_OK) {
+                    _tagOption = data.getStringExtra("tag");
+                    if (_tagOption != null && !_tagOption.isEmpty()) {
+                        _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
+                    }
+                    populateItems(null, _where);
+                }
+                else {
+                }
+                break;
+            }
+        }
 //		if (requestCode == Activity.RESULT_OK) {
 //			switch (requestCode) {
 //

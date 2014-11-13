@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +26,6 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.TagDBManager;
@@ -78,9 +76,12 @@ public class FindTag extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String tag = (String) parent.getItemAtPosition(position);
-                Intent i = new Intent(FindTag.this, WishList.class);
-                i.putExtra("tag", tag);
-                startActivity(i);
+
+                //close this activity
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("tag", tag);
+                setResult(RESULT_OK, resultIntent);
+                finish();
             }
         });
     }
@@ -148,7 +149,6 @@ public class FindTag extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            Log.v("ConvertView", String.valueOf(position));
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.tag_list, null);
