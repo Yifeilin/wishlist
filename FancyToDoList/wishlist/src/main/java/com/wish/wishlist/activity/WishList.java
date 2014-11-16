@@ -348,6 +348,7 @@ public class WishList extends Activity {
 		}
 
 		updateView();
+        updateActionBarTitle();
 	}
 
 	/***
@@ -953,7 +954,6 @@ public class WishList extends Activity {
             case FIND_TAG: {
                 if (resultCode == Activity.RESULT_OK) {
                     _tagOption = data.getStringExtra("tag");
-                    updateActionBarTitle();
                     if (_tagOption != null) {
                         _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
                     }
@@ -982,11 +982,22 @@ public class WishList extends Activity {
 	}
 
     private void updateActionBarTitle() {
-        if (_tagOption == null) {
+        if (_tagOption == null && _statusOption.equals("all")) {
             getActionBar().setTitle(R.string.app_name);
+            getActionBar().setSubtitle(null);
+            return;
+        }
+        if (_tagOption != null) {
+            getActionBar().setTitle(_tagOption);
+        }
+        if (_statusOption.equals("completed")) {
+            getActionBar().setSubtitle("Completed");
+        }
+        else if (_statusOption.equals("in_progress")) {
+            getActionBar().setSubtitle("In progress");
         }
         else {
-            getActionBar().setTitle(_tagOption);
+            getActionBar().setSubtitle(null);
         }
     }
 
