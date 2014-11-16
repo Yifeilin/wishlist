@@ -36,8 +36,8 @@
 	 	android:showAsAction="ifRoom|withText"
   />
 
- <item android:id="@+id/menu_filter" 
-		android:title="Filter"
+ <item android:id="@+id/menu_status"
+		android:title="Status"
 	/>
 
 <item android:id="@+id/menu_tags"

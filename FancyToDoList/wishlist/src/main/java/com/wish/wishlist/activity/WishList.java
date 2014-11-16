@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -79,7 +78,7 @@ public class WishList extends Activity {
 	private static final int ADD_ITEM = 1;
     private static final int FIND_TAG = 2;
 	private String _viewOption = "list";
-	private String _filterOption = "all";
+	private String _statusOption = "all";
     private String _tagOption = "";
 	private String _sortOption = ItemsCursor.SortBy.item_name.toString();
 
@@ -108,14 +107,14 @@ public class WishList extends Activity {
 
         SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
 		_viewOption = pref.getString(PREF_VIEW_OPTION, "list");
-        _filterOption = pref.getString(PREF_FILTER_OPTION, "all");
-		if (_filterOption.equals("all")) {
+        _statusOption = pref.getString(PREF_FILTER_OPTION, "all");
+		if (_statusOption.equals("all")) {
 			_where.clear();
 		}
-		else if(_filterOption.equals("completed")) {
+		else if(_statusOption.equals("completed")) {
 			_where.put("complete", "1");
 		}
-		else if(_filterOption.equals("in_progress")) {
+		else if(_statusOption.equals("in_progress")) {
 			_where.put("complete", "0");
 		}
 
@@ -604,7 +603,7 @@ public class WishList extends Activity {
 				showDialog(DIALOG_SORT);
 		}
 
-		else if (itemId == R.id.menu_filter) {
+		else if (itemId == R.id.menu_status) {
 				showDialog(DIALOG_FILTER);
 		}
 
@@ -795,13 +794,13 @@ public class WishList extends Activity {
 			final CharSequence[] options = {BY_ALL, BY_COMPLETED, BY_INPROGRESS};
 
 			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(WishList.this);
-			optionBuilder.setTitle("Filter wishes");
+			optionBuilder.setTitle("Wish status");
 
 			int i = 0;
-			if (_filterOption.equals("completed")) {
+			if (_statusOption.equals("completed")) {
 				i = 1;
 			}
-			else if (_filterOption.equals("in_progress")) {
+			else if (_statusOption.equals("in_progress")) {
 				i = 2;
 			}
 			optionBuilder.setSingleChoiceItems(options, i, new DialogInterface.OnClickListener() {
@@ -809,21 +808,21 @@ public class WishList extends Activity {
 
 						if (options[item].equals(BY_ALL)) {
 							_where.clear();
-							_filterOption = "all";
+							_statusOption = "all";
 						}
 
 						else if (options[item].equals(BY_COMPLETED)) {
 							_where.put("complete", "1");
-							_filterOption = "completed";
+							_statusOption = "completed";
 						}
 						else {
 							_where.put("complete", "0");
-							_filterOption = "in_progress";
+							_statusOption = "in_progress";
 						}
 						
 						SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
 						SharedPreferences.Editor editor = pref.edit();
-						editor.putString(PREF_FILTER_OPTION, _filterOption);
+						editor.putString(PREF_FILTER_OPTION, _statusOption);
 						editor.commit();
 						
 						dialog.dismiss();

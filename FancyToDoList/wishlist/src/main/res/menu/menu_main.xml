@@ -24,7 +24,7 @@
 	 	android:showAsAction="ifRoom|withText"
  />
  
- <item android:id="@+id/menu_filter" 
+ <item android:id="@+id/menu_status"
 		android:title="Filter"
 		android:icon="@drawable/ic_menu_filter"
 	/>
