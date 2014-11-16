@@ -79,7 +79,7 @@ public class WishList extends Activity {
     private static final int FIND_TAG = 2;
 	private String _viewOption = "list";
 	private String _statusOption = "all";
-    private String _tagOption = "";
+    private String _tagOption = null;
 	private String _sortOption = ItemsCursor.SortBy.item_name.toString();
 
 	private ViewFlipper _viewFlipper;
@@ -124,7 +124,7 @@ public class WishList extends Activity {
 		// Get the intent, verify the action and get the query
 		Intent intent = getIntent();
         _tagOption = intent.getStringExtra("tag");
-        if (_tagOption != null && !_tagOption.isEmpty()) {
+        if (_tagOption != null) {
             _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
         }
 
@@ -954,7 +954,7 @@ public class WishList extends Activity {
                 if (resultCode == Activity.RESULT_OK) {
                     _tagOption = data.getStringExtra("tag");
                     updateActionBarTitle();
-                    if (_tagOption != null && !_tagOption.isEmpty()) {
+                    if (_tagOption != null) {
                         _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
                     }
                     populateItems(null, _where);
@@ -982,7 +982,7 @@ public class WishList extends Activity {
 	}
 
     private void updateActionBarTitle() {
-        if (_tagOption == null || _tagOption.isEmpty()) {
+        if (_tagOption == null) {
             getActionBar().setTitle(R.string.app_name);
         }
         else {
