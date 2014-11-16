@@ -136,7 +136,7 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
     //needed for action bar
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_actionbar_edititeminfo, menu);
+        inflater.inflate(R.menu.menu_actionbar_addtag, menu);
         return true;
     }
 
@@ -147,8 +147,8 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
             finish();
             return true;
         }
-        else if (id == R.id.menu_done) {
-            onDone();
+        else if (id == R.id.menu_save) {
+            onSave();
             return true;
         }
         else {
@@ -156,7 +156,7 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
         }
     }
 
-    protected void onDone() {
+    protected void onSave() {
         //Get the text after the last token in the view. This text has not been tokenized, but it should be regarded as a tag
         String lastTag = completionView.getText().toString().replaceFirst(PREFIX, "").replace(",", "").trim();
         if (!lastTag.isEmpty()) {
