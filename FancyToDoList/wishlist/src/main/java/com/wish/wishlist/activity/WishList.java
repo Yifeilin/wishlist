@@ -87,8 +87,6 @@ public class WishList extends Activity {
 	private ListView _listView;
 	private GridView _gridView;
 	private Button _addNew;
-	// private EditText mySearchText;
-//	private Spinner myViewSpinner;
 	private ImageButton _backImageButton;
 	private ImageButton _viewImageButton;
 	private ImageButton _searchImageButton;
@@ -314,24 +312,6 @@ public class WishList extends Activity {
 	}
 
 	/***
-	 * display the items matching the search in both list and grid view, called
-	 * when the activity is created through search quest
-	 * 
-	 * @param sortBy
-	 * @param itemName
-	 *            the name to search
-	 */
-
-	// private void displaySearchItem(String itemName, ItemsCursor.SortBy
-	// sortBy){
-	// _wishItemCursor = _itemDBManager.searchItems(itemName);
-	// // updateListView();
-	// // updateGridView();
-	// updateView();
-	//
-	// }
-
-	/***
 	 * display the items in either list or grid view sorted by "sortBy"
 	 * 
 	 * @param sortBy
@@ -378,22 +358,19 @@ public class WishList extends Activity {
 	
 	private void updateGridView() {
 		if (_wishItemCursor != null) {
-			_wishItemCursor.requery();
-			int resID = R.layout.wishitem_photo;
+            _wishItemCursor.requery();
+            int resID = R.layout.wishitem_photo;
 
-			String[] from = new String[] { ItemDBManager.KEY_ID,
-					ItemDBManager.KEY_PHOTO_URL };
+            String[] from = new String[]{ItemDBManager.KEY_ID,
+                    ItemDBManager.KEY_PHOTO_URL};
 
-			int[] to = new int[] { R.id.txtItemID_Grid, R.id.imgPhotoGrid };
-			_wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
-					resID, _wishItemCursor, from, to);
+            int[] to = new int[]{R.id.txtItemID_Grid, R.id.imgPhotoGrid};
+            _wishListItemAdapterCursor = new WishListItemCursorAdapter(this,
+                    resID, _wishItemCursor, from, to);
 
-			_gridView.setAdapter(_wishListItemAdapterCursor);
-			_wishListItemAdapterCursor.notifyDataSetChanged();
-
-		} else {
-			// give message about empty cursor
-		}
+            _gridView.setAdapter(_wishListItemAdapterCursor);
+            _wishListItemAdapterCursor.notifyDataSetChanged();
+        }
 	}
 
 	private void updateListView() {
@@ -456,7 +433,6 @@ public class WishList extends Activity {
 						new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
-						//return false;
 					}
 				});
 
@@ -483,21 +459,6 @@ public class WishList extends Activity {
 		}
 		return true;
 	}
-
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// if(keyCode == KeyEvent.KEYCODE_SEARCH){
-	// if(mySearchText.getVisibility() == View.VISIBLE)
-	// mySearchText.setVisibility(View.INVISIBLE);
-	// else
-	// {
-	// mySearchText.setVisibility(View.VISIBLE);
-	// mySearchText.requestFocus();
-	// }
-	// return true;
-	// }
-	// return false;
-	// }
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -881,9 +842,6 @@ public class WishList extends Activity {
 		savedInstanceState.putInt(SELECTED_INDEX_KEY,
 				_gridView.getSelectedItemPosition());
 		}
-		// save the current sort criterion
-		//savedInstanceState.putString(SORT_BY_KEY, SORT_BY.item_name());
-		
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -896,35 +854,17 @@ public class WishList extends Activity {
 			if (savedInstanceState.containsKey(SELECTED_INDEX_KEY)) {
 				pos = savedInstanceState.getInt(SELECTED_INDEX_KEY, -1);
 			}
-		//	_viewOption = savedInstanceState.getString(PREF_VIEW_OPTION);
 		}
-		
-//		if (_viewOption.equals("list")) {
-			_listView.setSelection(pos);
-//		}
-//		else {
-			_gridView.setSelection(pos);		
-//		}
-		
-		updateView();
-		
-		// restore the sort order
-		// SORT_BY =
-		// ItemsCursor.SortBy.valueOf(savedInstanceState.getString(SORT_BY_KEY));
-		//
-		// int a = 0;
-		// int b = 0;
 
-		// restore the view type(list/grid)
+        _listView.setSelection(pos);
+        _gridView.setSelection(pos);
 
-		// restore the search results
-
+        updateView();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		// Close the database
 		_itemDBManager.close();
 	}
 
@@ -960,7 +900,6 @@ public class WishList extends Activity {
                     }
 
                     if (id != -1) {
-//						finish();
                         Intent i = new Intent(WishList.this, WishItemDetail.class);
                         i.putExtra("item_id", id);
                         startActivity(i);
@@ -990,15 +929,6 @@ public class WishList extends Activity {
                 break;
             }
         }
-//		if (requestCode == Activity.RESULT_OK) {
-//			switch (requestCode) {
-//
-//			case DETAIL_INFO_ACT:
-//				// should retrieve the info from data and construct a wish item
-//				// object
-//				break;			
-//			}
-//		}
 	}
 	
 	@Override
@@ -1045,10 +975,6 @@ public class WishList extends Activity {
 				@Override
 				public void onClick(View view) {
 					finish();
-					//start the WishList activity and move the focus to the newly added item
-					//				Intent home = new Intent(WishList.this, DashBoard.class);
-					//				startActivity(home);
-					//onSearchRequested();
 				}
 			});
 
