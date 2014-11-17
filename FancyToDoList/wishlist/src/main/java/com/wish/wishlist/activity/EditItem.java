@@ -315,8 +315,8 @@ public class EditItem extends Activity implements Observer {
         tagButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent i = new Intent(EditItem.this, AddTagForNewItem.class);
-                i.putExtra(AddTagForNewItem.TAGS, _tags);
+                Intent i = new Intent(EditItem.this, AddTagFromEditItem.class);
+                i.putExtra(AddTagFromEditItem.TAGS, _tags);
                 startActivityForResult(i, ADD_TAG);
             }
         });
@@ -466,7 +466,7 @@ public class EditItem extends Activity implements Observer {
 			}
             case ADD_TAG: {
                 if (resultCode == RESULT_OK) {
-                    _tags = data.getStringArrayListExtra(AddTagForNewItem.TAGS);
+                    _tags = data.getStringArrayListExtra(AddTagFromEditItem.TAGS);
                 }
             }
 		}//switch

@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import java.util.ArrayList;
 
-public class AddTagForNewItem extends AddTag {
+public class AddTagFromEditItem extends AddTag {
     public final static String TAGS = "tags";
 
     @Override
