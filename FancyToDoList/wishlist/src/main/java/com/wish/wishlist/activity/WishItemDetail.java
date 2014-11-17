@@ -357,7 +357,7 @@ public class WishItemDetail extends Activity {
 	}
 	
 	private void editItem(){
-		Intent i = new Intent(WishItemDetail.this, EditItemInfo.class);
+		Intent i = new Intent(WishItemDetail.this, EditItem.class);
 		i.putExtra("item_id", _itemId);
 		//i.putExtra("position", position);
 		startActivityForResult(i, EDIT_ITEM);

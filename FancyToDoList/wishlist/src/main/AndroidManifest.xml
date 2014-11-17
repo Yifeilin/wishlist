@@ -94,7 +94,7 @@
             
         </activity>
         
-        <activity android:name=".activity.EditItemInfo"
+        <activity android:name=".activity.EditItem"
         		  android:label="@string/app_name"
 				  android:theme="@style/WishList.EditWish.Theme.ActionBar"
 				  >

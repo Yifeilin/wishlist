@@ -58,7 +58,7 @@ import android.preference.PreferenceManager;
  * as a row in the Item table in the database
  */
 @SuppressLint("NewApi")
-public class EditItemInfo extends Activity implements Observer {
+public class EditItem extends Activity implements Observer {
 
 	private EditText _itemNameEditText;
 	private EditText _noteEditText;
@@ -132,7 +132,7 @@ public class EditItemInfo extends Activity implements Observer {
 		_locationDBManager = new LocationDBManager(this);
 		_locationDBManager.open();
 		
-		_pManager = new PositionManager(EditItemInfo.this);
+		_pManager = new PositionManager(EditItem.this);
 		_pManager.addObserver(this);
 
 		//find the resources by their ids
@@ -151,7 +151,7 @@ public class EditItemInfo extends Activity implements Observer {
 		_imageItem.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent i = new Intent(EditItemInfo.this, FullscreenPhoto.class);
+				Intent i = new Intent(EditItem.this, FullscreenPhoto.class);
 				if (_fullsizePhotoPath != null) {
 					i.putExtra("fullsize_pic_str", _fullsizePhotoPath);
 					startActivity(i);
@@ -236,7 +236,7 @@ public class EditItemInfo extends Activity implements Observer {
 		_cameraImageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(EditItemInfo.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(EditItem.this);
 				final CharSequence[] items = {"Take a photo", "From gallery"};
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
@@ -315,7 +315,7 @@ public class EditItemInfo extends Activity implements Observer {
         tagButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent i = new Intent(EditItemInfo.this, AddTagForNewItem.class);
+                Intent i = new Intent(EditItem.this, AddTagForNewItem.class);
                 i.putExtra(AddTagForNewItem.TAGS, _tags);
                 startActivityForResult(i, ADD_TAG);
             }
@@ -437,7 +437,7 @@ public class EditItemInfo extends Activity implements Observer {
 		mItem_id = item.save();
 
         //save the tags of this item
-        TagItemDBManager.instance(EditItemInfo.this).Update_item_tags(mItem_id, _tags);
+        TagItemDBManager.instance(EditItem.this).Update_item_tags(mItem_id, _tags);
 
 		//close this activity
 		Intent resultIntent = new Intent();
@@ -540,7 +540,7 @@ public class EditItemInfo extends Activity implements Observer {
 							new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							setResult(RESULT_CANCELED, null);
-							EditItemInfo.this.finish();
+							EditItem.this.finish();
 						}
 					}).setNegativeButton("No",
 							new DialogInterface.OnClickListener() {
@@ -660,7 +660,7 @@ public class EditItemInfo extends Activity implements Observer {
 		@Override
 			protected void onPostExecute(String add) {
 				if (_ddStr.equals("unknown")) {
-					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
+					Toast.makeText(EditItem.this, "location not available", Toast.LENGTH_LONG);
 				}
 				_locationEditText.setText(_ddStr);
 				_isGettingLocation = false;

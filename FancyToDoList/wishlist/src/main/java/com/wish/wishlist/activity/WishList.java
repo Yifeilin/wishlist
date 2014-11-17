@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -185,7 +184,7 @@ public class WishList extends Activity {
 
 		_addNew.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent editItem = new Intent(WishList.this, EditItemInfo.class);
+				Intent editItem = new Intent(WishList.this, EditItem.class);
 				startActivityForResult(editItem, ADD_ITEM);
 			}
 		});
@@ -600,7 +599,7 @@ public class WishList extends Activity {
 
 		else if (itemId == R.id.menu_add) {
 			// let user generate a wish item
-			Intent editItem = new Intent(this, EditItemInfo.class);
+			Intent editItem = new Intent(this, EditItem.class);
 			startActivityForResult(editItem, ADD_ITEM);
 			return true;
 		}
@@ -647,7 +646,7 @@ public class WishList extends Activity {
 			return true;
 		}
 		else if (itemId == R.id.EDIT) {
-			Intent editItem = new Intent(this, EditItemInfo.class);
+			Intent editItem = new Intent(this, EditItem.class);
 			editItem.putExtra("item_id", _selectedItem_id);
 			startActivityForResult(editItem, EDIT_ITEM);
 			return true;

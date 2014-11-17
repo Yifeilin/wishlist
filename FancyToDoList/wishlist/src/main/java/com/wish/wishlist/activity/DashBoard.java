@@ -12,8 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.TextView;
 
 import com.wish.wishlist.R;
@@ -78,7 +76,7 @@ public class DashBoard extends Activity {
 	{
 		int id = v.getId ();
 		if (id == R.id.home_btn_new_item) {
-			   startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
+			   startActivityForResult(new Intent(getApplicationContext(), EditItem.class), EDIT_ITEM);
 		}
 		else if(id ==  R.id.home_btn_wishlist) {
 			   startActivity (new Intent(getApplicationContext(), WishList.class));
@@ -211,7 +209,7 @@ public class DashBoard extends Activity {
 					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: RESULT_OK");
 					_fullsizePhotoPath = String.valueOf(_newfullsizePhotoPath);
 					_newfullsizePhotoPath = null;
-					Intent i = new Intent(getApplicationContext(), EditItemInfo.class);
+					Intent i = new Intent(getApplicationContext(), EditItem.class);
 					i.putExtra("fullsizePhotoPath", _fullsizePhotoPath);
 					startActivityForResult (i, EDIT_ITEM);
 					//	startActivityForResult(new Intent(getApplicationContext(), EditItemInfo.class), EDIT_ITEM);
