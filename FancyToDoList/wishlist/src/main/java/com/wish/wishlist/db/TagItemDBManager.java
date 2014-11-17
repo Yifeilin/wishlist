@@ -133,4 +133,26 @@ public class TagItemDBManager extends DBManager {
         close();
         return ItemIds;
     }
+
+    //tag the item with the given tags
+    public void Update_item_tags(long itemId, ArrayList<String> tags) {
+        // app icon save in action bar clicked;
+        ArrayList<String> oldTags = TagItemDBManager.instance(mCtx).tags_of_item(itemId);
+
+        //Remove the deleted tags
+        for (String tag : oldTags) {
+            if (!tags.contains(tag)) {
+                TagItemDBManager.instance(mCtx).Untag_item(tag, itemId);
+            }
+            else {
+                //Remove the tags we already have so the following for loop will not tag them again
+                tags.remove(tag);
+            }
+        }
+
+        //Add the new tags
+        for (String tag : tags) {
+            TagItemDBManager.instance(mCtx).Tag_item(tag, itemId);
+        }
+    }
 }

@@ -154,6 +154,10 @@
             android:label="@string/app_name"
             android:theme="@style/WishList.EditWish.Theme.ActionBar" >
         </activity>
+        <activity android:name=".activity.AddTagForNewItem"
+            android:label="@string/app_name"
+            android:theme="@style/WishList.EditWish.Theme.ActionBar" >
+        </activity>
 <!--    android:theme="@style/ToDoTheme"></activity> -->
                   
 <!--         <provider android:name="com.android.wishlist.defaultphotoprovider" -->

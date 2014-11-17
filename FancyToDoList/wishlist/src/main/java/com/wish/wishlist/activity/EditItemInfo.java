@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.BufferedOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Observer;
@@ -16,6 +17,7 @@ import java.util.Observable;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.LocationDBManager;
 import com.wish.wishlist.db.StoreDBManager;
+import com.wish.wishlist.db.TagItemDBManager;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.PositionManager;
@@ -43,6 +45,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -96,10 +99,12 @@ public class EditItemInfo extends Activity implements Observer {
 	private int _complete = -1;
 	private boolean _editNew = true;
 	private boolean _isGettingLocation = false;
+    private ArrayList<String> _tags;
 	
 	private AlertDialog _alert;
 	static final private int TAKE_PICTURE = 1;
 	private static final int SELECT_PICTURE = 2;
+    private static final int ADD_TAG = 3;
 	static final private String TAG = "EditItemInfo";
 
 	@Override
@@ -218,18 +223,16 @@ public class EditItemInfo extends Activity implements Observer {
 					_imageItem.setImageURI(picture_Uri);
 				}
 			}
+
+            _tags = TagItemDBManager.instance(this).tags_of_item(mItem_id);
 		}
 		
 		else { //we are editing a new wish, get the location in background
 			boolean tagLocation = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("autoLocation", true);
 			if (tagLocation) {
-				Log.d(WishList.LOG_TAG, "tag location true"); 
 				_pManager.startLocationUpdates();
 				_isGettingLocation = true;
 				_locationEditText.setText("Loading location...");
-			}
-			else {
-				Log.d(WishList.LOG_TAG, "tag location false"); 
 			}
 		}
 		
@@ -312,8 +315,17 @@ public class EditItemInfo extends Activity implements Observer {
 			}
 		});
 
+        Button tagButton = (Button) findViewById(R.id.tag);
+        tagButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent i = new Intent(EditItemInfo.this, AddTagForNewItem.class);
+                i.putExtra(AddTagForNewItem.TAGS, _tags);
+                startActivityForResult(i, ADD_TAG);
+            }
+        });
+
 		if (savedInstanceState != null) {
-//			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
 			// restore the current selected item in the list
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
@@ -330,9 +342,6 @@ public class EditItemInfo extends Activity implements Observer {
 //				Log.d(WishList.LOG_TAG, "_thumbnail not null");
 //			}
 		}
-//		else{
-//			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
-//		}
 	}
 
 	@Override
@@ -441,6 +450,10 @@ public class EditItemInfo extends Activity implements Observer {
 		
 		mItem_id = item.save();
 
+
+        //save the tags of this item
+        TagItemDBManager.instance(EditItemInfo.this).Update_item_tags(mItem_id, _tags);
+
 		//close this activity
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra("itemID", mItem_id);
@@ -468,26 +481,24 @@ public class EditItemInfo extends Activity implements Observer {
 		switch (requestCode) {
 			case TAKE_PICTURE: {
 				if (resultCode == RESULT_OK) {
-					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: RESULT_OK");
 					_fullsizePhotoPath = String.valueOf(_newfullsizePhotoPath);
 					_newfullsizePhotoPath = null;
 					handleBigCameraPhoto();
 				}
-//				else {
-//					Log.d(WishList.LOG_TAG, "TAKE_PICTURE: not RESULT_OK");
-//				}
 				break;
 			} 
 			case SELECT_PICTURE: {
 				if (resultCode == RESULT_OK) {
-					//Log.d(WishList.LOG_TAG, "SELECT_PICTURE: RESULT_OK");
 					Uri selectedImageUri = data.getData();
-					Log.d(WishList.LOG_TAG, "Image URL : " + selectedImageUri.toString());
 					_fullsizePhotoPath = copyPhotoToAlbum(selectedImageUri);
-					Log.d(WishList.LOG_TAG, "Image Path : " + _fullsizePhotoPath);
 					setPic();
 				}
 			}
+            case ADD_TAG: {
+                if (resultCode == RESULT_OK) {
+                    _tags = data.getStringArrayListExtra(AddTagForNewItem.TAGS);
+                }
+            }
 		}//switch
 	}
 	
@@ -506,12 +517,8 @@ public class EditItemInfo extends Activity implements Observer {
 
 	private void handleBigCameraPhoto() {
 		if (_fullsizePhotoPath != null) {
-//			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == " + _fullsizePhotoPath);
 			setPic();
 		}
-//		else {
-//			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath == null");
-//		}
 	}
 
 
@@ -606,11 +613,9 @@ public class EditItemInfo extends Activity implements Observer {
 		//this will cut the pic to be exact width*height
 		_thumbnail = android.media.ThumbnailUtils.extractThumbnail(_thumbnail, width, height);
 		if (_thumbnail == null) {
-			Log.d(WishList.LOG_TAG, "_thumbnail null");
 			return;
 		}
 		else {
-			Log.d(WishList.LOG_TAG, "_thumbnail is not null");
 			_imageItem.setImageBitmap(_thumbnail);
 		}
 		
@@ -625,7 +630,6 @@ public class EditItemInfo extends Activity implements Observer {
 			File f = null;
 			f = PhotoFileCreater.getInstance().setUpPhotoFile(true);
 			String thumnailPath = f.getAbsolutePath();
-			Log.d(WishList.LOG_TAG, "_thumbnail" + thumnailPath);
 			Uri uri = Uri.fromFile(f);
 			
 			OutputStream outStream = getContentResolver()
@@ -636,8 +640,6 @@ public class EditItemInfo extends Activity implements Observer {
 			outStream.close();
 			_picture_str = uri.toString();
 		} catch (Exception e) {
-//			Log.e(WishList.LOG_TAG,
-//					"exception while writing image", e);s
 		}
 	}
 	
@@ -645,7 +647,6 @@ public class EditItemInfo extends Activity implements Observer {
 	//this will also save the thumbnail on switching screen orientation
 	@Override
 	protected void onSaveInstanceState(Bundle savedInstanceState) {
-//		Log.d(WishList.LOG_TAG, "");
 		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
 		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
 		savedInstanceState.putParcelable("bitmap", _thumbnail);
@@ -663,15 +664,11 @@ public class EditItemInfo extends Activity implements Observer {
 		super.onRestoreInstanceState(savedInstanceState);
 		// restore the current selected item in the list
 		if (savedInstanceState != null) {
-//			Log.d(WishList.LOG_TAG, "savedInstanceState != null");
 			_newfullsizePhotoPath = savedInstanceState.getString("newfullsizePhotoPath");
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
 			_thumbnail = savedInstanceState.getParcelable("bitmap");
 			_imageItem.setImageBitmap(_thumbnail);			
 		}
-//		else {
-//			Log.d(WishList.LOG_TAG, "savedInstanceState == null");
-//		}
 	}
 
 	@Override
