@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
@@ -41,6 +42,7 @@ public class FindTag extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_tag);
         setUpActionBar();
+
         showTags();
     }
 
@@ -87,22 +89,30 @@ public class FindTag extends Activity {
     }
 
     @Override
+    //needed for action bar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actionbar_findtag, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
             return true;
         }
-        else if (id == R.id.menu_done) {
-            onDone();
+        else if (id == R.id.menu_show_all_wishes) {
+            Intent resultIntent = new Intent();
+            setResult(RESULT_OK, resultIntent);
+            finish();
             return true;
         }
         else {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    protected void onDone() {}
 
     private void setUpActionBar() {
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
