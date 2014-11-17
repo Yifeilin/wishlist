@@ -564,7 +564,25 @@ public class WishList extends Activity {
 
 		long itemId = item.getItemId();
 		if (itemId ==  android.R.id.home) {
-			finish();
+            if (_tagOption != null || !_statusOption.equals("all")) {
+                //the wishes are currently filtered by tag or status, tapping back button now should clean up the filter and show all wishes
+                _tagOption = null;
+                _itemIds.clear();
+
+                _statusOption = "all";
+                _where.clear();
+
+                SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(PREF_FILTER_OPTION, _statusOption);
+                editor.commit();
+
+                populateItems(null, _where);
+            }
+            else {
+                //we are already showing all the wishes, tapping back button should close the list view
+                finish();
+            }
 			return true;
 		}
 		else if (itemId == R.id.menu_search) {

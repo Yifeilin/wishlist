@@ -1,7 +1,0 @@
-<?xl version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/menu_show_all_wishes"
-		android:title="All wishes"
-		android:showAsAction="always"
-	/>
-</menu>

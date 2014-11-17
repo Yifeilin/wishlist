@@ -89,23 +89,9 @@ public class FindTag extends Activity {
     }
 
     @Override
-    //needed for action bar
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_actionbar_findtag, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-        else if (id == R.id.menu_show_all_wishes) {
-            Intent resultIntent = new Intent();
-            setResult(RESULT_OK, resultIntent);
             finish();
             return true;
         }
