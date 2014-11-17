@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -68,6 +69,7 @@ public class WishList extends Activity {
 	private static final String SORT_BY_KEY = "SORT_BY_KEY";
 	private static final String PREF_VIEW_OPTION = "viewOption";
 	private static final String PREF_FILTER_OPTION = "filterOption";
+    private static final String PREF_TAG_OPTION = "tagOption";
 	private static final String PREF_SORT_OPTION = "sortOption";
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
@@ -108,6 +110,7 @@ public class WishList extends Activity {
         SharedPreferences pref = this.getPreferences(MODE_PRIVATE);
 		_viewOption = pref.getString(PREF_VIEW_OPTION, "list");
         _statusOption = pref.getString(PREF_FILTER_OPTION, "all");
+
 		if (_statusOption.equals("all")) {
 			_where.clear();
 		}
@@ -118,16 +121,15 @@ public class WishList extends Activity {
 			_where.put("complete", "0");
 		}
 
-
 		_sortOption = pref.getString(PREF_SORT_OPTION, ItemsCursor.SortBy.item_name.toString());
 
-		// Get the intent, verify the action and get the query
-		Intent intent = getIntent();
-        _tagOption = intent.getStringExtra("tag");
+        _tagOption = pref.getString(PREF_TAG_OPTION, null);
         if (_tagOption != null) {
             _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
         }
 
+		// Get the intent, verify the action and get the query
+		Intent intent = getIntent();
 		setContentView(R.layout.main);
 
 		setUpActionBar();
@@ -575,6 +577,7 @@ public class WishList extends Activity {
                 SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString(PREF_FILTER_OPTION, _statusOption);
+                editor.putString(PREF_TAG_OPTION, _tagOption);
                 editor.commit();
 
                 populateItems(null, _where);
@@ -972,6 +975,12 @@ public class WishList extends Activity {
             case FIND_TAG: {
                 if (resultCode == Activity.RESULT_OK) {
                     _tagOption = data.getStringExtra("tag");
+
+                    SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString(PREF_TAG_OPTION, _tagOption);
+                    editor.commit();
+
                     if (_tagOption != null) {
                         _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
                     }
@@ -996,7 +1005,7 @@ public class WishList extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateView();
+        updateView();
 	}
 
     private void updateActionBarTitle() {
