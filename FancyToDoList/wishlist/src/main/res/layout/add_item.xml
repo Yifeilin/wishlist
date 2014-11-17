@@ -31,12 +31,20 @@
 			android:layout_weight="1"/>
 		
 		<ImageButton style="@style/TitleBarAction"
-			android:id="@+id/imageButton_camera"
-			android:contentDescription="@string/description_camera" 
-			android:src="@drawable/ic_camera_default_72by72"
-			android:onClick="onClickCamera"
-			android:layout_gravity="center"
-			android:layout_weight="1"/>
+            android:id="@+id/imageButton_camera"
+            android:contentDescription="@string/description_camera"
+            android:src="@drawable/ic_camera_default_72by72"
+            android:onClick="onClickCamera"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+
+        <ImageButton style="@style/TitleBarAction"
+            android:id="@+id/imageButton_tag"
+            android:contentDescription="@string/description_tag"
+            android:src="@drawable/ic_tag_default_72by72"
+            android:onClick="onClickTag"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
 
 		<ImageButton style="@style/TitleBarAction"
 			android:id="@+id/imageButton_gallery"
@@ -130,17 +138,7 @@
 			 	android:textColor="@color/bodyText_dark_grey"
 			 />
 
-            <Button
-                android:id="@+id/tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Tag"
-                android:textSize="@dimen/text_size_medium"
-                android:textColor="@color/bodyText_dark_grey"
-            />
-
-				<ImageView android:id="@+id/image_photo" style="@style/GridImageView"
+			<ImageView android:id="@+id/image_photo" style="@style/GridImageView"
 				android:layout_width="120dp"
 				android:layout_height="120dp"
 				android:padding="3dp"

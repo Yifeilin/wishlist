@@ -145,6 +145,17 @@ public class EditItem extends Activity implements Observer {
 		
 
 		_cameraImageButton = (ImageButton) findViewById(R.id.imageButton_camera);
+
+        ImageButton tagImageButton = (ImageButton) findViewById(R.id.imageButton_tag);
+        tagImageButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(EditItem.this, AddTagFromEditItem.class);
+                i.putExtra(AddTagFromEditItem.TAGS, _tags);
+                startActivityForResult(i, ADD_TAG);
+            }
+        });
+
 		_galleryImageButton = (ImageButton) findViewById(R.id.imageButton_gallery);
 		_imageItem = (ImageView) findViewById(R.id.image_photo);
 
@@ -310,16 +321,6 @@ public class EditItem extends Activity implements Observer {
 				return false;
 			}
 		});
-
-        Button tagButton = (Button) findViewById(R.id.tag);
-        tagButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Intent i = new Intent(EditItem.this, AddTagFromEditItem.class);
-                i.putExtra(AddTagFromEditItem.TAGS, _tags);
-                startActivityForResult(i, ADD_TAG);
-            }
-        });
 
 		if (savedInstanceState != null) {
 			// restore the current selected item in the list
