@@ -37,7 +37,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,8 +52,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-
-//import android.content.pm.ActivityInfo;
 
 /*** EditItemInfo.java is responsible for reading in the info. of a newly added item 
  * including its name, description, time, price, location and photo, and saving them
@@ -235,7 +232,6 @@ public class EditItemInfo extends Activity implements Observer {
 				_locationEditText.setText("Loading location...");
 			}
 		}
-		
 
 		_cameraImageButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -331,16 +327,6 @@ public class EditItemInfo extends Activity implements Observer {
 			_fullsizePhotoPath = savedInstanceState.getString("fullsizePhotoPath");
 			_thumbnail = savedInstanceState.getParcelable("bitmap");
 			_imageItem.setImageBitmap(_thumbnail);
-			
-//			Log.d(WishList.LOG_TAG, "_newfullsizePhotoPath " + _newfullsizePhotoPath);			
-//			Log.d(WishList.LOG_TAG, "_fullsizePhotoPath " + _fullsizePhotoPath);
-			
-//			if (_thumbnail == null) {
-//				Log.d(WishList.LOG_TAG, "_thumbnail null");
-//			}
-//			else {
-//				Log.d(WishList.LOG_TAG, "_thumbnail not null");
-//			}
 		}
 	}
 
@@ -450,7 +436,6 @@ public class EditItemInfo extends Activity implements Observer {
 		
 		mItem_id = item.save();
 
-
         //save the tags of this item
         TagItemDBManager.instance(EditItemInfo.this).Update_item_tags(mItem_id, _tags);
 
@@ -459,22 +444,7 @@ public class EditItemInfo extends Activity implements Observer {
 		resultIntent.putExtra("itemID", mItem_id);
 		setResult(RESULT_OK, resultIntent);
 		finish();
-		
-//		//start the WishList activity and move the focus to the newly added item
-//		Intent wishList = new Intent(this, WishList.class);
-//		startActivity(wishList);
-
 	}
-
-//	@Override
-//	protected Dialog onCreateDialog(int id) {
-//		switch (id) {
-//		case DATE_DIALOG_ID:
-//			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-//					mDay);
-//		}
-//		return null;
-//	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -521,7 +491,6 @@ public class EditItemInfo extends Activity implements Observer {
 		}
 	}
 
-
 	private String copyPhotoToAlbum(Uri uri) {
 		try {
 			//save the photo to a file we created in wishlist album
@@ -563,7 +532,7 @@ public class EditItemInfo extends Activity implements Observer {
 			return false;
 		}
 		
-		//only show warnning if user is editing a new item
+		//only show warning if user is editing a new item
 		if(_editNew){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("Discard the wish?").setCancelable(
@@ -572,13 +541,11 @@ public class EditItemInfo extends Activity implements Observer {
 						public void onClick(DialogInterface dialog, int id) {
 							setResult(RESULT_CANCELED, null);
 							EditItemInfo.this.finish();
-							//return super.onKeyDown(keyCode, event);
 						}
 					}).setNegativeButton("No",
 							new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
-							//return false;
 						}
 					});
 			_alert = builder.create();
@@ -598,14 +565,12 @@ public class EditItemInfo extends Activity implements Observer {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// do something on back button.
 			return navigateBack();
 		}
 		return false;
 	}
 	
 	private void setPic() {
-		//MediaStore.Images.thumbnails.getThumbnail();
 		int width =128;
 		int height=128;
 
@@ -629,7 +594,6 @@ public class EditItemInfo extends Activity implements Observer {
 		try {
 			File f = null;
 			f = PhotoFileCreater.getInstance().setUpPhotoFile(true);
-			String thumnailPath = f.getAbsolutePath();
 			Uri uri = Uri.fromFile(f);
 			
 			OutputStream outStream = getContentResolver()
@@ -650,12 +614,6 @@ public class EditItemInfo extends Activity implements Observer {
 		savedInstanceState.putString("newfullsizePhotoPath", _newfullsizePhotoPath);
 		savedInstanceState.putString("fullsizePhotoPath", _fullsizePhotoPath);
 		savedInstanceState.putParcelable("bitmap", _thumbnail);
-		if (_thumbnail == null) {
-			Log.d(WishList.LOG_TAG, "saved _thumbnail is null");
-		}
-		else {
-			Log.d(WishList.LOG_TAG, "saved _thumbnail is not null");
-		}
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -674,7 +632,6 @@ public class EditItemInfo extends Activity implements Observer {
 	@Override
 		public void update(Observable observable, Object data) {
 			// This method is notified after data changes.
-			Log.d(WishList.LOG_TAG, "update");
 			//get the location
 			Location location = _pManager.getCurrentLocation();
 			if (location == null){
@@ -698,12 +655,10 @@ public class EditItemInfo extends Activity implements Observer {
 			protected String doInBackground(String... arg) {
 				//getCuttentAddStr using geocode, may take a while, need to put this to a separate thread
 				_ddStr = _pManager.getCuttentAddStr();
-				Log.d(TAG, "finish doInBackground");
 				return _ddStr;
 			}
 		@Override
 			protected void onPostExecute(String add) {
-				Log.d(TAG, "onPostExe");
 				if (_ddStr.equals("unknown")) {
 					Toast.makeText(EditItemInfo.this, "location not available", Toast.LENGTH_LONG);
 				}
@@ -734,14 +689,12 @@ public class EditItemInfo extends Activity implements Observer {
 					navigateBack();
 				}
 			});
-
 			_saveImageButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					saveWishItem();
 				}
 			});
-
 		}
 	}
 }
