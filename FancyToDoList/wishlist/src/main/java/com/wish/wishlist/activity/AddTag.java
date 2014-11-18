@@ -11,6 +11,7 @@ import java.util.Set;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -165,6 +166,9 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
         ArrayList<String> tags = new ArrayList<String>();
         tags.addAll(currentTags);
         TagItemDBManager.instance(AddTag.this).Update_item_tags(mItem_id, tags);
+
+        Intent resultIntent = new Intent();
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 

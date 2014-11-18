@@ -78,6 +78,7 @@ public class WishList extends Activity {
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
     private static final int FIND_TAG = 2;
+    private static final int ADD_TAG = 3;
 	private String _viewOption = "list";
 	private String _statusOption = "all";
     private String _tagOption = null;
@@ -689,7 +690,7 @@ public class WishList extends Activity {
         else if (itemId == R.id.TAG) {
             Intent i = new Intent(WishList.this, AddTag.class);
             i.putExtra(AddTag.ITEM_ID, _selectedItem_id);
-            startActivity(i);
+            startActivityForResult(i, ADD_TAG);
         }
 
 		return false; }
@@ -881,13 +882,6 @@ public class WishList extends Activity {
 
 		switch (requestCode) {
             case EDIT_ITEM: {
-                if (resultCode == Activity.RESULT_OK) {
-
-                }
-                else {
-
-                }
-                break;
             }
             case ADD_ITEM: {
                 if (resultCode == Activity.RESULT_OK) {
@@ -922,9 +916,17 @@ public class WishList extends Activity {
                     if (_tagOption != null) {
                         _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
                     }
-                    populateItems(null, _where);
                 }
-                else {
+                break;
+            }
+            case ADD_TAG: {
+                if (resultCode == Activity.RESULT_OK) {
+                    // If the current wishlist is filtered by tag "T", and there is an item "A" in this list
+                    // we then enter the AddTag view for item "A" and delete the tag "T" from A. When we come back to
+                    // this list, we need to update _itemIds to exclude "A" so "A" will not show up in this list.
+                    if (_tagOption != null) {
+                        _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
+                    }
                 }
                 break;
             }
@@ -934,7 +936,19 @@ public class WishList extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-        updateView();
+        // When we navigate to another activity and navigate back to the wishlist activity, the wishes could have been changed,
+        // so we need to reload the list.
+
+        // Exmaples:
+        // 1. tap a wish to open wishitemdetail view -> edit the wish and save it, or delete the wish -> tap back button
+        // 2. add a new wish -> done -> show wishitemdetail -> back
+        // 3. filter by tag -> findtag view -> tap a tag
+        // ...
+
+        // If we are still in this activity but are changing the list by interacting with a dialog like sort, status, we need to
+        // explicitly reload the list, as in these cases, onResume won't be called.
+
+        populateItems(null, _where);
 	}
 
     private void updateActionBarTitle() {
