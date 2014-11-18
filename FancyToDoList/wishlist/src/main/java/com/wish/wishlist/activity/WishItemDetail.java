@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -151,8 +152,22 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 
 		});
 
+        // tagsView will gain focus automatically when the activity starts, and it will trigger the keyboard to
+        // show up if we don't have the following line.
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         TagsCompletionView tagsView = (TagsCompletionView)findViewById(R.id.ItemTagsView);
-        tagsView.setKeyListener(null);
+        View.OnTouchListener otl = new View.OnTouchListener() {
+            public boolean onTouch (View v, MotionEvent event) {
+                return true;
+                // the listener has consumed the event
+                // this is to prevent touch event on the tagsView such as
+                // keyboard pops up, text select, copy/paste etc.
+            }
+        };
+        tagsView.setOnTouchListener(otl);
+
+        tagsView.setCursorVisible(false);
         ArrayList<String> tags = TagItemDBManager.instance(this).tags_of_item(_itemId);
         for (String tag : tags) {
             tagsView.addObject(tag);
