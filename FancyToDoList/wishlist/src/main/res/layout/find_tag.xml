@@ -8,9 +8,11 @@
 
     <EditText android:id="@+id/tagFilter" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginTop="10dp"
-        android:hint="Find a tag...">
+        android:layout_marginBottom="10dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/text_size_medium"
+        android:hint="Enter a tag...">
         <requestFocus />
     </EditText>
 
