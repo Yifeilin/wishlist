@@ -96,7 +96,7 @@ public class EditItem extends Activity implements Observer {
 	private int _complete = -1;
 	private boolean _editNew = true;
 	private boolean _isGettingLocation = false;
-    private ArrayList<String> _tags;
+    private ArrayList<String> _tags = new ArrayList<String>();
 	
 	private AlertDialog _alert;
 	static final private int TAKE_PICTURE = 1;
