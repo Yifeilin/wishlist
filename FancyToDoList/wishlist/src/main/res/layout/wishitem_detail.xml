@@ -110,7 +110,23 @@
 					android:paddingLeft="15dip"
 					android:singleLine="false"
 					android:layout_gravity="left" />
-				
+
+
+                <!-- we merely reuse the TagsCompletionView for
+                displaying tags nicely, we do not allow any editing here -->
+                <!-- background = #0000000 remove bottom line -->
+                <com.wish.wishlist.activity.TagsCompletionView
+                    android:id="@+id/ItemTagsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="#00000000"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size_medium" >
+                </com.wish.wishlist.activity.TagsCompletionView>
+
 				<!-- white space at the bottom -->
 				<TextView 
 				   	android:layout_width="fill_parent"

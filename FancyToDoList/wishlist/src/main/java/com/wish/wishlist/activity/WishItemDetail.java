@@ -24,9 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tokenautocomplete.TokenCompleteTextView;
 import com.wish.wishlist.R;
 import com.wish.wishlist.db.ItemDBManager;
 import com.wish.wishlist.db.ItemDBManager.ItemsCursor;
+import com.wish.wishlist.db.TagItemDBManager;
 import com.wish.wishlist.model.WishItem;
 import com.wish.wishlist.model.WishItemManager;
 import com.wish.wishlist.util.DateTimeFormatter;
@@ -46,7 +48,7 @@ import java.util.Locale;
  * the order of the items during swiping is the order of the items displayed in 
  * the WishList activity
  */
-public class WishItemDetail extends Activity {
+public class WishItemDetail extends Activity implements TokenCompleteTextView.TokenListener {
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -65,7 +67,6 @@ public class WishItemDetail extends Activity {
 	private TextView _storeView;
 	private TextView _locationView;
 	private ImageButton _backImageButton;
-//	private ImageButton shareImageButton;
 	private ImageButton _deleteImageButton;
 	private ImageButton _editImageButton;
 	private ImageButton _shareImageButton;
@@ -85,16 +86,6 @@ public class WishItemDetail extends Activity {
 
 		setUpActionBar();
 
-
-//		shareImageButton = (ImageButton) findViewById(R.id.imageButton_share);
-//		shareImageButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-////				shareItem();
-//			}
-//		});
-
-		
 		// Remember the id of the item user clicked
 		// in the previous activity (WishList.java)
 		Intent i = getIntent();
@@ -157,8 +148,15 @@ public class WishItemDetail extends Activity {
 					startActivity(i);
 				}
 			}
+
 		});
 
+        TagsCompletionView tagsView = (TagsCompletionView)findViewById(R.id.ItemTagsView);
+        tagsView.setKeyListener(null);
+        ArrayList<String> tags = TagItemDBManager.instance(this).tags_of_item(_itemId);
+        for (String tag : tags) {
+            tagsView.addObject(tag);
+        }
 	}
 	
 	private void showItemInfo(WishItem item) {
@@ -585,4 +583,10 @@ public class WishItemDetail extends Activity {
 			});
 		}
 	}
+
+    @Override
+    public void onTokenAdded(Object token) {}
+
+    @Override
+    public void onTokenRemoved(Object token) {}
 }
