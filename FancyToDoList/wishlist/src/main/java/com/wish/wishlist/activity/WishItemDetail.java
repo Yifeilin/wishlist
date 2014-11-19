@@ -71,6 +71,7 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 	private ImageButton _deleteImageButton;
 	private ImageButton _editImageButton;
 	private ImageButton _shareImageButton;
+    private TagsCompletionView _tagsView;
 	
 	private long _itemId = -1;
 	private int _position;
@@ -125,8 +126,30 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 		_storeView = (TextView) findViewById(R.id.itemStoreDetail);
 		_locationView = (TextView) findViewById(R.id.itemLocationDetail);
 		_photoView = (ImageView) findViewById(R.id.imgPhotoDetail);
-		
+
+        // tagsView will gain focus automatically when the activity starts, and it will trigger the keyboard to
+        // show up if we don't have the following line.
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        _tagsView = (TagsCompletionView)findViewById(R.id.ItemTagsView);
+        View.OnTouchListener otl = new View.OnTouchListener() {
+            public boolean onTouch (View v, MotionEvent event) {
+                return true;
+                // the listener has consumed the event
+                // this is to prevent touch event on the tagsView such as
+                // keyboard pops up, text select, copy/paste etc.
+            }
+        };
+        _tagsView.setOnTouchListener(otl);
+        _tagsView.setCursorVisible(false);
+
 		showItemInfo(item);
+
+        if (savedInstanceState == null) {
+            // if screen is oriented, savedInstanceStat != null,
+            // and don't add tags again on screen orientation
+            addTags();
+        }
 
 //		// set the gesture detection
 //		gestureDetector = new GestureDetector(new MyGestureDetector());
@@ -152,26 +175,6 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 
 		});
 
-        // tagsView will gain focus automatically when the activity starts, and it will trigger the keyboard to
-        // show up if we don't have the following line.
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        TagsCompletionView tagsView = (TagsCompletionView)findViewById(R.id.ItemTagsView);
-        View.OnTouchListener otl = new View.OnTouchListener() {
-            public boolean onTouch (View v, MotionEvent event) {
-                return true;
-                // the listener has consumed the event
-                // this is to prevent touch event on the tagsView such as
-                // keyboard pops up, text select, copy/paste etc.
-            }
-        };
-        tagsView.setOnTouchListener(otl);
-
-        tagsView.setCursorVisible(false);
-        ArrayList<String> tags = TagItemDBManager.instance(this).tags_of_item(_itemId);
-        for (String tag : tags) {
-            tagsView.addObject(tag);
-        }
 	}
 	
 	private void showItemInfo(WishItem item) {
@@ -279,6 +282,14 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 		}
 	}
 
+    void addTags() {
+        ArrayList<String> tags = TagItemDBManager.instance(this).tags_of_item(_itemId);
+        _tagsView.removeAllObject();
+        for (String tag : tags) {
+            _tagsView.addObject(tag);
+        }
+    }
+
 	/***
 	 * get the _ID of the item in Item table
 	 * whose position in the listview is next 
@@ -372,7 +383,6 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 	private void editItem(){
 		Intent i = new Intent(WishItemDetail.this, EditItem.class);
 		i.putExtra("item_id", _itemId);
-		//i.putExtra("position", position);
 		startActivityForResult(i, EDIT_ITEM);
 	}
 	
@@ -390,13 +400,11 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 					if (id != -1) {
 						WishItem item = WishItemManager.getInstance(this).retrieveItembyId(id);
 						showItemInfo(item);
+                        addTags();
 					}
 					
 				}
 				
-			}
-			else {
-
 			}
 			break;
 		}
