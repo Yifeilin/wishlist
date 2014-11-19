@@ -83,10 +83,12 @@ public class AddTag extends Activity implements TokenCompleteTextView.TokenListe
         setUpActionBar();
 
         mItem_id = getIntent().getLongExtra(ITEM_ID, -1);
-        ArrayList<String> tags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
-        for (String tag : tags) {
-            completionView.addObject(tag);
-            currentTags.add(tag);
+        if (savedInstanceState == null) { // make sure on screen orientation, we don't add the same tags again to the view
+            ArrayList<String> tags = TagItemDBManager.instance(AddTag.this).tags_of_item(mItem_id);
+            for (String tag : tags) {
+                completionView.addObject(tag);
+                currentTags.add(tag);
+            }
         }
         showTags();
 
