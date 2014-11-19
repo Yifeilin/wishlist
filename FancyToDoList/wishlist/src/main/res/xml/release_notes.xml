@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <releaseNote>
+    <release versionName="1.0.10" versionCode="13">
+        <note>Users can add tags to wishes, view the tags of a wish, and look up wishes by tag.</note>
+    </release>
     <release versionName="1.0.9" versionCode="12">
         <note>Users can customize the currency symbol of the wished item's price.</note>
     </release>

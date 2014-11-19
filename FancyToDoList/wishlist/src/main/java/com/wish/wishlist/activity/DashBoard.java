@@ -178,8 +178,8 @@ public class DashBoard extends Activity {
 	 private void showWhatsNewDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
-		builder.setMessage("Version 1.0.9\n" +
-				"Users can customize the currency symbol of the wished item's price");
+		builder.setMessage("Version 1.0.10\n\n" +
+                "Users can add tags to wishes, view the tags of a wish, and look up wishes by tag.");
 		builder.setCancelable(false);
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
