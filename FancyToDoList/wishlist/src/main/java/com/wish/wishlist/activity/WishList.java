@@ -948,9 +948,16 @@ public class WishList extends Activity {
         // explicitly reload the list, as in these cases, onResume won't be called.
 
         populateItems(_nameQuery, _where);
+        updateActionBarTitle();
 	}
 
     private void updateActionBarTitle() {
+        if (_nameQuery != null) {
+            // we are showing search results
+            getActionBar().setTitle(R.string.app_name);
+            getActionBar().setSubtitle(null);
+            return;
+        }
         if (_tagOption == null && _statusOption.equals("all")) {
             getActionBar().setTitle(R.string.app_name);
             getActionBar().setSubtitle(null);
