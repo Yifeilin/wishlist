@@ -529,6 +529,10 @@ public class WishList extends Activity {
                 _itemIds.clear();
 
                 _statusOption = "all";
+                // need to remove the status single item choice dialog so it will be re-created and its initial choice will refreshed
+                // next time it is opened.
+                removeDialog(DIALOG_FILTER);
+
                 _where.clear();
 
                 SharedPreferences pref = WishList.this.getPreferences(MODE_PRIVATE);
