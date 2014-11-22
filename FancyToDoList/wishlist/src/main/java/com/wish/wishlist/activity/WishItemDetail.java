@@ -515,6 +515,8 @@ public class WishItemDetail extends Activity implements TokenCompleteTextView.To
 
 		long itemId = item.getItemId();
 		if (itemId ==  android.R.id.home) {
+            Intent resultIntent = new Intent();
+            setResult(RESULT_OK, resultIntent);
 			finish();
 			return true;
 		}

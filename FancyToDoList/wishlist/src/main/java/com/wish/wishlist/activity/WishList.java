@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -79,6 +80,7 @@ public class WishList extends Activity {
 	private static final int ADD_ITEM = 1;
     private static final int FIND_TAG = 2;
     private static final int ADD_TAG = 3;
+    private static final int ITEM_DETAILS = 4;
 	private String _viewOption = "list";
 	private String _statusOption = "all";
     private String _tagOption = null;
@@ -159,7 +161,7 @@ public class WishList extends Activity {
 				Intent i = new Intent(WishList.this, WishItemDetail.class);
 				i.putExtra("item_id", item_id);
 				i.putExtra("position", position);
-				startActivity(i);
+				startActivityForResult(i, ITEM_DETAILS);
 			}
 		});
 
@@ -863,6 +865,18 @@ public class WishList extends Activity {
         updateView();
 	}
 
+    private void updateItemIdsForTag() {
+        // If the current wishlist is filtered by tag "T", and there is an item "A" in this list
+        // we then enter the AddTag view for item "A" and delete the tag "T" from A. When we come back to
+        // this list, we need to update _itemIds to exclude "A" so "A" will not show up in this list.
+        if (_tagOption != null) {
+            _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
+            if (_itemIds.isEmpty()) {
+                _tagOption = null;
+            }
+        }
+    }
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -882,6 +896,18 @@ public class WishList extends Activity {
 
 		switch (requestCode) {
             case EDIT_ITEM: {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.v("A", "EDIT_ITEM result ok");
+                    updateItemIdsForTag();
+                }
+                break;
+            }
+            case ITEM_DETAILS: {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.v("A", "ITEM_DETAILS result ok");
+                    updateItemIdsForTag();
+                }
+                break;
             }
             case ADD_ITEM: {
                 if (resultCode == Activity.RESULT_OK) {
@@ -896,7 +922,7 @@ public class WishList extends Activity {
                     if (id != -1) {
                         Intent i = new Intent(WishList.this, WishItemDetail.class);
                         i.putExtra("item_id", id);
-                        startActivity(i);
+                        startActivityForResult(i, ITEM_DETAILS);
                     }
                 }
                 else {
@@ -921,12 +947,7 @@ public class WishList extends Activity {
             }
             case ADD_TAG: {
                 if (resultCode == Activity.RESULT_OK) {
-                    // If the current wishlist is filtered by tag "T", and there is an item "A" in this list
-                    // we then enter the AddTag view for item "A" and delete the tag "T" from A. When we come back to
-                    // this list, we need to update _itemIds to exclude "A" so "A" will not show up in this list.
-                    if (_tagOption != null) {
-                        _itemIds = TagItemDBManager.instance(this).ItemIds_by_tag(_tagOption);
-                    }
+                    updateItemIdsForTag();
                 }
                 break;
             }
