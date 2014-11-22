@@ -73,7 +73,7 @@ public class WishList extends Activity {
 
 	private ItemsCursor.SortBy SORT_BY = ItemsCursor.SortBy.item_name;
 	private Map<String,String> _where = new HashMap<String, String>();
-	private String nameQuery = null;
+	private String _nameQuery = null;
 	public static final String LOG_TAG = "WishList";
 	private static final int EDIT_ITEM = 0;
 	private static final int ADD_ITEM = 1;
@@ -200,16 +200,12 @@ public class WishList extends Activity {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			// activity is started from search, get the search query and
 			// displayed the searched items
-			nameQuery = intent.getStringExtra(SearchManager.QUERY);
-
-			// displaySearchItem(query, SORT_BY);
-			populateItems(nameQuery, _where);
+			_nameQuery = intent.getStringExtra(SearchManager.QUERY);
 		} else {
 			// activity is not started from search
 			// display all the items saved in the Item table
 			// sorted by item name
 			initializeView();
-
 		}
 
 		// set the spinner for switching between list and grid views
@@ -236,14 +232,14 @@ public class WishList extends Activity {
 //				if (pos == 0) {
 //					// Recall populate here is inefficient
 //					_viewOption = "list";
-//					populateItems(nameQuery, SORT_BY);
+//					populateItems(_nameQuery, SORT_BY);
 //					_viewFlipper.setDisplayedChild(0);
 //
 //				}
 //				// grid view is selected
 //				else if (pos == 1) {
 //					_viewOption = "grid";
-//					populateItems(nameQuery, SORT_BY);
+//					populateItems(_nameQuery, SORT_BY);
 //					_viewFlipper.setDisplayedChild(1);
 //
 //				}
@@ -712,11 +708,11 @@ public class WishList extends Activity {
 					if (items[item].equals("List")) {
 						// Recall populate here is inefficient
 						_viewOption = "list";
-						populateItems(nameQuery, _where);
+						populateItems(_nameQuery, _where);
 					}
 					else {
 						_viewOption = "grid";
-						populateItems(nameQuery, _where);
+						populateItems(_nameQuery, _where);
 					}
 					SharedPreferences pref = getPreferences(MODE_PRIVATE);
 					SharedPreferences.Editor editor = pref.edit();
@@ -945,10 +941,13 @@ public class WishList extends Activity {
         // 3. filter by tag -> findtag view -> tap a tag
         // ...
 
+        // If we search a wish by name, onResume will also be called.
+
+
         // If we are still in this activity but are changing the list by interacting with a dialog like sort, status, we need to
         // explicitly reload the list, as in these cases, onResume won't be called.
 
-        populateItems(null, _where);
+        populateItems(_nameQuery, _where);
 	}
 
     private void updateActionBarTitle() {
