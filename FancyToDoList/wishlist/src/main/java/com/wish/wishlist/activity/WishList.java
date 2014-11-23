@@ -801,7 +801,7 @@ public class WishList extends Activity {
 						
 						dialog.dismiss();
 	
-						populateItems(null, _where);
+						populateItems(_nameQuery, _where);
 					}
 			});
 
