@@ -1017,12 +1017,11 @@ public class WishList extends Activity {
             getActionBar().setSubtitle(null);
             return;
         }
-        if (_tagOption == null && _statusOption.equals("all")) {
+
+        if (_tagOption == null) {
             getActionBar().setTitle(R.string.app_name);
-            getActionBar().setSubtitle(null);
-            return;
         }
-        if (_tagOption != null) {
+        else {
             getActionBar().setTitle(_tagOption);
         }
 
