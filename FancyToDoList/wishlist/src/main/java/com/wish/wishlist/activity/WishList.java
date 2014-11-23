@@ -198,17 +198,7 @@ public class WishList extends Activity {
 		_itemDBManager = new ItemDBManager(this);
 		_itemDBManager.open();
 
-		// check if the activity is started from search
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			// activity is started from search, get the search query and
-			// displayed the searched items
-			_nameQuery = intent.getStringExtra(SearchManager.QUERY);
-		} else {
-			// activity is not started from search
-			// display all the items saved in the Item table
-			// sorted by item name
-			initializeView();
-		}
+        handleIntent(getIntent());
 
 		// set the spinner for switching between list and grid views
 //		ArrayAdapter<CharSequence> adapter = ArrayAdapter
@@ -257,6 +247,26 @@ public class WishList extends Activity {
 //		});
 
 	}
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        Log.v("A", "handleIntent");
+        // check if the activity is started from search
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            // activity is started from search, get the search query and
+            // displayed the searched items
+            _nameQuery = intent.getStringExtra(SearchManager.QUERY);
+        } else {
+            // activity is not started from search
+            // display all the items saved in the Item table
+            // sorted by item name
+            initializeView();
+        }
+    }
 
 	@Override
 	public boolean onSearchRequested() {
@@ -525,6 +535,11 @@ public class WishList extends Activity {
 
 		long itemId = item.getItemId();
 		if (itemId ==  android.R.id.home) {
+            if (_nameQuery !=null) {
+                _nameQuery = null;
+                populateItems(null, _where);
+                return true;
+            }
             if (_tagOption != null || !_statusOption.equals("all")) {
                 //the wishes are currently filtered by tag or status, tapping back button now should clean up the filter and show all wishes
                 _tagOption = null;
@@ -897,14 +912,12 @@ public class WishList extends Activity {
 		switch (requestCode) {
             case EDIT_ITEM: {
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.v("A", "EDIT_ITEM result ok");
                     updateItemIdsForTag();
                 }
                 break;
             }
             case ITEM_DETAILS: {
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.v("A", "ITEM_DETAILS result ok");
                     updateItemIdsForTag();
                 }
                 break;
