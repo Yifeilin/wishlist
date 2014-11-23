@@ -94,6 +94,8 @@ public class WishList extends Activity {
 	private ImageButton _viewImageButton;
 	private ImageButton _searchImageButton;
 
+    private Menu _menu;
+
 	private ItemsCursor _wishItemCursor;
 	private WishListItemCursorAdapter _wishListItemAdapterCursor;
 
@@ -260,6 +262,12 @@ public class WishList extends Activity {
             // activity is started from search, get the search query and
             // displayed the searched items
             _nameQuery = intent.getStringExtra(SearchManager.QUERY);
+            MenuItem tagItem =  _menu.findItem(R.id.menu_tags);
+            tagItem.setVisible(false);
+
+            MenuItem statusItem = _menu.findItem(R.id.menu_status);
+            statusItem.setVisible(false);
+
         } else {
             // activity is not started from search
             // display all the items saved in the Item table
@@ -456,6 +464,7 @@ public class WishList extends Activity {
 		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_main, menu);
+        _menu = menu;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			//search view is part the action bar in honeycomeb and up
@@ -542,6 +551,12 @@ public class WishList extends Activity {
                 _itemIds.clear();
                 _statusOption = "all";
                 _where.clear();
+
+                MenuItem tagItem =  _menu.findItem(R.id.menu_tags);
+                tagItem.setVisible(true);
+
+                MenuItem statusItem = _menu.findItem(R.id.menu_status);
+                statusItem.setVisible(true);
 
                 populateItems(null, _where);
                 return true;
