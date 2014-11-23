@@ -535,8 +535,14 @@ public class WishList extends Activity {
 
 		long itemId = item.getItemId();
 		if (itemId ==  android.R.id.home) {
-            if (_nameQuery !=null) {
+            if (_nameQuery != null) {
+                // We tap back on search results view, show all wishes
                 _nameQuery = null;
+                _tagOption = null;
+                _itemIds.clear();
+                _statusOption = "all";
+                _where.clear();
+
                 populateItems(null, _where);
                 return true;
             }
@@ -992,7 +998,7 @@ public class WishList extends Activity {
     private void updateActionBarTitle() {
         if (_nameQuery != null) {
             // we are showing search results
-            getActionBar().setTitle(R.string.app_name);
+            getActionBar().setTitle("Search: " + _nameQuery);
             getActionBar().setSubtitle(null);
             return;
         }
@@ -1004,6 +1010,7 @@ public class WishList extends Activity {
         if (_tagOption != null) {
             getActionBar().setTitle(_tagOption);
         }
+
         if (_statusOption.equals("completed")) {
             getActionBar().setSubtitle("Completed");
         }
