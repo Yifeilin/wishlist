@@ -179,7 +179,8 @@ public class DashBoard extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("What's new");
 		builder.setMessage("Version 1.0.10\n\n" +
-                "Users can add tags to wishes, view the tags of a wish, and look up wishes by tag.");
+                "Users can add tags to wishes, view the tags of a wish, and look up wishes by tag.\n\n" +
+                "Improved messages on header bar about the status and tags of the wishes shown.");
 		builder.setCancelable(false);
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
