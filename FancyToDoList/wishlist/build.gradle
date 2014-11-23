@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.wish.wishlist"
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 17
     }
 
