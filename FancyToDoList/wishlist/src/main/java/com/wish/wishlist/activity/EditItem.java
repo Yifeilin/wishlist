@@ -464,6 +464,7 @@ public class EditItem extends Activity implements Observer {
 					_fullsizePhotoPath = copyPhotoToAlbum(selectedImageUri);
 					setPic();
 				}
+                break;
 			}
             case ADD_TAG: {
                 if (resultCode == RESULT_OK) {
