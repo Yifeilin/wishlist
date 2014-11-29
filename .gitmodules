@@ -1,0 +1,3 @@
+[submodule "FancyToDoList/third_party/AndroidStaggeredGrid"]
+	path = third-party/AndroidStaggeredGrid
+	url = https://github.com/etsy/AndroidStaggeredGrid.git
